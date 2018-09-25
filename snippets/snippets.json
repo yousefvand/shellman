@@ -1,0 +1,393 @@
+{
+  "bash": {
+		"prefix": "bash",
+		"body": "#!/usr/bin/env bash\n\n",
+		"description": "bash shebang"
+  },
+  "summary": {
+		"prefix": "summary",
+		"body": [
+			"# Title:         ${1:title}",
+			"# Description:   ${2:description}",
+			"# Author:        ${3:author}",
+			"# Date:          ${4:yyyy-mm-dd}",
+			"# Version:       ${5:1.0.0}\n"
+		],
+		"description": "Script summary"
+  },
+  "function": {
+		"prefix": "func",
+		"body": [
+			"function ${1:name} () {",
+			"\t${2:echo \"\\$1\"}",
+			"}\n"
+		],
+		"description": "function"
+  },
+  "function_args_count": {
+    "prefix": "func args count",
+    "body": "echo $#",
+    "description": "number of function arguments"
+  },
+  "function_args": {
+    "prefix": "func args",
+    "body": "echo \"$@\"",
+    "description": "function arguments array"
+  },
+  "function_return_value": {
+    "prefix": "func ret val",
+    "body": "echo \"$?\"",
+    "description": "last function/command return code"
+  },
+  "if": {
+    "prefix": "if",
+    "body": [
+      "if [ ${1:condition} ]; then",
+      "\t${2: # body}",
+      "elif [ ${3:condition} ]; then",
+      "\t${4: # body}",
+      "else",
+      "\t${5: # body}",
+      "fi\n"
+    ],
+    "description": "if"
+  },
+  "iff": {
+		"prefix": "iff",
+		"body": "[ ${1:condition} ] && ${2:command}\n",
+		"description": "if condition is true then run command (short circuit)"
+  },
+  "iff_not": {
+		"prefix": "iff not",
+		"body": "[ ${1:condition} ] || ${2:command}\n",
+		"description": "if condition is false then run command (short circuit)"
+  },
+  "if_string_empty": {
+    "prefix": "if string empty",
+    "body": [
+			"if [ -z \"\\$${1:string}\" ]; then",
+			"\t${2:body}",
+      "fi\n"
+    ],
+    "description": "if string is empty"
+  },
+  "if_string_not_empty": {
+    "prefix": "if string not empty",
+    "body": [
+			"if [ -n \"\\$${1:string}\" ]; then",
+			"\t${2:body}",
+      "fi\n"
+    ],
+    "description": "if string is not empty"
+  },
+	"if_string_equal": {
+    "prefix": "if string =",
+    "body": [
+			"if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
+			"\t${3:body}",
+      "fi\n"
+    ],
+    "description": "if strings are equal"
+  },
+  "if_string_not_equal": {
+    "prefix": "if string !=",
+    "body": [
+			"if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
+			"\t${3:body}",
+      "fi\n"
+    ],
+    "description": "if strings are not equal"
+  },
+  "if_int_equal": {
+    "prefix": "if int =",
+    "body": [
+      "if [[ \\$${1:int1} == \\$${2:int2} ]]; then",
+      "\t${3:echo equal}",
+      "fi\n"
+    ],
+    "description": "if integers are equal"
+  },
+  "if_int_not_equal": {
+    "prefix": "if int !=",
+    "body": [
+      "if [[ \\$${1:int1} != \\$${2:int2} ]]; then",
+      "\t${3:echo not equal}",
+      "fi\n"
+    ],
+    "description": "if integers are not equal"
+  },
+  "if_int_greater": {
+    "prefix": "if int >",
+    "body": [
+      "if [[ \\$${1:int} > \\$${2:val} ]]; then",
+      "\t${3:echo greater}",
+      "fi\n"
+    ],
+    "description": "if integer greater than value"
+  },
+	"if_int_greater_equal": {
+    "prefix": "if int >=",
+    "body": [
+      "if [[ \\$${1:int} >= \\$${2:val} ]]; then",
+      "\t${3:echo greater equal}",
+      "fi\n"
+    ],
+    "description": "if integer greater than or equal value"
+  },
+  "if_int_less_than": {
+    "prefix": "if int <",
+    "body": [
+      "if [[ \\$${1:int} > \\$${2:val} ]]; then",
+      "\t${3:echo lesser}",
+      "fi\n"
+    ],
+    "description": "if integer lesser than value"
+  },
+  "if_int_less_equal": {
+    "prefix": "if int <=",
+    "body": [
+      "if [[ \\$${1:int} <= \\$${2:val} ]]; then",
+      "\t${3:echo lesser equal}",
+      "fi\n"
+    ],
+    "description": "if integer lesser than or equal value"
+  },
+  "cmd": {
+    "prefix": "cmd",
+    "body": "`${1:command}`",
+    "description": "run command (command substitution)"
+  },
+  "if_cmd_exists": {
+    "prefix": "if cmd exists",
+    "body": [
+      "if [ `command -v ${1:command}` ]; then",
+      "\t${2:# body}",
+      "fi\n"
+    ],
+    "description": "check if command exists"
+  },
+  "if_exists": {
+    "prefix": "if exists",
+    "body": [
+      "if [ -e \"\\$${1:path}\"; then",
+      "\t${0:echo exists}",
+      "fi\n"
+    ],
+    "description": "if path exists (file, directory, link...)"
+  },
+  "if_file_exists": {
+    "prefix": "if file exists",
+    "body": [
+      "if [ -f \"\\$${1:file}\" ]; then",
+      "\t${2:echo file exists}",
+      "fi\n"
+    ],
+    "description": "if file exists"
+  },
+  "if_file_not_empty": {
+    "prefix": "if file not empty",
+    "body": [
+      "if [ -s \"\\$${1:file}\" ]; then",
+      "\t${2:echo file not empty}",
+      "fi\n"
+    ],
+    "description": "if file size is greater than zero"
+  },
+  "if_directory_exists": {
+    "prefix": "if directory exists",
+    "body": [
+      "if [ -d \"\\$${1:directory}\" ]; then",
+      "\t${0:echo directory exists}",
+      "fi\n"
+    ],
+    "description": "if directory exists"
+  },
+  "if_file_readable": {
+    "prefix": "if file readable",
+    "body": [
+      "if [ -r \"\\$${1:file}\" ]; then",
+      "\t${0:echo file is readable}",
+      "fi\n"
+    ],
+    "description": "if file readable"
+  },
+  "if_file_writeable": {
+    "prefix": "if file writeable",
+    "body": [
+      "if [ -w \"\\$${1:file}\" ]; then",
+      "\t${0:echo file is writeable}",
+      "fi\n"
+    ],
+    "description": "if file writeable"
+  },
+  "if_file_executable": {
+    "prefix": "if file executable",
+    "body": [
+    "if [ -x \"\\$${1:file}\" ]; then",
+    "\t${0:echo file is executable}",
+    "fi\n"
+  ],
+    "description": "if file executable"
+  },
+  "if_file_equal": {
+    "prefix": "if file =",
+    "body": [
+      "if [ \"\\$${1:file1}\" -ef \"\\$${2:file2}\" ]; then",
+      "\t${0:echo files are equal}",
+      "fi\n"
+    ],
+    "description": "if files are equal"
+  },
+  "if_file_link": {
+    "prefix": "if file link",
+    "body": [
+      "if [ -h \"\\$${1:file}\" ]; then",
+      "\t${0:echo symbolic link}",
+      "fi\n"
+    ],
+    "description": "if file exists and is a symbolic link"
+  },
+  "if_file_newer": {
+    "prefix": "if file newer",
+    "body": [
+      "if [ \"\\$${1:file1}\" -nt \"\\$${2:file2}\" ]; then",
+      "\t${0:echo file1 is newer than file2}",
+      "fi\n"
+    ],
+    "description": "if file1 newer than file2"
+  },
+  "if_file_older": {
+    "prefix": "if file older",
+    "body": [
+      "if [ \"\\$${1:file1}\" -ot \"\\$${2:file2}\" ]; then",
+      "\t${0:echo file1 is older than file2}",
+      "fi\n"
+    ],
+    "description": "if file1 older than file2"
+  },
+  "for_i": {
+    "prefix": "for i",
+    "body": [
+      "for((i=0;i<${1:n};i++)); do",
+      "\t${0:echo \"\\$i\"}",
+      "done\n"
+    ],
+    "description": "for loop by index"
+  },
+  "for_ij": {
+    "prefix": "for ij",
+    "body": [
+      "for((i=0;i<${1:n};i++)); do",
+      "\tfor((j=0;j<${2:m};j++)); do",
+      "\t\t${0:echo \"\\$i, \\$j\"}",
+      "\tdone",
+      "done\n"
+    ],
+    "description": "for loop by index"
+  },
+  "for_in": {
+    "prefix": "for in",
+    "body": [
+      "for ${1:item} in {${2:a..z}}; do",
+      "\techo \"\\$${1:item}\"",
+      "done\n"
+    ],
+    "description": "for loop in collection"
+  },
+  "for_in_column": {
+    "prefix": "for in column",
+    "body": [
+      "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
+      "\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
+      "\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
+      "done\n"
+    ],
+    "description": "for loop in collection"
+  },
+  "while": {
+    "prefix": "while",
+    "body": [
+      "while [ ${1:condition} ]; do",
+      "\t${0:# body}",
+      "done\n"
+    ],
+    "description": "while loop"
+  },
+  "until": {
+    "prefix": "until",
+    "body": [
+      "until [ ${1:condition} ]; do",
+      "\t${0:# body}",
+      "done\n"
+    ],
+    "description": "until loop"
+  },
+  "switch": {
+    "prefix": "switch case",
+    "body": [
+      "case \"\\$${1:item}\" in",
+      "\t${2:1})",
+      "\t\t${3:echo \"case 1\"}",
+      "\t;;",
+      "\t${4:2|3})",
+      "\t\t${5:echo \"case 2 or 3\"}",
+      "\t;;",
+      "\t*)",
+      "\t\t${6:echo \"default\"}",
+      "\t;;",
+      "esac\n"
+    ],
+    "description": "switch case"
+  },
+  "expr": {
+    "prefix": "expr",
+    "body": "expr ${0:2 * 3}",
+    "description": "arithmetic operations"
+  },
+  "math": {
+  "prefix": "math",
+  "body": "\\$((${0:i++}))"
+  },
+  "file_read": {
+    "prefix": "file read",
+    "body": [
+      "cat ${1:\"\\$filepath\"} | while read ${2:line}; do",
+      "\t${3:echo \"\\$line\"}",
+      "done\n"
+    ],
+    "description": "read a file"
+  },
+  "file_write": {
+    "prefix": "file write",
+    "body": [
+      "echo ${1:\"file header\"} > ${2:\"\\$filepath\"}",
+      "for ${3:line} in {${4:lines}}; do",
+      "\techo \"\\$${3:line}\" >> ${2:\"\\$filepath\"}",
+      "done\n"
+    ],
+    "description": "write a file"
+  },
+  "file_write_multiline": {
+		"prefix": "file write multiline",
+		"body": [
+			"cat >${1:filepath} <<EOL",
+			"# text here",
+			"EOL"
+		],
+		"description": "write multiple lines into file"
+  },
+  "file_write_multiline_sudo": {
+		"prefix": "file write multiline sudo",
+		"body": [
+			"cat << EOL | sudo tee ${1:filepath}",
+			"${0:# text here}",
+			"EOL"
+		],
+		"description": "write multiple lines into file with sudo permission"
+  },
+  "remove_files_older_than": {
+		"prefix": "remove files older",
+		"body": "find \"\\$${1:path}\" -mtime +${2:days} | xargs rm -f\n",
+		"description": "find and remove files older than x days"
+	}
+}
