@@ -58,6 +58,10 @@ Wide range of logical conditions which are more common in bash scripts.
 
 ## Release Notes
 
+### 1.1.2
+
+- Fixed vscode marketplace header color contrast
+
 ### 1.1.1
 
 - Minor bugs fixed

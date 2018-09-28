@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.1.2
+
+- Fixed vscode marketplace header color contrast
+
 ## 1.1.1
 
 - Minor bugs fixed
