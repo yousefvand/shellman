@@ -19,7 +19,7 @@
 		"prefix": "func",
 		"body": [
 			"function ${1:name} () {",
-			"\t${2:echo \"\\$1\"}",
+			"\t${2:echo \"\\$1\" # arguments are accessible through $1, $2,...}",
 			"}\n"
 		],
 		"description": "function"
@@ -38,6 +38,19 @@
     "prefix": "func ret val",
     "body": "echo \"$?\"",
     "description": "last function/command return code"
+  },
+  "cmd": {
+    "prefix": "cmd",
+    "body": "`${1:command}`",
+    "description": "run command (command substitution)"
+  },
+  "ask_question": {
+    "prefix": "ask question",
+    "body": [
+      "read -ep \"${1:Question here? }\" -i ${2:Default answer} ANSWER",
+      "${3:echo \"\\$ANSWER\"}\n"
+    ],
+    "description": "Ask question with default answer"
   },
   "if": {
     "prefix": "if",
@@ -66,7 +79,7 @@
     "prefix": "if string empty",
     "body": [
 			"if [ -z \"\\$${1:string}\" ]; then",
-			"\t${2:body}",
+			"\t${2:# body}",
       "fi\n"
     ],
     "description": "if string is empty"
@@ -75,7 +88,7 @@
     "prefix": "if string not empty",
     "body": [
 			"if [ -n \"\\$${1:string}\" ]; then",
-			"\t${2:body}",
+			"\t${2:# body}",
       "fi\n"
     ],
     "description": "if string is not empty"
@@ -84,7 +97,7 @@
     "prefix": "if string =",
     "body": [
 			"if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
-			"\t${3:body}",
+			"\t${3:# body}",
       "fi\n"
     ],
     "description": "if strings are equal"
@@ -93,7 +106,7 @@
     "prefix": "if string !=",
     "body": [
 			"if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
-			"\t${3:body}",
+			"\t${3:# body}",
       "fi\n"
     ],
     "description": "if strings are not equal"
@@ -151,11 +164,6 @@
       "fi\n"
     ],
     "description": "if integer lesser than or equal value"
-  },
-  "cmd": {
-    "prefix": "cmd",
-    "body": "`${1:command}`",
-    "description": "run command (command substitution)"
   },
   "if_cmd_exists": {
     "prefix": "if cmd exists",
@@ -346,7 +354,8 @@
   },
   "math": {
   "prefix": "math",
-  "body": "\\$((${0:i++}))"
+  "body": "\\$((${0:i++}))",
+  "description": "Doing mathematical operations"
   },
   "file_read": {
     "prefix": "file read",
@@ -389,5 +398,65 @@
 		"prefix": "remove files older",
 		"body": "find \"\\$${1:path}\" -mtime +${2:days} | xargs rm -f\n",
 		"description": "find and remove files older than x days"
-	}
+  },
+  "color_black": {
+		"prefix": "color black",
+		"body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n",
+		"description": "write in black"
+  },
+  "color_red": {
+		"prefix": "color red",
+		"body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n",
+		"description": "write in red"
+  },
+  "color_green": {
+		"prefix": "color green",
+		"body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n",
+		"description": "write in green"
+  },
+  "color_yellow": {
+		"prefix": "color yellow",
+		"body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n",
+		"description": "write in yellow"
+  },
+  "color_blue": {
+		"prefix": "color blue",
+		"body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n",
+		"description": "write in blue"
+  },
+  "color_magenta": {
+		"prefix": "color magenta",
+		"body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n",
+		"description": "write in magenta"
+  },
+  "color_cyan": {
+		"prefix": "color cyan",
+		"body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n",
+		"description": "write in cyan"
+  },
+  "color_white": {
+		"prefix": "color white",
+		"body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n",
+		"description": "write in white"
+  },
+  "format_bold": {
+		"prefix": "format bold",
+		"body": "echo `tput bold`${0:bold text}`tput sgr0`\n",
+		"description": "write in bold"
+  },
+  "format_italic": {
+		"prefix": "format italic",
+		"body": "echo `tput sitm`${0:italic text}`tput sgr0`\n",
+		"description": "write in italic"
+  },
+  "format_dim": {
+		"prefix": "format dim",
+		"body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n",
+		"description": "write in dim"
+  },
+  "format_reverse": {
+		"prefix": "format reverse",
+		"body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
+		"description": "write in reverse"
+  }
 }

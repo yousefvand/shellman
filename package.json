@@ -2,7 +2,7 @@
     "name": "shellman",
     "displayName": "shellman",
     "description": "Bash script snippet",
-    "version": "0.0.1",
+    "version": "1.1.1",
     "publisher": "Remisa",
     "icon": "images/icon.png",
     "license": "SEE LICENSE IN LICENSE.md",
@@ -11,7 +11,7 @@
         "url": "https://github.com/remisa-yousefvand/shellman.git"
     },
     "galleryBanner": {
-        "color": "#EF9237",
+        "color": "#FDF497",
         "theme": "dark"
     },
     "engines": {
@@ -27,5 +27,14 @@
                 "path": "./snippets/snippets.json"
             }
         ]
+    },
+    "devDependencies": {
+        "cspell": "^3.1.3",
+        "fs": "0.0.1-security",
+        "path": "^0.12.7"
+    },
+    "scripts": {
+        "doc": "node docgen.js",
+        "clean": "rm COMMANDS.md &> /dev/null"
     }
 }

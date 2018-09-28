@@ -1,7 +1,12 @@
 # Change Log
-All notable changes to the "shellman" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 1.1.1
 
-## [Unreleased]
+- Minor bugs fixed
+- Write colorful text
+- Write formatted text (bold, italic, dim, reverse)
+- Snippet documentation added
+
+## 0.0.1
+
 - Initial release
