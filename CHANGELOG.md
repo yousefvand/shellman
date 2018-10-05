@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.2.0
+
+- Check last command success/failure via `cmd...`
+- Directory operations via `directory...`
+
 ## 1.1.2
 
 - Fixed vscode marketplace header color contrast

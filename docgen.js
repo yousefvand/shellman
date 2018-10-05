@@ -7,7 +7,7 @@ const snippets = JSON.parse(fs.readFileSync(path.join(__dirname, './snippets/sni
 let out = '# Commands\n\n'
 
 for (let snippetName in snippets) { // ToC
-  out += `- [${snippets[snippetName].prefix}](##${snippets[snippetName].prefix.split(' ').join('&#32;')})\n\n`
+  out += `- [${snippets[snippetName].prefix}](#${snippets[snippetName].prefix.split(' ').join('-')})\n\n`
 }
 
 for (let snippetName in snippets) {

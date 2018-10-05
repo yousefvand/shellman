@@ -1,7 +1,7 @@
 {
   "bash": {
 		"prefix": "bash",
-		"body": "#!/usr/bin/env bash\n\n",
+		"body": "#!/usr/bin/env ${1|bash,python,node|}\n\n",
 		"description": "bash shebang"
   },
   "summary": {
@@ -9,7 +9,7 @@
 		"body": [
 			"# Title:         ${1:title}",
 			"# Description:   ${2:description}",
-			"# Author:        ${3:author}",
+			"# Author:        ${3:author <email>}",
 			"# Date:          ${4:yyyy-mm-dd}",
 			"# Version:       ${5:1.0.0}\n"
 		],
@@ -44,6 +44,29 @@
     "body": "`${1:command}`",
     "description": "run command (command substitution)"
   },
+  "cmd_success_check": {
+    "prefix": "cmd success check",
+    "body": [
+      "if [[ \\$? == 0 ]]; then",
+      "\t${3:echo command succeed}",
+      "fi\n"
+    ],
+    "description": "check if last command succeed"
+  },
+  "cmd_failure_check": {
+    "prefix": "cmd failure check",
+    "body": [
+      "if [[ \\$? != 0 ]]; then",
+      "\t${3:echo command failed}",
+      "fi\n"
+    ],
+    "description": "check if last command failed"
+  },
+  "assign_if_empty": {
+    "prefix": "assign if empty",
+    "body": ": \"\\${${1:variable}:=${2:default}}\"",
+    "description": "assign default to variable if variable is empty or null"
+  },
   "ask_question": {
     "prefix": "ask question",
     "body": [
@@ -51,6 +74,16 @@
       "${3:echo \"\\$ANSWER\"}\n"
     ],
     "description": "Ask question with default answer"
+  },
+  "directory_create": {
+    "prefix": "directory create",
+    "body": "mkdir ${1:dirname}",
+    "description": "create directory"
+  },
+  "directory_create_nested": {
+    "prefix": "directory create nested",
+    "body": "mkdir -p ${1:parent dir}/${2:child dir}",
+    "description": "create nested directories"
   },
   "if": {
     "prefix": "if",

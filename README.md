@@ -25,15 +25,23 @@ For more convenience similar commands are grouped into same prefixes. Here is an
 
 Shebang should be used as the first line of your script. You can replace `bash` with any other installed scripting language like `node` or `python`.
 
+`cmd...`
+
+Run external commands and check if operation succeeded.
+
 `color...`
 
 Write colorful
+
+`directory...`
+
+Directory operations
 
 `func...`
 
 Snippets related to function.
 
-`for..`
+`for...`
 
 Iterate different collections/arrays...
 
@@ -54,9 +62,14 @@ Wide range of logical conditions which are more common in bash scripts.
 ## To do
 
 - [x] Write colorful text
-- [ ] New whole function feature (whole functions start with `fn_`)
+- [ ] New whole function feature (whole functions start with `fn`)
 
 ## Release Notes
+
+### 1.2.0
+
+- Check last command success/failure via `cmd...`
+- Directory operations via `directory...`
 
 ### 1.1.2
 

@@ -1,129 +1,139 @@
 # Commands
 
-- [bash](##bash)
+- [bash](#bash)
 
-- [summary](##summary)
+- [summary](#summary)
 
-- [func](##func)
+- [func](#func)
 
-- [func args count](##func&#32;args&#32;count)
+- [func args count](#func-args-count)
 
-- [func args](##func&#32;args)
+- [func args](#func-args)
 
-- [func ret val](##func&#32;ret&#32;val)
+- [func ret val](#func-ret-val)
 
-- [cmd](##cmd)
+- [cmd](#cmd)
 
-- [ask question](##ask&#32;question)
+- [cmd success check](#cmd-success-check)
 
-- [if](##if)
+- [cmd failure check](#cmd-failure-check)
 
-- [iff](##iff)
+- [assign if empty](#assign-if-empty)
 
-- [iff not](##iff&#32;not)
+- [ask question](#ask-question)
 
-- [if string empty](##if&#32;string&#32;empty)
+- [directory create](#directory-create)
 
-- [if string not empty](##if&#32;string&#32;not&#32;empty)
+- [directory create nested](#directory-create-nested)
 
-- [if string =](##if&#32;string&#32;=)
+- [if](#if)
 
-- [if string !=](##if&#32;string&#32;!=)
+- [iff](#iff)
 
-- [if int =](##if&#32;int&#32;=)
+- [iff not](#iff-not)
 
-- [if int !=](##if&#32;int&#32;!=)
+- [if string empty](#if-string-empty)
 
-- [if int >](##if&#32;int&#32;>)
+- [if string not empty](#if-string-not-empty)
 
-- [if int >=](##if&#32;int&#32;>=)
+- [if string =](#if-string-=)
 
-- [if int <](##if&#32;int&#32;<)
+- [if string !=](#if-string-!=)
 
-- [if int <=](##if&#32;int&#32;<=)
+- [if int =](#if-int-=)
 
-- [if cmd exists](##if&#32;cmd&#32;exists)
+- [if int !=](#if-int-!=)
 
-- [if exists](##if&#32;exists)
+- [if int >](#if-int->)
 
-- [if file exists](##if&#32;file&#32;exists)
+- [if int >=](#if-int->=)
 
-- [if file not empty](##if&#32;file&#32;not&#32;empty)
+- [if int <](#if-int-<)
 
-- [if directory exists](##if&#32;directory&#32;exists)
+- [if int <=](#if-int-<=)
 
-- [if file readable](##if&#32;file&#32;readable)
+- [if cmd exists](#if-cmd-exists)
 
-- [if file writeable](##if&#32;file&#32;writeable)
+- [if exists](#if-exists)
 
-- [if file executable](##if&#32;file&#32;executable)
+- [if file exists](#if-file-exists)
 
-- [if file =](##if&#32;file&#32;=)
+- [if file not empty](#if-file-not-empty)
 
-- [if file link](##if&#32;file&#32;link)
+- [if directory exists](#if-directory-exists)
 
-- [if file newer](##if&#32;file&#32;newer)
+- [if file readable](#if-file-readable)
 
-- [if file older](##if&#32;file&#32;older)
+- [if file writeable](#if-file-writeable)
 
-- [for i](##for&#32;i)
+- [if file executable](#if-file-executable)
 
-- [for ij](##for&#32;ij)
+- [if file =](#if-file-=)
 
-- [for in](##for&#32;in)
+- [if file link](#if-file-link)
 
-- [for in column](##for&#32;in&#32;column)
+- [if file newer](#if-file-newer)
 
-- [while](##while)
+- [if file older](#if-file-older)
 
-- [until](##until)
+- [for i](#for-i)
 
-- [switch case](##switch&#32;case)
+- [for ij](#for-ij)
 
-- [expr](##expr)
+- [for in](#for-in)
 
-- [math](##math)
+- [for in column](#for-in-column)
 
-- [file read](##file&#32;read)
+- [while](#while)
 
-- [file write](##file&#32;write)
+- [until](#until)
 
-- [file write multiline](##file&#32;write&#32;multiline)
+- [switch case](#switch-case)
 
-- [file write multiline sudo](##file&#32;write&#32;multiline&#32;sudo)
+- [expr](#expr)
 
-- [remove files older](##remove&#32;files&#32;older)
+- [math](#math)
 
-- [color black](##color&#32;black)
+- [file read](#file-read)
 
-- [color red](##color&#32;red)
+- [file write](#file-write)
 
-- [color green](##color&#32;green)
+- [file write multiline](#file-write-multiline)
 
-- [color yellow](##color&#32;yellow)
+- [file write multiline sudo](#file-write-multiline-sudo)
 
-- [color blue](##color&#32;blue)
+- [remove files older](#remove-files-older)
 
-- [color magenta](##color&#32;magenta)
+- [color black](#color-black)
 
-- [color cyan](##color&#32;cyan)
+- [color red](#color-red)
 
-- [color white](##color&#32;white)
+- [color green](#color-green)
 
-- [format bold](##format&#32;bold)
+- [color yellow](#color-yellow)
 
-- [format italic](##format&#32;italic)
+- [color blue](#color-blue)
 
-- [format dim](##format&#32;dim)
+- [color magenta](#color-magenta)
 
-- [format reverse](##format&#32;reverse)
+- [color cyan](#color-cyan)
+
+- [color white](#color-white)
+
+- [format bold](#format-bold)
+
+- [format italic](#format-italic)
+
+- [format dim](#format-dim)
+
+- [format reverse](#format-reverse)
 
 ## `bash`
 
 bash shebang [&uarr;](#Commands)
 
 ```bash
-#!/usr/bin/env bash
+#!/usr/bin/env ${1|bash,python,node|}
 ```
 
 ## `summary`
@@ -133,7 +143,7 @@ Script summary [&uarr;](#Commands)
 ```bash
 # Title:         title
 # Description:   description
-# Author:        author
+# Author:        author <email>
 # Date:          yyyy-mm-dd
 # Version:       1.0.0
 ```
@@ -180,6 +190,34 @@ run command (command substitution) [&uarr;](#Commands)
 `command`
 ```
 
+## `cmd success check`
+
+check if last command succeed [&uarr;](#Commands)
+
+```bash
+if [[ $? == 0 ]]; then
+  echo command succeed
+fi
+```
+
+## `cmd failure check`
+
+check if last command failed [&uarr;](#Commands)
+
+```bash
+if [[ $? != 0 ]]; then
+  echo command failed
+fi
+```
+
+## `assign if empty`
+
+assign default to variable if variable is empty or null [&uarr;](#Commands)
+
+```bash
+: "${variable:=default}"
+```
+
 ## `ask question`
 
 Ask question with default answer [&uarr;](#Commands)
@@ -187,6 +225,22 @@ Ask question with default answer [&uarr;](#Commands)
 ```bash
 read -ep "Question here? " -i Default answer ANSWER
 echo "$ANSWER"
+```
+
+## `directory create`
+
+create directory [&uarr;](#Commands)
+
+```bash
+mkdir dirname
+```
+
+## `directory create nested`
+
+create nested directories [&uarr;](#Commands)
+
+```bash
+mkdir -p parent dir/child dir
 ```
 
 ## `if`
@@ -533,7 +587,7 @@ expr 2 * 3
 Doing mathematical operations [&uarr;](#Commands)
 
 ```bash
-\$((i++))
+$((i++))
 ```
 
 ## `file read`
@@ -582,7 +636,7 @@ EOL
 find and remove files older than x days [&uarr;](#Commands)
 
 ```bash
-find "\$path" -mtime +days | xargs rm -f
+find "$path" -mtime +days | xargs rm -f
 ```
 
 ## `color black`
