@@ -491,5 +491,97 @@
 		"prefix": "format reverse",
 		"body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
 		"description": "write in reverse"
-  }
+  },
+  "stopwatch_start": {
+		"prefix": "stopwatch start",
+		"body": "STOPWATCH_START_TIME=\\$(date +%s)\n",
+		"description": "start stopwatch"
+	},
+	"stopwatch_stop": {
+		"prefix": "stopwatch stop",
+		"body": "STOPWATCH_END_TIME=\\$(date +%s)\n",
+		"description": "stop stopwatch"
+	},
+	"stopwatch_elapsed": {
+		"prefix": "stopwatch elapsed",
+		"body": [
+			"STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))",
+			"STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))",
+			"STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))",
+			"${1:echo elapsed \\$STOPWATCH_ELAPSED_MINUTES minutes and \\$STOPWATCH_ELAPSED_SECONDS seconds}\n"
+		],
+		"description": "elapsed time"
+	},
+	"sleep": {
+		"prefix": "sleep",
+		"body": "sleep ${1:30}${2|s,m,h,d|}\n",
+		"description": "sleep for a specified amount of time (s: second, m: minute, h: hour, d: day)"
+	},
+	"fn_banner_simple": {
+		"prefix": "fn banner simple",
+		"body": [
+			"function banner_simple() {",
+			"\tlocal msg=\"* \\$* *\"",
+			"\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
+			"\techo \"\\$edge\"",
+			"\techo \"`tput bold`\\$msg`tput sgr0`\"",
+			"\techo \"\\$edge\"",
+			"\techo",
+			"}\n"
+		],
+		"description": "function: print a banner. example: banner_simple \"my title\""
+	},
+	"fx_banner_simple": {
+		"prefix": "fx banner simple",
+		"body": "banner_simple \"${1:my title}\"\n",
+		"description": "call banner_simple function"
+	},
+	"fn_banner_color": {
+		"prefix": "fn banner color",
+		"body": [
+			"function banner_color() {",
+			"\tlocal color=\\$1",
+			"\tshift\n",
+			"\tcase \\$color in",
+			"\t\tblack) color=0",
+			"\t\t;;",
+			"\t\tred) color=1",
+			"\t\t;;",
+			"\t\tgreen) color=2",
+			"\t\t;;",
+			"\t\tyellow) color=3",
+			"\t\t;;",
+			"\t\tblue) color=4",
+			"\t\t;;",
+			"\t\tmagenta) color=5",
+			"\t\t;;",
+			"\t\tcyan) color=6",
+			"\t\t;;",
+			"\t\twhite) color=7",
+			"\t\t;;",
+			"\t\t*) echo \"color is not set\"; exit 1",
+			"\t\t;;",
+			"\tesac\n",
+			"\tlocal s=(\"$@\") b w",
+			"\tfor l in \"\\${s[@]}\"; do",
+			"\t\t((w<${#l})) && { b=\"\\$l\"; w=\"\\${#l}\"; }",
+			"\tdone",
+			"\ttput setaf \\$color",
+			"\techo \" =\\${b//?/=}=",
+			"| \\${b//?/ } |\"",
+			"\tfor l in \"\\${s[@]}\"; do",
+			"\t\tprintf '| %s%*s%s |\\n' \"\\$(tput setaf \\$color)\" \"-\\$w\" \"\\$l\" \"\\$(tput setaf \\$color)\"",
+			"\tdone\n",
+			"\techo \"| ${b//?/ } |",
+			" =${b//?/=}=\"",
+			"\ttput sgr 0",
+			"}\n"
+		],
+		"description": "function: print a color banner. example: banner_color red \"my title\"\n"
+	},
+	"fx_banner_color": {
+		"prefix": "fx banner color",
+		"body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
+		"description": "call banner_color function"
+	}
 }

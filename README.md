@@ -4,6 +4,14 @@ Shell script snippet
 
 ![shellman](images/demo.gif)
 
+## Stopwatch example
+
+![shellman](images/stopwatch.gif)
+
+## `fn... / fx...` example
+
+![shellman](images/banner.gif)
+
 ## Requirements
 
 - vscode
@@ -57,14 +65,35 @@ Write in bold, italic, dim, reverse format.
 
 Wide range of logical conditions which are more common in bash scripts.
 
-## List of [Commands](COMMANDS.md)
+`stopwatch...`
+
+Start and stop, stopwatch and read elapsed time.
+
+## `fn` / `fx`
+
+`fn...`
+
+inserts a whole function into script. Function declaration should prceed its usage.
+
+`fx...`
+
+Call function which is declared by `fn...`
+
+## List of [commands](COMMANDS.md)
 
 ## To do
 
 - [x] Write colorful text
-- [ ] New whole function feature (whole functions start with `fn`)
+- [x] New whole function feature (whole functions start with `fn`)
 
 ## Release Notes
+
+### 1.3.0
+
+- stopwatch
+- `fn...` / `fx...` whole function and usage insertion.
+  - `fn banner simple`: insert function to print a banner.
+  - `fn banner color`: insert function to print a color banner.
 
 ### 1.2.0
 

@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.3.0
+
+- stopwatch
+- `fn...` / `fx...` whole function and usage insertion.
+  - `fn banner simple`: insert function to print a banner.
+  - `fn banner color`: insert function to print a color banner.
+
 ## 1.2.0
 
 - Check last command success/failure via `cmd...`
