@@ -128,6 +128,22 @@
 
 - [format reverse](#format-reverse)
 
+- [stopwatch start](#stopwatch-start)
+
+- [stopwatch stop](#stopwatch-stop)
+
+- [stopwatch elapsed](#stopwatch-elapsed)
+
+- [sleep](#sleep)
+
+- [fn banner simple](#fn-banner-simple)
+
+- [fx banner simple](#fx-banner-simple)
+
+- [fn banner color](#fn-banner-color)
+
+- [fx banner color](#fx-banner-color)
+
 ## `bash`
 
 bash shebang [&uarr;](#Commands)
@@ -733,5 +749,116 @@ write in reverse [&uarr;](#Commands)
 
 ```bash
 echo `tput rev`reversed text`tput sgr0`
+```
+
+## `stopwatch start`
+
+start stopwatch [&uarr;](#Commands)
+
+```bash
+STOPWATCH_START_TIME=$(date +%s)
+```
+
+## `stopwatch stop`
+
+stop stopwatch [&uarr;](#Commands)
+
+```bash
+STOPWATCH_END_TIME=$(date +%s)
+```
+
+## `stopwatch elapsed`
+
+elapsed time [&uarr;](#Commands)
+
+```bash
+STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))
+STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))
+STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))
+echo elapsed $STOPWATCH_ELAPSED_MINUTES minutes and $STOPWATCH_ELAPSED_SECONDS seconds
+```
+
+## `sleep`
+
+sleep for a specified amount of time (s: second, m: minute, h: hour, d: day) [&uarr;](#Commands)
+
+```bash
+sleep 30${2|s,m,h,d|}
+```
+
+## `fn banner simple`
+
+function: print a banner. example: banner_simple "my title" [&uarr;](#Commands)
+
+```bash
+function banner_simple() {
+  local msg="* $* *"
+  local edge=`echo "$msg" | sed 's/./*/g'`
+  echo "$edge"
+  echo "`tput bold`$msg`tput sgr0`"
+  echo "$edge"
+  echo
+}
+```
+
+## `fx banner simple`
+
+call banner_simple function [&uarr;](#Commands)
+
+```bash
+banner_simple "my title"
+```
+
+## `fn banner color`
+
+function: print a color banner. example: banner_color red "my title"
+ [&uarr;](#Commands)
+
+```bash
+function banner_color() {
+  local color=$1
+  shift
+  case $color in
+    black) color=0
+    ;;
+    red) color=1
+    ;;
+    green) color=2
+    ;;
+    yellow) color=3
+    ;;
+    blue) color=4
+    ;;
+    magenta) color=5
+    ;;
+    cyan) color=6
+    ;;
+    white) color=7
+    ;;
+    *) echo "color is not set"; exit 1
+    ;;
+  esac
+  local s=("$@") b w
+  for l in "${s[@]}"; do
+    ((w<${#l})) && { b="$l"; w="${#l}"; }
+  done
+  tput setaf $color
+  echo " =${b//?/=}=
+| ${b//?/ } |"
+  for l in "${s[@]}"; do
+    printf '| %s%*s%s |\n' "$(tput setaf $color)" "-$w" "$l" "$(tput setaf $color)"
+  done
+  echo "| ${b//?/ } |
+ =${b//?/=}="
+  tput sgr 0
+}
+```
+
+## `fx banner color`
+
+call banner_color function [&uarr;](#Commands)
+
+```bash
+banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} "my title"
 ```
 
