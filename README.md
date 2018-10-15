@@ -1,5 +1,11 @@
 # shellman
 
+[![GitHub release](https://img.shields.io/github/release/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/release)
+[![GitHub license](https://img.shields.io/github/license/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/blob/master/LICENSE.md)
+[![GitHub stars](https://img.shields.io/github/stars/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/issues)
+![Author](https://img.shields.io/badge/Author-Remisa-ff69b4.svg)
+
 Shell script snippet
 
 ![shellman](images/demo.gif)
@@ -81,12 +87,20 @@ Call function which is declared by `fn...`
 
 ## List of [commands](COMMANDS.md)
 
-## To do
-
-- [x] Write colorful text
-- [x] New whole function feature (whole functions start with `fn`)
-
 ## Release Notes
+
+### 1.4.0
+
+- `assign array`: assign elements to an array.
+- `ip ...`
+  - `ips`: array of local IPs.
+  - `ip info`: public ip information (country, city...).
+  - `ip public`: public ip address.
+- `random number`: generate random integer x such as min < x < max.
+- `service manage`: manage service operations via `systemctl`.
+- `timeout`: run command within a time frame. Cancel command if not finished within x seconds.
+- `fn/fx`
+  - `scan`: scan host's port range and find open ports (tcp/udp).
 
 ### 1.3.0
 

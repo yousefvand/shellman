@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.4.0
+
+- `assign array`: assign elements to an array.
+- `ip ...`
+  - `ips`: array of local IPs.
+  - `ip info`: public ip information (country, city...).
+  - `ip public`: public ip address.
+- `random number`: generate random integer x such as min < x < max.
+- `service manage`: manage service operations via `systemctl`.
+- `timeout`: run command within a time frame. Cancel command if not finished within x seconds.
+- `fn/fx`
+  - `scan`: scan host's port range and find open ports (tcp/udp).
+
 ## 1.3.0
 
 - stopwatch

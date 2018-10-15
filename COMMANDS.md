@@ -18,6 +18,8 @@
 
 - [cmd failure check](#cmd-failure-check)
 
+- [assign array](#assign-array)
+
 - [assign if empty](#assign-if-empty)
 
 - [ask question](#ask-question)
@@ -76,6 +78,12 @@
 
 - [if file older](#if-file-older)
 
+- [ips](#ips)
+
+- [ip info](#ip-info)
+
+- [ip public](#ip-public)
+
 - [for i](#for-i)
 
 - [for ij](#for-ij)
@@ -128,6 +136,10 @@
 
 - [format reverse](#format-reverse)
 
+- [random int](#random-int)
+
+- [service manage](#service-manage)
+
 - [stopwatch start](#stopwatch-start)
 
 - [stopwatch stop](#stopwatch-stop)
@@ -136,6 +148,8 @@
 
 - [sleep](#sleep)
 
+- [timeout](#timeout)
+
 - [fn banner simple](#fn-banner-simple)
 
 - [fx banner simple](#fx-banner-simple)
@@ -143,6 +157,10 @@
 - [fn banner color](#fn-banner-color)
 
 - [fx banner color](#fx-banner-color)
+
+- [fn scan](#fn-scan)
+
+- [fx scan](#fx-scan)
 
 ## `bash`
 
@@ -224,6 +242,14 @@ check if last command failed [&uarr;](#Commands)
 if [[ $? != 0 ]]; then
   echo command failed
 fi
+```
+
+## `assign array`
+
+assign elements to an array [&uarr;](#Commands)
+
+```bash
+newArray=("Element 1" "Element 2")
 ```
 
 ## `assign if empty`
@@ -509,6 +535,30 @@ if [ "$file1" -ot "$file2" ]; then
 fi
 ```
 
+## `ips`
+
+Array of local IPs [&uarr;](#Commands)
+
+```bash
+IPS=`hostname -I`
+```
+
+## `ip info`
+
+public ip information [&uarr;](#Commands)
+
+```bash
+echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`
+```
+
+## `ip public`
+
+public ip [&uarr;](#Commands)
+
+```bash
+PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`
+```
+
 ## `for i`
 
 for loop by index [&uarr;](#Commands)
@@ -751,6 +801,22 @@ write in reverse [&uarr;](#Commands)
 echo `tput rev`reversed text`tput sgr0`
 ```
 
+## `random int`
+
+generate random integer x such as min < x < max [&uarr;](#Commands)
+
+```bash
+echo $((min + RANDOM % $((max-min))))
+```
+
+## `service manage`
+
+Manage service operations [&uarr;](#Commands)
+
+```bash
+sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} service
+```
+
 ## `stopwatch start`
 
 start stopwatch [&uarr;](#Commands)
@@ -784,6 +850,14 @@ sleep for a specified amount of time (s: second, m: minute, h: hour, d: day) [&u
 
 ```bash
 sleep 30${2|s,m,h,d|}
+```
+
+## `timeout`
+
+Run command within a time frame [&uarr;](#Commands)
+
+```bash
+timeout seconds command
 ```
 
 ## `fn banner simple`
@@ -860,5 +934,26 @@ call banner_color function [&uarr;](#Commands)
 
 ```bash
 banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} "my title"
+```
+
+## `fn scan`
+
+Scan host's port range (tcp/udp) [&uarr;](#Commands)
+
+```bash
+# scan proto host fromPort toPort
+function scan () {
+  for ((port=$3; port<=$4; port++)); do
+    (echo >/dev/$1/$2/$port) >/dev/null 2>&1 && echo "$1 $port => open"
+  done
+}
+```
+
+## `fx scan`
+
+call scan function to scan a host over a port range [&uarr;](#Commands)
+
+```bash
+scan ${1|tcp,udp|} host fromPort  toPort
 ```
 
