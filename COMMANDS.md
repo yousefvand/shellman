@@ -42,6 +42,30 @@
 
 - [if string !=](#if-string-!=)
 
+- [string length](#string-length)
+
+- [string trim](#string-trim)
+
+- [string trim left](#string-trim-left)
+
+- [string trim right](#string-trim-right)
+
+- [string trim all](#string-trim-all)
+
+- [string replace](#string-replace)
+
+- [string reverse](#string-reverse)
+
+- [string toLower](#string-toLower)
+
+- [string toUpper](#string-toUpper)
+
+- [string substring](#string-substring)
+
+- [string contains](#string-contains)
+
+- [string indexOf](#string-indexOf)
+
 - [if int =](#if-int-=)
 
 - [if int !=](#if-int-!=)
@@ -138,6 +162,8 @@
 
 - [random int](#random-int)
 
+- [region](#region)
+
 - [service manage](#service-manage)
 
 - [stopwatch start](#stopwatch-start)
@@ -167,7 +193,7 @@
 bash shebang [&uarr;](#Commands)
 
 ```bash
-#!/usr/bin/env ${1|bash,python,node|}
+#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}
 ```
 
 ## `summary`
@@ -335,7 +361,7 @@ if [ -n "$string" ]; then
 fi
 ```
 
-## `if string =`
+## `if string =,string equal`
 
 if strings are equal [&uarr;](#Commands)
 
@@ -345,7 +371,7 @@ if [ "$string1" = "$string2" ]; then
 fi
 ```
 
-## `if string !=`
+## `if string !=,string not equal`
 
 if strings are not equal [&uarr;](#Commands)
 
@@ -353,6 +379,105 @@ if strings are not equal [&uarr;](#Commands)
 if [ "$string1" != "$string2" ]; then
   # body
 fi
+```
+
+## `string length`
+
+length of string in characters [&uarr;](#Commands)
+
+```bash
+length=${#variable}
+```
+
+## `string trim`
+
+remove leading and trailing white space(s) [&uarr;](#Commands)
+
+```bash
+trimmed=`echo -e "${var}" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`
+```
+
+## `string trim left`
+
+remove leading white space(s) [&uarr;](#Commands)
+
+```bash
+trimmed=`echo -e "${var}" | sed -e 's/^[[:space:]]*//'`
+```
+
+## `string trim right`
+
+remove trailing white space(s) [&uarr;](#Commands)
+
+```bash
+trimmed=`echo -e "${var}" | sed -e 's/[[:space:]]*$//'`
+```
+
+## `string trim all`
+
+remove all white space(s) [&uarr;](#Commands)
+
+```bash
+trimmed=`echo -e "${var}" | tr -d '[[:space:]]'`
+```
+
+## `string replace`
+
+find all occurences of a substrings and replace them [&uarr;](#Commands)
+
+```bash
+replaced=`echo -e "${var}" | sed -e 's/find/replace/g'`
+```
+
+## `string reverse`
+
+reverse string characters [&uarr;](#Commands)
+
+```bash
+reversed=`echo -e "${var}" | rev`
+```
+
+## `string toLower`
+
+convert string to lowercase [&uarr;](#Commands)
+
+```bash
+toLower=`echo -e "${var}" | tr '[:upper:]' '[:lower:]'`
+```
+
+## `string toUpper`
+
+convert string to uppercase [&uarr;](#Commands)
+
+```bash
+toUpper=`echo -e "${var}" | tr '[:lower:]' '[:upper:]'`
+```
+
+## `string substring`
+
+part of the string from offset with length characters [&uarr;](#Commands)
+
+```bash
+substring=`echo -e "${var:offset:length"`
+```
+
+## `string contains,if string contains`
+
+check whether string contains substring [&uarr;](#Commands)
+
+```bash
+if [[ "$string" = *substring* ]]; then
+  # body
+fi
+```
+
+## `string indexOf`
+
+first index of substring in string [&uarr;](#Commands)
+
+```bash
+temp=${string%%"substring"*} && indexOf=`echo ${string%%"substring"*} | echo ${#temp}`
+# echo $indexOf
 ```
 
 ## `if int =`
@@ -553,7 +678,7 @@ echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`
 
 ## `ip public`
 
-public ip [&uarr;](#Commands)
+public ip address [&uarr;](#Commands)
 
 ```bash
 PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`
@@ -809,6 +934,16 @@ generate random integer x such as min < x < max [&uarr;](#Commands)
 echo $((min + RANDOM % $((max-min))))
 ```
 
+## `region`
+
+Comment out a special region (i.e. variable declrations [&uarr;](#Commands)
+
+```bash
+# >>>>>>>>>>>>>>>>>>>>>>>> name >>>>>>>>>>>>>>>>>>>>>>>>
+
+# <<<<<<<<<<<<<<<<<<<<<<<< name <<<<<<<<<<<<<<<<<<<<<<<<
+```
+
 ## `service manage`
 
 Manage service operations [&uarr;](#Commands)
@@ -956,4 +1091,3 @@ call scan function to scan a host over a port range [&uarr;](#Commands)
 ```bash
 scan ${1|tcp,udp|} host fromPort  toPort
 ```
-

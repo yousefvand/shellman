@@ -1,7 +1,7 @@
 {
-  "bash": {
+	"bash": {
     "prefix": "bash",
-    "body": "#!/usr/bin/env ${1|bash,python,node|}\n\n",
+    "body": "#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}\n\n",
     "description": "bash shebang"
   },
   "summary": {
@@ -131,8 +131,8 @@
     ],
     "description": "if string is not empty"
   },
-  "if_string_equal": {
-    "prefix": "if string =",
+	"if_string_equal": {
+    "prefix": ["if string =", "string equal"],
     "body": [
       "if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
       "\t${3:# body}",
@@ -141,7 +141,7 @@
     "description": "if strings are equal"
   },
   "if_string_not_equal": {
-    "prefix": "if string !=",
+    "prefix": ["if string !=", "string not equal"],
     "body": [
       "if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
       "\t${3:# body}",
@@ -149,6 +149,73 @@
     ],
     "description": "if strings are not equal"
   },
+  "string_length": {
+		"prefix": "string length",
+		"body": "length=\\${#${1:variable}}\n",
+		"description": "length of string in characters"
+	},
+	"string_trim": {
+		"prefix": "string trim",
+		"body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`",
+		"description": "remove leading and trailing white space(s)"
+	},
+	"string_trim_left": {
+		"prefix": "string trim left",
+		"body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | sed -e 's/^[[:space:]]*//'`",
+		"description": "remove leading white space(s)"
+	},
+	"string_trim_right": {
+		"prefix": "string trim right",
+		"body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | sed -e 's/[[:space:]]*$//'`",
+		"description": "remove trailing white space(s)"
+	},
+	"string_trim_all": {
+		"prefix": "string trim all",
+		"body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | tr -d '[[:space:]]'`",
+		"description": "remove all white space(s)"
+	},
+	"string_replace": {
+		"prefix": "string replace",
+		"body": "${1:replaced}=`echo -e \"\\${${2:var}}\" | sed -e 's/${3:find}/${4:replace}/g'`",
+		"description": "find all occurences of a substrings and replace them"
+	},
+	"string_reverse": {
+		"prefix": "string reverse",
+		"body": "reversed=`echo -e \"\\${${1:var}}\" | rev`",
+		"description": "reverse string characters"
+	},
+	"string_to_lower": {
+		"prefix": "string toLower",
+		"body": "toLower=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`",
+		"description": "convert string to lowercase"
+	},
+	"string_to_upper": {
+		"prefix": "string toUpper",
+		"body": "toUpper=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`",
+		"description": "convert string to uppercase"
+	},
+	"string_substring": {
+		"prefix": "string substring",
+		"body": "substring=`echo -e \"\\${${1:var}:${2:offset}:${3:length}\"`",
+		"description": "part of the string from offset with length characters"
+	},
+	"string_contains": {
+    "prefix": ["string contains", "if string contains"],
+    "body": [
+      "if [[ \"\\$${1:string}\" = *${2:substring}* ]]; then",
+      "\t${3:# body}",
+      "fi\n"
+    ],
+    "description": "check whether string contains substring"
+	},
+	"string_index_of": {
+		"prefix": "string indexOf",
+		"body": [
+			"temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=`echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp}`",
+			"${0:# echo \\$indexOf}"
+		],
+		"description": "first index of substring in string"
+	},
   "if_int_equal": {
     "prefix": "if int =",
     "body": [
@@ -517,6 +584,15 @@
     "body": "echo \\$((${1:min} + RANDOM % \\$((${2:max}-${1:min}))))\n",
     "description": "generate random integer x such as min < x < max"
   },
+  "region": {
+		"prefix": "region",
+		"body": [
+			"# >>>>>>>>>>>>>>>>>>>>>>>> ${1:name} >>>>>>>>>>>>>>>>>>>>>>>>",
+			"$0",
+			"# <<<<<<<<<<<<<<<<<<<<<<<< ${1:name} <<<<<<<<<<<<<<<<<<<<<<<<"
+		],
+		"description": "Comment out a special region (i.e. variable declrations"
+	},
   "service_manage": {
     "prefix": "service manage",
     "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:service}\n",

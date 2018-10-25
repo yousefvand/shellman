@@ -71,6 +71,10 @@ Write in bold, italic, dim, reverse format.
 
 Wide range of logical conditions which are more common in bash scripts.
 
+`string...`
+
+String utilities
+
 `stopwatch...`
 
 Start and stop, stopwatch and read elapsed time.
@@ -88,6 +92,23 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 1.5.0
+
+- `region`: A region for specific purpose (functions, variables...)
+- string manipluation
+  - `string length`: length of string in characters.
+  - `string trim`: remove leading and trailing white space(s).
+  - `string trim left`: remove leading white space(s).
+  - `string trim right`: remove trailing white space(s).
+  - `string trimm all`: remove all white space(s).
+  - `string replace`: find all occurences of a substrings and replace them.
+  - `string reverse`: reverse string characters.
+  - `string toLower`: convert string to lowercase.
+  - `string toUpper`: convert string to uppercase.
+  - `string substring`: part of the string from offset with [length] characters.
+  - `string contains`: check whether string contains substring.
+  - `string indexOf`: first index of substring in string.
 
 ### 1.4.0
 

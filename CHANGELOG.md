@@ -1,5 +1,22 @@
 # Change Log
 
+## 1.5.0
+
+- `region`: A region for specific purpose (functions, variables...)
+- string manipluation
+  - `string length`: length of string in characters.
+  - `string trim`: remove leading and trailing white space(s).
+  - `string trim left`: remove leading white space(s).
+  - `string trim right`: remove trailing white space(s).
+  - `string trimm all`: remove all white space(s).
+  - `string replace`: find all occurences of a substrings and replace them.
+  - `string reverse`: reverse string characters.
+  - `string toLower`: convert string to lowercase.
+  - `string toUpper`: convert string to uppercase.
+  - `string substring`: part of the string from offset with [length] characters.
+  - `string contains`: check whether string contains substring.
+  - `string indexOf`: first index of substring in string.
+
 ## 1.4.0
 
 - `assign array`: assign elements to an array.
