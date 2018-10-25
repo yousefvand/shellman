@@ -423,7 +423,7 @@ trimmed=`echo -e "${var}" | tr -d '[[:space:]]'`
 
 ## `string replace`
 
-find all occurences of a substrings and replace them [&uarr;](#Commands)
+find all occurrences of a substrings and replace them [&uarr;](#Commands)
 
 ```bash
 replaced=`echo -e "${var}" | sed -e 's/find/replace/g'`

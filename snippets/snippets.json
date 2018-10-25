@@ -177,7 +177,7 @@
 	"string_replace": {
 		"prefix": "string replace",
 		"body": "${1:replaced}=`echo -e \"\\${${2:var}}\" | sed -e 's/${3:find}/${4:replace}/g'`",
-		"description": "find all occurences of a substrings and replace them"
+		"description": "find all occurrences of a substrings and replace them"
 	},
 	"string_reverse": {
 		"prefix": "string reverse",
