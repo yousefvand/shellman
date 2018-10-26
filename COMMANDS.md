@@ -458,7 +458,7 @@ toUpper=`echo -e "${var}" | tr '[:lower:]' '[:upper:]'`
 part of the string from offset with length characters [&uarr;](#Commands)
 
 ```bash
-substring=`echo -e "${var:offset:length"`
+substring=`echo -e "${var:offset:length}"`
 ```
 
 ## `string contains,if string contains`
@@ -940,7 +940,7 @@ Comment out a special region (i.e. variable declrations [&uarr;](#Commands)
 
 ```bash
 # >>>>>>>>>>>>>>>>>>>>>>>> name >>>>>>>>>>>>>>>>>>>>>>>>
-
+$0
 # <<<<<<<<<<<<<<<<<<<<<<<< name <<<<<<<<<<<<<<<<<<<<<<<<
 ```
 
@@ -1091,3 +1091,4 @@ call scan function to scan a host over a port range [&uarr;](#Commands)
 ```bash
 scan ${1|tcp,udp|} host fromPort  toPort
 ```
+

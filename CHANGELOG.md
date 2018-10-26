@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.5.1
+
+- `string substring` typo fixed.
+
 ## 1.5.0
 
 - `region`: A region for specific purpose (functions, variables...)
