@@ -124,7 +124,35 @@
 
 - [expr](#expr)
 
-- [math](#math)
+- [math ++](#math-++)
+
+- [math --](#math---)
+
+- [math +](#math-+)
+
+- [math -](#math--)
+
+- [math *](#math-*)
+
+- [math /](#math-/)
+
+- [math %](#math-%)
+
+- [math ^](#math-^)
+
+- [math √](#math-√)
+
+- [math 0.00](#math-0.00)
+
+- [math const π](#math-const-π)
+
+- [math const e](#math-const-e)
+
+- [math const 𝛾](#math-const-𝛾)
+
+- [math const ϕ](#math-const-ϕ)
+
+- [math const Ω](#math-const-Ω)
 
 - [file read](#file-read)
 
@@ -773,12 +801,124 @@ arithmetic operations [&uarr;](#Commands)
 expr 2 * 3
 ```
 
-## `math`
+## `math ++`
 
-Doing mathematical operations [&uarr;](#Commands)
+increment variable [&uarr;](#Commands)
 
 ```bash
-$((i++))
+$((${1|var++,++var|}))
+```
+
+## `math --`
+
+decrement variable [&uarr;](#Commands)
+
+```bash
+$((${1|var--,--var|}))
+```
+
+## `math +`
+
+add two variables (+= assign result to var1) [&uarr;](#Commands)
+
+```bash
+$((var1 ${2|+,+=|} var2))
+```
+
+## `math -`
+
+subtract var2 from var1 (-= assign result to var1) [&uarr;](#Commands)
+
+```bash
+$((var1 ${2|-,-=|} var2))
+```
+
+## `math *`
+
+multiply var1 and var2 (*= assign result to var1) [&uarr;](#Commands)
+
+```bash
+$((var1 ${2|*,*=|} var2))
+```
+
+## `math /`
+
+divide var1 by var2 (/= assign result to var1) [&uarr;](#Commands)
+
+```bash
+$((var1 ${2|/,/=|} var2))
+```
+
+## `math %`
+
+reminder of dividing var1 by var2 (%= assign result to var1) [&uarr;](#Commands)
+
+```bash
+$((var1 ${2|%,%=|} var2))
+```
+
+## `math ^`
+
+exponentiate base to power [&uarr;](#Commands)
+
+```bash
+$((base ** power))
+```
+
+## `math √`
+
+square root of var up to scale decimal places [&uarr;](#Commands)
+
+```bash
+result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt($var)" | bc`
+```
+
+## `math 0.00`
+
+math operations with up to scale decimal places precision [&uarr;](#Commands)
+
+```bash
+result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc`
+```
+
+## `math const π`
+
+math PI constant [&uarr;](#Commands)
+
+```bash
+MATH_PI='3.14159265358979323846264338327950288'
+```
+
+## `math const e`
+
+math Napier's constant [&uarr;](#Commands)
+
+```bash
+MATH_NAPIER='2.71828182845904523536028747135266249'
+```
+
+## `math const 𝛾`
+
+math Euler-Mascheroni constant [&uarr;](#Commands)
+
+```bash
+MATH_GAMMA='0.57721566490153286060651209008240243'
+```
+
+## `math const ϕ`
+
+math golden ration constant [&uarr;](#Commands)
+
+```bash
+MATH_GOLDEN_RATIO='1.61803398874989484820458683436563811'
+```
+
+## `math const Ω`
+
+math Omega constant [&uarr;](#Commands)
+
+```bash
+MATH_OMEGA='0.56714329040978387299996866221035554'
 ```
 
 ## `file read`
@@ -936,7 +1076,7 @@ echo $((min + RANDOM % $((max-min))))
 
 ## `region`
 
-Comment out a special region (i.e. variable declrations [&uarr;](#Commands)
+Comment out a special region (i.e. variable declarations [&uarr;](#Commands)
 
 ```bash
 # >>>>>>>>>>>>>>>>>>>>>>>> name >>>>>>>>>>>>>>>>>>>>>>>>

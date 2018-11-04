@@ -10,6 +10,10 @@ Shell script snippet
 
 ![shellman](images/demo.gif)
 
+## Math example
+
+![shellman](images/math.gif)
+
 ## Stopwatch example
 
 ![shellman](images/stopwatch.gif)
@@ -25,7 +29,7 @@ Shell script snippet
 
 ## Usage
 
-Install extionsion in vscode by:
+Install extension in vscode by:
 
 ```bash
 ext install Remisa.shellman
@@ -33,7 +37,7 @@ ext install Remisa.shellman
 
 Start typing and Shellman will provide you available commands.
 
-For more convenience similar commands are grouped into same prefixes. Here is an overoview:
+For more convenience similar commands are grouped into same prefixes. Here is an overview:
 
 `bash`
 
@@ -71,6 +75,10 @@ Write in bold, italic, dim, reverse format.
 
 Wide range of logical conditions which are more common in bash scripts.
 
+`math...`
+
+Math operations
+
 `string...`
 
 String utilities
@@ -83,7 +91,7 @@ Start and stop, stopwatch and read elapsed time.
 
 `fn...`
 
-inserts a whole function into script. Function declaration should prceed its usage.
+inserts a whole function into script. Function declaration should proceed its usage.
 
 `fx...`
 
@@ -92,6 +100,12 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 2.0.0
+
+- `math...`
+  - math constants (π, e, Ω, ...)
+  - math operations (with precision).
 
 ### 1.5.1
 

@@ -1,8 +1,8 @@
 {
-    "name": "shellman", 
+    "name": "shellman",
     "displayName": "shellman",
     "description": "Bash script snippet",
-    "version": "1.5.1",
+    "version": "2.0.0",
     "publisher": "Remisa",
     "icon": "images/icon.png",
     "license": "SEE LICENSE IN LICENSE.md",
@@ -35,6 +35,7 @@
     },
     "scripts": {
         "doc": "node docgen.js",
-        "clean": "rm COMMANDS.md &> /dev/null"
+        "clean": "rm COMMANDS.md &> /dev/null",
+        "spellcheck": "./node_modules/.bin/cspell ./**/*"
     }
 }

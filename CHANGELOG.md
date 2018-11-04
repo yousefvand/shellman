@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0
+
+- `math...`
+  - math constants (π, e, Ω, ...)
+  - math operations (with precision).
+
 ## 1.5.1
 
 - `string substring` typo fixed.

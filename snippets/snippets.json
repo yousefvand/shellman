@@ -469,14 +469,84 @@
   },
   "expr": {
     "prefix": "expr",
-    "body": "expr ${0:2 * 3}",
+    "body": "expr ${0:2 * 3}\n",
     "description": "arithmetic operations"
   },
-  "math": {
-  "prefix": "math",
-  "body": "\\$((${0:i++}))",
-  "description": "Doing mathematical operations"
-  },
+  "math_inc": {
+  "prefix": "math ++",
+  "body": "\\$((${1|var++,++var|}))\n",
+  "description": "increment variable"
+	},
+	"math_dec": {
+		"prefix": "math --",
+		"body": "\\$((${1|var--,--var|}))\n",
+		"description": "decrement variable"
+		},
+	"math_add": {
+		"prefix": "math +",
+		"body": "\\$((${1:var1} ${2|+,+=|} ${3:var2}))\n",
+		"description": "add two variables (+= assign result to var1)"
+		},
+	"math_subtract": {
+		"prefix": "math -",
+		"body": "\\$((${1:var1} ${2|-,-=|} ${3:var2}))\n",
+		"description": "subtract var2 from var1 (-= assign result to var1)"
+		},
+	"math_multiply": {
+		"prefix": "math *",
+		"body": "\\$((${1:var1} ${2|*,*=|} ${3:var2}))\n",
+		"description": "multiply var1 and var2 (*= assign result to var1)"
+		},
+	"math_divide": {
+		"prefix": "math /",
+		"body": "\\$((${1:var1} ${2|/,/=|} ${3:var2}))\n",
+		"description": "divide var1 by var2 (/= assign result to var1)"
+		},
+	"math_modulus": {
+		"prefix": "math %",
+		"body": "\\$((${1:var1} ${2|%,%=|} ${3:var2}))\n",
+		"description": "reminder of dividing var1 by var2 (%= assign result to var1)"
+		},
+	"math_power": {
+		"prefix": "math ^",
+		"body": "\\$((${1:base} ** ${2:power}))\n",
+		"description": "exponentiate base to power"
+		},
+	"math_sqrt": {
+		"prefix": "math √",
+		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
+		"description": "square root of var up to scale decimal places"
+		},
+	"math_float": {
+		"prefix": "math 0.00",
+		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n",
+		"description": "math operations with up to scale decimal places precision"
+		},
+	"math_const_pi": {
+		"prefix": "math const π",
+		"body": "MATH_PI='3.14159265358979323846264338327950288'\n",
+		"description": "math PI constant"
+	},
+	"math_const_napier": {
+		"prefix": "math const e",
+		"body": "MATH_NAPIER='2.71828182845904523536028747135266249'\n",
+		"description": "math Napier's constant"
+	},
+	"math_const_gamma": {
+		"prefix": "math const 𝛾",
+		"body": "MATH_GAMMA='0.57721566490153286060651209008240243'\n",
+		"description": "math Euler-Mascheroni constant"
+	},
+	"math_const_phi": {
+		"prefix": "math const ϕ",
+		"body": "MATH_GOLDEN_RATIO='1.61803398874989484820458683436563811'\n",
+		"description": "math golden ration constant"
+	},
+	"math_const_omega": {
+		"prefix": "math const Ω",
+		"body": "MATH_OMEGA='0.56714329040978387299996866221035554'\n",
+		"description": "math Omega constant"
+	},
   "file_read": {
     "prefix": "file read",
     "body": [
@@ -591,7 +661,7 @@
 			"$0",
 			"# <<<<<<<<<<<<<<<<<<<<<<<< ${1:name} <<<<<<<<<<<<<<<<<<<<<<<<"
 		],
-		"description": "Comment out a special region (i.e. variable declrations"
+		"description": "Comment out a special region (i.e. variable declarations"
 	},
   "service_manage": {
     "prefix": "service manage",
