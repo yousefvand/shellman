@@ -212,6 +212,14 @@
 
 - [fx banner color](#fx-banner-color)
 
+- [fn import](#fn-import)
+
+- [fx import](#fx-import)
+
+- [fn options](#fn-options)
+
+- [fx options](#fx-options)
+
 - [fn scan](#fn-scan)
 
 - [fx scan](#fx-scan)
@@ -1137,9 +1145,10 @@ timeout seconds command
 
 ## `fn banner simple`
 
-function: print a banner. example: banner_simple "my title" [&uarr;](#Commands)
+function: print a banner with provided title [&uarr;](#Commands)
 
 ```bash
+# Usage: banner_simple "my title"
 function banner_simple() {
   local msg="* $* *"
   local edge=`echo "$msg" | sed 's/./*/g'`
@@ -1160,10 +1169,10 @@ banner_simple "my title"
 
 ## `fn banner color`
 
-function: print a color banner. example: banner_color red "my title"
- [&uarr;](#Commands)
+print a color banner. [&uarr;](#Commands)
 
 ```bash
+# Usage: banner_color green "my title"
 function banner_color() {
   local color=$1
   shift
@@ -1211,12 +1220,95 @@ call banner_color function [&uarr;](#Commands)
 banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} "my title"
 ```
 
+## `fn import`
+
+import functions from other shellscript files [&uarr;](#Commands)
+
+```bash
+# Usage: import "mylib"
+function import() {
+  local file="./lib/$1.sh"
+  if [ -f "$file" ]; then
+    source "$file"
+  else
+    echo "Error: Cannot find library at: $file"
+    exit 1
+  fi
+}
+```
+
+## `fx import`
+
+call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file [&uarr;](#Commands)
+
+```bash
+import "libname"
+```
+
+## `fn options`
+
+provide a list of options to user and return the index of selected option [&uarr;](#Commands)
+
+```bash
+# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
+function chooseOption() {
+  echo "$1"; shift
+  echo `tput sitm``tput dim`-"Change selection: [up/down]  Select: [ENTER]" `tput sgr0`
+  local selected="$1"; shift
+  ESC=`echo -e "\033"`
+  cursor_blink_on()  { tput cnorm; }
+  cursor_blink_off() { tput civis; }
+  cursor_to()        { tput cup $(($1-1)); }
+  print_option()     { echo  `tput dim` "   $1" `tput sgr0`; }
+  print_selected()   { echo `tput bold` "=> $1" `tput sgr0`; }
+  get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
+  key_input()        { read -s -n3 key 2>/dev/null >&2; [[ $key = $ESC[A ]] && echo up; [[ $key = $ESC[B ]] && echo down; [[ $key = "" ]] && echo enter; }
+  for opt; do echo; done
+  local lastrow=`get_cursor_row`
+  local startrow=$(($lastrow - $#))
+  trap "cursor_blink_on; echo; echo; exit" 2
+  cursor_blink_off
+  : selected:=0
+  while true; do
+    local idx=0
+    for opt; do
+      cursor_to $(($startrow + $idx))
+      if [ $idx -eq $selected ]; then
+        print_selected "$opt"
+      else
+        print_option "$opt"
+      fi
+      ((idx++))
+    done
+    case `key_input` in
+      enter) break;;
+      up)    ((selected--)); [ $selected -lt 0 ] && selected=$(($# - 1));;
+      down)  ((selected++)); [ $selected -ge $# ] && selected=0;;
+    esac
+  done
+  cursor_to $lastrow
+  cursor_blink_on
+  echo
+  return $selected
+}
+```
+
+## `fx options`
+
+call options function [&uarr;](#Commands)
+
+```bash
+options=("one" "two" "three")
+chooseOption "Choose:" 1 "${options[@]}"; choice=$?
+echo "${options[$choice]}" selected
+```
+
 ## `fn scan`
 
 Scan host's port range (tcp/udp) [&uarr;](#Commands)
 
 ```bash
-# scan proto host fromPort toPort
+# Usage: scan proto host fromPort toPort
 function scan () {
   for ((port=$3; port<=$4; port++)); do
     (echo >/dev/$1/$2/$port) >/dev/null 2>&1 && echo "$1 $port => open"
