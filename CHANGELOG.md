@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.0
+
+- Documentation improved.
+- `import` function (fn/fx) added.
+  - Import functions from other shell script files.
+- `options` function (fn/fx) added.
+  - Provide a list of options to user.
+
 ## 2.0.0
 
 - `math...`

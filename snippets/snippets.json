@@ -701,6 +701,7 @@
   "fn_banner_simple": {
     "prefix": "fn banner simple",
     "body": [
+      "# Usage: banner_simple \"my title\"\n",
       "function banner_simple() {",
       "\tlocal msg=\"* \\$* *\"",
       "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
@@ -710,7 +711,7 @@
       "\techo",
       "}\n"
     ],
-    "description": "function: print a banner. example: banner_simple \"my title\""
+    "description": "function: print a banner with provided title"
   },
   "fx_banner_simple": {
     "prefix": "fx banner simple",
@@ -720,6 +721,7 @@
   "fn_banner_color": {
     "prefix": "fn banner color",
     "body": [
+      "# Usage: banner_color green \"my title\"\n",
       "function banner_color() {",
       "\tlocal color=\\$1",
       "\tshift\n",
@@ -758,17 +760,94 @@
       "\ttput sgr 0",
       "}\n"
     ],
-    "description": "function: print a color banner. example: banner_color red \"my title\"\n"
+    "description": "print a color banner."
   },
   "fx_banner_color": {
     "prefix": "fx banner color",
     "body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
     "description": "call banner_color function"
   },
+  "fn_import": {
+    "prefix": "fn import",
+    "body": [
+			"# Usage: import \"mylib\"\n",
+      "function import() {",
+      "\tlocal file=\"./${0:lib}/\\$1.sh\"",
+      "\tif [ -f \"\\$file\" ]; then",
+      "\t\tsource \"\\$file\"",
+      "\telse",
+			"\t\techo \"Error: Cannot find library at: \\$file\"",
+			"\t\texit 1",
+      "\tfi",
+      "}\n"
+    ],
+    "description": "import functions from other shellscript files"
+  },
+  "fx_import": {
+    "prefix": "fx import",
+    "body": "import \"${1:libname}\"\n",
+    "description": "call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file"
+	},
+	"fn_options": {
+		"prefix": "fn options",
+		"body": [
+			"# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"\n",
+			"function chooseOption() {",
+			"\techo \"\\$1\"; shift",
+			"\techo `tput sitm``tput dim`-\"Change selection: [up/down]  Select: [ENTER]\" `tput sgr0`",
+			"\tlocal selected=\"\\$1\"; shift\n",
+			"\tESC=`echo -e \"\\033\"`",
+			"\tcursor_blink_on()  { tput cnorm; }",
+			"\tcursor_blink_off() { tput civis; }",
+			"\tcursor_to()        { tput cup \\$((\\$1-1)); }",
+			"\tprint_option()     { echo  `tput dim` \"   \\$1\" `tput sgr0`; }",
+			"\tprint_selected()   { echo `tput bold` \"=> \\$1\" `tput sgr0`; }",
+			"\tget_cursor_row()   { IFS=';' read -sdR -p \\$'\\E[6n' ROW COL; echo \\${ROW#*[}; }",
+			"\tkey_input()        { read -s -n3 key 2>/dev/null >&2; [[ \\$key = \\$ESC[A ]] && echo up; [[ \\$key = \\$ESC[B ]] && echo down; [[ \\$key = \"\" ]] && echo enter; }\n",
+			"\tfor opt; do echo; done\n",
+			"\tlocal lastrow=`get_cursor_row`",
+			"\tlocal startrow=\\$((\\$lastrow - \\$#))",
+			"\ttrap \"cursor_blink_on; echo; echo; exit\" 2",
+			"\tcursor_blink_off\n",
+			"\t: selected:=0\n",
+			"\twhile true; do",
+			"\t\tlocal idx=0",
+			"\t\tfor opt; do",
+			"\t\t\tcursor_to \\$((\\$startrow + \\$idx))",
+			"\t\t\tif [ \\$idx -eq \\$selected ]; then",
+			"\t\t\t\tprint_selected \"\\$opt\"",
+			"\t\t\telse",
+			"\t\t\t\tprint_option \"\\$opt\"",
+			"\t\t\tfi",
+			"\t\t\t((idx++))",
+			"\t\tdone\n",
+			"\t\tcase `key_input` in",
+			"\t\t\tenter) break;;",
+			"\t\t\tup)    ((selected--)); [ \\$selected -lt 0 ] && selected=\\$((\\$# - 1));;",
+			"\t\t\tdown)  ((selected++)); [ \\$selected -ge \\$# ] && selected=0;;",
+			"\t\tesac",
+			"\tdone\n",
+			"\tcursor_to \\$lastrow",
+			"\tcursor_blink_on",
+			"\techo\n",
+			"\treturn \\$selected",
+			"}\n"
+		],
+		"description": "provide a list of options to user and return the index of selected option"
+	},
+	"fx_options": {
+		"prefix": "fx options",
+		"body": [
+			"options=(${1:\"one\" \"two\" \"three\"})",
+			"chooseOption \"Choose:\" ${2:1} \"\\${options[@]}\"; choice=\\$?",
+			"echo \"\\${options[\\$choice]}\" selected\n"
+		],
+		"description": "call options function"
+	},
   "fn_scan": {
     "prefix": "fn scan",
     "body": [
-      "# scan proto host fromPort toPort",
+      "# Usage: scan proto host fromPort toPort",
       "function scan () {",
       "\tfor ((port=\\$3; port<=\\$4; port++)); do",
       "\t\t(echo >/dev/\\$1/\\$2/\\$port) >/dev/null 2>&1 && echo \"\\$1 \\$port => open\"",

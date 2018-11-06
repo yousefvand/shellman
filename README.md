@@ -97,9 +97,31 @@ inserts a whole function into script. Function declaration should proceed its us
 
 Call function which is declared by `fn...`
 
+## Functions
+
+- banner simple
+  - print a banner with provided title.
+  - example: `banner_simple "my title"`
+- banner color
+  - print a color banner.
+  - example: `banner_color red "my title"`
+- import
+  - Organize your project and reuse functions. Import functions from other shell script files. Default import directory is `lib`. This directory should be where the calling script exists and contain library files with `.sh` extension. For example if `libname.sh` contains some useful functions and exists in `lib` directory, you can import those functions into your script and call them.
+  - example: `import "somefile"` will import all defined functions in `somefile.sh` from `lib` directory where calling script resides.
+- scan
+  - Scan host's port range (tcp/udp)
+
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 2.1.0
+
+- Documentation improved.
+- `import` function (fn/fx) added.
+  - Import functions from other shell script files.
+- `options` function (fn/fx) added.
+  - Provide a list of options to user.
 
 ### 2.0.0
 
