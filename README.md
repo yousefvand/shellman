@@ -8,6 +8,8 @@
 
 Shell script snippet
 
+read [Shellman story](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) on medium.
+
 ![shellman](images/demo.gif)
 
 ## Math example
