@@ -255,7 +255,7 @@
   "if_int_less_than": {
     "prefix": "if int <",
     "body": [
-      "if [[ \\$${1:int} > \\$${2:val} ]]; then",
+      "if [[ \\$${1:int} < \\$${2:val} ]]; then",
       "\t${3:echo lesser}",
       "fi\n"
     ],
