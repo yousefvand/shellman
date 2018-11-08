@@ -14,10 +14,6 @@ Shell script snippet
 
 ![shellman](images/math.gif)
 
-## Stopwatch example
-
-![shellman](images/stopwatch.gif)
-
 ## `fn... / fx...` example
 
 ![shellman](images/banner.gif)
@@ -114,6 +110,12 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 2.2.1
+
+- Argument parsing
+  - parse command line arguments (flags/switches)
+- bug fixed (int less than)
 
 ### 2.1.0
 

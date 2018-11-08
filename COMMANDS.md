@@ -4,6 +4,8 @@
 
 - [summary](#summary)
 
+- [argument parsing](#argument-parsing)
+
 - [func](#func)
 
 - [func args count](#func-args-count)
@@ -234,7 +236,7 @@ bash shebang [&uarr;](#Commands)
 
 ## `summary`
 
-Script summary [&uarr;](#Commands)
+script summary [&uarr;](#Commands)
 
 ```bash
 # Title:         title
@@ -242,6 +244,31 @@ Script summary [&uarr;](#Commands)
 # Author:        author <email>
 # Date:          yyyy-mm-dd
 # Version:       1.0.0
+```
+
+## `argument parsing,parse args`
+
+parse command line arguments (flags/switches) [&uarr;](#Commands)
+
+```bash
+POSITIONAL=()
+while [[ $# > 0 ]]; do
+  case "$1" in
+    -f|--flag)
+    echo flag: $1
+    shift # shift once since flags have no values
+    ;;
+    -s|--switch)
+    echo switch $1 with value: $2
+    shift 2 # shift twice to bypass switch and its value
+    ;;
+    *) # unknown flag/switch
+    POSITIONAL+=("$1")
+    shift
+    ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional params
 ```
 
 ## `func`

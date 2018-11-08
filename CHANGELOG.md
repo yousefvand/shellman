@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.1
+
+- Argument parsing
+  - parse command line arguments (flags/switches)
+- bug fixed (int less than)
+
 ## 2.1.0
 
 - Documentation improved.
