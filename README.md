@@ -39,6 +39,10 @@ For more convenience similar commands are grouped into same prefixes. Here is an
 
 Shebang should be used as the first line of your script. You can replace `bash` with any other installed scripting language like `node` or `python`.
 
+`argument parsing` | `parse args`
+
+Parse commandline arguments
+
 `cmd...`
 
 Run external commands and check if operation succeeded.
