@@ -8,7 +8,7 @@
 
 Shell script snippet
 
-read [Shellman story](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) on medium.
+[Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
 ![shellman](images/demo.gif)
 
@@ -116,6 +116,15 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 2.3.1
+
+- `date...`, `time...`
+  - Date and time commands
+- `file find`
+  - Find files and directories by name (wildcard supported)
+- `file search`
+  - Search inside all files for a text (i.e. word)
 
 ### 2.2.1
 

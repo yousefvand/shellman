@@ -104,6 +104,61 @@
     ],
     "description": "Ask question with default answer"
   },
+  "date_short": {
+		"prefix": "date now short",
+		"body": "dateShort=`date -I`\n",
+		"description": "yyyy/mm/dd"
+	},
+	"date_utc": {
+		"prefix": "date now UTC",
+		"body": "dateUTC=`date -u`\n",
+		"description": "coordinated Universal Time"
+	},
+	"date_year": {
+		"prefix": "date now year",
+		"body": "year=`date +%Y`\n",
+		"description": "current Year"
+	},
+	"date_month_number": {
+		"prefix": "date now monthNumber",
+		"body": "monthNumber=`date +%m`\n",
+		"description": "current month number (1..12)"
+	},
+	"date_month_name": {
+		"prefix": "date now monthName",
+		"body": "monthName=`date +%${1|B,b|}`\n",
+		"description": "current month name (full/abbreviated B/b)"
+	},
+	"date_day": {
+		"prefix": "date now dayOfMonth",
+		"body": "dayOfMonth=`date +%d`\n",
+		"description": "current day of month (1..31)"
+	},
+	"date_day_of_week": {
+		"prefix": "date now dayOfWeek",
+		"body": "dayOfWeek=`date +%${1|A,a|}`\n",
+		"description": "current day of week name (full/abbreviated A/a)"
+	},
+	"date_day_of_year": {
+		"prefix": "date now dayOfYear",
+		"body": "dayOfYear=`date +%j`\n",
+		"description": "current day of year (1..366)"
+  },
+  "time_local": {
+		"prefix": "time now local",
+		"body": "timeNowLocal=`date +%${1|R,r|}`\n",
+		"description": "current local time (24hrs/12hrs R/r)"
+	},
+	"time_utc": {
+		"prefix": "time now UTC",
+		"body": "timeNowUTC=`date -u +%R`\n",
+		"description": "current UTC time"
+	},
+	"time_epoch_seconds": {
+		"prefix": "time seconds epoch",
+		"body": "timeNowSecondsEpoch=`date +%s`\n",
+		"description": "seconds since epoch (1970-01-01 00:00:00)"
+	},
   "directory_create": {
     "prefix": "directory create",
     "body": "mkdir ${1:dirname}",
@@ -570,6 +625,16 @@
 		"prefix": "math const Ω",
 		"body": "MATH_OMEGA='0.56714329040978387299996866221035554'\n",
 		"description": "math Omega constant"
+  },
+  "file_delete": {
+		"prefix": ["file delete", "file remove"],
+		"body": "rm -f ${1:./path/file}\n",
+		"description": "delete file(s)"
+	},
+	"file_find": {
+		"prefix": ["file find", "directory find"],
+		"body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n",
+		"description": "find files (-type f) or directories (-type d) by name"
 	},
   "file_read": {
     "prefix": "file read",
@@ -580,6 +645,11 @@
     ],
     "description": "read a file"
   },
+  "file_search": {
+		"prefix": ["file search", "search in files", "find in files"],
+		"body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +`\n",
+		"description": "find files which contain search criteria"
+	},
   "file_write": {
     "prefix": "file write",
     "body": [

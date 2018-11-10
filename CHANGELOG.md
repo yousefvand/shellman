@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.3.1
+
+- `date...`, `time...`
+  - Date and time commands
+- `file find`
+  - Find files and directories by name (wildcard supported)
+- `file search`
+  - Search inside all files for a text (i.e. word)
+
 ## 2.2.1
 
 - Argument parsing

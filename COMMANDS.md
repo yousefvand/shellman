@@ -26,6 +26,28 @@
 
 - [ask question](#ask-question)
 
+- [date now short](#date-now-short)
+
+- [date now UTC](#date-now-UTC)
+
+- [date now year](#date-now-year)
+
+- [date now monthNumber](#date-now-monthNumber)
+
+- [date now monthName](#date-now-monthName)
+
+- [date now dayOfMonth](#date-now-dayOfMonth)
+
+- [date now dayOfWeek](#date-now-dayOfWeek)
+
+- [date now dayOfYear](#date-now-dayOfYear)
+
+- [time now local](#time-now-local)
+
+- [time now UTC](#time-now-UTC)
+
+- [time seconds epoch](#time-seconds-epoch)
+
 - [directory create](#directory-create)
 
 - [directory create nested](#directory-create-nested)
@@ -156,7 +178,13 @@
 
 - [math const Ω](#math-const-Ω)
 
+- [file delete](#file-delete)
+
+- [file find](#file-find)
+
 - [file read](#file-read)
+
+- [file search](#file-search)
 
 - [file write](#file-write)
 
@@ -356,6 +384,94 @@ Ask question with default answer [&uarr;](#Commands)
 ```bash
 read -ep "Question here? " -i Default answer ANSWER
 echo "$ANSWER"
+```
+
+## `date now short`
+
+yyyy/mm/dd [&uarr;](#Commands)
+
+```bash
+dateShort=`date -I`
+```
+
+## `date now UTC`
+
+coordinated Universal Time [&uarr;](#Commands)
+
+```bash
+dateUTC=`date -u`
+```
+
+## `date now year`
+
+current Year [&uarr;](#Commands)
+
+```bash
+year=`date +%Y`
+```
+
+## `date now monthNumber`
+
+current month number (1..12) [&uarr;](#Commands)
+
+```bash
+monthNumber=`date +%m`
+```
+
+## `date now monthName`
+
+current month name (full/abbreviated B/b) [&uarr;](#Commands)
+
+```bash
+monthName=`date +%${1|B,b|}`
+```
+
+## `date now dayOfMonth`
+
+current day of month (1..31) [&uarr;](#Commands)
+
+```bash
+dayOfMonth=`date +%d`
+```
+
+## `date now dayOfWeek`
+
+current day of week name (full/abbreviated A/a) [&uarr;](#Commands)
+
+```bash
+dayOfWeek=`date +%${1|A,a|}`
+```
+
+## `date now dayOfYear`
+
+current day of year (1..366) [&uarr;](#Commands)
+
+```bash
+dayOfYear=`date +%j`
+```
+
+## `time now local`
+
+current local time (24hrs/12hrs R/r) [&uarr;](#Commands)
+
+```bash
+timeNowLocal=`date +%${1|R,r|}`
+```
+
+## `time now UTC`
+
+current UTC time [&uarr;](#Commands)
+
+```bash
+timeNowUTC=`date -u +%R`
+```
+
+## `time seconds epoch`
+
+seconds since epoch (1970-01-01 00:00:00) [&uarr;](#Commands)
+
+```bash
+timeNowSecondsEpoch=`date +%s`
 ```
 
 ## `directory create`
@@ -588,7 +704,7 @@ fi
 if integer lesser than value [&uarr;](#Commands)
 
 ```bash
-if [[ $int > $${2:val} ]]; then
+if [[ $int < $${2:val} ]]; then
   echo lesser
 fi
 ```
@@ -956,6 +1072,22 @@ math Omega constant [&uarr;](#Commands)
 MATH_OMEGA='0.56714329040978387299996866221035554'
 ```
 
+## `file delete,file remove`
+
+delete file(s) [&uarr;](#Commands)
+
+```bash
+rm -f ./path/file
+```
+
+## `file find,directory find`
+
+find files (-type f) or directories (-type d) by name [&uarr;](#Commands)
+
+```bash
+result=`find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name "criteria"`
+```
+
 ## `file read`
 
 read a file [&uarr;](#Commands)
@@ -964,6 +1096,14 @@ read a file [&uarr;](#Commands)
 cat "$filepath" | while read line; do
   echo "$line"
 done
+```
+
+## `file search,search in files,find in files`
+
+find files which contain search criteria [&uarr;](#Commands)
+
+```bash
+result=`find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +`
 ```
 
 ## `file write`
