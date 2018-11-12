@@ -86,11 +86,75 @@
     ],
     "description": "check if last command failed"
   },
-  "assign_array": {
-    "prefix": "assign array",
-    "body": "newArray=(\"${1:Element 1}\" \"${2:Element 2}\")\n",
-    "description": "assign elements to an array"
-  },
+	"array_concat": {
+		"prefix": "array concat",
+		"body": "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
+		"description": "concatenate two arrays"
+	},
+	"array_declare": {
+		"prefix": "array declare",
+		"body": "${1:myArray}=('${2:one}' '${3:two}' '${4:three}')\n",
+		"description": "declare an array"
+	},
+	"array_delete": {
+		"prefix": "array delete",
+		"body": "unset ${1:myArray}\n",
+		"description": "delete entire array"
+	},
+	"array_delete_at": {
+		"prefix": "array delete at",
+		"body": "unset ${1:myArray}[${2:index}]\n",
+		"description": "delete element at index from array"
+	},
+	"array_all": {
+		"prefix": "array all",
+		"body": "${myArray[@]}\n",
+		"description": "all array elements"
+	},
+	"array_find": {
+		"prefix": "array find",
+		"body": "${myArray[@]/${0:regex}/}\n",
+		"description": "find elements in array using regex"
+	},
+	"array_push": {
+		"prefix": ["array push", "array add"],
+		"body": "${1:myArray}+=('${2:newItem}')\n",
+		"description": "push new item to the end of array"
+	},
+	"array_replace": {
+		"prefix": "array replace",
+		"body": "${myArray[@]//${1:find}/${2:replace}}\n",
+		"description": "find and replace elements in array using regex"
+	},
+	"array_at_index": {
+		"prefix": "array at index",
+		"body": "${myArray[${1:index}]}\n",
+		"description": "retrieve element at specified index (zero based)"
+	},
+	"array_iterate": {
+		"prefix": ["array iterate", "array forEach"],
+		"body": [
+			"for item in ${${1:myArray}[@]}; do",
+			"\t${2:echo \"\\$item\"}",
+			"done\n"
+		],
+		"description": "iterate array elements"
+	},
+	"array_length": {
+		"prefix": "array length",
+		"body": "${#${1:myArray}[@]}\n",
+		"description": "length of array"
+	},
+	"array_range": {
+		"prefix": ["array slice", "array range"],
+		"body": "${myArray[@]:${1:from}:${2:count}}\n",
+		"description": "elements of array from index, equal to count numbers"
+	},
+	"array_set_element": {
+		"prefix": "array set element",
+		"body": "myArray[${1:index}]=${2:value}\n",
+		"description": "set array element at index"
+	},
   "assign_if_empty": {
     "prefix": "assign if empty",
     "body": ": \"\\${${1:variable}:=${2:default}}\"",

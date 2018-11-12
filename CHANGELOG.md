@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.0.0
+
+- `array...`
+  - Array namespace
+
 ## 2.3.1
 
 - `date...`, `time...`

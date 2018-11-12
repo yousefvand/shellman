@@ -20,7 +20,31 @@
 
 - [cmd failure check](#cmd-failure-check)
 
-- [assign array](#assign-array)
+- [array concat](#array-concat)
+
+- [array declare](#array-declare)
+
+- [array delete](#array-delete)
+
+- [array delete at](#array-delete-at)
+
+- [array all](#array-all)
+
+- [array find](#array-find)
+
+- [array push](#array-push)
+
+- [array replace](#array-replace)
+
+- [array at index](#array-at-index)
+
+- [array iterate](#array-iterate)
+
+- [array length](#array-length)
+
+- [array slice](#array-slice)
+
+- [array set element](#array-set-element)
 
 - [assign if empty](#assign-if-empty)
 
@@ -361,12 +385,110 @@ if [[ $? != 0 ]]; then
 fi
 ```
 
-## `assign array`
+## `array concat`
 
-assign elements to an array [&uarr;](#Commands)
+concatenate two arrays [&uarr;](#Commands)
 
 ```bash
-newArray=("Element 1" "Element 2")
+newArray=("${array1[@]}" "${array2[@]}")
+```
+
+## `array declare`
+
+declare an array [&uarr;](#Commands)
+
+```bash
+myArray=('one' 'two' 'three')
+```
+
+## `array delete`
+
+delete entire array [&uarr;](#Commands)
+
+```bash
+unset myArray
+```
+
+## `array delete at`
+
+delete element at index from array [&uarr;](#Commands)
+
+```bash
+unset myArray[index]
+```
+
+## `array all`
+
+all array elements [&uarr;](#Commands)
+
+```bash
+${myArray[@]}
+```
+
+## `array find`
+
+find elements in array using regex [&uarr;](#Commands)
+
+```bash
+${myArray[@]/regex/}
+```
+
+## `array push,array add`
+
+push new item to the end of array [&uarr;](#Commands)
+
+```bash
+myArray+=('newItem')
+```
+
+## `array replace`
+
+find and replace elements in array using regex [&uarr;](#Commands)
+
+```bash
+${myArray[@]//find/replace}
+```
+
+## `array at index`
+
+retrieve element at specified index (zero based) [&uarr;](#Commands)
+
+```bash
+${myArray[index]}
+```
+
+## `array iterate,array forEach`
+
+iterate array elements [&uarr;](#Commands)
+
+```bash
+for item in ${myArray[@]}; do
+  echo "$item"
+done
+```
+
+## `array length`
+
+length of array [&uarr;](#Commands)
+
+```bash
+${#myArray[@]}
+```
+
+## `array slice,array range`
+
+elements of array from index, equal to count numbers [&uarr;](#Commands)
+
+```bash
+${myArray[@]:from:count}
+```
+
+## `array set element`
+
+set array element at index [&uarr;](#Commands)
+
+```bash
+myArray[index]=value
 ```
 
 ## `assign if empty`
