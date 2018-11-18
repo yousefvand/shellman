@@ -6,6 +6,7 @@
     "bashdb",
     "civis",
     "cnorm",
+    "czvf",
     "docgen",
     "elif",
     "esac",
@@ -25,6 +26,7 @@
     "proto",
     "quickstart",
     "setaf",
+    "shasum",
     "shellman",
     "sitm",
     "somefile",
@@ -35,6 +37,7 @@
     "ttput",
     "uarr",
     "whatismyipaddress",
-    "xargs"
+    "xargs",
+    "xzvf"
   ]
 }

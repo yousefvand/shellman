@@ -16,9 +16,15 @@
 
 - [cmd](#cmd)
 
+- [cmd nice](#cmd-nice)
+
 - [cmd success check](#cmd-success-check)
 
 - [cmd failure check](#cmd-failure-check)
+
+- [archive compress tar.gz](#archive-compress-tar.gz)
+
+- [archive decompress tar.gz](#archive-decompress-tar.gz)
 
 - [array concat](#array-concat)
 
@@ -49,6 +55,12 @@
 - [assign if empty](#assign-if-empty)
 
 - [ask question](#ask-question)
+
+- [crypto base64 encode](#crypto-base64-encode)
+
+- [crypto base64 decode](#crypto-base64-decode)
+
+- [crypto hash](#crypto-hash)
 
 - [date now short](#date-now-short)
 
@@ -365,6 +377,14 @@ run command (command substitution) [&uarr;](#Commands)
 `command`
 ```
 
+## `cmd nice`
+
+run command with desired privilege. n: -20 (most favorable scheduling) to 19 (least favorable) [&uarr;](#Commands)
+
+```bash
+sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} command
+```
+
 ## `cmd success check`
 
 check if last command succeed [&uarr;](#Commands)
@@ -383,6 +403,22 @@ check if last command failed [&uarr;](#Commands)
 if [[ $? != 0 ]]; then
   echo command failed
 fi
+```
+
+## `archive compress tar.gz`
+
+compress file/folder to a .tar.gz file [&uarr;](#Commands)
+
+```bash
+tar -czvf /path/to/archive.tar.gz /path/to/directory-or-file
+```
+
+## `archive decompress tar.gz`
+
+compress file/folder to a .tar.gz file [&uarr;](#Commands)
+
+```bash
+tar -C /extract/to/path -xzvf /path/to/archive.tar.gz
 ```
 
 ## `array concat`
@@ -506,6 +542,30 @@ Ask question with default answer [&uarr;](#Commands)
 ```bash
 read -ep "Question here? " -i Default answer ANSWER
 echo "$ANSWER"
+```
+
+## `crypto base64 encode`
+
+encode variable to base64 [&uarr;](#Commands)
+
+```bash
+base64Encoded=`echo -n "$variableToEncode" | base64`
+```
+
+## `crypto base64 decode`
+
+decode variable from base64 [&uarr;](#Commands)
+
+```bash
+base64Decoded=`echo -n "$variableToDecode" | base64 -d`
+```
+
+## `crypto hash`
+
+compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512) [&uarr;](#Commands)
+
+```bash
+hash=`echo -n "$variableToHash" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`
 ```
 
 ## `date now short`

@@ -65,9 +65,14 @@
   },
   "cmd": {
     "prefix": "cmd",
-    "body": "`${1:command}`",
+    "body": "`${1:command}`\n",
     "description": "run command (command substitution)"
   },
+  "cmd_nice": {
+		"prefix": "cmd nice",
+		"body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${0:command}\n",
+		"description": "run command with desired privilege. n: -20 (most favorable scheduling) to 19 (least favorable)"
+	},
   "cmd_success_check": {
     "prefix": "cmd success check",
     "body": [
@@ -86,6 +91,16 @@
     ],
     "description": "check if last command failed"
   },
+  "archive_compress_tar_gz": {
+		"prefix": "archive compress tar.gz",
+		"body": "tar -czvf ${1:/path/to/archive}.tar.gz ${2:/path/to/directory-or-file}\n",
+		"description": "compress file/folder to a .tar.gz file"
+	},
+	"archive_decompress_tar_gz": {
+		"prefix": "archive decompress tar.gz",
+		"body": "tar -C ${1:/extract/to/path} -xzvf ${2:/path/to/archive}.tar.gz\n",
+		"description": "compress file/folder to a .tar.gz file"
+	},
 	"array_concat": {
 		"prefix": "array concat",
 		"body": "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
@@ -168,6 +183,21 @@
     ],
     "description": "Ask question with default answer"
   },
+  "crypto_base64_encode": {
+		"prefix": "crypto base64 encode",
+		"body": "${1:base64Encoded}=`echo -n \"\\$${2:variableToEncode}\" | base64`\n",
+		"description": "encode variable to base64"
+	},
+	"crypto_base64_decode": {
+		"prefix": "crypto base64 decode",
+		"body": "${1:base64Decoded}=`echo -n \"\\$${2:variableToDecode}\" | base64 -d`\n",
+		"description": "decode variable from base64"
+	},
+	"crypto_hash": {
+		"prefix": "crypto hash",
+		"body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n",
+		"description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
+	},
   "date_short": {
 		"prefix": "date now short",
 		"body": "dateShort=`date -I`\n",

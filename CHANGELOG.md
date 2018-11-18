@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.1.0
+
+- `nice`
+  - Execute a command with desired privilege
+- `archive...`
+  - Compress/decompress file/directory (currently .tar.gz supported. More soon)
+- `crypto...`
+  - base64 encode / decode
+  - Calculate hash of string using md5, sha, sha1, sha224, sha256, sha384 and sha512 algorithms
+
 ## 3.0.0
 
 - `array...`
