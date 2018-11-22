@@ -4,6 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/blob/master/LICENSE.md)
 [![GitHub stars](https://img.shields.io/github/stars/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/issues)
+[![Gitter](https://img.shields.io/gitter/room/badges/shields.svg?style=plastic)](https://gitter.im/vscode-shellman/Lobby)
 ![Author](https://img.shields.io/badge/Author-Remisa-ff69b4.svg)
 
 Shell script snippet
