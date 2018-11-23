@@ -118,6 +118,11 @@ Call function which is declared by `fn...`
 
 ## Release Notes
 
+### 3.2.0
+
+- `fn/fx progress`
+  - Dummy progress bar with custom message
+
 ### 3.1.0
 
 - `nice`

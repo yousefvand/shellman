@@ -286,6 +286,10 @@
 
 - [fx options](#fx-options)
 
+- [fn progress](#fn-progress)
+
+- [fx progress](#fx-progress)
+
 - [fn scan](#fn-scan)
 
 - [fx scan](#fx-scan)
@@ -1650,6 +1654,30 @@ call options function [&uarr;](#Commands)
 options=("one" "two" "three")
 chooseOption "Choose:" 1 "${options[@]}"; choice=$?
 echo "${options[$choice]}" selected
+```
+
+## `fn progress`
+
+progress bar function [&uarr;](#Commands)
+
+```bash
+function progressBar() {
+  local BAR='████████████████████'
+  local SPACE='                    '
+  for i in {1..20}; do
+    echo -ne "\r|${BAR:0:$i}${SPACE:$i:20}| $(($i*5))% [ $2 ] "
+    sleep $1
+  done
+  echo -ne ''
+}
+```
+
+## `fx progress`
+
+call progress bar function [&uarr;](#Commands)
+
+```bash
+progressBar ${1|.1,.2,.3,.4,.5,1,2,5|} "Installing foo..."
 ```
 
 ## `fn scan`

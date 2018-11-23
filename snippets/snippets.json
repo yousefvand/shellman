@@ -1031,6 +1031,26 @@
 			"echo \"\\${options[\\$choice]}\" selected\n"
 		],
 		"description": "call options function"
+  },
+  "fn_progress": {
+		"prefix": "fn progress",
+		"body": [
+			"function progressBar() {",
+			"\tlocal BAR='████████████████████'",
+			"\tlocal SPACE='                    '",
+			"\tfor i in {1..20}; do",
+			"\t\techo -ne \"\\r|\\${BAR:0:\\$i}\\${SPACE:\\$i:20}| \\$((\\$i*5))% [ \\$2 ] \"",
+			"\t\tsleep \\$1",
+			"\tdone",
+			"\techo -ne '\n'",
+			"}\n"
+		],
+		"description": "progress bar function"
+	},
+	"fx_progress": {
+		"prefix": "fx progress",
+		"body": "progressBar ${1|.1,.2,.3,.4,.5,1,2,5|} \"${2:Installing foo...}\"\n",
+		"description": "call progress bar function"
 	},
   "fn_scan": {
     "prefix": "fn scan",
