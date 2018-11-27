@@ -88,6 +88,18 @@
 
 - [directory create nested](#directory-create-nested)
 
+- [http GET](#http-GET)
+
+- [http POST](#http-POST)
+
+- [http POST file](#http-POST-file)
+
+- [http header](#http-header)
+
+- [http cookie](#http-cookie)
+
+- [http download](#http-download)
+
 - [if](#if)
 
 - [iff](#iff)
@@ -674,6 +686,73 @@ create nested directories [&uarr;](#Commands)
 
 ```bash
 mkdir -p parent dir/child dir
+```
+
+## `http GET,http DELETE`
+
+Send http GET/DELETE request using curl [&uarr;](#Commands)
+
+```bash
+curl --request ${1|GET,DELETE|} -sL \
+  --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --url 'http://example.com'
+```
+
+## `http POST,http PUT`
+
+Send data with http POST/PUT, using curl [&uarr;](#Commands)
+
+```bash
+curl --request ${1|POST,PUT|} -sL \
+  --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --url 'http://example.com' \
+  --data 'key=${5:value}' \
+  --data 'key=${7:value}'
+```
+
+## `http POST file`
+
+Send file with http POST, using curl [&uarr;](#Commands)
+
+```bash
+curl --request POST -sL \
+  --user-agent '${1|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --url 'http://example.com' \
+  --form 'key=${4:value}' \
+  --form 'file=@/path/to/file'
+```
+
+## `http header`
+
+Send http request with custom header, using curl [&uarr;](#Commands)
+
+```bash
+curl --request ${1|GET,POST,DELETE,PUT|} -sL \
+  --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --header 'key: ${4:value}' \
+  --url 'http://example.com'
+```
+
+## `http cookie`
+
+Send http request with cookies, using curl [&uarr;](#Commands)
+
+```bash
+curl --request ${1|GET,POST,DELETE,PUT|} -sL \
+  --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --cookie 'key=${4:value}' \
+  --url 'http://example.com'
+```
+
+## `http download`
+
+Download from url and save to /path/to/file, using curl [&uarr;](#Commands)
+
+```bash
+curl --request ${1|GET,POST|} -sL \
+  --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
+  --output '/path/to/file' \
+  --url 'http://example.com/file.zip'
 ```
 
 ## `if`

@@ -263,6 +263,67 @@
     "body": "mkdir -p ${1:parent dir}/${2:child dir}",
     "description": "create nested directories"
   },
+  "http_get": {
+		"prefix": [ "http GET", "http DELETE"],
+		"body": [
+			"curl --request ${1|GET,DELETE|} -sL \\",
+			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--url '${3:http://example.com}'\n"
+		],
+		"description": "Send http GET/DELETE request using curl"
+	},
+	"http_post": {
+		"prefix": [ "http POST", "http PUT"],
+		"body": [
+			"curl --request ${1|POST,PUT|} -sL \\",
+			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--url '${3:http://example.com}' \\",
+			"\t--data '${4:key}=${5:value}' \\",
+			"\t--data '${6:key}=${7:value}'\n"
+		],
+		"description": "Send data with http POST/PUT, using curl"
+	},
+	"http_post_file": {
+		"prefix": "http POST file",
+		"body": [
+			"curl --request POST -sL \\",
+			"\t--user-agent '${1|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--url '${2:http://example.com}' \\",
+			"\t--form '${3:key}=${4:value}' \\",
+			"\t--form 'file=@${5:/path/to/file}'\n"
+		],
+		"description": "Send file with http POST, using curl"
+	},
+	"http_header": {
+		"prefix": "http header",
+		"body": [
+			"curl --request ${1|GET,POST,DELETE,PUT|} -sL \\",
+			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--header '${3:key}: ${4:value}' \\",
+			"\t--url '${5:http://example.com}'\n"
+		],
+		"description": "Send http request with custom header, using curl"
+	},
+	"http_cookie": {
+		"prefix": "http cookie",
+		"body": [
+			"curl --request ${1|GET,POST,DELETE,PUT|} -sL \\",
+			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--cookie '${3:key}=${4:value}' \\",
+			"\t--url '${5:http://example.com}'\n"
+		],
+		"description": "Send http request with cookies, using curl"
+	},
+	"http_download": {
+		"prefix": "http download",
+		"body": [
+			"curl --request ${1|GET,POST|} -sL \\",
+			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+			"\t--output '${3:/path/to/file}' \\",
+			"\t--url '${4:http://example.com/file.zip}'\n"
+		],
+		"description": "Download from url and save to /path/to/file, using curl"
+	},
   "if": {
     "prefix": "if",
     "body": [

@@ -118,6 +118,18 @@ Call function which is declared by `fn...`
 
 ## Release Notes
 
+### 3.3.0
+
+- `http`
+  - `GET`: Send http GET request using curl.
+  - `POST`: Send data with http POST, using curl.
+  - `POST file`: Send file via http POST, using curl.
+  - `PUT`: Send data with http PUT, using curl
+  - `DELETE`: Send http DELETE request using curl.
+  - `cookie`: Send http request with cookies, using curl.
+  - `header`: Send http request with protocol/custom header, using curl.
+  - `download`: Download from url and save to `/path/to/file`, using curl.
+
 ### 3.2.0
 
 - `fn/fx progress`
