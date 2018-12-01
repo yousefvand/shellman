@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.4.0
+
+- `ftp`
+  - `list`: Get the list of files on the ftp server at specific path.
+  - `download`: Download specified file from ftp server.
+  - `upload`: Upload specified file to ftp server.
+  - `delete`: Delete specified file from ftp server.
+  - `rename`: Rename specified file/directory on ftp server.
+
 ## 3.3.0
 
 - `http`

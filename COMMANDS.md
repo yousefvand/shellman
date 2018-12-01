@@ -100,6 +100,16 @@
 
 - [http download](#http-download)
 
+- [ftp list](#ftp-list)
+
+- [ftp download](#ftp-download)
+
+- [ftp upload](#ftp-upload)
+
+- [ftp delete file](#ftp-delete-file)
+
+- [ftp rename](#ftp-rename)
+
 - [if](#if)
 
 - [iff](#iff)
@@ -753,6 +763,46 @@ curl --request ${1|GET,POST|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
   --output '/path/to/file' \
   --url 'http://example.com/file.zip'
+```
+
+## `ftp list`
+
+Get the list of files on the ftp server at specific path [&uarr;](#Commands)
+
+```bash
+curl ftp://user:password@ipOrDomain/directoryPathOnServer/
+```
+
+## `ftp download`
+
+Download specified file from ftp server [&uarr;](#Commands)
+
+```bash
+curl ftp://user:password@ipOrDomain/filePathOnServer/
+```
+
+## `ftp upload`
+
+Upload specified file to ftp server [&uarr;](#Commands)
+
+```bash
+curl -T fileToUpload ftp://user:password@ipOrDomain/directoryPathOnServer/
+```
+
+## `ftp delete file`
+
+Delete specified file from ftp server [&uarr;](#Commands)
+
+```bash
+curl ftp://user:password@ipOrDomain/path/fileToDelete -Q "DELE fileToDelete"
+```
+
+## `ftp rename`
+
+Rename specified file/directory on ftp server [&uarr;](#Commands)
+
+```bash
+curl ftp://user:password@ipOrDomain/path/ -Q "-RNFR path/renameFrom" -Q "-RNTO path/renameTo"
 ```
 
 ## `if`
