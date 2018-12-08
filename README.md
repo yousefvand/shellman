@@ -44,7 +44,7 @@ Shebang should be used as the first line of your script. You can replace `bash` 
 
 `argument parsing` | `parse args`
 
-Parse commandline arguments
+Parse command-line arguments
 
 `cmd...`
 
@@ -118,9 +118,14 @@ Call function which is declared by `fn...`
 
 ## Release Notes
 
+### 3.5.0
+
+- `git...`
+  - `git` commands.
+
 ### 3.4.0
 
-- `ftp`
+- `ftp...`
   - `list`: Get the list of files on the ftp server at specific path.
   - `download`: Download specified file from ftp server.
   - `upload`: Upload specified file to ftp server.
@@ -129,7 +134,7 @@ Call function which is declared by `fn...`
 
 ### 3.3.0
 
-- `http`
+- `http...`
   - `GET`: Send http GET request using curl.
   - `POST`: Send data with http POST, using curl.
   - `POST file`: Send file via http POST, using curl.

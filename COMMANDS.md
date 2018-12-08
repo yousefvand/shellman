@@ -88,6 +88,54 @@
 
 - [directory create nested](#directory-create-nested)
 
+- [git branch list](#git-branch-list)
+
+- [git branch create](#git-branch-create)
+
+- [git branch delete local](#git-branch-delete-local)
+
+- [git branch delete remote](#git-branch-delete-remote)
+
+- [git branch push](#git-branch-push)
+
+- [git branch rename](#git-branch-rename)
+
+- [git changes revert](#git-changes-revert)
+
+- [git clone](#git-clone)
+
+- [git clone branch](#git-clone-branch)
+
+- [git commit](#git-commit)
+
+- [git commit list notPushed](#git-commit-list-notPushed)
+
+- [git commit search](#git-commit-search)
+
+- [git commit undo](#git-commit-undo)
+
+- [git config list](#git-config-list)
+
+- [git config set](#git-config-set)
+
+- [git patch apply](#git-patch-apply)
+
+- [git patch create](#git-patch-create)
+
+- [git remote list](#git-remote-list)
+
+- [git remote urlChange](#git-remote-urlChange)
+
+- [git remote urlChange](#git-remote-urlChange)
+
+- [git tag list](#git-tag-list)
+
+- [git tag commit](#git-tag-commit)
+
+- [git tag remote delete](#git-tag-remote-delete)
+
+- [git tag remote push](#git-tag-remote-push)
+
 - [http GET](#http-GET)
 
 - [http POST](#http-POST)
@@ -696,6 +744,198 @@ create nested directories [&uarr;](#Commands)
 
 ```bash
 mkdir -p parent dir/child dir
+```
+
+## `git branch list`
+
+List all branches. [&uarr;](#Commands)
+
+```bash
+git branch
+```
+
+## `git branch create`
+
+Create branch locally and switch into it. [&uarr;](#Commands)
+
+```bash
+git checkout -b branchName
+```
+
+## `git branch delete local`
+
+Delete local branch. [&uarr;](#Commands)
+
+```bash
+git branch --delete localBranch
+```
+
+## `git branch delete remote`
+
+Delete remote branch. [&uarr;](#Commands)
+
+```bash
+git push origin --delete remoteBranch
+```
+
+## `git branch push`
+
+Push branch to remote. [&uarr;](#Commands)
+
+```bash
+git push origin branchName
+```
+
+## `git branch rename`
+
+Rename current branch. [&uarr;](#Commands)
+
+```bash
+git branch -m newName
+```
+
+## `git changes revert`
+
+Revert tracked changes [&uarr;](#Commands)
+
+```bash
+git checkout .
+```
+
+## `git clone`
+
+Clone remote repository to local machine. [&uarr;](#Commands)
+
+```bash
+git clone https://github.com/user/repository.git
+```
+
+## `git clone branch`
+
+Clone a remote branch to local machine. [&uarr;](#Commands)
+
+```bash
+git clone -b branchName https://github.com/user/repository.git
+```
+
+## `git commit`
+
+Commit changes. [&uarr;](#Commands)
+
+```bash
+git commit -m "commit message"
+```
+
+## `git commit list notPushed`
+
+List non pushed commits. [&uarr;](#Commands)
+
+```bash
+git log origin/master..HEAD
+```
+
+## `git commit search`
+
+Search for a commit which contains searchCriteria. [&uarr;](#Commands)
+
+```bash
+git log --all --grep='searchCriteria'
+```
+
+## `git commit undo`
+
+Undo last N commits (soft: preserve local changes | hard: delete local changes [&uarr;](#Commands)
+
+```bash
+git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5|}
+```
+
+## `git config list`
+
+List git configurations. [&uarr;](#Commands)
+
+```bash
+git config --list
+```
+
+## `git config set`
+
+Configure git. [&uarr;](#Commands)
+
+```bash
+git config --${1|local,global|} |user.name,user.email| "value"
+```
+
+## `git patch apply`
+
+Apply a patch from file. [&uarr;](#Commands)
+
+```bash
+git apply < /path/to/patch1.patch
+```
+
+## `git patch create`
+
+Create a patch from changes. [&uarr;](#Commands)
+
+```bash
+git diff > /path/to/patch1.patch
+```
+
+## `git remote list`
+
+List all remotes. [&uarr;](#Commands)
+
+```bash
+git remote
+```
+
+## `git remote urlChange`
+
+Add remote url. [&uarr;](#Commands)
+
+```bash
+git remote add origin https://github.com/user/repository.git
+```
+
+## `git remote urlChange`
+
+Change remote url. [&uarr;](#Commands)
+
+```bash
+git remote set-url origin https://github.com/user/repository.git
+```
+
+## `git tag list`
+
+List all tags. [&uarr;](#Commands)
+
+```bash
+git tag
+```
+
+## `git tag commit,git commit tag`
+
+Tag a commit. [&uarr;](#Commands)
+
+```bash
+git tag -a release/1.0.0 -m "1.0.0 release"
+```
+
+## `git tag remote delete`
+
+Delete tag from remote. [&uarr;](#Commands)
+
+```bash
+git push --delete origin tagName && git push origin :tagName
+```
+
+## `git tag remote push`
+
+Push tag to remote. [&uarr;](#Commands)
+
+```bash
+git push origin tagName
 ```
 
 ## `http GET,http DELETE`

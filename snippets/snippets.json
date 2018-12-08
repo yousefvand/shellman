@@ -263,6 +263,126 @@
     "body": "mkdir -p ${1:parent dir}/${2:child dir}",
     "description": "create nested directories"
   },
+  "git_branch_list": {
+		"prefix": "git branch list",
+		"body": "git branch\n",
+		"description": "List all branches."
+	},
+	"git_branch_create": {
+		"prefix": "git branch create",
+		"body": "git checkout -b ${1:branchName}\n",
+		"description": "Create branch locally and switch into it."
+	},
+	"git_branch_delete_local": {
+		"prefix": "git branch delete local",
+		"body": "git branch --delete ${1:localBranch}\n",
+		"description": "Delete local branch."
+	},
+	"git_branch_delete_remote": {
+		"prefix": "git branch delete remote",
+		"body": "git push origin --delete ${1:remoteBranch}\n",
+		"description": "Delete remote branch."
+	},
+	"git_branch_push": {
+		"prefix": "git branch push",
+		"body": "git push origin ${1:branchName}\n",
+		"description": "Push branch to remote."
+	},
+	"git_branch_rename": {
+		"prefix": "git branch rename",
+		"body": "git branch -m ${1:newName}\n",
+		"description": "Rename current branch."
+	},
+	"git_changes_revert": {
+		"prefix": "git changes revert",
+		"body": "git checkout .\n",
+		"description": "Revert tracked changes"
+	},
+	"git_clone": {
+		"prefix": "git clone",
+		"body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
+		"description": "Clone remote repository to local machine."
+	},
+	"git_clone_branch": {
+		"prefix": "git clone branch",
+		"body": "git clone -b ${1:branchName} https://${2:github.com}/${3:user}/${4:repository}.git\n",
+		"description": "Clone a remote branch to local machine."
+	},
+	"git_commit": {
+		"prefix": "git commit",
+		"body": "git commit -m \"${1:commit message}\"\n",
+		"description": "Commit changes."
+	},
+	"git_commit_list": {
+		"prefix": "git commit list notPushed",
+		"body": "git log origin/master..HEAD\n",
+		"description": "List non pushed commits."
+	},
+	"git_commit_search": {
+		"prefix": "git commit search",
+		"body": "git log --all --grep='${1:searchCriteria}'\n",
+		"description": "Search for a commit which contains searchCriteria."
+	},
+	"git_commit_undo": {
+		"prefix": "git commit undo",
+		"body": "git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5|}\n",
+		"description": "Undo last N commits (soft: preserve local changes | hard: delete local changes"
+	},
+	"git_config_list": {
+		"prefix": "git config list",
+		"body": "git config --list\n",
+		"description": "List git configurations."
+	},
+	"git_config_set": {
+		"prefix": "git config set",
+		"body": "git config --${1|local,global|} ${2:|user.name,user.email|} \"${3:value}\"\n",
+		"description": "Configure git."
+	},
+	"git_patch_apply": {
+		"prefix": "git patch apply",
+		"body": "git apply < ${0:/path/to/patch1.patch}\n",
+		"description": "Apply a patch from file."
+	},
+	"git_patch_create": {
+		"prefix": "git patch create",
+		"body": "git diff > ${0:/path/to/patch1.patch}\n",
+		"description": "Create a patch from changes."
+	},
+	"git_remote_list": {
+		"prefix": "git remote list",
+		"body": "git remote\n",
+		"description": "List all remotes."
+	},
+	"git_remote_urlAdd": {
+		"prefix": "git remote urlChange",
+		"body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
+		"description": "Add remote url."
+	},
+	"git_remote_urlChange": {
+		"prefix": "git remote urlChange",
+		"body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
+		"description": "Change remote url."
+	},
+	"git_tag_list": {
+		"prefix": "git tag list",
+		"body": "git tag\n",
+		"description": "List all tags."
+	},
+	"git_tag_commit": {
+		"prefix": ["git tag commit", "git commit tag"],
+		"body": "git tag -a ${1:release/1.0.0} -m \"${2:1.0.0 release}\"\n",
+		"description": "Tag a commit."
+	},
+	"git_tag_remote_delete": {
+		"prefix": "git tag remote delete",
+		"body": "git push --delete origin ${1:tagName} && git push origin :${1:tagName}\n",
+		"description": "Delete tag from remote."
+	},
+	"git_tag_remote_push": {
+		"prefix": "git tag remote push",
+		"body": "git push origin ${1:tagName}\n",
+		"description": "Push tag to remote."
+	},
   "http_get": {
 		"prefix": [ "http GET", "http DELETE"],
 		"body": [
