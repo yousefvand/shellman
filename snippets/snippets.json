@@ -1094,17 +1094,17 @@
 	},
 	"system_distro_name": {
 		"prefix": "system distro name",
-		"body": "lsb_release -i | awk '{print $3}'\n",
+		"body": "lsb_release -i | awk '{print \\$3}'\n",
 		"description": "OS ID (i.e. Ubuntu)"
 	},
 	"system_distro_version": {
 		"prefix": "system distro version",
-		"body": "lsb_release -r | awk '{print $2}'\n",
+		"body": "lsb_release -r | awk '{print \\$2}'\n",
 		"description": "OS Release (i.e. 16.04)"
 	},
 	"system_distro_codename": {
 		"prefix": "system distro codename",
-		"body": "lsb_release -c | awk '{print $2}'\n",
+		"body": "lsb_release -c | awk '{print \\$2}'\n",
 		"description": "OS codename (i.e. xenial)"
 	},
 	"system_kernel_name": {
@@ -1124,12 +1124,12 @@
 	},
 	"system_processor_count": {
 		"prefix": "system processor count",
-		"body": "lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1\n",
+		"body": "lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1\n",
 		"description": "Processor count (cores)"
 	},
 	"system_processor_architecture": {
 		"prefix": "system processor architecture",
-		"body": "lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1\n",
+		"body": "lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1\n",
 		"description": "Processor architecture (i.e. x86_64)"
 	},
 	"system_processor_model": {
