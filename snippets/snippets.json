@@ -1087,6 +1087,61 @@
     "body": "sleep ${1:30}${2|s,m,h,d|}\n",
     "description": "sleep for a specified amount of time (s: second, m: minute, h: hour, d: day)"
   },
+  "system_memory_info": {
+		"prefix": "system memory info",
+		"body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n",
+		"description": "System memory information in kilobytes (KB)"
+	},
+	"system_distro_name": {
+		"prefix": "system distro name",
+		"body": "lsb_release -i | awk '{print $3}'\n",
+		"description": "OS ID (i.e. Ubuntu)"
+	},
+	"system_distro_version": {
+		"prefix": "system distro version",
+		"body": "lsb_release -r | awk '{print $2}'\n",
+		"description": "OS Release (i.e. 16.04)"
+	},
+	"system_distro_codename": {
+		"prefix": "system distro codename",
+		"body": "lsb_release -c | awk '{print $2}'\n",
+		"description": "OS codename (i.e. xenial)"
+	},
+	"system_kernel_name": {
+		"prefix": "system kernel name",
+		"body": "uname -s\n",
+		"description": "OS kernel name (i.e. Linux)"
+	},
+	"system_kernel_release": {
+		"prefix": "system kernel release",
+		"body": "uname -r\n",
+		"description": "OS kernel release (i.e. 4.4.0-140-generic)"
+	},
+	"system_processor_type": {
+		"prefix": "system processor type",
+		"body": "uname -p\n",
+		"description": "OS processor type (i.e. x86_64)"
+	},
+	"system_processor_count": {
+		"prefix": "system processor count",
+		"body": "lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1\n",
+		"description": "Processor count (cores)"
+	},
+	"system_processor_architecture": {
+		"prefix": "system processor architecture",
+		"body": "lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1\n",
+		"description": "Processor architecture (i.e. x86_64)"
+	},
+	"system_processor_model": {
+		"prefix": "system processor model",
+		"body": "lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//'\n",
+		"description": "Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz)"
+	},
+	"system_uptime": {
+		"prefix": "system uptime",
+		"body": "sys_uptime=`uptime | cut -d ' ' -f2`\n",
+		"description": "System uptime (hh:mm:ss)"
+	},
   "timeout": {
     "prefix": "timeout",
     "body": "timeout ${1:seconds} ${2:command}\n",

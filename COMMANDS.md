@@ -338,6 +338,28 @@
 
 - [sleep](#sleep)
 
+- [system memory info](#system-memory-info)
+
+- [system distro name](#system-distro-name)
+
+- [system distro version](#system-distro-version)
+
+- [system distro codename](#system-distro-codename)
+
+- [system kernel name](#system-kernel-name)
+
+- [system kernel release](#system-kernel-release)
+
+- [system processor type](#system-processor-type)
+
+- [system processor count](#system-processor-count)
+
+- [system processor architecture](#system-processor-architecture)
+
+- [system processor model](#system-processor-model)
+
+- [system uptime](#system-uptime)
+
 - [timeout](#timeout)
 
 - [fn banner simple](#fn-banner-simple)
@@ -1855,6 +1877,94 @@ sleep for a specified amount of time (s: second, m: minute, h: hour, d: day) [&u
 
 ```bash
 sleep 30${2|s,m,h,d|}
+```
+
+## `system memory info`
+
+System memory information in kilobytes (KB) [&uarr;](#Commands)
+
+```bash
+sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1`
+```
+
+## `system distro name`
+
+OS ID (i.e. Ubuntu) [&uarr;](#Commands)
+
+```bash
+lsb_release -i | awk '{print $3}'
+```
+
+## `system distro version`
+
+OS Release (i.e. 16.04) [&uarr;](#Commands)
+
+```bash
+lsb_release -r | awk '{print $2}'
+```
+
+## `system distro codename`
+
+OS codename (i.e. xenial) [&uarr;](#Commands)
+
+```bash
+lsb_release -c | awk '{print $2}'
+```
+
+## `system kernel name`
+
+OS kernel name (i.e. Linux) [&uarr;](#Commands)
+
+```bash
+uname -s
+```
+
+## `system kernel release`
+
+OS kernel release (i.e. 4.4.0-140-generic) [&uarr;](#Commands)
+
+```bash
+uname -r
+```
+
+## `system processor type`
+
+OS processor type (i.e. x86_64) [&uarr;](#Commands)
+
+```bash
+uname -p
+```
+
+## `system processor count`
+
+Processor count (cores) [&uarr;](#Commands)
+
+```bash
+lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1
+```
+
+## `system processor architecture`
+
+Processor architecture (i.e. x86_64) [&uarr;](#Commands)
+
+```bash
+lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1
+```
+
+## `system processor model`
+
+Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz) [&uarr;](#Commands)
+
+```bash
+lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//'
+```
+
+## `system uptime`
+
+System uptime (hh:mm:ss) [&uarr;](#Commands)
+
+```bash
+sys_uptime=`uptime | cut -d ' ' -f2`
 ```
 
 ## `timeout`

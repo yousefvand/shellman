@@ -9,6 +9,8 @@
 
 Shell script snippet
 
+🎆 🎅 Learn Bash Scripting with Shellman (download free PDF 👉 Jan 2019)
+
 [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
 ![shellman](images/demo.gif)
@@ -74,6 +76,14 @@ File operations
 
 Write in bold, italic, dim, reverse format.
 
+`ftp...` and `http...`
+
+Web methods and functionalities: GET, POST...
+
+`git...`
+
+git commands
+
 `if...`
 
 Wide range of logical conditions which are more common in bash scripts.
@@ -117,6 +127,11 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 3.6.0
+
+- `system...`
+  - System information (CPU, Memory, Kernel...)
 
 ### 3.5.0
 

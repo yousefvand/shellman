@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.6.0
+
+- `system...`
+  - System information (CPU, Memory, Kernel...)
+
 ## 3.5.0
 
 - `git...`

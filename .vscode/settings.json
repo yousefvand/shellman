@@ -7,7 +7,9 @@
     "bashdb",
     "civis",
     "cnorm",
+    "codename",
     "czvf",
+    "distro",
     "docgen",
     "elif",
     "esac",
@@ -21,7 +23,9 @@
     "ipinfo",
     "lastrow",
     "libname",
+    "lscpu",
     "maxdepth",
+    "meminfo",
     "multiline",
     "mylib",
     "proto",
@@ -37,8 +41,10 @@
     "tput",
     "ttput",
     "uarr",
+    "uname",
     "whatismyipaddress",
     "xargs",
+    "xenial",
     "xzvf"
   ]
 }
