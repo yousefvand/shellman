@@ -126,10 +126,10 @@
 		"body": "${myArray[@]}\n",
 		"description": "all array elements"
 	},
-	"array_find": {
-		"prefix": "array find",
-		"body": "${myArray[@]/${0:regex}/}\n",
-		"description": "find elements in array using regex"
+	"array_filter": {
+		"prefix": "array filter",
+		"body": "${1:filtered}=(`for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}`)\n",
+		"description": "filter elements of an array based on given pattern"
 	},
 	"array_push": {
 		"prefix": ["array push", "array add"],
@@ -255,12 +255,12 @@
 	},
   "directory_create": {
     "prefix": "directory create",
-    "body": "mkdir ${1:dirname}",
+    "body": "mkdir \"${1:dirname}\"\n",
     "description": "create directory"
   },
   "directory_create_nested": {
     "prefix": "directory create nested",
-    "body": "mkdir -p ${1:parent dir}/${2:child dir}",
+    "body": "mkdir -p \"${1:parent dir}\"/\"${2:child dir}\"\n",
     "description": "create nested directories"
   },
   "git_branch_list": {
@@ -335,7 +335,7 @@
 	},
 	"git_config_set": {
 		"prefix": "git config set",
-		"body": "git config --${1|local,global|} ${2:|user.name,user.email|} \"${3:value}\"\n",
+		"body": "git config --${1|local,global|} ${2|user.name,user.email|} \"${3:value}\"\n",
 		"description": "Configure git."
 	},
 	"git_patch_apply": {
@@ -354,7 +354,7 @@
 		"description": "List all remotes."
 	},
 	"git_remote_urlAdd": {
-		"prefix": "git remote urlChange",
+		"prefix": "git remote urlAdd",
 		"body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
 		"description": "Add remote url."
 	},
@@ -890,7 +890,12 @@
 		"prefix": "math ^",
 		"body": "\\$((${1:base} ** ${2:power}))\n",
 		"description": "exponentiate base to power"
-		},
+    },
+    "random_number": {
+      "prefix": "math random",
+      "body": "echo \\$((${1:min} + RANDOM % \\$((${2:max}-${1:min}))))\n",
+      "description": "generate random integer x such as min < x < max"
+    },
 	"math_sqrt": {
 		"prefix": "math √",
 		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
@@ -1042,11 +1047,6 @@
     "prefix": "format reverse",
     "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
     "description": "write in reverse"
-  },
-  "random_number": {
-    "prefix": "random int",
-    "body": "echo \\$((${1:min} + RANDOM % \\$((${2:max}-${1:min}))))\n",
-    "description": "generate random integer x such as min < x < max"
   },
   "region": {
 		"prefix": "region",

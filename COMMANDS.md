@@ -36,7 +36,7 @@
 
 - [array all](#array-all)
 
-- [array find](#array-find)
+- [array filter](#array-filter)
 
 - [array push](#array-push)
 
@@ -124,7 +124,7 @@
 
 - [git remote list](#git-remote-list)
 
-- [git remote urlChange](#git-remote-urlChange)
+- [git remote urlAdd](#git-remote-urlAdd)
 
 - [git remote urlChange](#git-remote-urlChange)
 
@@ -270,6 +270,8 @@
 
 - [math ^](#math-^)
 
+- [math random](#math-random)
+
 - [math √](#math-√)
 
 - [math 0.00](#math-0.00)
@@ -323,8 +325,6 @@
 - [format dim](#format-dim)
 
 - [format reverse](#format-reverse)
-
-- [random int](#random-int)
 
 - [region](#region)
 
@@ -557,12 +557,12 @@ all array elements [&uarr;](#Commands)
 ${myArray[@]}
 ```
 
-## `array find`
+## `array filter`
 
-find elements in array using regex [&uarr;](#Commands)
+filter elements of an array based on given pattern [&uarr;](#Commands)
 
 ```bash
-${myArray[@]/regex/}
+filtered=(`for i in ${myArray[@]} ; do echo $i; done | grep pattern`)
 ```
 
 ## `array push,array add`
@@ -757,7 +757,7 @@ timeNowSecondsEpoch=`date +%s`
 create directory [&uarr;](#Commands)
 
 ```bash
-mkdir dirname
+mkdir "dirname"
 ```
 
 ## `directory create nested`
@@ -765,7 +765,7 @@ mkdir dirname
 create nested directories [&uarr;](#Commands)
 
 ```bash
-mkdir -p parent dir/child dir
+mkdir -p "parent dir"/"child dir"
 ```
 
 ## `git branch list`
@@ -885,7 +885,7 @@ git config --list
 Configure git. [&uarr;](#Commands)
 
 ```bash
-git config --${1|local,global|} |user.name,user.email| "value"
+git config --${1|local,global|} ${2|user.name,user.email|} "value"
 ```
 
 ## `git patch apply`
@@ -912,7 +912,7 @@ List all remotes. [&uarr;](#Commands)
 git remote
 ```
 
-## `git remote urlChange`
+## `git remote urlAdd`
 
 Add remote url. [&uarr;](#Commands)
 
@@ -1593,6 +1593,14 @@ exponentiate base to power [&uarr;](#Commands)
 $((base ** power))
 ```
 
+## `math random`
+
+generate random integer x such as min < x < max [&uarr;](#Commands)
+
+```bash
+echo $((min + RANDOM % $((max-min))))
+```
+
 ## `math √`
 
 square root of var up to scale decimal places [&uarr;](#Commands)
@@ -1816,14 +1824,6 @@ write in reverse [&uarr;](#Commands)
 
 ```bash
 echo `tput rev`reversed text`tput sgr0`
-```
-
-## `random int`
-
-generate random integer x such as min < x < max [&uarr;](#Commands)
-
-```bash
-echo $((min + RANDOM % $((max-min))))
 ```
 
 ## `region`
