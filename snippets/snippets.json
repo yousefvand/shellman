@@ -598,7 +598,7 @@
   "if_int_equal": {
     "prefix": "if int =",
     "body": [
-      "if [[ \\$${1:int1} == \\$${2:int2} ]]; then",
+      "if (( \\$${1:int1} == \\$${2:int2} )); then",
       "\t${3:echo equal}",
       "fi\n"
     ],
@@ -607,7 +607,7 @@
   "if_int_not_equal": {
     "prefix": "if int !=",
     "body": [
-      "if [[ \\$${1:int1} != \\$${2:int2} ]]; then",
+      "if (( \\$${1:int1} != \\$${2:int2} )); then",
       "\t${3:echo not equal}",
       "fi\n"
     ],
@@ -616,7 +616,7 @@
   "if_int_greater": {
     "prefix": "if int >",
     "body": [
-      "if [[ \\$${1:int} > \\$${2:val} ]]; then",
+      "if (( \\$${1:int} > \\$${2:val} )); then",
       "\t${3:echo greater}",
       "fi\n"
     ],
@@ -625,7 +625,7 @@
   "if_int_greater_equal": {
     "prefix": "if int >=",
     "body": [
-      "if [[ \\$${1:int} >= \\$${2:val} ]]; then",
+      "if (( \\$${1:int} >= \\$${2:val} )); then",
       "\t${3:echo greater equal}",
       "fi\n"
     ],
@@ -634,7 +634,7 @@
   "if_int_less_than": {
     "prefix": "if int <",
     "body": [
-      "if [[ \\$${1:int} < \\$${2:val} ]]; then",
+      "if (( \\$${1:int} < \\$${2:val} )); then",
       "\t${3:echo lesser}",
       "fi\n"
     ],
@@ -643,7 +643,7 @@
   "if_int_less_equal": {
     "prefix": "if int <=",
     "body": [
-      "if [[ \\$${1:int} <= \\$${2:val} ]]; then",
+      "if (( \\$${1:int} <= \\$${2:val} )); then",
       "\t${3:echo lesser equal}",
       "fi\n"
     ],

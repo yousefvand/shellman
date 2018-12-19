@@ -1241,7 +1241,7 @@ temp=${string%%"substring"*} && indexOf=`echo ${string%%"substring"*} | echo ${#
 if integers are equal [&uarr;](#Commands)
 
 ```bash
-if [[ $int1 == $int2 ]]; then
+if (( $int1 == $int2 )); then
   echo equal
 fi
 ```
@@ -1251,7 +1251,7 @@ fi
 if integers are not equal [&uarr;](#Commands)
 
 ```bash
-if [[ $int1 != $int2 ]]; then
+if (( $int1 != $int2 )); then
   echo not equal
 fi
 ```
@@ -1261,7 +1261,7 @@ fi
 if integer greater than value [&uarr;](#Commands)
 
 ```bash
-if [[ $int > $${2:val} ]]; then
+if (( $int > $${2:val} )); then
   echo greater
 fi
 ```
@@ -1271,7 +1271,7 @@ fi
 if integer greater than or equal value [&uarr;](#Commands)
 
 ```bash
-if [[ $int >= $val ]]; then
+if (( $int >= $val )); then
   echo greater equal
 fi
 ```
@@ -1281,7 +1281,7 @@ fi
 if integer lesser than value [&uarr;](#Commands)
 
 ```bash
-if [[ $int < $${2:val} ]]; then
+if (( $int < $${2:val} )); then
   echo lesser
 fi
 ```
@@ -1291,7 +1291,7 @@ fi
 if integer lesser than or equal value [&uarr;](#Commands)
 
 ```bash
-if [[ $int <= $val ]]; then
+if (( $int <= $val )); then
   echo lesser equal
 fi
 ```
