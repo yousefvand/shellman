@@ -1,5 +1,10 @@
 # Change Log
 
+## 4.1.1
+
+- Minor bugs fixed.
+- `let` added for arithmetic operations.
+
 ## 4.0.0
 
 - fixed issues [3](https://github.com/remisa-yousefvand/shellman/issues/3), [4](https://github.com/remisa-yousefvand/shellman/issues/4), [5](https://github.com/remisa-yousefvand/shellman/issues/5), [6](https://github.com/remisa-yousefvand/shellman/issues/6), [7](https://github.com/remisa-yousefvand/shellman/issues/7)

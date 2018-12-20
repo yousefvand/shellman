@@ -252,6 +252,8 @@
 
 - [switch case](#switch-case)
 
+- [let](#let)
+
 - [expr](#expr)
 
 - [math ++](#math-++)
@@ -1241,7 +1243,7 @@ temp=${string%%"substring"*} && indexOf=`echo ${string%%"substring"*} | echo ${#
 if integers are equal [&uarr;](#Commands)
 
 ```bash
-if (( int1 = ${2:int2} )); then
+if (( int1 == ${2:int2} )); then
   echo equal
 fi
 ```
@@ -1311,7 +1313,7 @@ fi
 if path exists (file, directory, link...) [&uarr;](#Commands)
 
 ```bash
-if [ -e "$path"; then
+if [ -e "$path" ]; then
   echo exists
 fi
 ```
@@ -1521,12 +1523,20 @@ case "$item" in
 esac
 ```
 
+## `let`
+
+arithmetic operations [&uarr;](#Commands)
+
+```bash
+let "result = var1 ${3|+,-,*,/,%|} var2"
+```
+
 ## `expr`
 
 arithmetic operations [&uarr;](#Commands)
 
 ```bash
-expr 2 * 3
+expr 2 ${2|+,-,\*,/,%|} 3
 ```
 
 ## `math ++`

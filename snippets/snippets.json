@@ -598,7 +598,7 @@
   "if_int_equal": {
     "prefix": "if int =",
     "body": [
-      "if (( ${1:int1} = ${2:int2} )); then",
+      "if (( ${1:int1} == ${2:int2} )); then",
       "\t${3:echo equal}",
       "fi\n"
     ],
@@ -661,7 +661,7 @@
   "if_exists": {
     "prefix": "if exists",
     "body": [
-      "if [ -e \"\\$${1:path}\"; then",
+      "if [ -e \"\\$${1:path}\" ]; then",
       "\t${0:echo exists}",
       "fi\n"
     ],
@@ -846,9 +846,14 @@
     ],
     "description": "switch case"
   },
+  "let": {
+    "prefix": "let",
+    "body": "let \"${1:result} = ${2:var1} ${3|+,-,*,/,%|} ${4:var2}\"\n",
+    "description": "arithmetic operations"
+  },
   "expr": {
     "prefix": "expr",
-    "body": "expr ${0:2 * 3}\n",
+    "body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
     "description": "arithmetic operations"
   },
   "math_inc": {
