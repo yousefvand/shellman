@@ -963,9 +963,9 @@
   "file_write": {
     "prefix": "file write",
     "body": [
-      "echo ${1:\"file header\"} > ${2:\"\\$filepath\"}",
-      "for ${3:line} in {${4:lines}}; do",
-      "\techo \"\\$${3:line}\" >> ${2:\"\\$filepath\"}",
+      "echo \"${1:sample header}\" > ${2:/path/to/file}",
+      "for ${3:line} in \\${${4:lines}}; do",
+      "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
       "done\n"
     ],
     "description": "write a file"

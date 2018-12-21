@@ -1706,9 +1706,9 @@ result=`find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "crit
 write a file [&uarr;](#Commands)
 
 ```bash
-echo "file header" > ${2:"$filepath"}
-for line in {lines}; do
-  echo "$line" >> "$filepath"
+echo "sample header" > ${2:/path/to/file}
+for line in ${lines}; do
+  echo "$line" >> /path/to/file
 done
 ```
 
