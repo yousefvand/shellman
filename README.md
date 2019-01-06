@@ -9,9 +9,15 @@
 
 Shell script snippet
 
-🎆 🎅 Learn Bash Scripting with Shellman (download free PDF 👉 Jan 2019)
+Learn Bash Scripting with Shellman, examples included. Download free ebook:
 
-[Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
+- [pdf](https://github.com/remisa-yousefvand/shellman-ebook/files/2730547/shellman-2019-01-06.pdf.zip)
+
+- [epub](https://github.com/remisa-yousefvand/shellman-ebook/files/2730548/shellman-2019-01-06.epub.zip)
+
+- [mobi](https://github.com/remisa-yousefvand/shellman-ebook/files/2730550/shellman-2019-01-06.mobi.zip)
+
+Read [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
 ![shellman](images/demo.gif)
 
