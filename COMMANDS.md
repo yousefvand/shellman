@@ -376,6 +376,18 @@
 
 - [fx import](#fx-import)
 
+- [fn math sum](#fn-math-sum)
+
+- [fx math sum](#fx-math-sum)
+
+- [fn math product](#fn-math-product)
+
+- [fx math product](#fx-math-product)
+
+- [fn math average](#fn-math-average)
+
+- [fx math average](#fx-math-average)
+
 - [fn options](#fn-options)
 
 - [fx options](#fx-options)
@@ -2085,6 +2097,72 @@ call import function, to import functions from other shellscript files located i
 
 ```bash
 import "libname"
+```
+
+## `fn math sum`
+
+Calculate sum of given integers [&uarr;](#Commands)
+
+```bash
+function sum () {
+  local result=0
+  for item in $@; do
+    ((result += item))
+  done
+  echo $result
+}
+```
+
+## `fx math sum`
+
+Call math sum function [&uarr;](#Commands)
+
+```bash
+result=`sum $var1 $var2 $var3`
+```
+
+## `fn math product`
+
+Calculate product of given integers [&uarr;](#Commands)
+
+```bash
+function product () {
+  local result=1
+  for item in $@; do
+    ((result *= item))
+  done
+  echo $result
+}
+```
+
+## `fx math product`
+
+Call math product function [&uarr;](#Commands)
+
+```bash
+result=`product $var1 $var2 $var3`
+```
+
+## `fn math average`
+
+Calculate average of given integers [&uarr;](#Commands)
+
+```bash
+function average () {
+  local result=0
+  for item in $@; do
+    ((result += item))
+  done
+  echo $((result / $#))
+}
+```
+
+## `fx math average`
+
+Call math average function [&uarr;](#Commands)
+
+```bash
+result=`average $var1 $var2 $var3`
 ```
 
 ## `fn options`

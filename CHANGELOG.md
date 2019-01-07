@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.2.0
+
+- Shellman ebook available for [download](https://github.com/remisa-yousefvand/shellman-ebook).
+- `math fn/fx`
+  - `sum`: Calculate sum of given integers.
+  - `product`: Calculate product of given integers.
+  - `average`: Calculate average of given integers.
+
 ## 4.1.1
 
 - Minor bugs fixed.

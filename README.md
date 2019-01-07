@@ -9,13 +9,7 @@
 
 Shell script snippet
 
-Learn Bash Scripting with Shellman, examples included. Download free ebook:
-
-- [pdf](https://github.com/remisa-yousefvand/shellman-ebook/files/2730547/shellman-2019-01-06.pdf.zip)
-
-- [epub](https://github.com/remisa-yousefvand/shellman-ebook/files/2730548/shellman-2019-01-06.epub.zip)
-
-- [mobi](https://github.com/remisa-yousefvand/shellman-ebook/files/2730550/shellman-2019-01-06.mobi.zip)
+Learn Bash Scripting with Shellman, examples included. [Download](https://github.com/remisa-yousefvand/shellman-ebook) free ebook (pdf, epub, mobi).
 
 Read [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
@@ -133,6 +127,14 @@ Call function which is declared by `fn...`
 ## List of [commands](COMMANDS.md)
 
 ## Release Notes
+
+### 4.2.0
+
+- Shellman ebook available for [download](https://github.com/remisa-yousefvand/shellman-ebook).
+- `math fn/fx`
+  - `sum`: Calculate sum of given integers.
+  - `product`: Calculate product of given integers.
+  - `average`: Calculate average of given integers.
 
 ### 4.1.1
 
