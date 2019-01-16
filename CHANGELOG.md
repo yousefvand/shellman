@@ -2,7 +2,7 @@
 
 ## 4.2.0
 
-- Shellman ebook available for [download](https://github.com/remisa-yousefvand/shellman-ebook).
+- Shellman ebook available for [download](https://github.com/yousefvand/shellman-ebook).
 - `math fn/fx`
   - `sum`: Calculate sum of given integers.
   - `product`: Calculate product of given integers.
@@ -15,7 +15,7 @@
 
 ## 4.0.0
 
-- fixed issues [3](https://github.com/remisa-yousefvand/shellman/issues/3), [4](https://github.com/remisa-yousefvand/shellman/issues/4), [5](https://github.com/remisa-yousefvand/shellman/issues/5), [6](https://github.com/remisa-yousefvand/shellman/issues/6), [7](https://github.com/remisa-yousefvand/shellman/issues/7)
+- fixed issues [3](https://github.com/yousefvand/shellman/issues/3), [4](https://github.com/yousefvand/shellman/issues/4), [5](https://github.com/yousefvand/shellman/issues/5), [6](https://github.com/yousefvand/shellman/issues/6), [7](https://github.com/yousefvand/shellman/issues/7)
 
 ## 3.6.1
 

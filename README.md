@@ -1,15 +1,15 @@
 # shellman
 
-[![GitHub release](https://img.shields.io/github/release/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/release)
-[![GitHub license](https://img.shields.io/github/license/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/blob/master/LICENSE.md)
-[![GitHub stars](https://img.shields.io/github/stars/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/remisa-yousefvand/shellman/issues)
+[![GitHub release](https://img.shields.io/github/release/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/yousefvand/shellman/release)
+[![GitHub license](https://img.shields.io/github/license/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/yousefvand/shellman/blob/master/LICENSE.md)
+[![GitHub stars](https://img.shields.io/github/stars/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/yousefvand/shellman/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/remisa-yousefvand/shellman.svg?style=plastic)](https://github.com/yousefvand/shellman/issues)
 [![Gitter](https://img.shields.io/gitter/room/badges/shields.svg?style=plastic)](https://gitter.im/vscode-shellman/Lobby)
 ![Author](https://img.shields.io/badge/Author-Remisa-ff69b4.svg?style=plastic)
 
 Shell script snippet
 
-Learn Bash Scripting with Shellman, examples included. [Download](https://github.com/remisa-yousefvand/shellman-ebook) free ebook (pdf, epub, mobi).
+Learn Bash Scripting with Shellman, examples included. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi).
 
 Read [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
@@ -130,7 +130,7 @@ Call function which is declared by `fn...`
 
 ### 4.2.0
 
-- Shellman ebook available for [download](https://github.com/remisa-yousefvand/shellman-ebook).
+- Shellman ebook available for [download](https://github.com/yousefvand/shellman-ebook).
 - `math fn/fx`
   - `sum`: Calculate sum of given integers.
   - `product`: Calculate product of given integers.
@@ -143,7 +143,7 @@ Call function which is declared by `fn...`
 
 ### 4.0.0
 
-- fixed issues [3](https://github.com/remisa-yousefvand/shellman/issues/3), [4](https://github.com/remisa-yousefvand/shellman/issues/4), [5](https://github.com/remisa-yousefvand/shellman/issues/5), [6](https://github.com/remisa-yousefvand/shellman/issues/6), [7](https://github.com/remisa-yousefvand/shellman/issues/7)
+- fixed issues [3](https://github.com/yousefvand/shellman/issues/3), [4](https://github.com/yousefvand/shellman/issues/4), [5](https://github.com/yousefvand/shellman/issues/5), [6](https://github.com/yousefvand/shellman/issues/6), [7](https://github.com/yousefvand/shellman/issues/7)
 
 ### 3.6.1
 
