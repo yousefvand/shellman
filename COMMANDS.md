@@ -18,6 +18,8 @@
 
 - [cmd nice](#cmd-nice)
 
+- [cmd renice](#cmd-renice)
+
 - [cmd success check](#cmd-success-check)
 
 - [cmd failure check](#cmd-failure-check)
@@ -328,6 +330,12 @@
 
 - [format reverse](#format-reverse)
 
+- [process list](#process-list)
+
+- [process ID](#process-ID)
+
+- [process kill](#process-kill)
+
 - [region](#region)
 
 - [service manage](#service-manage)
@@ -489,10 +497,18 @@ run command (command substitution) [&uarr;](#Commands)
 
 ## `cmd nice`
 
-run command with desired privilege. n: -20 (most favorable scheduling) to 19 (least favorable) [&uarr;](#Commands)
+run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
 
 ```bash
 sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} command
+```
+
+## `cmd renice`
+
+Change running process priority. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
+
+```bash
+sudo renice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -p `pgrep process_name`
 ```
 
 ## `cmd success check`
@@ -1846,6 +1862,30 @@ write in reverse [&uarr;](#Commands)
 
 ```bash
 echo `tput rev`reversed text`tput sgr0`
+```
+
+## `process list`
+
+List processes [&uarr;](#Commands)
+
+```bash
+ps -A
+```
+
+## `process ID`
+
+Find process id (PID) [&uarr;](#Commands)
+
+```bash
+pgrep process_name
+```
+
+## `process kill`
+
+Kill process by name [&uarr;](#Commands)
+
+```bash
+sudo kill -9 `pgrep process_name`
 ```
 
 ## `region`

@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.3.0
+
+- Process commands `process ...`
+  - `list`: List all processes.
+  - `id`: Get process ID by name.
+  - `kill`: Kill process by name.
+- `cmd renice`: Change running process priority.
+
 ## 4.2.0
 
 - Shellman ebook available for [download](https://github.com/yousefvand/shellman-ebook).

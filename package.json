@@ -2,7 +2,7 @@
     "name": "shellman",
     "displayName": "shellman",
     "description": "Bash script snippet",
-    "version": "4.2.0",
+    "version": "4.3.0",
     "publisher": "Remisa",
     "icon": "images/icon.png",
     "license": "SEE LICENSE IN LICENSE.md",
@@ -29,7 +29,7 @@
         ]
     },
     "devDependencies": {
-        "cspell": "^3.1.3",
+        "cspell": "^3.2.1",
         "fs": "0.0.1-security",
         "path": "^0.12.7"
     },

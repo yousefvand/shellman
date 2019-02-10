@@ -71,7 +71,12 @@
   "cmd_nice": {
 		"prefix": "cmd nice",
 		"body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${0:command}\n",
-		"description": "run command with desired privilege. n: -20 (most favorable scheduling) to 19 (least favorable)"
+		"description": "run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority)"
+	},
+	"cmd_renice": {
+		"prefix": "cmd renice",
+		"body": "sudo renice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -p `pgrep ${0:process_name}`\n",
+		"description": "Change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
 	},
   "cmd_success_check": {
     "prefix": "cmd success check",
@@ -1052,7 +1057,22 @@
     "prefix": "format reverse",
     "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
     "description": "write in reverse"
-  },
+	},
+	"process_list": {
+		"prefix": "process list",
+		"body": "ps -A\n",
+		"description": "List processes"
+	},
+	"process_id": {
+		"prefix": "process ID",
+		"body": "pgrep ${1:process_name}\n",
+		"description": "Find process id (PID)"
+	},
+	"process_kill": {
+		"prefix": "process kill",
+		"body": "sudo kill -9 `pgrep ${1:process_name}`\n",
+		"description": "Kill process by name"
+	},
   "region": {
 		"prefix": "region",
 		"body": [
