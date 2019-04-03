@@ -860,62 +860,87 @@
     "prefix": "expr",
     "body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
     "description": "arithmetic operations"
-  },
-  "math_inc": {
-  "prefix": "math ++",
-  "body": "\\$((${1|var++,++var|}))\n",
-  "description": "increment variable"
+	},
+	"math_inc": {
+		"prefix": "math ++",
+		"body": "((${1|var++,++var|}))\n",
+		"description": "increment variable"
 	},
 	"math_dec": {
 		"prefix": "math --",
-		"body": "\\$((${1|var--,--var|}))\n",
+		"body": "((${1|var--,--var|}))\n",
 		"description": "decrement variable"
-		},
+	},
 	"math_add": {
 		"prefix": "math +",
-		"body": "\\$((${1:var1} ${2|+,+=|} ${3:var2}))\n",
-		"description": "add two variables (+= assign result to var1)"
-		},
+		"body": "${1:result}=\\$((${2:var1} + ${3:var2}))\n",
+		"description": "add two variables"
+	},
+	"math_plus_equal": {
+		"prefix": "math +=",
+		"body": "((${1:var1} += ${2:var2}))\n",
+		"description": "add var1 and var2 and assign the result to var1"
+	},
 	"math_subtract": {
 		"prefix": "math -",
-		"body": "\\$((${1:var1} ${2|-,-=|} ${3:var2}))\n",
-		"description": "subtract var2 from var1 (-= assign result to var1)"
-		},
+		"body": "${1:result}=\\$((${2:var1} - ${3:var2}))\n",
+		"description": "subtract var2 from var1"
+	},
+	"math_minus_equal": {
+		"prefix": "math -=",
+		"body": "((${1:var1} -= ${2:var2}))\n",
+		"description": "subtract var2 from var1 and assign the result to var1"
+	},
 	"math_multiply": {
 		"prefix": "math *",
-		"body": "\\$((${1:var1} ${2|*,*=|} ${3:var2}))\n",
-		"description": "multiply var1 and var2 (*= assign result to var1)"
-		},
+		"body": "${1:result}=\\$((${2:var1} * ${3:var2}))\n",
+		"description": "multiply var1 by var2"
+	},
+	"math_multiply_equal": {
+		"prefix": "math *=",
+		"body": "((${1:var1} *= ${2:var2}))\n",
+		"description": "multiply var1 by var2 and assign the result to var1"
+	},
 	"math_divide": {
 		"prefix": "math /",
-		"body": "\\$((${1:var1} ${2|/,/=|} ${3:var2}))\n",
-		"description": "divide var1 by var2 (/= assign result to var1)"
-		},
+		"body": "${1:result}=\\$((${2:var1} / ${3:var2}))\n",
+		"description": "divide var1 by var2"
+	},
+	"math_divide_equal": {
+		"prefix": "math /=",
+		"body": "((${1:var1} /= ${2:var2}))\n",
+		"description": "divide var1 by var2 and assign the result to var1"
+	},
 	"math_modulus": {
 		"prefix": "math %",
-		"body": "\\$((${1:var1} ${2|%,%=|} ${3:var2}))\n",
-		"description": "reminder of dividing var1 by var2 (%= assign result to var1)"
-		},
+		"body": "${1:result}=\\$((${2:var1} % ${3:var2}))\n",
+		"description": "reminder of dividing var1 by var2 (modulus)"
+	},
+	"math_modulus_equal": {
+		"prefix": "math %=",
+		"body": "((${1:var1} %= ${2:var2}))\n",
+		"description": "divide var1 by var2 and assign the reminder to var1"
+	},
 	"math_power": {
 		"prefix": "math ^",
-		"body": "\\$((${1:base} ** ${2:power}))\n",
+		"body": "${1:result}=\\$((${2:base} ** ${3:power}))\n",
 		"description": "exponentiate base to power"
-    },
-    "random_number": {
-      "prefix": "math random",
-      "body": "echo \\$((${1:min} + RANDOM % \\$((${2:max}-${1:min}))))\n",
-      "description": "generate random integer x such as min < x < max"
-    },
+  },
+	"random_number": {
+		"prefix": "math random",
+		"body": "${1:result}=\\$((${2:min} + RANDOM % \\$((${3:max}-${2:min}))))\n",
+		"description": "generate random integer x such as min <= x <= max"
+  },
 	"math_sqrt": {
 		"prefix": "math √",
 		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
 		"description": "square root of var up to scale decimal places"
-		},
+	},
 	"math_float": {
 		"prefix": "math 0.00",
 		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n",
 		"description": "math operations with up to scale decimal places precision"
-		},
+	},
 	"math_const_pi": {
 		"prefix": "math const π",
 		"body": "MATH_PI='3.14159265358979323846264338327950288'\n",

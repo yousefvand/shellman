@@ -1,5 +1,10 @@
 # Change Log
 
+## 4.3.1
+
+- Fixed #10 in math namespace.
+- Some enhancements in math namespace.
+
 ## 4.3.0
 
 - Process commands `process ...`

@@ -264,13 +264,23 @@
 
 - [math +](#math-+)
 
+- [math +=](#math-+=)
+
 - [math -](#math--)
+
+- [math -=](#math--=)
 
 - [math *](#math-*)
 
+- [math *=](#math-*=)
+
 - [math /](#math-/)
 
+- [math /=](#math-/=)
+
 - [math %](#math-%)
+
+- [math %=](#math-%=)
 
 - [math ^](#math-^)
 
@@ -1572,7 +1582,7 @@ expr 2 ${2|+,-,\*,/,%|} 3
 increment variable [&uarr;](#Commands)
 
 ```bash
-$((${1|var++,++var|}))
+((${1|var++,++var|}))
 ```
 
 ## `math --`
@@ -1580,47 +1590,87 @@ $((${1|var++,++var|}))
 decrement variable [&uarr;](#Commands)
 
 ```bash
-$((${1|var--,--var|}))
+((${1|var--,--var|}))
 ```
 
 ## `math +`
 
-add two variables (+= assign result to var1) [&uarr;](#Commands)
+add two variables [&uarr;](#Commands)
 
 ```bash
-$((var1 ${2|+,+=|} var2))
+result=$((var1 + var2))
+```
+
+## `math +=`
+
+add var1 and var2 and assign the result to var1 [&uarr;](#Commands)
+
+```bash
+((var1 += var2))
 ```
 
 ## `math -`
 
-subtract var2 from var1 (-= assign result to var1) [&uarr;](#Commands)
+subtract var2 from var1 [&uarr;](#Commands)
 
 ```bash
-$((var1 ${2|-,-=|} var2))
+result=$((var1 - var2))
+```
+
+## `math -=`
+
+subtract var2 from var1 and assign the result to var1 [&uarr;](#Commands)
+
+```bash
+((var1 -= var2))
 ```
 
 ## `math *`
 
-multiply var1 and var2 (*= assign result to var1) [&uarr;](#Commands)
+multiply var1 by var2 [&uarr;](#Commands)
 
 ```bash
-$((var1 ${2|*,*=|} var2))
+result=$((var1 * var2))
+```
+
+## `math *=`
+
+multiply var1 by var2 and assign the result to var1 [&uarr;](#Commands)
+
+```bash
+((var1 *= var2))
 ```
 
 ## `math /`
 
-divide var1 by var2 (/= assign result to var1) [&uarr;](#Commands)
+divide var1 by var2 [&uarr;](#Commands)
 
 ```bash
-$((var1 ${2|/,/=|} var2))
+result=$((var1 / var2))
+```
+
+## `math /=`
+
+divide var1 by var2 and assign the result to var1 [&uarr;](#Commands)
+
+```bash
+((var1 /= var2))
 ```
 
 ## `math %`
 
-reminder of dividing var1 by var2 (%= assign result to var1) [&uarr;](#Commands)
+reminder of dividing var1 by var2 (modulus) [&uarr;](#Commands)
 
 ```bash
-$((var1 ${2|%,%=|} var2))
+result=$((var1 % var2))
+```
+
+## `math %=`
+
+divide var1 by var2 and assign the reminder to var1 [&uarr;](#Commands)
+
+```bash
+((var1 %= var2))
 ```
 
 ## `math ^`
@@ -1628,15 +1678,15 @@ $((var1 ${2|%,%=|} var2))
 exponentiate base to power [&uarr;](#Commands)
 
 ```bash
-$((base ** power))
+result=$((base ** power))
 ```
 
 ## `math random`
 
-generate random integer x such as min < x < max [&uarr;](#Commands)
+generate random integer x such as min <= x <= max [&uarr;](#Commands)
 
 ```bash
-echo $((min + RANDOM % $((max-min))))
+result=$((min + RANDOM % $((max-min))))
 ```
 
 ## `math √`
@@ -2307,4 +2357,3 @@ call scan function to scan a host over a port range [&uarr;](#Commands)
 ```bash
 scan ${1|tcp,udp|} host fromPort  toPort
 ```
-
