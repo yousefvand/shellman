@@ -474,6 +474,11 @@
 		"body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/ -Q \"-RNFR ${4:path}/${5:renameFrom}\" -Q \"-RNTO ${4:path}/${6:renameTo}\"\n",
 		"description": "Rename specified file/directory on ftp server"
 	},
+	"alias": {
+    "prefix": "alias",
+    "body": "alias ${1:alias_name}=\"${2:command_to_alias}\"",
+    "description": "alias name=\"command_to_alias\""
+  },
   "if": {
     "prefix": "if",
     "body": [
