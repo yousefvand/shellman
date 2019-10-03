@@ -104,7 +104,7 @@
 	"archive_decompress_tar_gz": {
 		"prefix": "archive decompress tar.gz",
 		"body": "tar -C ${1:/extract/to/path} -xzvf ${2:/path/to/archive}.tar.gz\n",
-		"description": "compress file/folder to a .tar.gz file"
+		"description": "decompress file/folder to a .tar.gz file"
 	},
 	"array_concat": {
 		"prefix": "array concat",
