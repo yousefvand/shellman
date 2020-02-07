@@ -1,8 +1,15 @@
 # Change Log
 
+## 4.4.0
+
+- Fixed issue [#13](https://github.com/yousefvand/shellman/issues/13). Thanks to [@wangyuew](https://github.com/wangyuew).
+- `fn/fx [version | semver] compare`
+  - Compare two [semver](https://semver.org) versions. Function compares first argument with the second and returns `>`, `<` or `=`.
+- `string substring [count | frequency]`: Frequency of a substring in a string. You may need character escaping, for example if string is `1.2.3` and substring is `.` then substring should be `\.` when passed to command.
+
 ## 4.3.1
 
-- Fixed #10 in math namespace.
+- Fixed issue [#10](https://github.com/yousefvand/shellman/issues/10) in math namespace.
 - Some enhancements in math namespace.
 
 ## 4.3.0
@@ -28,7 +35,7 @@
 
 ## 4.0.0
 
-- fixed issues [3](https://github.com/yousefvand/shellman/issues/3), [4](https://github.com/yousefvand/shellman/issues/4), [5](https://github.com/yousefvand/shellman/issues/5), [6](https://github.com/yousefvand/shellman/issues/6), [7](https://github.com/yousefvand/shellman/issues/7)
+- fixed issues [#3](https://github.com/yousefvand/shellman/issues/3), [#4](https://github.com/yousefvand/shellman/issues/4), [#5](https://github.com/yousefvand/shellman/issues/5), [#6](https://github.com/yousefvand/shellman/issues/6), [#7](https://github.com/yousefvand/shellman/issues/7)
 
 ## 3.6.1
 
@@ -46,7 +53,7 @@
 
 ## 3.4.0
 
-- `ftp`
+- `ftp...`
   - `list`: Get the list of files on the ftp server at specific path.
   - `download`: Download specified file from ftp server.
   - `upload`: Upload specified file to ftp server.
@@ -55,7 +62,7 @@
 
 ## 3.3.0
 
-- `http`
+- `http...`
   - `GET`: Send http GET request using curl.
   - `POST`: Send data with http POST, using curl.
   - `POST file`: Send file via http POST, using curl.
@@ -173,4 +180,4 @@
 
 ## 0.0.1
 
-- Initial release
+Initial release

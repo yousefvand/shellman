@@ -1,22 +1,28 @@
 {
 	"bash": {
-    "prefix": "bash",
-    "body": "#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}\n\n",
-    "description": "bash shebang"
-  },
-  "summary": {
-    "prefix": "summary",
-    "body": [
-      "# Title:         ${1:title}",
-      "# Description:   ${2:description}",
-      "# Author:        ${3:author <email>}",
-      "# Date:          ${4:yyyy-mm-dd}",
-      "# Version:       ${5:1.0.0}\n"
-    ],
-    "description": "script summary"
-  },
-  "argument_parsing": {
-		"prefix": ["argument parsing", "parse args"],
+		"prefix": [
+			"bash",
+			"shebang"
+		],
+		"body": "#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}\n\n",
+		"description": "bash shebang"
+	},
+	"summary": {
+		"prefix": "summary",
+		"body": [
+			"# Title:         ${1:title}",
+			"# Description:   ${2:description}",
+			"# Author:        ${3:author <email>}",
+			"# Date:          ${4:yyyy-mm-dd}",
+			"# Version:       ${5:1.0.0}\n"
+		],
+		"description": "script summary"
+	},
+	"argument_parsing": {
+		"prefix": [
+			"argument parsing",
+			"parse args"
+		],
 		"body": [
 			"POSITIONAL=()",
 			"while [[ \\$# > 0 ]]; do",
@@ -39,36 +45,36 @@
 		],
 		"description": "parse command line arguments (flags/switches)"
 	},
-  "function": {
-    "prefix": "func",
-    "body": [
-      "function ${1:name} () {",
-      "\t${2:echo \"\\$1\" # arguments are accessible through $1, $2,...}",
-      "}\n"
-    ],
-    "description": "function"
-  },
-  "function_args_count": {
-    "prefix": "func args count",
-    "body": "echo $#",
-    "description": "number of function arguments"
-  },
-  "function_args": {
-    "prefix": "func args",
-    "body": "echo \"$@\"",
-    "description": "function arguments array"
-  },
-  "function_return_value": {
-    "prefix": "func ret val",
-    "body": "echo \"$?\"",
-    "description": "last function/command return code"
-  },
-  "cmd": {
-    "prefix": "cmd",
-    "body": "`${1:command}`\n",
-    "description": "run command (command substitution)"
-  },
-  "cmd_nice": {
+	"function": {
+		"prefix": "func",
+		"body": [
+			"function ${1:name} () {",
+			"\t${2:echo \"\\$1\" # arguments are accessible through $1, $2,...}",
+			"}\n"
+		],
+		"description": "function"
+	},
+	"function_args_count": {
+		"prefix": "func args count",
+		"body": "echo $#",
+		"description": "number of function arguments"
+	},
+	"function_args": {
+		"prefix": "func args",
+		"body": "echo \"$@\"",
+		"description": "function arguments array"
+	},
+	"function_return_value": {
+		"prefix": "func ret val",
+		"body": "echo \"$?\"",
+		"description": "last function/command return code"
+	},
+	"cmd": {
+		"prefix": "cmd",
+		"body": "`${1:command}`\n",
+		"description": "run command (command substitution)"
+	},
+	"cmd_nice": {
 		"prefix": "cmd nice",
 		"body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${0:command}\n",
 		"description": "run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority)"
@@ -78,25 +84,25 @@
 		"body": "sudo renice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -p `pgrep ${0:process_name}`\n",
 		"description": "Change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
 	},
-  "cmd_success_check": {
-    "prefix": "cmd success check",
-    "body": [
-      "if [[ \\$? == 0 ]]; then",
-      "\t${3:echo command succeed}",
-      "fi\n"
-    ],
-    "description": "check if last command succeed"
-  },
-  "cmd_failure_check": {
-    "prefix": "cmd failure check",
-    "body": [
-      "if [[ \\$? != 0 ]]; then",
-      "\t${3:echo command failed}",
-      "fi\n"
-    ],
-    "description": "check if last command failed"
-  },
-  "archive_compress_tar_gz": {
+	"cmd_success_check": {
+		"prefix": "cmd success check",
+		"body": [
+			"if [[ \\$? == 0 ]]; then",
+			"\t${3:echo command succeed}",
+			"fi\n"
+		],
+		"description": "check if last command succeed"
+	},
+	"cmd_failure_check": {
+		"prefix": "cmd failure check",
+		"body": [
+			"if [[ \\$? != 0 ]]; then",
+			"\t${3:echo command failed}",
+			"fi\n"
+		],
+		"description": "check if last command failed"
+	},
+	"archive_compress_tar_gz": {
 		"prefix": "archive compress tar.gz",
 		"body": "tar -czvf ${1:/path/to/archive}.tar.gz ${2:/path/to/directory-or-file}\n",
 		"description": "compress file/folder to a .tar.gz file"
@@ -104,7 +110,7 @@
 	"archive_decompress_tar_gz": {
 		"prefix": "archive decompress tar.gz",
 		"body": "tar -C ${1:/extract/to/path} -xzvf ${2:/path/to/archive}.tar.gz\n",
-		"description": "decompress file/folder to a .tar.gz file"
+		"description": "decompress a .tar.gz file to specified path"
 	},
 	"array_concat": {
 		"prefix": "array concat",
@@ -137,7 +143,10 @@
 		"description": "filter elements of an array based on given pattern"
 	},
 	"array_push": {
-		"prefix": ["array push", "array add"],
+		"prefix": [
+			"array push",
+			"array add"
+		],
 		"body": "${1:myArray}+=('${2:newItem}')\n",
 		"description": "push new item to the end of array"
 	},
@@ -152,7 +161,10 @@
 		"description": "retrieve element at specified index (zero based)"
 	},
 	"array_iterate": {
-		"prefix": ["array iterate", "array forEach"],
+		"prefix": [
+			"array iterate",
+			"array forEach"
+		],
 		"body": [
 			"for item in ${${1:myArray}[@]}; do",
 			"\t${2:echo \"\\$item\"}",
@@ -166,7 +178,10 @@
 		"description": "length of array"
 	},
 	"array_range": {
-		"prefix": ["array slice", "array range"],
+		"prefix": [
+			"array slice",
+			"array range"
+		],
 		"body": "${myArray[@]:${1:from}:${2:count}}\n",
 		"description": "elements of array from index, equal to count numbers"
 	},
@@ -175,20 +190,20 @@
 		"body": "myArray[${1:index}]=${2:value}\n",
 		"description": "set array element at index"
 	},
-  "assign_if_empty": {
-    "prefix": "assign if empty",
-    "body": ": \"\\${${1:variable}:=${2:default}}\"",
-    "description": "assign default to variable if variable is empty or null"
-  },
-  "ask_question": {
-    "prefix": "ask question",
-    "body": [
-      "read -ep \"${1:Question here? }\" -i ${2:Default answer} ANSWER",
-      "${3:echo \"\\$ANSWER\"}\n"
-    ],
-    "description": "Ask question with default answer"
-  },
-  "crypto_base64_encode": {
+	"assign_if_empty": {
+		"prefix": "assign if empty",
+		"body": ": \"\\${${1:variable}:=${2:default}}\"",
+		"description": "assign default to variable if variable is empty or null"
+	},
+	"ask_question": {
+		"prefix": "ask question",
+		"body": [
+			"read -ep \"${1:Question here? }\" -i ${2:Default answer} ANSWER",
+			"${3:echo \"\\$ANSWER\"}\n"
+		],
+		"description": "Ask question with default answer"
+	},
+	"crypto_base64_encode": {
 		"prefix": "crypto base64 encode",
 		"body": "${1:base64Encoded}=`echo -n \"\\$${2:variableToEncode}\" | base64`\n",
 		"description": "encode variable to base64"
@@ -203,7 +218,7 @@
 		"body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n",
 		"description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
 	},
-  "date_short": {
+	"date_short": {
 		"prefix": "date now short",
 		"body": "dateShort=`date -I`\n",
 		"description": "yyyy/mm/dd"
@@ -242,8 +257,8 @@
 		"prefix": "date now dayOfYear",
 		"body": "dayOfYear=`date +%j`\n",
 		"description": "current day of year (1..366)"
-  },
-  "time_local": {
+	},
+	"time_local": {
 		"prefix": "time now local",
 		"body": "timeNowLocal=`date +%${1|R,r|}`\n",
 		"description": "current local time (24hrs/12hrs R/r)"
@@ -258,17 +273,17 @@
 		"body": "timeNowSecondsEpoch=`date +%s`\n",
 		"description": "seconds since epoch (1970-01-01 00:00:00)"
 	},
-  "directory_create": {
-    "prefix": "directory create",
-    "body": "mkdir \"${1:dirname}\"\n",
-    "description": "create directory"
-  },
-  "directory_create_nested": {
-    "prefix": "directory create nested",
-    "body": "mkdir -p \"${1:parent dir}\"/\"${2:child dir}\"\n",
-    "description": "create nested directories"
-  },
-  "git_branch_list": {
+	"directory_create": {
+		"prefix": "directory create",
+		"body": "mkdir \"${1:dirname}\"\n",
+		"description": "create directory"
+	},
+	"directory_create_nested": {
+		"prefix": "directory create nested",
+		"body": "mkdir -p \"${1:parent dir}\"/\"${2:child dir}\"\n",
+		"description": "create nested directories"
+	},
+	"git_branch_list": {
 		"prefix": "git branch list",
 		"body": "git branch\n",
 		"description": "List all branches."
@@ -374,7 +389,10 @@
 		"description": "List all tags."
 	},
 	"git_tag_commit": {
-		"prefix": ["git tag commit", "git commit tag"],
+		"prefix": [
+			"git tag commit",
+			"git commit tag"
+		],
 		"body": "git tag -a ${1:release/1.0.0} -m \"${2:1.0.0 release}\"\n",
 		"description": "Tag a commit."
 	},
@@ -388,8 +406,11 @@
 		"body": "git push origin ${1:tagName}\n",
 		"description": "Push tag to remote."
 	},
-  "http_get": {
-		"prefix": [ "http GET", "http DELETE"],
+	"http_get": {
+		"prefix": [
+			"http GET",
+			"http DELETE"
+		],
 		"body": [
 			"curl --request ${1|GET,DELETE|} -sL \\",
 			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
@@ -398,7 +419,10 @@
 		"description": "Send http GET/DELETE request using curl"
 	},
 	"http_post": {
-		"prefix": [ "http POST", "http PUT"],
+		"prefix": [
+			"http POST",
+			"http PUT"
+		],
 		"body": [
 			"curl --request ${1|POST,PUT|} -sL \\",
 			"\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
@@ -448,8 +472,8 @@
 			"\t--url '${4:http://example.com/file.zip}'\n"
 		],
 		"description": "Download from url and save to /path/to/file, using curl"
-  },
-  "ftp_list": {
+	},
+	"ftp_list": {
 		"prefix": "ftp list",
 		"body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:directoryPathOnServer}/\n",
 		"description": "Get the list of files on the ftp server at specific path"
@@ -474,66 +498,72 @@
 		"body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/ -Q \"-RNFR ${4:path}/${5:renameFrom}\" -Q \"-RNTO ${4:path}/${6:renameTo}\"\n",
 		"description": "Rename specified file/directory on ftp server"
 	},
-  "if": {
-    "prefix": "if",
-    "body": [
-      "if [ ${1:condition} ]; then",
-      "\t${2: # body}",
-      "elif [ ${3:condition} ]; then",
-      "\t${4: # body}",
-      "else",
-      "\t${5: # body}",
-      "fi\n"
-    ],
-    "description": "if"
-  },
-  "iff": {
-    "prefix": "iff",
-    "body": "[ ${1:condition} ] && ${2:command}\n",
-    "description": "if condition is true then run command (short circuit)"
-  },
-  "iff_not": {
-    "prefix": "iff not",
-    "body": "[ ${1:condition} ] || ${2:command}\n",
-    "description": "if condition is false then run command (short circuit)"
-  },
-  "if_string_empty": {
-    "prefix": "if string empty",
-    "body": [
-      "if [ -z \"\\$${1:string}\" ]; then",
-      "\t${2:# body}",
-      "fi\n"
-    ],
-    "description": "if string is empty"
-  },
-  "if_string_not_empty": {
-    "prefix": "if string not empty",
-    "body": [
-      "if [ -n \"\\$${1:string}\" ]; then",
-      "\t${2:# body}",
-      "fi\n"
-    ],
-    "description": "if string is not empty"
-  },
+	"if": {
+		"prefix": "if",
+		"body": [
+			"if [ ${1:condition} ]; then",
+			"\t${2: # body}",
+			"elif [ ${3:condition} ]; then",
+			"\t${4: # body}",
+			"else",
+			"\t${5: # body}",
+			"fi\n"
+		],
+		"description": "if"
+	},
+	"iff": {
+		"prefix": "iff",
+		"body": "[ ${1:condition} ] && ${2:command}\n",
+		"description": "if condition is true then run command (short circuit)"
+	},
+	"iff_not": {
+		"prefix": "iff not",
+		"body": "[ ${1:condition} ] || ${2:command}\n",
+		"description": "if condition is false then run command (short circuit)"
+	},
+	"if_string_empty": {
+		"prefix": "if string empty",
+		"body": [
+			"if [ -z \"\\$${1:string}\" ]; then",
+			"\t${2:# body}",
+			"fi\n"
+		],
+		"description": "if string is empty"
+	},
+	"if_string_not_empty": {
+		"prefix": "if string not empty",
+		"body": [
+			"if [ -n \"\\$${1:string}\" ]; then",
+			"\t${2:# body}",
+			"fi\n"
+		],
+		"description": "if string is not empty"
+	},
 	"if_string_equal": {
-    "prefix": ["if string =", "string equal"],
-    "body": [
-      "if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
-      "\t${3:# body}",
-      "fi\n"
-    ],
-    "description": "if strings are equal"
-  },
-  "if_string_not_equal": {
-    "prefix": ["if string !=", "string not equal"],
-    "body": [
-      "if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
-      "\t${3:# body}",
-      "fi\n"
-    ],
-    "description": "if strings are not equal"
-  },
-  "string_length": {
+		"prefix": [
+			"if string =",
+			"string equal"
+		],
+		"body": [
+			"if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
+			"\t${3:# body}",
+			"fi\n"
+		],
+		"description": "if strings are equal"
+	},
+	"if_string_not_equal": {
+		"prefix": [
+			"if string !=",
+			"string not equal"
+		],
+		"body": [
+			"if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
+			"\t${3:# body}",
+			"fi\n"
+		],
+		"description": "if strings are not equal"
+	},
+	"string_length": {
 		"prefix": "string length",
 		"body": "length=\\${#${1:variable}}\n",
 		"description": "length of string in characters"
@@ -584,13 +614,24 @@
 		"description": "part of the string from offset with length characters"
 	},
 	"string_contains": {
-    "prefix": ["string contains", "if string contains"],
-    "body": [
-      "if [[ \"\\$${1:string}\" = *${2:substring}* ]]; then",
-      "\t${3:# body}",
-      "fi\n"
-    ],
-    "description": "check whether string contains substring"
+		"prefix": [
+			"string contains",
+			"if string contains"
+		],
+		"body": [
+			"if [[ \"\\$${1:string}\" = *${2:substring}* ]]; then",
+			"\t${3:# body}",
+			"fi\n"
+		],
+		"description": "check whether string contains substring"
+	},
+	"string_substring_count": {
+		"prefix": [
+			"string substring count",
+			"string substring frequency"
+		],
+		"body": "frequency=`sed -E 's/(.)/\\1\\n/g' <<<\"${1:string}\" | grep -c \"${2:substring}\"`\n",
+		"description": "Frequency of a substring in a string (may need character escaping)"
 	},
 	"string_index_of": {
 		"prefix": "string indexOf",
@@ -600,266 +641,266 @@
 		],
 		"description": "first index of substring in string"
 	},
-  "if_int_equal": {
-    "prefix": "if int =",
-    "body": [
-      "if (( ${1:int1} == ${2:int2} )); then",
-      "\t${3:echo equal}",
-      "fi\n"
-    ],
-    "description": "if integers are equal"
-  },
-  "if_int_not_equal": {
-    "prefix": "if int !=",
-    "body": [
-      "if (( ${1:int1} != ${2:int2} )); then",
-      "\t${3:echo not equal}",
-      "fi\n"
-    ],
-    "description": "if integers are not equal"
-  },
-  "if_int_greater": {
-    "prefix": "if int >",
-    "body": [
-      "if (( ${1:int} > ${2:val} )); then",
-      "\t${3:echo greater}",
-      "fi\n"
-    ],
-    "description": "if integer greater than value"
-  },
-  "if_int_greater_equal": {
-    "prefix": "if int >=",
-    "body": [
-      "if (( ${1:int} >= ${2:val} )); then",
-      "\t${3:echo greater equal}",
-      "fi\n"
-    ],
-    "description": "if integer greater than or equal value"
-  },
-  "if_int_less_than": {
-    "prefix": "if int <",
-    "body": [
-      "if (( ${1:int} < ${2:val} )); then",
-      "\t${3:echo lesser}",
-      "fi\n"
-    ],
-    "description": "if integer lesser than value"
-  },
-  "if_int_less_equal": {
-    "prefix": "if int <=",
-    "body": [
-      "if (( ${1:int} <= ${2:val} )); then",
-      "\t${3:echo lesser equal}",
-      "fi\n"
-    ],
-    "description": "if integer lesser than or equal value"
-  },
-  "if_cmd_exists": {
-    "prefix": "if cmd exists",
-    "body": [
-      "if [ `command -v ${1:command}` ]; then",
-      "\t${2:# body}",
-      "fi\n"
-    ],
-    "description": "check if command exists"
-  },
-  "if_exists": {
-    "prefix": "if exists",
-    "body": [
-      "if [ -e \"\\$${1:path}\" ]; then",
-      "\t${0:echo exists}",
-      "fi\n"
-    ],
-    "description": "if path exists (file, directory, link...)"
-  },
-  "if_file_exists": {
-    "prefix": "if file exists",
-    "body": [
-      "if [ -f \"\\$${1:file}\" ]; then",
-      "\t${2:echo file exists}",
-      "fi\n"
-    ],
-    "description": "if file exists"
-  },
-  "if_file_not_empty": {
-    "prefix": "if file not empty",
-    "body": [
-      "if [ -s \"\\$${1:file}\" ]; then",
-      "\t${2:echo file not empty}",
-      "fi\n"
-    ],
-    "description": "if file size is greater than zero"
-  },
-  "if_directory_exists": {
-    "prefix": "if directory exists",
-    "body": [
-      "if [ -d \"\\$${1:directory}\" ]; then",
-      "\t${0:echo directory exists}",
-      "fi\n"
-    ],
-    "description": "if directory exists"
-  },
-  "if_file_readable": {
-    "prefix": "if file readable",
-    "body": [
-      "if [ -r \"\\$${1:file}\" ]; then",
-      "\t${0:echo file is readable}",
-      "fi\n"
-    ],
-    "description": "if file readable"
-  },
-  "if_file_writeable": {
-    "prefix": "if file writeable",
-    "body": [
-      "if [ -w \"\\$${1:file}\" ]; then",
-      "\t${0:echo file is writeable}",
-      "fi\n"
-    ],
-    "description": "if file writeable"
-  },
-  "if_file_executable": {
-    "prefix": "if file executable",
-    "body": [
-    "if [ -x \"\\$${1:file}\" ]; then",
-    "\t${0:echo file is executable}",
-    "fi\n"
-  ],
-    "description": "if file executable"
-  },
-  "if_file_equal": {
-    "prefix": "if file =",
-    "body": [
-      "if [ \"\\$${1:file1}\" -ef \"\\$${2:file2}\" ]; then",
-      "\t${0:echo files are equal}",
-      "fi\n"
-    ],
-    "description": "if files are equal"
-  },
-  "if_file_link": {
-    "prefix": "if file link",
-    "body": [
-      "if [ -h \"\\$${1:file}\" ]; then",
-      "\t${0:echo symbolic link}",
-      "fi\n"
-    ],
-    "description": "if file exists and is a symbolic link"
-  },
-  "if_file_newer": {
-    "prefix": "if file newer",
-    "body": [
-      "if [ \"\\$${1:file1}\" -nt \"\\$${2:file2}\" ]; then",
-      "\t${0:echo file1 is newer than file2}",
-      "fi\n"
-    ],
-    "description": "if file1 newer than file2"
-  },
-  "if_file_older": {
-    "prefix": "if file older",
-    "body": [
-      "if [ \"\\$${1:file1}\" -ot \"\\$${2:file2}\" ]; then",
-      "\t${0:echo file1 is older than file2}",
-      "fi\n"
-    ],
-    "description": "if file1 older than file2"
-  },
-  "ips": {
-    "prefix": "ips",
-    "body": "IPS=`hostname -I`\n",
-    "description": "Array of local IPs"
-  },
-  "ip_info": {
-    "prefix": "ip info",
-    "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n",
-    "description": "public ip information"
-  },
-  "ip_public": {
-    "prefix": "ip public",
-    "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
-    "description": "public ip address"
-  },
-  "for_i": {
-    "prefix": "for i",
-    "body": [
-      "for((i=0;i<${1:n};i++)); do",
-      "\t${0:echo \"\\$i\"}",
-      "done\n"
-    ],
-    "description": "for loop by index"
-  },
-  "for_ij": {
-    "prefix": "for ij",
-    "body": [
-      "for((i=0;i<${1:n};i++)); do",
-      "\tfor((j=0;j<${2:m};j++)); do",
-      "\t\t${0:echo \"\\$i, \\$j\"}",
-      "\tdone",
-      "done\n"
-    ],
-    "description": "for loop by index"
-  },
-  "for_in": {
-    "prefix": "for in",
-    "body": [
-      "for ${1:item} in {${2:a..z}}; do",
-      "\techo \"\\$${1:item}\"",
-      "done\n"
-    ],
-    "description": "for loop in collection"
-  },
-  "for_in_column": {
-    "prefix": "for in column",
-    "body": [
-      "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
-      "\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
-      "\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
-      "done\n"
-    ],
-    "description": "for loop in collection"
-  },
-  "while": {
-    "prefix": "while",
-    "body": [
-      "while [ ${1:condition} ]; do",
-      "\t${0:# body}",
-      "done\n"
-    ],
-    "description": "while loop"
-  },
-  "until": {
-    "prefix": "until",
-    "body": [
-      "until [ ${1:condition} ]; do",
-      "\t${0:# body}",
-      "done\n"
-    ],
-    "description": "until loop"
-  },
-  "switch": {
-    "prefix": "switch case",
-    "body": [
-      "case \"\\$${1:item}\" in",
-      "\t${2:1})",
-      "\t\t${3:echo \"case 1\"}",
-      "\t;;",
-      "\t${4:2|3})",
-      "\t\t${5:echo \"case 2 or 3\"}",
-      "\t;;",
-      "\t*)",
-      "\t\t${6:echo \"default\"}",
-      "\t;;",
-      "esac\n"
-    ],
-    "description": "switch case"
-  },
-  "let": {
-    "prefix": "let",
-    "body": "let \"${1:result} = ${2:var1} ${3|+,-,*,/,%|} ${4:var2}\"\n",
-    "description": "arithmetic operations"
-  },
-  "expr": {
-    "prefix": "expr",
-    "body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
-    "description": "arithmetic operations"
+	"if_int_equal": {
+		"prefix": "if int =",
+		"body": [
+			"if (( ${1:int1} == ${2:int2} )); then",
+			"\t${3:echo equal}",
+			"fi\n"
+		],
+		"description": "if integers are equal"
+	},
+	"if_int_not_equal": {
+		"prefix": "if int !=",
+		"body": [
+			"if (( ${1:int1} != ${2:int2} )); then",
+			"\t${3:echo not equal}",
+			"fi\n"
+		],
+		"description": "if integers are not equal"
+	},
+	"if_int_greater": {
+		"prefix": "if int >",
+		"body": [
+			"if (( ${1:int} > ${2:val} )); then",
+			"\t${3:echo greater}",
+			"fi\n"
+		],
+		"description": "if integer greater than value"
+	},
+	"if_int_greater_equal": {
+		"prefix": "if int >=",
+		"body": [
+			"if (( ${1:int} >= ${2:val} )); then",
+			"\t${3:echo greater equal}",
+			"fi\n"
+		],
+		"description": "if integer greater than or equal value"
+	},
+	"if_int_less_than": {
+		"prefix": "if int <",
+		"body": [
+			"if (( ${1:int} < ${2:val} )); then",
+			"\t${3:echo lesser}",
+			"fi\n"
+		],
+		"description": "if integer lesser than value"
+	},
+	"if_int_less_equal": {
+		"prefix": "if int <=",
+		"body": [
+			"if (( ${1:int} <= ${2:val} )); then",
+			"\t${3:echo lesser equal}",
+			"fi\n"
+		],
+		"description": "if integer lesser than or equal value"
+	},
+	"if_cmd_exists": {
+		"prefix": "if cmd exists",
+		"body": [
+			"if [ `command -v ${1:command}` ]; then",
+			"\t${2:# body}",
+			"fi\n"
+		],
+		"description": "check if command exists"
+	},
+	"if_exists": {
+		"prefix": "if exists",
+		"body": [
+			"if [ -e \"\\$${1:path}\" ]; then",
+			"\t${0:echo exists}",
+			"fi\n"
+		],
+		"description": "if path exists (file, directory, link...)"
+	},
+	"if_file_exists": {
+		"prefix": "if file exists",
+		"body": [
+			"if [ -f \"\\$${1:file}\" ]; then",
+			"\t${2:echo file exists}",
+			"fi\n"
+		],
+		"description": "if file exists"
+	},
+	"if_file_not_empty": {
+		"prefix": "if file not empty",
+		"body": [
+			"if [ -s \"\\$${1:file}\" ]; then",
+			"\t${2:echo file not empty}",
+			"fi\n"
+		],
+		"description": "if file size is greater than zero"
+	},
+	"if_directory_exists": {
+		"prefix": "if directory exists",
+		"body": [
+			"if [ -d \"\\$${1:directory}\" ]; then",
+			"\t${0:echo directory exists}",
+			"fi\n"
+		],
+		"description": "if directory exists"
+	},
+	"if_file_readable": {
+		"prefix": "if file readable",
+		"body": [
+			"if [ -r \"\\$${1:file}\" ]; then",
+			"\t${0:echo file is readable}",
+			"fi\n"
+		],
+		"description": "if file readable"
+	},
+	"if_file_writeable": {
+		"prefix": "if file writeable",
+		"body": [
+			"if [ -w \"\\$${1:file}\" ]; then",
+			"\t${0:echo file is writeable}",
+			"fi\n"
+		],
+		"description": "if file writeable"
+	},
+	"if_file_executable": {
+		"prefix": "if file executable",
+		"body": [
+			"if [ -x \"\\$${1:file}\" ]; then",
+			"\t${0:echo file is executable}",
+			"fi\n"
+		],
+		"description": "if file executable"
+	},
+	"if_file_equal": {
+		"prefix": "if file =",
+		"body": [
+			"if [ \"\\$${1:file1}\" -ef \"\\$${2:file2}\" ]; then",
+			"\t${0:echo files are equal}",
+			"fi\n"
+		],
+		"description": "if files are equal"
+	},
+	"if_file_link": {
+		"prefix": "if file link",
+		"body": [
+			"if [ -h \"\\$${1:file}\" ]; then",
+			"\t${0:echo symbolic link}",
+			"fi\n"
+		],
+		"description": "if file exists and is a symbolic link"
+	},
+	"if_file_newer": {
+		"prefix": "if file newer",
+		"body": [
+			"if [ \"\\$${1:file1}\" -nt \"\\$${2:file2}\" ]; then",
+			"\t${0:echo file1 is newer than file2}",
+			"fi\n"
+		],
+		"description": "if file1 newer than file2"
+	},
+	"if_file_older": {
+		"prefix": "if file older",
+		"body": [
+			"if [ \"\\$${1:file1}\" -ot \"\\$${2:file2}\" ]; then",
+			"\t${0:echo file1 is older than file2}",
+			"fi\n"
+		],
+		"description": "if file1 older than file2"
+	},
+	"ips": {
+		"prefix": "ips",
+		"body": "IPS=`hostname -I`\n",
+		"description": "Array of local IPs"
+	},
+	"ip_info": {
+		"prefix": "ip info",
+		"body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n",
+		"description": "public ip information"
+	},
+	"ip_public": {
+		"prefix": "ip public",
+		"body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
+		"description": "public ip address"
+	},
+	"for_i": {
+		"prefix": "for i",
+		"body": [
+			"for((i=0;i<${1:n};i++)); do",
+			"\t${0:echo \"\\$i\"}",
+			"done\n"
+		],
+		"description": "for loop by index"
+	},
+	"for_ij": {
+		"prefix": "for ij",
+		"body": [
+			"for((i=0;i<${1:n};i++)); do",
+			"\tfor((j=0;j<${2:m};j++)); do",
+			"\t\t${0:echo \"\\$i, \\$j\"}",
+			"\tdone",
+			"done\n"
+		],
+		"description": "for loop by index"
+	},
+	"for_in": {
+		"prefix": "for in",
+		"body": [
+			"for ${1:item} in {${2:a..z}}; do",
+			"\techo \"\\$${1:item}\"",
+			"done\n"
+		],
+		"description": "for loop in collection"
+	},
+	"for_in_column": {
+		"prefix": "for in column",
+		"body": [
+			"for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
+			"\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
+			"\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
+			"done\n"
+		],
+		"description": "for loop in collection"
+	},
+	"while": {
+		"prefix": "while",
+		"body": [
+			"while [ ${1:condition} ]; do",
+			"\t${0:# body}",
+			"done\n"
+		],
+		"description": "while loop"
+	},
+	"until": {
+		"prefix": "until",
+		"body": [
+			"until [ ${1:condition} ]; do",
+			"\t${0:# body}",
+			"done\n"
+		],
+		"description": "until loop"
+	},
+	"switch": {
+		"prefix": "switch case",
+		"body": [
+			"case \"\\$${1:item}\" in",
+			"\t${2:1})",
+			"\t\t${3:echo \"case 1\"}",
+			"\t;;",
+			"\t${4:2|3})",
+			"\t\t${5:echo \"case 2 or 3\"}",
+			"\t;;",
+			"\t*)",
+			"\t\t${6:echo \"default\"}",
+			"\t;;",
+			"esac\n"
+		],
+		"description": "switch case"
+	},
+	"let": {
+		"prefix": "let",
+		"body": "let \"${1:result} = ${2:var1} ${3|+,-,*,/,%|} ${4:var2}\"\n",
+		"description": "arithmetic operations"
+	},
+	"expr": {
+		"prefix": "expr",
+		"body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
+		"description": "arithmetic operations"
 	},
 	"math_inc": {
 		"prefix": "math ++",
@@ -925,12 +966,12 @@
 		"prefix": "math ^",
 		"body": "${1:result}=\\$((${2:base} ** ${3:power}))\n",
 		"description": "exponentiate base to power"
-  },
+	},
 	"random_number": {
 		"prefix": "math random",
 		"body": "${1:result}=\\$((${2:min} + RANDOM % \\$((${3:max}-${2:min}))))\n",
 		"description": "generate random integer x such as min <= x <= max"
-  },
+	},
 	"math_sqrt": {
 		"prefix": "math √",
 		"body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
@@ -965,123 +1006,133 @@
 		"prefix": "math const Ω",
 		"body": "MATH_OMEGA='0.56714329040978387299996866221035554'\n",
 		"description": "math Omega constant"
-  },
-  "file_delete": {
-		"prefix": ["file delete", "file remove"],
+	},
+	"file_delete": {
+		"prefix": [
+			"file delete",
+			"file remove"
+		],
 		"body": "rm -f ${1:./path/file}\n",
 		"description": "delete file(s)"
 	},
 	"file_find": {
-		"prefix": ["file find", "directory find"],
+		"prefix": [
+			"file find",
+			"directory find"
+		],
 		"body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n",
 		"description": "find files (-type f) or directories (-type d) by name"
 	},
-  "file_read": {
-    "prefix": "file read",
-    "body": [
-      "cat ${1:\"\\$filepath\"} | while read ${2:line}; do",
-      "\t${3:echo \"\\$line\"}",
-      "done\n"
-    ],
-    "description": "read a file"
-  },
-  "file_search": {
-		"prefix": ["file search", "search in files", "find in files"],
+	"file_read": {
+		"prefix": "file read",
+		"body": [
+			"cat ${1:\"\\$filepath\"} | while read ${2:line}; do",
+			"\t${3:echo \"\\$line\"}",
+			"done\n"
+		],
+		"description": "read a file"
+	},
+	"file_search": {
+		"prefix": [
+			"file search",
+			"search in files",
+			"find in files"
+		],
 		"body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +`\n",
 		"description": "find files which contain search criteria"
 	},
-  "file_write": {
-    "prefix": "file write",
-    "body": [
-      "echo \"${1:sample header}\" > ${2:/path/to/file}",
-      "for ${3:line} in \\${${4:lines}}; do",
-      "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
-      "done\n"
-    ],
-    "description": "write a file"
-  },
-  "file_write_multiline": {
-    "prefix": "file write multiline",
-    "body": [
-      "cat >${1:filepath} <<EOL",
-      "# text here",
-      "EOL"
-    ],
-    "description": "write multiple lines into file"
-  },
-  "file_write_multiline_sudo": {
-    "prefix": "file write multiline sudo",
-    "body": [
-      "cat << EOL | sudo tee ${1:filepath}",
-      "${0:# text here}",
-      "EOL"
-    ],
-    "description": "write multiple lines into file with sudo permission"
-  },
-  "remove_files_older_than": {
-    "prefix": "remove files older",
-    "body": "find \"\\$${1:path}\" -mtime +${2:days} | xargs rm -f\n",
-    "description": "find and remove files older than x days"
-  },
-  "color_black": {
-    "prefix": "color black",
-    "body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n",
-    "description": "write in black"
-  },
-  "color_red": {
-    "prefix": "color red",
-    "body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n",
-    "description": "write in red"
-  },
-  "color_green": {
-    "prefix": "color green",
-    "body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n",
-    "description": "write in green"
-  },
-  "color_yellow": {
-    "prefix": "color yellow",
-    "body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n",
-    "description": "write in yellow"
-  },
-  "color_blue": {
-    "prefix": "color blue",
-    "body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n",
-    "description": "write in blue"
-  },
-  "color_magenta": {
-    "prefix": "color magenta",
-    "body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n",
-    "description": "write in magenta"
-  },
-  "color_cyan": {
-    "prefix": "color cyan",
-    "body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n",
-    "description": "write in cyan"
-  },
-  "color_white": {
-    "prefix": "color white",
-    "body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n",
-    "description": "write in white"
-  },
-  "format_bold": {
-    "prefix": "format bold",
-    "body": "echo `tput bold`${0:bold text}`tput sgr0`\n",
-    "description": "write in bold"
-  },
-  "format_italic": {
-    "prefix": "format italic",
-    "body": "echo `tput sitm`${0:italic text}`tput sgr0`\n",
-    "description": "write in italic"
-  },
-  "format_dim": {
-    "prefix": "format dim",
-    "body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n",
-    "description": "write in dim"
-  },
-  "format_reverse": {
-    "prefix": "format reverse",
-    "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
-    "description": "write in reverse"
+	"file_write": {
+		"prefix": "file write",
+		"body": [
+			"echo \"${1:sample header}\" > ${2:/path/to/file}",
+			"for ${3:line} in \\${${4:lines}}; do",
+			"\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
+			"done\n"
+		],
+		"description": "write a file"
+	},
+	"file_write_multiline": {
+		"prefix": "file write multiline",
+		"body": [
+			"cat >${1:filepath} <<EOL",
+			"# text here",
+			"EOL"
+		],
+		"description": "write multiple lines into file"
+	},
+	"file_write_multiline_sudo": {
+		"prefix": "file write multiline sudo",
+		"body": [
+			"cat << EOL | sudo tee ${1:filepath}",
+			"${0:# text here}",
+			"EOL"
+		],
+		"description": "write multiple lines into file with sudo permission"
+	},
+	"remove_files_older_than": {
+		"prefix": "remove files older",
+		"body": "find \"\\$${1:path}\" -mtime +${2:days} | xargs rm -f\n",
+		"description": "find and remove files older than x days"
+	},
+	"color_black": {
+		"prefix": "color black",
+		"body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n",
+		"description": "write in black"
+	},
+	"color_red": {
+		"prefix": "color red",
+		"body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n",
+		"description": "write in red"
+	},
+	"color_green": {
+		"prefix": "color green",
+		"body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n",
+		"description": "write in green"
+	},
+	"color_yellow": {
+		"prefix": "color yellow",
+		"body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n",
+		"description": "write in yellow"
+	},
+	"color_blue": {
+		"prefix": "color blue",
+		"body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n",
+		"description": "write in blue"
+	},
+	"color_magenta": {
+		"prefix": "color magenta",
+		"body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n",
+		"description": "write in magenta"
+	},
+	"color_cyan": {
+		"prefix": "color cyan",
+		"body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n",
+		"description": "write in cyan"
+	},
+	"color_white": {
+		"prefix": "color white",
+		"body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n",
+		"description": "write in white"
+	},
+	"format_bold": {
+		"prefix": "format bold",
+		"body": "echo `tput bold`${0:bold text}`tput sgr0`\n",
+		"description": "write in bold"
+	},
+	"format_italic": {
+		"prefix": "format italic",
+		"body": "echo `tput sitm`${0:italic text}`tput sgr0`\n",
+		"description": "write in italic"
+	},
+	"format_dim": {
+		"prefix": "format dim",
+		"body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n",
+		"description": "write in dim"
+	},
+	"format_reverse": {
+		"prefix": "format reverse",
+		"body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
+		"description": "write in reverse"
 	},
 	"process_list": {
 		"prefix": "process list",
@@ -1098,7 +1149,7 @@
 		"body": "sudo kill -9 `pgrep ${1:process_name}`\n",
 		"description": "Kill process by name"
 	},
-  "region": {
+	"region": {
 		"prefix": "region",
 		"body": [
 			"# >>>>>>>>>>>>>>>>>>>>>>>> ${1:name} >>>>>>>>>>>>>>>>>>>>>>>>",
@@ -1107,37 +1158,37 @@
 		],
 		"description": "Comment out a special region (i.e. variable declarations"
 	},
-  "service_manage": {
-    "prefix": "service manage",
-    "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:service}\n",
-    "description": "Manage service operations"
-  },
-  "stopwatch_start": {
-    "prefix": "stopwatch start",
-    "body": "STOPWATCH_START_TIME=\\$(date +%s)\n",
-    "description": "start stopwatch"
-  },
-  "stopwatch_stop": {
-    "prefix": "stopwatch stop",
-    "body": "STOPWATCH_END_TIME=\\$(date +%s)\n",
-    "description": "stop stopwatch"
-  },
-  "stopwatch_elapsed": {
-    "prefix": "stopwatch elapsed",
-    "body": [
-      "STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))",
-      "STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))",
-      "STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))",
-      "${1:echo elapsed \\$STOPWATCH_ELAPSED_MINUTES minutes and \\$STOPWATCH_ELAPSED_SECONDS seconds}\n"
-    ],
-    "description": "elapsed time"
-  },
-  "sleep": {
-    "prefix": "sleep",
-    "body": "sleep ${1:30}${2|s,m,h,d|}\n",
-    "description": "sleep for a specified amount of time (s: second, m: minute, h: hour, d: day)"
-  },
-  "system_memory_info": {
+	"service_manage": {
+		"prefix": "service manage",
+		"body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:service}\n",
+		"description": "Manage service operations"
+	},
+	"stopwatch_start": {
+		"prefix": "stopwatch start",
+		"body": "STOPWATCH_START_TIME=\\$(date +%s)\n",
+		"description": "start stopwatch"
+	},
+	"stopwatch_stop": {
+		"prefix": "stopwatch stop",
+		"body": "STOPWATCH_END_TIME=\\$(date +%s)\n",
+		"description": "stop stopwatch"
+	},
+	"stopwatch_elapsed": {
+		"prefix": "stopwatch elapsed",
+		"body": [
+			"STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))",
+			"STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))",
+			"STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))",
+			"${1:echo elapsed \\$STOPWATCH_ELAPSED_MINUTES minutes and \\$STOPWATCH_ELAPSED_SECONDS seconds}\n"
+		],
+		"description": "elapsed time"
+	},
+	"sleep": {
+		"prefix": "sleep",
+		"body": "sleep ${1:30}${2|s,m,h,d|}\n",
+		"description": "sleep for a specified amount of time (s: second, m: minute, h: hour, d: day)"
+	},
+	"system_memory_info": {
 		"prefix": "system memory info",
 		"body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n",
 		"description": "System memory information in kilobytes (KB)"
@@ -1192,102 +1243,102 @@
 		"body": "sys_uptime=`uptime | cut -d ' ' -f2`\n",
 		"description": "System uptime (hh:mm:ss)"
 	},
-  "timeout": {
-    "prefix": "timeout",
-    "body": "timeout ${1:seconds} ${2:command}\n",
-    "description": "Run command within a time frame"
-  },
-  "fn_banner_simple": {
-    "prefix": "fn banner simple",
-    "body": [
-      "# Usage: banner_simple \"my title\"\n",
-      "function banner_simple() {",
-      "\tlocal msg=\"* \\$* *\"",
-      "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
-      "\techo \"\\$edge\"",
-      "\techo \"`tput bold`\\$msg`tput sgr0`\"",
-      "\techo \"\\$edge\"",
-      "\techo",
-      "}\n"
-    ],
-    "description": "function: print a banner with provided title"
-  },
-  "fx_banner_simple": {
-    "prefix": "fx banner simple",
-    "body": "banner_simple \"${1:my title}\"\n",
-    "description": "call banner_simple function"
-  },
-  "fn_banner_color": {
-    "prefix": "fn banner color",
-    "body": [
-      "# Usage: banner_color green \"my title\"\n",
-      "function banner_color() {",
-      "\tlocal color=\\$1",
-      "\tshift\n",
-      "\tcase \\$color in",
-      "\t\tblack) color=0",
-      "\t\t;;",
-      "\t\tred) color=1",
-      "\t\t;;",
-      "\t\tgreen) color=2",
-      "\t\t;;",
-      "\t\tyellow) color=3",
-      "\t\t;;",
-      "\t\tblue) color=4",
-      "\t\t;;",
-      "\t\tmagenta) color=5",
-      "\t\t;;",
-      "\t\tcyan) color=6",
-      "\t\t;;",
-      "\t\twhite) color=7",
-      "\t\t;;",
-      "\t\t*) echo \"color is not set\"; exit 1",
-      "\t\t;;",
-      "\tesac\n",
-      "\tlocal s=(\"$@\") b w",
-      "\tfor l in \"\\${s[@]}\"; do",
-      "\t\t((w<${#l})) && { b=\"\\$l\"; w=\"\\${#l}\"; }",
-      "\tdone",
-      "\ttput setaf \\$color",
-      "\techo \" =\\${b//?/=}=",
-      "| \\${b//?/ } |\"",
-      "\tfor l in \"\\${s[@]}\"; do",
-      "\t\tprintf '| %s%*s%s |\\n' \"\\$(tput setaf \\$color)\" \"-\\$w\" \"\\$l\" \"\\$(tput setaf \\$color)\"",
-      "\tdone\n",
-      "\techo \"| ${b//?/ } |",
-      " =${b//?/=}=\"",
-      "\ttput sgr 0",
-      "}\n"
-    ],
-    "description": "print a color banner."
-  },
-  "fx_banner_color": {
-    "prefix": "fx banner color",
-    "body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
-    "description": "call banner_color function"
-  },
-  "fn_import": {
-    "prefix": "fn import",
-    "body": [
+	"timeout": {
+		"prefix": "timeout",
+		"body": "timeout ${1:seconds} ${2:command}\n",
+		"description": "Run command within a time frame"
+	},
+	"fn_banner_simple": {
+		"prefix": "fn banner simple",
+		"body": [
+			"# Usage: banner_simple \"my title\"\n",
+			"function banner_simple() {",
+			"\tlocal msg=\"* \\$* *\"",
+			"\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
+			"\techo \"\\$edge\"",
+			"\techo \"`tput bold`\\$msg`tput sgr0`\"",
+			"\techo \"\\$edge\"",
+			"\techo",
+			"}\n"
+		],
+		"description": "function: print a banner with provided title"
+	},
+	"fx_banner_simple": {
+		"prefix": "fx banner simple",
+		"body": "banner_simple \"${1:my title}\"\n",
+		"description": "call banner_simple function"
+	},
+	"fn_banner_color": {
+		"prefix": "fn banner color",
+		"body": [
+			"# Usage: banner_color green \"my title\"\n",
+			"function banner_color() {",
+			"\tlocal color=\\$1",
+			"\tshift\n",
+			"\tcase \\$color in",
+			"\t\tblack) color=0",
+			"\t\t;;",
+			"\t\tred) color=1",
+			"\t\t;;",
+			"\t\tgreen) color=2",
+			"\t\t;;",
+			"\t\tyellow) color=3",
+			"\t\t;;",
+			"\t\tblue) color=4",
+			"\t\t;;",
+			"\t\tmagenta) color=5",
+			"\t\t;;",
+			"\t\tcyan) color=6",
+			"\t\t;;",
+			"\t\twhite) color=7",
+			"\t\t;;",
+			"\t\t*) echo \"color is not set\"; exit 1",
+			"\t\t;;",
+			"\tesac\n",
+			"\tlocal s=(\"$@\") b w",
+			"\tfor l in \"\\${s[@]}\"; do",
+			"\t\t((w<${#l})) && { b=\"\\$l\"; w=\"\\${#l}\"; }",
+			"\tdone",
+			"\ttput setaf \\$color",
+			"\techo \" =\\${b//?/=}=",
+			"| \\${b//?/ } |\"",
+			"\tfor l in \"\\${s[@]}\"; do",
+			"\t\tprintf '| %s%*s%s |\\n' \"\\$(tput setaf \\$color)\" \"-\\$w\" \"\\$l\" \"\\$(tput setaf \\$color)\"",
+			"\tdone\n",
+			"\techo \"| ${b//?/ } |",
+			" =${b//?/=}=\"",
+			"\ttput sgr 0",
+			"}\n"
+		],
+		"description": "print a color banner."
+	},
+	"fx_banner_color": {
+		"prefix": "fx banner color",
+		"body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
+		"description": "call banner_color function"
+	},
+	"fn_import": {
+		"prefix": "fn import",
+		"body": [
 			"# Usage: import \"mylib\"\n",
-      "function import() {",
-      "\tlocal file=\"./${0:lib}/\\$1.sh\"",
-      "\tif [ -f \"\\$file\" ]; then",
-      "\t\tsource \"\\$file\"",
-      "\telse",
+			"function import() {",
+			"\tlocal file=\"./${0:lib}/\\$1.sh\"",
+			"\tif [ -f \"\\$file\" ]; then",
+			"\t\tsource \"\\$file\"",
+			"\telse",
 			"\t\techo \"Error: Cannot find library at: \\$file\"",
 			"\t\texit 1",
-      "\tfi",
-      "}\n"
-    ],
-    "description": "import functions from other shellscript files"
-  },
-  "fx_import": {
-    "prefix": "fx import",
-    "body": "import \"${1:libname}\"\n",
-    "description": "call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file"
-  },
-  "fn_math_sum": {
+			"\tfi",
+			"}\n"
+		],
+		"description": "import functions from other shellscript files"
+	},
+	"fx_import": {
+		"prefix": "fx import",
+		"body": "import \"${1:libname}\"\n",
+		"description": "call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file"
+	},
+	"fn_math_sum": {
 		"prefix": "fn math sum",
 		"body": [
 			"function sum () {",
@@ -1323,7 +1374,7 @@
 		"body": "result=`product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n",
 		"description": "Call math product function"
 	},
-		"fn_math_average": {
+	"fn_math_average": {
 		"prefix": "fn math average",
 		"body": [
 			"function average () {",
@@ -1396,8 +1447,8 @@
 			"echo \"\\${options[\\$choice]}\" selected\n"
 		],
 		"description": "call options function"
-  },
-  "fn_progress": {
+	},
+	"fn_progress": {
 		"prefix": "fn progress",
 		"body": [
 			"function progressBar() {",
@@ -1417,21 +1468,65 @@
 		"body": "progressBar ${1|.1,.2,.3,.4,.5,1,2,5|} \"${2:Installing foo...}\"\n",
 		"description": "call progress bar function"
 	},
-  "fn_scan": {
-    "prefix": "fn scan",
-    "body": [
-      "# Usage: scan proto host fromPort toPort",
-      "function scan () {",
-      "\tfor ((port=\\$3; port<=\\$4; port++)); do",
-      "\t\t(echo >/dev/\\$1/\\$2/\\$port) >/dev/null 2>&1 && echo \"\\$1 \\$port => open\"",
-      "\tdone",
-      "}\n"
-    ],
-    "description": "Scan host's port range (tcp/udp)"
-  },
-  "fx_scan": {
-    "prefix": "fx scan",
-    "body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4: toPort}",
-    "description": "call scan function to scan a host over a port range"
-  }
+	"fn_scan": {
+		"prefix": "fn scan",
+		"body": [
+			"# Usage: scan proto host fromPort toPort",
+			"function scan () {",
+			"\tfor ((port=\\$3; port<=\\$4; port++)); do",
+			"\t\t(echo >/dev/\\$1/\\$2/\\$port) >/dev/null 2>&1 && echo \"\\$1 \\$port => open\"",
+			"\tdone",
+			"}\n"
+		],
+		"description": "Scan host's port range (tcp/udp)"
+	},
+	"fx_scan": {
+		"prefix": "fx scan",
+		"body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4: toPort}",
+		"description": "call scan function to scan a host over a port range"
+	},
+	"fn_version_compare": {
+		"prefix": [
+			"fn version compare",
+			"fn semver compare"
+		],
+		"body": [
+			"# Usage: version_compare \"1.2.3\" \"1.1.7\"\n",
+			"function version_compare () {",
+			"\tfunction sub_ver () {",
+			"\t\tlocal len=${#1}",
+			"\t\ttemp=${1%%\".\"*} && indexOf=`echo ${1%%\".\"*} | echo ${#temp}`",
+			"\t\techo -e \"\\${1:0:indexOf}\"",
+			"\t}",
+			"\tfunction cut_dot () {",
+			"\t\tlocal offset=${#1}",
+			"\t\tlocal length=${#2}",
+			"\t\techo -e \"\\${2:((++offset)):length}\"",
+			"\t}",
+			"\tif [ -z \"\\$1\" ] || [ -z \"\\$2\" ]; then",
+			"\t\techo \"=\" && exit 0",
+			"\tfi",
+			"\tlocal v1=`echo -e \"\\${1}\" | tr -d '[[:space:]]'`",
+			"\tlocal v2=`echo -e \"\\${2}\" | tr -d '[[:space:]]'`",
+			"\tlocal v1_sub=`sub_ver \\$v1`",
+			"\tlocal v2_sub=`sub_ver \\$v2`",
+			"\tif (( v1_sub > v2_sub )); then",
+			"\t\techo \">\"",
+			"\telif (( v1_sub < v2_sub )); then",
+			"\t\techo \"<\"",
+			"\telse",
+			"\t\tversion_compare `cut_dot \\$v1_sub \\$v1` `cut_dot \\$v2_sub \\$v2`",
+			"\tfi",
+			"}\n"
+		],
+		"description": "function: compares two semvers and returns >, < or ="
+	},
+	"fx_version_compare": {
+		"prefix": [
+			"fx version compare",
+			"fx semver compare"
+		],
+		"body": "version_compare \"${1:major}.${2:minor}.${3:patch}\" \"${4:major}.${5:minor}.${6:patch}\"\n",
+		"description": "call version_compare function"
+	}
 }

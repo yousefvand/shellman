@@ -196,6 +196,8 @@
 
 - [string contains](#string-contains)
 
+- [string substring count](#string-substring-count)
+
 - [string indexOf](#string-indexOf)
 
 - [if int =](#if-int-=)
@@ -418,7 +420,11 @@
 
 - [fx scan](#fx-scan)
 
-## `bash`
+- [fn version compare](#fn-version-compare)
+
+- [fx version compare](#fx-version-compare)
+
+## `bash,shebang`
 
 bash shebang [&uarr;](#Commands)
 
@@ -551,7 +557,7 @@ tar -czvf /path/to/archive.tar.gz /path/to/directory-or-file
 
 ## `archive decompress tar.gz`
 
-compress file/folder to a .tar.gz file [&uarr;](#Commands)
+decompress a .tar.gz file to specified path [&uarr;](#Commands)
 
 ```bash
 tar -C /extract/to/path -xzvf /path/to/archive.tar.gz
@@ -1265,6 +1271,14 @@ check whether string contains substring [&uarr;](#Commands)
 if [[ "$string" = *substring* ]]; then
   # body
 fi
+```
+
+## `string substring count,string substring frequency`
+
+Frequency of a substring in a string (may need character escaping) [&uarr;](#Commands)
+
+```bash
+frequency=`sed -E 's/(.)/\1\n/g' <<<"string" | grep -c "substring"`
 ```
 
 ## `string indexOf`
@@ -2357,3 +2371,46 @@ call scan function to scan a host over a port range [&uarr;](#Commands)
 ```bash
 scan ${1|tcp,udp|} host fromPort  toPort
 ```
+
+## `fn version compare,fn semver compare`
+
+function: compares two semvers and returns >, < or = [&uarr;](#Commands)
+
+```bash
+# Usage: version_compare "1.2.3" "1.1.7"
+function version_compare () {
+  function sub_ver () {
+    local len=${#1}
+    temp=${1%%"."*} && indexOf=`echo ${1%%"."*} | echo ${#temp}`
+    echo -e "0:indexOf"
+  }
+  function cut_dot () {
+    local offset=${#1}
+    local length=${#2}
+    echo -e "((++offset)):length"
+  }
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "=" && exit 0
+  fi
+  local v1=`echo -e "${1}" | tr -d '[[:space:]]'`
+  local v2=`echo -e "${2}" | tr -d '[[:space:]]'`
+  local v1_sub=`sub_ver $v1`
+  local v2_sub=`sub_ver $v2`
+  if (( v1_sub > v2_sub )); then
+    echo ">"
+  elif (( v1_sub < v2_sub )); then
+    echo "<"
+  else
+    version_compare `cut_dot $v1_sub $v1` `cut_dot $v2_sub $v2`
+  fi
+}
+```
+
+## `fx version compare,fx semver compare`
+
+call version_compare function [&uarr;](#Commands)
+
+```bash
+version_compare "major.minor.patch" "major.minor.patch"
+```
+
