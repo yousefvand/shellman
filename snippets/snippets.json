@@ -71,7 +71,7 @@
 	},
 	"cmd": {
 		"prefix": "cmd",
-		"body": "`${1:command}`\n",
+		"body": "$(${1:command})\n",
 		"description": "run command (command substitution)"
 	},
 	"cmd_nice": {
