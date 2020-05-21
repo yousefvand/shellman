@@ -1,0 +1,5 @@
+{
+  "prefix": "string toUpper",
+  "body": "toUpper=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`",
+  "description": "convert string to uppercase"
+}

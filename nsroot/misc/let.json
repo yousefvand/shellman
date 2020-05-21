@@ -1,0 +1,5 @@
+{
+  "prefix": "let",
+  "body": "let \"${1:result} = ${2:var1} ${3|+,-,*,/,%|} ${4:var2}\"\n",
+  "description": "arithmetic operations"
+}

@@ -1,0 +1,9 @@
+{
+  "prefix": "if file writeable",
+  "body": [
+    "if [ -w \"\\$${1:file}\" ]; then",
+    "\t${0:echo file is writeable}",
+    "fi\n"
+  ],
+  "description": "if file writeable"
+}

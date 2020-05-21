@@ -1,0 +1,5 @@
+{
+  "prefix": "sleep",
+  "body": "sleep ${1:30}${2|s,m,h,d|}\n",
+  "description": "sleep for a specified amount of time (s: second, m: minute, h: hour, d: day)"
+}

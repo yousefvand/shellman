@@ -29,13 +29,12 @@
         ]
     },
     "devDependencies": {
-        "cspell": "^4.0.46",
+        "cspell": "^4.0.63",
         "fs": "0.0.1-security",
         "path": "^0.12.7"
     },
     "scripts": {
-        "doc": "node docgen.js",
-        "clean": "rm COMMANDS.md &> /dev/null",
+        "build": "node build.js",
         "spellcheck": "./node_modules/.bin/cspell ./**/*"
     }
 }

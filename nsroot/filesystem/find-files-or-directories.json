@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "file find",
+    "directory find"
+  ],
+  "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n",
+  "description": "find files (-type f) or directories (-type d) by name"
+}

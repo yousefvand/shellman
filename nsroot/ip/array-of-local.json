@@ -1,0 +1,5 @@
+{
+  "prefix": "ips",
+  "body": "IPS=`hostname -I`\n",
+  "description": "Array of local IPs"
+}

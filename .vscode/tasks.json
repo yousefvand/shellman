@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "spellcheck",
+			"problemMatcher": [],
+			"label": "npm: spellcheck",
+			"detail": "./node_modules/.bin/cspell ./**/*"
+		}
+	]
+}

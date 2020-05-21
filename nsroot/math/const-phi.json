@@ -1,0 +1,5 @@
+{
+  "prefix": "math const ϕ",
+  "body": "MATH_GOLDEN_RATIO='1.61803398874989484820458683436563811'\n",
+  "description": "math golden ration constant"
+}

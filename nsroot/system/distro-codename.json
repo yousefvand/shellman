@@ -1,0 +1,5 @@
+{
+  "prefix": "system distro codename",
+  "body": "lsb_release -c | awk '{print \\$2}'\n",
+  "description": "OS codename (i.e. xenial)"
+}

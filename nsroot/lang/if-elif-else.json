@@ -1,0 +1,13 @@
+{
+  "prefix": "if",
+  "body": [
+    "if [ ${1:condition} ]; then",
+    "\t${2: # body}",
+    "elif [ ${3:condition} ]; then",
+    "\t${4: # body}",
+    "else",
+    "\t${5: # body}",
+    "fi\n"
+  ],
+  "description": "if"
+}

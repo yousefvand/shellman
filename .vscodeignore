@@ -1,8 +1,9 @@
 .vscode/**
-.vscode-test/**
-.gitignore
-.gitattributes
-docgen.js
-publish.sh
+node_modules/**
+nsroot/**
 _config.yml
+.gitattributes
+.gitignore
+build.js
+publish.sh
 test.sh

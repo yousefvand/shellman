@@ -1,0 +1,5 @@
+{
+  "prefix": "git branch delete local",
+  "body": "git branch --delete ${1:localBranch}\n",
+  "description": "Delete local branch."
+}

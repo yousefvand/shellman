@@ -1,0 +1,9 @@
+{
+  "prefix": "region",
+  "body": [
+    "# >>>>>>>>>>>>>>>>>>>>>>>> ${1:name} >>>>>>>>>>>>>>>>>>>>>>>>",
+    "$0",
+    "# <<<<<<<<<<<<<<<<<<<<<<<< ${1:name} <<<<<<<<<<<<<<<<<<<<<<<<"
+  ],
+  "description": "Comment out a special region (i.e. variable declarations"
+}

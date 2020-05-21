@@ -1,0 +1,9 @@
+{
+  "prefix": "for in",
+  "body": [
+    "for ${1:item} in {${2:a..z}}; do",
+    "\techo \"\\$${1:item}\"",
+    "done\n"
+  ],
+  "description": "for loop in collection"
+}

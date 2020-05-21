@@ -1,0 +1,5 @@
+{
+  "prefix": "math const 𝛾",
+  "body": "MATH_GAMMA='0.57721566490153286060651209008240243'\n",
+  "description": "math Euler-Mascheroni constant"
+}

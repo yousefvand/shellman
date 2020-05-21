@@ -1,0 +1,5 @@
+{
+  "prefix": "ftp rename",
+  "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/ -Q \"-RNFR ${4:path}/${5:renameFrom}\" -Q \"-RNTO ${4:path}/${6:renameTo}\"\n",
+  "description": "Rename specified file/directory on ftp server"
+}

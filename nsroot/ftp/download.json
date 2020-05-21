@@ -1,0 +1,5 @@
+{
+  "prefix": "ftp download",
+  "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:filePathOnServer}/\n",
+  "description": "Download specified file from ftp server"
+}

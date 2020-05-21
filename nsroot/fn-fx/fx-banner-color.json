@@ -1,0 +1,5 @@
+{
+  "prefix": "fx banner color",
+  "body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
+  "description": "call banner_color function"
+}

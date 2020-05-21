@@ -1,0 +1,5 @@
+{
+  "prefix": "system kernel name",
+  "body": "uname -s\n",
+  "description": "OS kernel name (i.e. Linux)"
+}

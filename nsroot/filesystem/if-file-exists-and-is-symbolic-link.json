@@ -1,0 +1,9 @@
+{
+  "prefix": "if file link",
+  "body": [
+    "if [ -h \"\\$${1:file}\" ]; then",
+    "\t${0:echo symbolic link}",
+    "fi\n"
+  ],
+  "description": "if file exists and is a symbolic link"
+}

@@ -1,0 +1,12 @@
+{
+  "prefix": [
+    "if string !=",
+    "string not equal"
+  ],
+  "body": [
+    "if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
+    "\t${3:# body}",
+    "fi\n"
+  ],
+  "description": "if strings are not equal"
+}

@@ -1,0 +1,5 @@
+{
+  "prefix": "expr",
+  "body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
+  "description": "arithmetic operations"
+}

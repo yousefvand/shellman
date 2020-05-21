@@ -1,0 +1,5 @@
+{
+  "prefix": "date now short",
+  "body": "dateShort=`date -I`\n",
+  "description": "yyyy/mm/dd"
+}

@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "file delete",
+    "file remove"
+  ],
+  "body": "rm -f ${1:./path/file}\n",
+  "description": "delete file(s)"
+}

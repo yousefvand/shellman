@@ -1,0 +1,5 @@
+{
+  "prefix": "date now dayOfWeek",
+  "body": "dayOfWeek=`date +%${1|A,a|}`\n",
+  "description": "current day of week name (full/abbreviated A/a)"
+}

@@ -1,0 +1,11 @@
+{
+  "prefix": "summary",
+  "body": [
+    "# Title:         ${1:title}",
+    "# Description:   ${2:description}",
+    "# Author:        ${3:author <email>}",
+    "# Date:          ${4:yyyy-mm-dd}",
+    "# Version:       ${5:1.0.0}\n"
+  ],
+  "description": "script summary"
+}

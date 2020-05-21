@@ -1,0 +1,9 @@
+{
+  "prefix": "if int =",
+  "body": [
+    "if (( ${1:int1} == ${2:int2} )); then",
+    "\t${3:echo equal}",
+    "fi\n"
+  ],
+  "description": "if integers are equal"
+}

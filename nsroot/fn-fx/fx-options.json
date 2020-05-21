@@ -1,0 +1,9 @@
+{
+  "prefix": "fx options",
+  "body": [
+    "options=(${1:\"one\" \"two\" \"three\"})",
+    "chooseOption \"Choose:\" ${2:1} \"\\${options[@]}\"; choice=\\$?",
+    "echo \"\\${options[\\$choice]}\" selected\n"
+  ],
+  "description": "call options function"
+}

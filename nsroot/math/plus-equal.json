@@ -1,0 +1,5 @@
+{
+  "prefix": "math +=",
+  "body": "((${1:var1} += ${2:var2}))\n",
+  "description": "add var1 and var2 and assign the result to var1"
+}

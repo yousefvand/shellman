@@ -1,0 +1,5 @@
+{
+  "prefix": "math const Ω",
+  "body": "MATH_OMEGA='0.56714329040978387299996866221035554'\n",
+  "description": "math Omega constant"
+}

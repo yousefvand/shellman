@@ -1,0 +1,5 @@
+{
+  "prefix": "color magenta",
+  "body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n",
+  "description": "write in magenta"
+}

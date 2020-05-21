@@ -1,0 +1,5 @@
+{
+  "prefix": "math random",
+  "body": "${1:result}=\\$((${2:min} + RANDOM % \\$((${3:max}-${2:min}))))\n",
+  "description": "generate random integer x such as min <= x <= max"
+}

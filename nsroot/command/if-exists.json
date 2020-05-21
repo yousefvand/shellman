@@ -1,0 +1,9 @@
+{
+  "prefix": "if cmd exists",
+  "body": [
+    "if [ `command -v ${1:command}` ]; then",
+    "\t${2:# body}",
+    "fi\n"
+  ],
+  "description": "check if command exists"
+}

@@ -1,0 +1,15 @@
+{
+  "prefix": "fn progress",
+  "body": [
+    "function progressBar() {",
+    "\tlocal BAR='████████████████████'",
+    "\tlocal SPACE='                    '",
+    "\tfor i in {1..20}; do",
+    "\t\techo -ne \"\\r|\\${BAR:0:\\$i}\\${SPACE:\\$i:20}| \\$((\\$i*5))% [ \\$2 ] \"",
+    "\t\tsleep \\$1",
+    "\tdone",
+    "\techo -ne '\n'",
+    "}\n"
+  ],
+  "description": "progress bar function"
+}

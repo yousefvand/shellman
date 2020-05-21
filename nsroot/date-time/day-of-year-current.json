@@ -1,0 +1,5 @@
+{
+  "prefix": "date now dayOfYear",
+  "body": "dayOfYear=`date +%j`\n",
+  "description": "current day of year (1..366)"
+}

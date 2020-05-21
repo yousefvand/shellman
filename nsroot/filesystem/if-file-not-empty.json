@@ -1,0 +1,9 @@
+{
+  "prefix": "if file not empty",
+  "body": [
+    "if [ -s \"\\$${1:file}\" ]; then",
+    "\t${2:echo file not empty}",
+    "fi\n"
+  ],
+  "description": "if file size is greater than zero"
+}

@@ -1,0 +1,5 @@
+{
+  "prefix": "system kernel release",
+  "body": "uname -r\n",
+  "description": "OS kernel release (i.e. 4.4.0-140-generic)"
+}

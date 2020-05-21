@@ -1,0 +1,5 @@
+{
+  "prefix": "system processor type",
+  "body": "uname -p\n",
+  "description": "OS processor type (i.e. x86_64)"
+}

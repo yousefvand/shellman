@@ -1,0 +1,5 @@
+{
+  "prefix": "iff",
+  "body": "[ ${1:condition} ] && ${2:command}\n",
+  "description": "if condition is true then run command (short circuit)"
+}

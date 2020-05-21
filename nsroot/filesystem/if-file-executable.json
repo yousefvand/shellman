@@ -1,0 +1,9 @@
+{
+  "prefix": "if file executable",
+  "body": [
+    "if [ -x \"\\$${1:file}\" ]; then",
+    "\t${0:echo file is executable}",
+    "fi\n"
+  ],
+  "description": "if file executable"
+}

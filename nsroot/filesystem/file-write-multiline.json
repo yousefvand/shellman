@@ -1,0 +1,9 @@
+{
+  "prefix": "file write multiline",
+  "body": [
+    "cat >${1:filepath} <<EOL",
+    "# text here",
+    "EOL"
+  ],
+  "description": "write multiple lines into file"
+}

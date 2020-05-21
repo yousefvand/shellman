@@ -1,0 +1,5 @@
+{
+  "prefix": "string substring",
+  "body": "substring=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n",
+  "description": "part of the string from offset with length characters"
+}

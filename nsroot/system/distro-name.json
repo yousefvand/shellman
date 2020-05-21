@@ -1,0 +1,5 @@
+{
+  "prefix": "system distro name",
+  "body": "lsb_release -i | awk '{print \\$3}'\n",
+  "description": "OS ID (i.e. Ubuntu)"
+}
