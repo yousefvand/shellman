@@ -4,10 +4,20 @@
     "body": "tar -czvf ${1:/path/to/archive}.tar.gz ${2:/path/to/directory-or-file}\n",
     "description": "compress file/folder to a .tar.gz file"
   },
+  "archive.compress-tar-xz": {
+    "prefix": "archive compress tar.xz",
+    "body": "tar -cJf ${1:/path/to/archive}.tar.xz ${2:/path/to/directory-or-file}\n",
+    "description": "compress file/folder to a .tar.xz file"
+  },
   "archive.decompress-tar-gz": {
     "prefix": "archive decompress tar.gz",
     "body": "tar -C ${1:/extract/to/path} -xzvf ${2:/path/to/archive}.tar.gz\n",
     "description": "decompress a .tar.gz file to specified path"
+  },
+  "archive.decompress-tar-xz": {
+    "prefix": "archive decompress tar.xz",
+    "body": "tar -C ${1:/extract/to/path} -xf ${2:/path/to/archive}.tar.xz\n",
+    "description": "decompress a .tar.xz file to specified path"
   },
   "array.all-elements": {
     "prefix": "array all",
@@ -957,22 +967,7 @@
     ],
     "description": "if integers are not equal"
   },
-  "ip.array-of-local": {
-    "prefix": "ips",
-    "body": "IPS=`hostname -I`\n",
-    "description": "Array of local IPs"
-  },
-  "ip.info": {
-    "prefix": "ip info",
-    "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n",
-    "description": "public ip information"
-  },
-  "ip.public-address": {
-    "prefix": "ip public",
-    "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
-    "description": "public ip address"
-  },
-  "lang.for-i-j": {
+  "internal.for-i-j": {
     "prefix": "for ij",
     "body": [
       "for((i=0;i<${1:n};i++)); do",
@@ -983,7 +978,7 @@
     ],
     "description": "for loop by index"
   },
-  "lang.for-i": {
+  "internal.for-i": {
     "prefix": "for i",
     "body": [
       "for((i=0;i<${1:n};i++)); do",
@@ -992,7 +987,7 @@
     ],
     "description": "for loop by index"
   },
-  "lang.for-in-collection": {
+  "internal.for-in-collection": {
     "prefix": "for in",
     "body": [
       "for ${1:item} in {${2:a..z}}; do",
@@ -1001,7 +996,7 @@
     ],
     "description": "for loop in collection"
   },
-  "lang.for-in-column": {
+  "internal.for-in-column": {
     "prefix": "for in column",
     "body": [
       "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
@@ -1011,7 +1006,7 @@
     ],
     "description": "for loop in collection"
   },
-  "lang.if-elif-else": {
+  "internal.if-elif-else": {
     "prefix": "if",
     "body": [
       "if [ ${1:condition} ]; then",
@@ -1024,17 +1019,17 @@
     ],
     "description": "if"
   },
-  "lang.if-not": {
+  "internal.if-not": {
     "prefix": "iff not",
     "body": "[ ${1:condition} ] || ${2:command}\n",
     "description": "if condition is false then run command (short circuit)"
   },
-  "lang.if": {
+  "internal.if": {
     "prefix": "iff",
     "body": "[ ${1:condition} ] && ${2:command}\n",
     "description": "if condition is true then run command (short circuit)"
   },
-  "lang.switch": {
+  "internal.switch": {
     "prefix": "switch case",
     "body": [
       "case \"\\$${1:item}\" in",
@@ -1051,7 +1046,7 @@
     ],
     "description": "switch case"
   },
-  "lang.until": {
+  "internal.until": {
     "prefix": "until",
     "body": [
       "until [ ${1:condition} ]; do",
@@ -1060,7 +1055,7 @@
     ],
     "description": "until loop"
   },
-  "lang.while": {
+  "internal.while": {
     "prefix": "while",
     "body": [
       "while [ ${1:condition} ]; do",
@@ -1068,6 +1063,21 @@
       "done\n"
     ],
     "description": "while loop"
+  },
+  "ip.array-of-local": {
+    "prefix": "ips",
+    "body": "IPS=`hostname -I`\n",
+    "description": "Array of local IPs"
+  },
+  "ip.info": {
+    "prefix": "ip info",
+    "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n",
+    "description": "public ip information"
+  },
+  "ip.public-address": {
+    "prefix": "ip public",
+    "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
+    "description": "public ip address"
   },
   "math.add": {
     "prefix": "math +",

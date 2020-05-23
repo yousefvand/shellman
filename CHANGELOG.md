@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.5.0
+
+- Renice process and sub processes. [PR](https://github.com/yousefvand/shellman/pull/17) by [@jakiro2017](https://github.com/jakiro2017).
+- `archive...`
+  - Compress/decompress file/directory to/from `.tar.xz`
+
 ## 4.4.0
 
 - Fixed issue [#13](https://github.com/yousefvand/shellman/issues/13). Thanks to [@wangyuew](https://github.com/wangyuew).

@@ -1,0 +1,5 @@
+{
+	"prefix": "archive compress tar.xz",
+	"body": "tar -cJf ${1:/path/to/archive}.tar.xz ${2:/path/to/directory-or-file}\n",
+	"description": "compress file/folder to a .tar.xz file"
+}

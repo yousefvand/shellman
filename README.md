@@ -130,9 +130,8 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-### 4.4.0
+### 4.5.0
 
-- Fixed issue [#13](https://github.com/yousefvand/shellman/issues/13). Thanks to [@wangyuew](https://github.com/wangyuew).
-- `fn/fx [version | semver] compare`
-  - Compare two [semver](https://semver.org) versions. Function compares first argument with the second and returns `>`, `<` or `=`.
-- `string substring [count | frequency]`: Frequency of a substring in a string. You may need character escaping, for example if string is `1.2.3` and substring is `.` then substring should be `\.` when passed to command.
+- Renice process and sub processes. [PR](https://github.com/yousefvand/shellman/pull/17) by [@jakiro2017](https://github.com/jakiro2017).
+- `archive...`
+  - Compress/decompress file/directory to/from `.tar.xz`

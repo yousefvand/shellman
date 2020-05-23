@@ -4,7 +4,11 @@
 
   - [archive compress tar.gz](#archive-compress-tar.gz)
 
+  - [archive compress tar.xz](#archive-compress-tar.xz)
+
   - [archive decompress tar.gz](#archive-decompress-tar.gz)
+
+  - [archive decompress tar.xz](#archive-decompress-tar.xz)
 
 - array
 
@@ -270,15 +274,7 @@
 
   - [if int !=](#if-int-!=)
 
-- ip
-
-  - [ips](#ips)
-
-  - [ip info](#ip-info)
-
-  - [ip public](#ip-public)
-
-- lang
+- internal
 
   - [for ij](#for-ij)
 
@@ -299,6 +295,14 @@
   - [until](#until)
 
   - [while](#while)
+
+- ip
+
+  - [ips](#ips)
+
+  - [ip info](#ip-info)
+
+  - [ip public](#ip-public)
 
 - math
 
@@ -472,12 +476,28 @@ compress file/folder to a .tar.gz file [&uarr;](#Commands)
 tar -czvf /path/to/archive.tar.gz /path/to/directory-or-file
 ```
 
+## `archive compress tar.xz`
+
+compress file/folder to a .tar.xz file [&uarr;](#Commands)
+
+```bash
+tar -cJf /path/to/archive.tar.xz /path/to/directory-or-file
+```
+
 ## `archive decompress tar.gz`
 
 decompress a .tar.gz file to specified path [&uarr;](#Commands)
 
 ```bash
 tar -C /extract/to/path -xzvf /path/to/archive.tar.gz
+```
+
+## `archive decompress tar.xz`
+
+decompress a .tar.xz file to specified path [&uarr;](#Commands)
+
+```bash
+tar -C /extract/to/path -xf /path/to/archive.tar.xz
 ```
 
 ## `array all`
@@ -1666,30 +1686,6 @@ if (( int1 != ${2:int2} )); then
 fi
 ```
 
-## `ips`
-
-Array of local IPs [&uarr;](#Commands)
-
-```bash
-IPS=`hostname -I`
-```
-
-## `ip info`
-
-public ip information [&uarr;](#Commands)
-
-```bash
-echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`
-```
-
-## `ip public`
-
-public ip address [&uarr;](#Commands)
-
-```bash
-PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`
-```
-
 ## `for ij`
 
 for loop by index [&uarr;](#Commands)
@@ -1799,6 +1795,30 @@ while loop [&uarr;](#Commands)
 while [ condition ]; do
   # body
 done
+```
+
+## `ips`
+
+Array of local IPs [&uarr;](#Commands)
+
+```bash
+IPS=`hostname -I`
+```
+
+## `ip info`
+
+public ip information [&uarr;](#Commands)
+
+```bash
+echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`
+```
+
+## `ip public`
+
+public ip address [&uarr;](#Commands)
+
+```bash
+PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`
 ```
 
 ## `math +`
