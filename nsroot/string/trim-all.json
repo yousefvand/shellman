@@ -1,0 +1,5 @@
+{
+  "prefix": "string trim all",
+  "body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | tr -d '[[:space:]]'`",
+  "description": "remove all white space(s)"
+}

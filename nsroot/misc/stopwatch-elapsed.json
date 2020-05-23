@@ -1,0 +1,10 @@
+{
+  "prefix": "stopwatch elapsed",
+  "body": [
+    "STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))",
+    "STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))",
+    "STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))",
+    "${1:echo elapsed \\$STOPWATCH_ELAPSED_MINUTES minutes and \\$STOPWATCH_ELAPSED_SECONDS seconds}\n"
+  ],
+  "description": "elapsed time"
+}

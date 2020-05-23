@@ -1,0 +1,5 @@
+{
+  "prefix": "func args",
+  "body": "echo \"$@\"",
+  "description": "function arguments array"
+}

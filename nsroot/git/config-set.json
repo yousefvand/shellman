@@ -1,0 +1,5 @@
+{
+  "prefix": "git config set",
+  "body": "git config --${1|local,global|} ${2|user.name,user.email|} \"${3:value}\"\n",
+  "description": "Configure git."
+}

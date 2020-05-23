@@ -1,0 +1,5 @@
+{
+  "prefix": "git branch push",
+  "body": "git push origin ${1:branchName}\n",
+  "description": "Push branch to remote."
+}

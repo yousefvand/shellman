@@ -1,0 +1,5 @@
+{
+  "prefix": "git branch rename",
+  "body": "git branch -m ${1:newName}\n",
+  "description": "Rename current branch."
+}

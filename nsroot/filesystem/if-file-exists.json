@@ -1,0 +1,9 @@
+{
+  "prefix": "if file exists",
+  "body": [
+    "if [ -f \"\\$${1:file}\" ]; then",
+    "\t${2:echo file exists}",
+    "fi\n"
+  ],
+  "description": "if file exists"
+}

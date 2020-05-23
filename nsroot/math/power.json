@@ -1,0 +1,5 @@
+{
+  "prefix": "math ^",
+  "body": "${1:result}=\\$((${2:base} ** ${3:power}))\n",
+  "description": "exponentiate base to power"
+}

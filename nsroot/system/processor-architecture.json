@@ -1,0 +1,5 @@
+{
+  "prefix": "system processor architecture",
+  "body": "lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1\n",
+  "description": "Processor architecture (i.e. x86_64)"
+}

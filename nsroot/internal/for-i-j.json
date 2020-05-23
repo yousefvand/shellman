@@ -1,0 +1,11 @@
+{
+  "prefix": "for ij",
+  "body": [
+    "for((i=0;i<${1:n};i++)); do",
+    "\tfor((j=0;j<${2:m};j++)); do",
+    "\t\t${0:echo \"\\$i, \\$j\"}",
+    "\tdone",
+    "done\n"
+  ],
+  "description": "for loop by index"
+}

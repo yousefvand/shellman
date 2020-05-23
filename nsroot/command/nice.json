@@ -1,0 +1,5 @@
+{
+  "prefix": "cmd nice",
+  "body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${0:command}\n",
+  "description": "run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority)"
+}

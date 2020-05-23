@@ -1,0 +1,5 @@
+{
+  "prefix": "fx import",
+  "body": "import \"${1:libname}\"\n",
+  "description": "call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file"
+}

@@ -1,0 +1,9 @@
+{
+  "prefix": "if file older",
+  "body": [
+    "if [ \"\\$${1:file1}\" -ot \"\\$${2:file2}\" ]; then",
+    "\t${0:echo file1 is older than file2}",
+    "fi\n"
+  ],
+  "description": "if file1 older than file2"
+}

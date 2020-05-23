@@ -1,0 +1,5 @@
+{
+  "prefix": "time now UTC",
+  "body": "timeNowUTC=`date -u +%R`\n",
+  "description": "current UTC time"
+}

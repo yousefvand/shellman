@@ -1,0 +1,5 @@
+{
+  "prefix": "string replace",
+  "body": "${1:replaced}=`echo -e \"\\${${2:var}}\" | sed -e 's/${3:find}/${4:replace}/g'`",
+  "description": "find all occurrences of a substrings and replace them"
+}

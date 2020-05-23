@@ -1,0 +1,5 @@
+{
+  "prefix": "math const e",
+  "body": "MATH_NAPIER='2.71828182845904523536028747135266249'\n",
+  "description": "math Napier's constant"
+}

@@ -1,0 +1,5 @@
+{
+  "prefix": "git branch create",
+  "body": "git checkout -b ${1:branchName}\n",
+  "description": "Create branch locally and switch into it."
+}

@@ -1,0 +1,5 @@
+{
+  "prefix": "array replace",
+  "body": "${myArray[@]//${1:find}/${2:replace}}\n",
+  "description": "find and replace elements in array using regex"
+}

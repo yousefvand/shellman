@@ -1,0 +1,5 @@
+{
+  "prefix": "string reverse",
+  "body": "reversed=`echo -e \"\\${${1:var}}\" | rev`",
+  "description": "reverse string characters"
+}

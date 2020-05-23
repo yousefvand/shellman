@@ -1,0 +1,5 @@
+{
+  "prefix": "func ret val",
+  "body": "echo \"$?\"",
+  "description": "last function/command return code"
+}

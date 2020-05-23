@@ -1,0 +1,36 @@
+{
+  "prefix": [
+    "fn version compare",
+    "fn semver compare"
+  ],
+  "body": [
+    "# Usage: version_compare \"1.2.3\" \"1.1.7\"\n",
+    "function version_compare () {",
+    "\tfunction sub_ver () {",
+    "\t\tlocal len=${#1}",
+    "\t\ttemp=${1%%\".\"*} && indexOf=`echo ${1%%\".\"*} | echo ${#temp}`",
+    "\t\techo -e \"\\${1:0:indexOf}\"",
+    "\t}",
+    "\tfunction cut_dot () {",
+    "\t\tlocal offset=${#1}",
+    "\t\tlocal length=${#2}",
+    "\t\techo -e \"\\${2:((++offset)):length}\"",
+    "\t}",
+    "\tif [ -z \"\\$1\" ] || [ -z \"\\$2\" ]; then",
+    "\t\techo \"=\" && exit 0",
+    "\tfi",
+    "\tlocal v1=`echo -e \"\\${1}\" | tr -d '[[:space:]]'`",
+    "\tlocal v2=`echo -e \"\\${2}\" | tr -d '[[:space:]]'`",
+    "\tlocal v1_sub=`sub_ver \\$v1`",
+    "\tlocal v2_sub=`sub_ver \\$v2`",
+    "\tif (( v1_sub > v2_sub )); then",
+    "\t\techo \">\"",
+    "\telif (( v1_sub < v2_sub )); then",
+    "\t\techo \"<\"",
+    "\telse",
+    "\t\tversion_compare `cut_dot \\$v1_sub \\$v1` `cut_dot \\$v2_sub \\$v2`",
+    "\tfi",
+    "}\n"
+  ],
+  "description": "function: compares two semvers and returns >, < or ="
+}

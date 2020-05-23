@@ -1,0 +1,5 @@
+{
+  "prefix": "system uptime",
+  "body": "sys_uptime=`uptime | cut -d ' ' -f2`\n",
+  "description": "System uptime (hh:mm:ss)"
+}

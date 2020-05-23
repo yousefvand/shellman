@@ -1,0 +1,5 @@
+{
+  "prefix": "math *",
+  "body": "${1:result}=\\$((${2:var1} * ${3:var2}))\n",
+  "description": "multiply var1 by var2"
+}

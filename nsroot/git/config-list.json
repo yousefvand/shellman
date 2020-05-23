@@ -1,0 +1,5 @@
+{
+  "prefix": "git config list",
+  "body": "git config --list\n",
+  "description": "List git configurations."
+}

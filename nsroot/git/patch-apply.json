@@ -1,0 +1,5 @@
+{
+  "prefix": "git patch apply",
+  "body": "git apply < ${0:/path/to/patch1.patch}\n",
+  "description": "Apply a patch from file."
+}

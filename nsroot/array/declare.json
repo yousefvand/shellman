@@ -1,0 +1,5 @@
+{
+  "prefix": "array declare",
+  "body": "${1:myArray}=('${2:one}' '${3:two}' '${4:three}')\n",
+  "description": "declare an array"
+}

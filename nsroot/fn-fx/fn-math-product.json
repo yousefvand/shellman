@@ -1,0 +1,13 @@
+{
+  "prefix": "fn math product",
+  "body": [
+    "function product () {",
+    "\tlocal result=1",
+    "\tfor item in $@; do",
+    "\t\t((result *= item))",
+    "\tdone",
+    "\techo \\$result",
+    "}\n"
+  ],
+  "description": "Calculate product of given integers"
+}

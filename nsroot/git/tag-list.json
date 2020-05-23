@@ -1,0 +1,5 @@
+{
+  "prefix": "git tag list",
+  "body": "git tag\n",
+  "description": "List all tags."
+}

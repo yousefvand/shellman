@@ -1,0 +1,5 @@
+{
+  "prefix": "math --",
+  "body": "((${1|var--,--var|}))\n",
+  "description": "decrement variable"
+}

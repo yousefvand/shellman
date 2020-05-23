@@ -1,0 +1,5 @@
+{
+  "prefix": "array delete",
+  "body": "unset ${1:myArray}\n",
+  "description": "delete entire array"
+}

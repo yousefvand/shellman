@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "array push",
+    "array add"
+  ],
+  "body": "${1:myArray}+=('${2:newItem}')\n",
+  "description": "push new item to the end of array"
+}

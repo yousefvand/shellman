@@ -1,0 +1,12 @@
+{
+  "prefix": "fn scan",
+  "body": [
+    "# Usage: scan proto host fromPort toPort",
+    "function scan () {",
+    "\tfor ((port=\\$3; port<=\\$4; port++)); do",
+    "\t\t(echo >/dev/\\$1/\\$2/\\$port) >/dev/null 2>&1 && echo \"\\$1 \\$port => open\"",
+    "\tdone",
+    "}\n"
+  ],
+  "description": "Scan host's port range (tcp/udp)"
+}

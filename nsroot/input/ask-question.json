@@ -1,0 +1,8 @@
+{
+  "prefix": "ask question",
+  "body": [
+    "read -ep \"${1:Question here? }\" -i ${2:Default answer} ANSWER",
+    "${3:echo \"\\$ANSWER\"}\n"
+  ],
+  "description": "Ask question with default answer"
+}

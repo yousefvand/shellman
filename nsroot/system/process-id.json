@@ -1,0 +1,5 @@
+{
+  "prefix": "process ID",
+  "body": "pgrep ${1:process_name}\n",
+  "description": "Find process id (PID)"
+}

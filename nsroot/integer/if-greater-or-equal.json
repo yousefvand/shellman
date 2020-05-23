@@ -1,0 +1,9 @@
+{
+  "prefix": "if int >=",
+  "body": [
+    "if (( ${1:int} >= ${2:val} )); then",
+    "\t${3:echo greater equal}",
+    "fi\n"
+  ],
+  "description": "if integer greater than or equal value"
+}

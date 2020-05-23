@@ -1,0 +1,9 @@
+{
+  "prefix": "while",
+  "body": [
+    "while [ ${1:condition} ]; do",
+    "\t${0:# body}",
+    "done\n"
+  ],
+  "description": "while loop"
+}

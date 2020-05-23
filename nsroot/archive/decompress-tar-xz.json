@@ -1,0 +1,5 @@
+{
+  "prefix": "archive decompress tar.xz",
+  "body": "tar -C ${1:/extract/to/path} -xf ${2:/path/to/archive}.tar.xz\n",
+  "description": "decompress a .tar.xz file to specified path"
+}

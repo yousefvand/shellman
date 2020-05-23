@@ -1,0 +1,9 @@
+{
+  "prefix": "if directory exists",
+  "body": [
+    "if [ -d \"\\$${1:directory}\" ]; then",
+    "\t${0:echo directory exists}",
+    "fi\n"
+  ],
+  "description": "if directory exists"
+}

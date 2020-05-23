@@ -1,0 +1,5 @@
+{
+  "prefix": "git branch delete remote",
+  "body": "git push origin --delete ${1:remoteBranch}\n",
+  "description": "Delete remote branch."
+}
