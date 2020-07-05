@@ -1,0 +1,9 @@
+{
+  "prefix": "animation frame",
+  "body": [
+    "IFS='' read -r -d '' ${1:frames}[${2:1}] <<\"EOF\"",
+    "${3:# Frame here}",
+    "EOF\n"
+  ],
+  "description": "Define animation frame"
+}

@@ -1,0 +1,8 @@
+{
+  "prefix": "fx animation pacman",
+  "body": [
+    "# Usage: pac_man inputString interval pad",
+    "pac_man \"${1:Hello World}\" ${2:0.5} \"${3:*}\"\n"
+  ],
+  "description": "Call Pacman animation (eating input text) function"
+}

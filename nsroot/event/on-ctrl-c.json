@@ -1,0 +1,20 @@
+{
+  "prefix": [
+    "event terminate",
+    "event CTRL+C"
+  ],
+  "body": [
+    "# CTRL+C event handler",
+    "function on_ctrl_c() {",
+    "\techo # Set cursor to the next line of '^C'",
+    "\ttput cnorm # show cursor. You need this if animation is used.",
+    "\t${1:# i.e. clean-up code here}",
+    "\texit 0 # Exit gracefully. Use a number 1-255 for error code if desired.",
+    "}",
+    "",
+    "# Put this line at the beginning of your script entry point (after function definitions).",
+    "# Register CTRL+C event handler",
+    "trap on_ctrl_c SIGINT"
+  ],
+  "description": "register a function (handler) to run on script termination (CTRL+C)"
+}

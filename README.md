@@ -110,7 +110,7 @@ inserts a whole function into script. Function declaration should proceed its us
 
 Call function which is declared by `fn...`
 
-## Functions
+## Function usage examples
 
 - banner simple
   - print a banner with provided title.
@@ -121,8 +121,11 @@ Call function which is declared by `fn...`
 - import
   - Organize your project and reuse functions. Import functions from other shell script files. Default import directory is `lib`. This directory should be where the calling script exists and contain library files with `.sh` extension. For example if `libname.sh` contains some useful functions and exists in `lib` directory, you can import those functions into your script and call them.
   - example: `import "somefile"` will import all defined functions in `somefile.sh` from `lib` directory where calling script resides.
-- scan
-  - Scan host's port range (tcp/udp)
+- animation
+  - Create some frames with same size using `animation frame` snippet.
+  - Insert `animate` function using `fn animation animate` snippet.
+  - Call `animate` function.
+  - Check [sample animations](samples/animation).
 
 ## List of [commands](COMMANDS.md)
 
@@ -130,8 +133,16 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-### 4.5.0
+### 4.6.0
 
-- Renice process and sub processes. [PR](https://github.com/yousefvand/shellman/pull/17) by [@jakiro2017](https://github.com/jakiro2017).
-- `archive...`
-  - Compress/decompress file/directory to/from `.tar.xz`
+- Fixed issue [#19](https://github.com/yousefvand/shellman/issues/19)
+- Handle events `event ...`
+  - `exit`: Run commands when script exits.
+  - `CTRL+C`: Run commands when script is interrupted.
+- Animation
+  - Define animation frame.
+  - Call `animate` function. Check [sample animations](samples/animation/funny-cat.sh).
+  - pacman animation for texts. Check [sample animations](samples/animation/pacman.sh).
+- String
+  - Concat: Concatenate two strings.
+  

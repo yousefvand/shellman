@@ -1,0 +1,16 @@
+{
+  "prefix": "event exit",
+  "body": [
+    "# Exit event handler",
+    "function on_exit() {",
+    "\ttput cnorm # Show cursor. You need this if animation is used.",
+    "\t${1:# i.e. clean-up code here}",
+    "\texit 0 # Exit gracefully.",
+    "}",
+    "",
+    "# Put this line at the beginning of your script entry point (after function definitions).",
+    "# Register exit event handler.",
+    "trap on_exit EXIT"
+  ],
+  "description": "register a function (handler) to run on script exit"
+}

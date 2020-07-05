@@ -1,5 +1,18 @@
 # Change Log
 
+## 4.6.0
+
+- Fixed issue [#19](https://github.com/yousefvand/shellman/issues/19)
+- Handle events `event ...`
+  - `exit`: Run commands when script exits.
+  - `CTRL+C`: Run commands when script is interrupted.
+- Animation
+  - Define animation frame.
+  - Call `animate` function. Check [sample animations](samples/animation/funny-cat.sh).
+  - pacman animation for texts. Check [sample animations](samples/animation/pacman.sh).
+- String
+  - Concat: Concatenate two strings.
+
 ## 4.5.0
 
 - Renice process and sub processes. [PR](https://github.com/yousefvand/shellman/pull/17) by [@jakiro2017](https://github.com/jakiro2017).

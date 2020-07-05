@@ -84,6 +84,12 @@
 
   - [date now year](#date-now-year)
 
+- event
+
+  - [event terminate](#event-terminate)
+
+  - [event exit](#event-exit)
+
 - filesystem
 
   - [directory create nested](#directory-create-nested)
@@ -130,6 +136,10 @@
 
 - fn-fx
 
+  - [fn animation animate](#fn-animation-animate)
+
+  - [fn animation pacman](#fn-animation-pacman)
+
   - [fn banner color](#fn-banner-color)
 
   - [fn banner simple](#fn-banner-simple)
@@ -149,6 +159,10 @@
   - [fn scan](#fn-scan)
 
   - [fn version compare](#fn-version-compare)
+
+  - [fx animation animate](#fx-animation-animate)
+
+  - [fx animation pacman](#fx-animation-pacman)
 
   - [fx banner color](#fx-banner-color)
 
@@ -350,6 +364,8 @@
 
 - misc
 
+  - [animation frame](#animation-frame)
+
   - [argument parsing](#argument-parsing)
 
   - [expr](#expr)
@@ -401,6 +417,8 @@
   - [format reverse](#format-reverse)
 
 - string
+
+  - [string concat](#string-concat)
 
   - [string contains](#string-contains)
 
@@ -529,7 +547,11 @@ newArray=("${array1[@]}" "${array2[@]}")
 declare an array [&uarr;](#Commands)
 
 ```bash
-myArray=('one' 'two' 'three')
+myArray=(
+  'one 1'
+  'two 2'
+  'three 3'
+)
 ```
 
 ## `array delete at`
@@ -561,7 +583,7 @@ filtered=(`for i in ${myArray[@]} ; do echo $i; done | grep pattern`)
 iterate array elements [&uarr;](#Commands)
 
 ```bash
-for item in ${myArray[@]}; do
+for item in "${myArray[@]}"; do
   echo "$item"
 done
 ```
@@ -772,6 +794,41 @@ current Year [&uarr;](#Commands)
 year=`date +%Y`
 ```
 
+## `event terminate,event CTRL+C`
+
+register a function (handler) to run on script termination (CTRL+C) [&uarr;](#Commands)
+
+```bash
+# CTRL+C event handler
+function on_ctrl_c() {
+  echo # Set cursor to the next line of '^C'
+  tput cnorm # show cursor. You need this if animation is used.
+  # i.e. clean-up code here
+  exit 0 # Exit gracefully. Use a number 1-255 for error code if desired.
+}
+
+# Put this line at the beginning of your script entry point (after function definitions).
+# Register CTRL+C event handler
+trap on_ctrl_c SIGINT
+```
+
+## `event exit`
+
+register a function (handler) to run on script exit [&uarr;](#Commands)
+
+```bash
+# Exit event handler
+function on_exit() {
+  tput cnorm # Show cursor. You need this if animation is used.
+  # i.e. clean-up code here
+  exit 0 # Exit gracefully.
+}
+
+# Put this line at the beginning of your script entry point (after function definitions).
+# Register exit event handler.
+trap on_exit EXIT
+```
+
 ## `directory create nested`
 
 create nested directories [&uarr;](#Commands)
@@ -969,6 +1026,68 @@ find and remove files older than x days [&uarr;](#Commands)
 
 ```bash
 find "$path" -mtime +days | xargs rm -f
+```
+
+## `fn animation animate`
+
+Animate frames of animation [&uarr;](#Commands)
+
+```bash
+# Usage: animate frames_array interval
+function animate () {
+  local frames=("$@")
+  ((last_index=${#frames[@]} - 1))
+  local interval=${frames[last_index]}
+  unset frames[last_index]
+
+  # Comment out next two lines if you are using CTRL+C event handler.
+  trap 'tput cnorm; echo' EXIT  trap 'exit 127' HUP INT TERM
+  tput civis # hide cursor
+  tput sc # save cursor position
+
+  while true; do
+    for frame in "${frames[@]}"; do
+      tput rc # restore cursor position
+      echo "$frame"
+      sleep "$interval"
+    done
+  done
+}
+```
+
+## `fn animation pacman`
+
+Pacman animation (eating input text) [&uarr;](#Commands)
+
+```bash
+# Usage: pac_man inputString interval pad
+# Example: pacman "Hello World" 0.5 "*"
+function pac_man () {
+  local string="$1"
+  local interval="$2"
+  : "${interval:=0.2}"
+  local pad="$3"
+  : "${pad:=.}"
+  local length=${#string}
+  local padding=""
+
+  tput civis # hide cursor
+  tput sc # save cursor position
+
+  for((i=0;i<=length;i++)); do
+    tput rc
+    echo "$padding"c"${string:i:length}"
+    sleep "$interval"
+    tput rc
+    echo "$padding"C"${string:i:length}"
+    sleep "$interval"
+    padding+="$pad"
+  done
+
+  tput cnorm
+  tput rc
+  echo "$padding"
+}
 ```
 
 ## `fn banner color`
@@ -1200,6 +1319,24 @@ function version_compare () {
     version_compare `cut_dot $v1_sub $v1` `cut_dot $v2_sub $v2`
   fi
 }
+```
+
+## `fx animation animate`
+
+call animate function to start animation [&uarr;](#Commands)
+
+```bash
+# Usage: animate frames_array interval
+animate "${frames[@]}" 0.5
+```
+
+## `fx animation pacman`
+
+Call Pacman animation (eating input text) function [&uarr;](#Commands)
+
+```bash
+# Usage: pac_man inputString interval pad
+pac_man "Hello World" ${2:0.5} "*"
 ```
 
 ## `fx banner color`
@@ -1989,6 +2126,16 @@ subtract var2 from var1 [&uarr;](#Commands)
 result=$((var1 - var2))
 ```
 
+## `animation frame`
+
+Define animation frame [&uarr;](#Commands)
+
+```bash
+IFS='' read -r -d '' frames[${2:1}] <<"EOF"
+# Frame here
+EOF
+```
+
 ## `argument parsing,parse args`
 
 parse command line arguments (flags/switches) [&uarr;](#Commands)
@@ -2205,6 +2352,14 @@ write in reverse [&uarr;](#Commands)
 
 ```bash
 echo `tput rev`reversed text`tput sgr0`
+```
+
+## `string concat`
+
+concatenate two strings [&uarr;](#Commands)
+
+```bash
+str="${str1}${str2}"
 ```
 
 ## `string contains,if string contains`

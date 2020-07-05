@@ -1,0 +1,8 @@
+{
+  "prefix": "fx animation animate",
+  "body": [
+    "# Usage: animate frames_array interval",
+    "animate \"\\${${1:frames}[@]}\" ${2:0.5}\n"
+  ],
+  "description": "call animate function to start animation"
+}

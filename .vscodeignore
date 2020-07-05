@@ -1,6 +1,7 @@
 .vscode/**
 node_modules/**
 nsroot/**
+samples/**
 _config.yml
 .gitattributes
 .gitignore

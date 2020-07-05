@@ -1,5 +1,11 @@
 {
   "prefix": "array declare",
-  "body": "${1:myArray}=('${2:one}' '${3:two}' '${4:three}')\n",
+  "body": [
+    "${1:myArray}=(",
+    "\t'${2:one 1}'",
+    "\t'${3:two 2}'",
+    "\t'${4:three 3}'",
+    ")\n"
+  ],
   "description": "declare an array"
 }

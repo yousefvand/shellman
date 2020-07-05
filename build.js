@@ -5,10 +5,10 @@ const path = require('path')
 const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x)
 
 // directoryFiles :: String -> [String]
-function directoryFiles(dir, result = []) {
+function directoryFiles (dir, result = []) {
   fs.readdirSync(dir).forEach(item =>
-    fs.statSync(path.join(dir, item)).isDirectory() ?
-      directoryFiles(path.join(dir, item), result)
+    fs.statSync(path.join(dir, item)).isDirectory()
+      ? directoryFiles(path.join(dir, item), result)
       : result.push(path.join(dir, item)))
   return result
 }
@@ -51,7 +51,7 @@ const app = pipe(
 )
 
 // TODO: Refactoring
-function docGen() {
+function docGen () {
   const rgx = /\$\{\d+:(.*?)\}/g
   const snippets = JSON.parse(fs.readFileSync(
     path.join(__dirname, './snippets/snippets.json'), 'utf-8'
@@ -60,7 +60,7 @@ function docGen() {
   let out = '# Commands\n\n'
   let ns = ''
 
-  for (let snippetName in snippets) { // Table of Contents
+  for (const snippetName in snippets) { // Table of Contents
     const snippet = snippets[snippetName]
     if (snippetName.split('.')[0] !== ns) {
       ns = snippetName.split('.')[0]
@@ -73,7 +73,7 @@ function docGen() {
     }
   }
 
-  for (let snippetName in snippets) {
+  for (const snippetName in snippets) {
     const snippet = snippets[snippetName]
     out += `## \`${snippet.prefix}\`\n\n`
     out += `${snippet.description} [&uarr;](#Commands)\n\n`
