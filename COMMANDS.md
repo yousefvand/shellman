@@ -804,10 +804,10 @@ function on_ctrl_c() {
   echo # Set cursor to the next line of '^C'
   tput cnorm # show cursor. You need this if animation is used.
   # i.e. clean-up code here
-  exit 0 # Exit gracefully. Use a number 1-255 for error code if desired.
+  exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 
-# Put this line at the beginning of your script entry point (after function definitions).
+# Put this line at the beginning of your script (after functions used by event handlers).
 # Register CTRL+C event handler
 trap on_ctrl_c SIGINT
 ```
@@ -824,7 +824,7 @@ function on_exit() {
   exit 0 # Exit gracefully.
 }
 
-# Put this line at the beginning of your script entry point (after function definitions).
+# Put this line at the beginning of your script (after functions used by event handlers).
 # Register exit event handler.
 trap on_exit EXIT
 ```
@@ -1071,6 +1071,8 @@ function pac_man () {
   local length=${#string}
   local padding=""
 
+  # Comment out next two lines if you are using CTRL+C event handler.
+  trap 'tput cnorm; echo' EXIT  trap 'exit 127' HUP INT TERM
   tput civis # hide cursor
   tput sc # save cursor position
 
@@ -2131,6 +2133,8 @@ result=$((var1 - var2))
 Define animation frame [&uarr;](#Commands)
 
 ```bash
+# Your frames need to have the exact same width and height.
+# If they are different in size, fill unused space with `space`s (no `TAB`s).
 IFS='' read -r -d '' frames[${2:1}] <<"EOF"
 # Frame here
 EOF
@@ -2240,6 +2244,13 @@ script summary [&uarr;](#Commands)
 # Author:        author <email>
 # Date:          yyyy-mm-dd
 # Version:       1.0.0
+
+# Exit codes
+# ==========
+# 0   no error
+# 1   script interrupted
+# 2   ${7:error description}
+
 ```
 
 ## `timeout`
@@ -2250,7 +2261,7 @@ Run command within a time frame [&uarr;](#Commands)
 timeout seconds command
 ```
 
-## `assign if empty`
+## `assign if empty,variable default value`
 
 assign default to variable if variable is empty or null [&uarr;](#Commands)
 

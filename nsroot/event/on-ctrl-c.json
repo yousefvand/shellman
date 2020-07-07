@@ -9,10 +9,10 @@
     "\techo # Set cursor to the next line of '^C'",
     "\ttput cnorm # show cursor. You need this if animation is used.",
     "\t${1:# i.e. clean-up code here}",
-    "\texit 0 # Exit gracefully. Use a number 1-255 for error code if desired.",
+    "\texit 1 # Don't remove. Use a number (1-255) for error code.",
     "}",
     "",
-    "# Put this line at the beginning of your script entry point (after function definitions).",
+    "# Put this line at the beginning of your script (after functions used by event handlers).",
     "# Register CTRL+C event handler",
     "trap on_ctrl_c SIGINT"
   ],

@@ -12,6 +12,8 @@
     "\tlocal length=\\${#string}",
     "\tlocal padding=\"\"",
     "",
+    "\t# Comment out next two lines if you are using CTRL+C event handler.",
+    "${1:\ttrap 'tput cnorm; echo' EXIT\n\ttrap 'exit 127' HUP INT TERM}\n",
     "\ttput civis # hide cursor",
     "\ttput sc # save cursor position",
     "",

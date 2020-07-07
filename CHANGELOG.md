@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.6.1
+
+- New `Shellman ebook` release. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi)
+- Fixed issues [#20](https://github.com/yousefvand/shellman/issues/20) and [#21](https://github.com/yousefvand/shellman/issues/21).
+- Updated `summary` snippet to include exit codes.
+- Samples:
+  - Step by step [sample script](samples/backup-tool) tutorial.
+
 ## 4.6.0
 
 - Fixed issue [#19](https://github.com/yousefvand/shellman/issues/19)

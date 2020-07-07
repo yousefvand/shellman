@@ -5,7 +5,14 @@
     "# Description:   ${2:description}",
     "# Author:        ${3:author <email>}",
     "# Date:          ${4:yyyy-mm-dd}",
-    "# Version:       ${5:1.0.0}\n"
+    "# Version:       ${5:1.0.0}",
+    "",
+    "# Exit codes",
+    "# ==========",
+    "# 0   no error",
+    "# 1   script interrupted",
+    "# ${6:2}   ${7:error description}",
+    ""
   ],
   "description": "script summary"
 }

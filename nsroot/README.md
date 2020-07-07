@@ -9,12 +9,12 @@ Add new folder for a new namespace.
 Put snippet inside appropriate folder and run npm build task:
 
 ```bash
-$ npm run build
+npm run build
 ```
 
 Bump version in `package.json` file according to [SemVer](https://semver.org).
 
-## Caution:
+## Caution
 
 - Directory structure depth is fixed to one.
 - Don't use dot (`.`) in file and directory names.

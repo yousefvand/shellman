@@ -133,16 +133,10 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-### 4.6.0
+### 4.6.1
 
-- Fixed issue [#19](https://github.com/yousefvand/shellman/issues/19)
-- Handle events `event ...`
-  - `exit`: Run commands when script exits.
-  - `CTRL+C`: Run commands when script is interrupted.
-- Animation
-  - Define animation frame.
-  - Call `animate` function. Check [sample animations](samples/animation/funny-cat.sh).
-  - pacman animation for texts. Check [sample animations](samples/animation/pacman.sh).
-- String
-  - Concat: Concatenate two strings.
-  
+- New `Shellman ebook` release. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi)
+- Fixed issues [#20](https://github.com/yousefvand/shellman/issues/20) and [#21](https://github.com/yousefvand/shellman/issues/21).
+- Updated `summary` snippet to include exit codes.
+- Samples:
+  - Step by step [sample script](samples/backup-tool) tutorial.

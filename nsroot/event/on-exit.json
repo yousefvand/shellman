@@ -8,7 +8,7 @@
     "\texit 0 # Exit gracefully.",
     "}",
     "",
-    "# Put this line at the beginning of your script entry point (after function definitions).",
+    "# Put this line at the beginning of your script (after functions used by event handlers).",
     "# Register exit event handler.",
     "trap on_exit EXIT"
   ],

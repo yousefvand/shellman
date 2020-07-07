@@ -226,10 +226,10 @@
       "\techo # Set cursor to the next line of '^C'",
       "\ttput cnorm # show cursor. You need this if animation is used.",
       "\t${1:# i.e. clean-up code here}",
-      "\texit 0 # Exit gracefully. Use a number 1-255 for error code if desired.",
+      "\texit 1 # Don't remove. Use a number (1-255) for error code.",
       "}",
       "",
-      "# Put this line at the beginning of your script entry point (after function definitions).",
+      "# Put this line at the beginning of your script (after functions used by event handlers).",
       "# Register CTRL+C event handler",
       "trap on_ctrl_c SIGINT"
     ],
@@ -245,7 +245,7 @@
       "\texit 0 # Exit gracefully.",
       "}",
       "",
-      "# Put this line at the beginning of your script entry point (after function definitions).",
+      "# Put this line at the beginning of your script (after functions used by event handlers).",
       "# Register exit event handler.",
       "trap on_exit EXIT"
     ],
@@ -467,6 +467,8 @@
       "\tlocal length=\\${#string}",
       "\tlocal padding=\"\"",
       "",
+      "\t# Comment out next two lines if you are using CTRL+C event handler.",
+      "${1:\ttrap 'tput cnorm; echo' EXIT\n\ttrap 'exit 127' HUP INT TERM}\n",
       "\ttput civis # hide cursor",
       "\ttput sc # save cursor position",
       "",
@@ -1305,6 +1307,8 @@
   "misc.animation-frame": {
     "prefix": "animation frame",
     "body": [
+      "# Your frames need to have the exact same width and height.",
+      "# If they are different in size, fill unused space with `space`s (no `TAB`s).",
       "IFS='' read -r -d '' ${1:frames}[${2:1}] <<\"EOF\"",
       "${3:# Frame here}",
       "EOF\n"
@@ -1397,7 +1401,14 @@
       "# Description:   ${2:description}",
       "# Author:        ${3:author <email>}",
       "# Date:          ${4:yyyy-mm-dd}",
-      "# Version:       ${5:1.0.0}\n"
+      "# Version:       ${5:1.0.0}",
+      "",
+      "# Exit codes",
+      "# ==========",
+      "# 0   no error",
+      "# 1   script interrupted",
+      "# ${6:2}   ${7:error description}",
+      ""
     ],
     "description": "script summary"
   },
@@ -1407,7 +1418,10 @@
     "description": "Run command within a time frame"
   },
   "misc.variable-default-value": {
-    "prefix": "assign if empty",
+    "prefix": [
+      "assign if empty",
+      "variable default value"
+    ],
     "body": ": \"\\${${1:variable}:=${2:default}}\"",
     "description": "assign default to variable if variable is empty or null"
   },
