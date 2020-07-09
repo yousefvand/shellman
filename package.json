@@ -2,7 +2,7 @@
     "name": "shellman",
     "displayName": "shellman",
     "description": "Bash script snippet",
-    "version": "4.6.1",
+    "version": "4.7.0",
     "publisher": "Remisa",
     "icon": "images/icon.png",
     "license": "SEE LICENSE IN LICENSE.md",

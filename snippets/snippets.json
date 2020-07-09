@@ -128,7 +128,7 @@
   },
   "command.renice": {
     "prefix": "cmd renice",
-    "body": "for p in \\$(pidof \"${process_name}\"); do sudo renice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -p \\$p; done",
+    "body": "for p in \\$(pidof \"${1:process_name}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done",
     "description": "Change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.run": {
@@ -160,65 +160,50 @@
     "body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n",
     "description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
   },
-  "date-time.day-of-month-current": {
+  "date.day-of-month-current": {
     "prefix": "date now dayOfMonth",
     "body": "dayOfMonth=`date +%d`\n",
     "description": "current day of month (1..31)"
   },
-  "date-time.day-of-week-current": {
+  "date.day-of-week-current": {
     "prefix": "date now dayOfWeek",
     "body": "dayOfWeek=`date +%${1|A,a|}`\n",
     "description": "current day of week name (full/abbreviated A/a)"
   },
-  "date-time.day-of-year-current": {
+  "date.day-of-year-current": {
     "prefix": "date now dayOfYear",
     "body": "dayOfYear=`date +%j`\n",
     "description": "current day of year (1..366)"
   },
-  "date-time.epoch-seconds": {
-    "prefix": "time seconds epoch",
-    "body": "timeNowSecondsEpoch=`date +%s`\n",
-    "description": "seconds since epoch (1970-01-01 00:00:00)"
-  },
-  "date-time.local-time-current": {
-    "prefix": "time now local",
-    "body": "timeNowLocal=`date +%${1|R,r|}`\n",
-    "description": "current local time (24hrs/12hrs R/r)"
-  },
-  "date-time.month-name-current": {
-    "prefix": "date now monthName",
-    "body": "monthName=`date +%${1|B,b|}`\n",
-    "description": "current month name (full/abbreviated B/b)"
-  },
-  "date-time.month-number-current": {
-    "prefix": "date now monthNumber",
-    "body": "monthNumber=`date +%m`\n",
-    "description": "current month number (1..12)"
-  },
-  "date-time.short": {
+  "date.local-short": {
     "prefix": "date now short",
     "body": "dateShort=`date -I`\n",
     "description": "yyyy/mm/dd"
   },
-  "date-time.time-utc": {
-    "prefix": "time now UTC",
-    "body": "timeNowUTC=`date -u +%R`\n",
-    "description": "current UTC time"
+  "date.month-name-current": {
+    "prefix": "date now monthName",
+    "body": "monthName=`date +%${1|B,b|}`\n",
+    "description": "current month name (full/abbreviated B/b)"
   },
-  "date-time.utc": {
+  "date.month-number-current": {
+    "prefix": "date now monthNumber",
+    "body": "monthNumber=`date +%m`\n",
+    "description": "current month number (1..12)"
+  },
+  "date.utc-long": {
     "prefix": "date now UTC",
     "body": "dateUTC=`date -u`\n",
     "description": "coordinated Universal Time"
   },
-  "date-time.year-current": {
+  "date.year-current": {
     "prefix": "date now year",
     "body": "year=`date +%Y`\n",
     "description": "current Year"
   },
   "event.on-ctrl-c": {
     "prefix": [
-      "event terminate",
-      "event CTRL+C"
+      "event CTRL+C",
+      "event terminated"
     ],
     "body": [
       "# CTRL+C event handler",
@@ -236,7 +221,7 @@
     "description": "register a function (handler) to run on script termination (CTRL+C)"
   },
   "event.on-exit": {
-    "prefix": "event exit",
+    "prefix": "event EXIT",
     "body": [
       "# Exit event handler",
       "function on_exit() {",
@@ -261,12 +246,20 @@
     "body": "mkdir \"${1:dirname}\"\n",
     "description": "create directory"
   },
+  "filesystem.directory-delete-nested": {
+    "prefix": [
+      "directory delete nested",
+      "directory remove nested"
+    ],
+    "body": "rm -rf ${1:/path/to/directory}\n",
+    "description": "delete directory and all contents"
+  },
   "filesystem.file-delete": {
     "prefix": [
       "file delete",
       "file remove"
     ],
-    "body": "rm -f ${1:./path/file}\n",
+    "body": "rm -f ${1:/path/to/file}\n",
     "description": "delete file(s)"
   },
   "filesystem.file-read": {
@@ -313,7 +306,7 @@
       "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
       "done\n"
     ],
-    "description": "write a file"
+    "description": "write to a file"
   },
   "filesystem.find-files-or-directories": {
     "prefix": [
@@ -348,7 +341,7 @@
       "\t${0:echo symbolic link}",
       "fi\n"
     ],
-    "description": "if file exists and is a symbolic link"
+    "description": "if given path is a symbolic link"
   },
   "filesystem.if-file-exists": {
     "prefix": "if file exists",
@@ -880,7 +873,7 @@
     "body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
     "description": "Clone remote repository to local machine."
   },
-  "git.commit-list": {
+  "git.commit-list-notpushed": {
     "prefix": "git commit list notPushed",
     "body": "git log origin/master..HEAD\n",
     "description": "List non pushed commits."
@@ -1139,12 +1132,12 @@
     ],
     "description": "if"
   },
-  "internal.if-not": {
+  "internal.iff-not": {
     "prefix": "iff not",
     "body": "[ ${1:condition} ] || ${2:command}\n",
     "description": "if condition is false then run command (short circuit)"
   },
-  "internal.if": {
+  "internal.iff": {
     "prefix": "iff",
     "body": "[ ${1:condition} ] && ${2:command}\n",
     "description": "if condition is true then run command (short circuit)"
@@ -1167,7 +1160,7 @@
     "description": "switch case"
   },
   "internal.until": {
-    "prefix": "until",
+    "prefix": "loop until",
     "body": [
       "until [ ${1:condition} ]; do",
       "\t${0:# body}",
@@ -1176,7 +1169,7 @@
     "description": "until loop"
   },
   "internal.while": {
-    "prefix": "while",
+    "prefix": "loop while",
     "body": [
       "while [ ${1:condition} ]; do",
       "\t${0:# body}",
@@ -1185,7 +1178,7 @@
     "description": "while loop"
   },
   "ip.array-of-local": {
-    "prefix": "ips",
+    "prefix": "ip local IPs",
     "body": "IPS=`hostname -I`\n",
     "description": "Array of local IPs"
   },
@@ -1244,11 +1237,6 @@
     "body": "${1:result}=\\$((${2:var1} / ${3:var2}))\n",
     "description": "divide var1 by var2"
   },
-  "math.float": {
-    "prefix": "math 0.00",
-    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n",
-    "description": "math operations with up to scale decimal places precision"
-  },
   "math.increment": {
     "prefix": "math ++",
     "body": "((${1|var++,++var|}))\n",
@@ -1288,6 +1276,11 @@
     "prefix": "math ^",
     "body": "${1:result}=\\$((${2:base} ** ${3:power}))\n",
     "description": "exponentiate base to power"
+  },
+  "math.precision": {
+    "prefix": "math 0.00",
+    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n",
+    "description": "math operations with up to scale decimal places precision"
   },
   "math.random-number": {
     "prefix": "math random",
@@ -1363,8 +1356,8 @@
   },
   "misc.shebang": {
     "prefix": [
-      "bash",
-      "shebang"
+      "shebang",
+      "bash"
     ],
     "body": "#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}\n\n",
     "description": "bash shebang"
@@ -1484,6 +1477,21 @@
     "prefix": "format reverse",
     "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
     "description": "write in reverse"
+  },
+  "process.process-id": {
+    "prefix": "process ID",
+    "body": "pgrep ${1:process_name}\n",
+    "description": "Find process id (PID)"
+  },
+  "process.process-kill": {
+    "prefix": "process kill",
+    "body": "sudo kill -9 `pgrep ${1:process_name}`\n",
+    "description": "Kill process by name"
+  },
+  "process.process-list": {
+    "prefix": "process list",
+    "body": "ps -A\n",
+    "description": "List processes"
   },
   "string.concat": {
     "prefix": "string concat",
@@ -1640,21 +1648,6 @@
     "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n",
     "description": "System memory information in kilobytes (KB)"
   },
-  "system.process-id": {
-    "prefix": "process ID",
-    "body": "pgrep ${1:process_name}\n",
-    "description": "Find process id (PID)"
-  },
-  "system.process-kill": {
-    "prefix": "process kill",
-    "body": "sudo kill -9 `pgrep ${1:process_name}`\n",
-    "description": "Kill process by name"
-  },
-  "system.process-list": {
-    "prefix": "process list",
-    "body": "ps -A\n",
-    "description": "List processes"
-  },
   "system.processor-architecture": {
     "prefix": "system processor architecture",
     "body": "lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1\n",
@@ -1684,5 +1677,20 @@
     "prefix": "system uptime",
     "body": "sys_uptime=`uptime | cut -d ' ' -f2`\n",
     "description": "System uptime (hh:mm:ss)"
+  },
+  "time.epoch-seconds": {
+    "prefix": "time seconds epoch",
+    "body": "timeNowSecondsEpoch=`date +%s`\n",
+    "description": "seconds since epoch (1970-01-01 00:00:00)"
+  },
+  "time.local-time-current": {
+    "prefix": "time now local",
+    "body": "timeNowLocal=`date +%${1|R,r|}`\n",
+    "description": "current local time (24hrs/12hrs R/r)"
+  },
+  "time.time-utc": {
+    "prefix": "time now UTC",
+    "body": "timeNowUTC=`date -u +%R`\n",
+    "description": "current UTC time"
   }
 }

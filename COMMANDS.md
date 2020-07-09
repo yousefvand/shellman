@@ -60,7 +60,7 @@
 
   - [crypto hash](#crypto-hash)
 
-- date-time
+- date
 
   - [date now dayOfMonth](#date-now-dayOfMonth)
 
@@ -68,17 +68,11 @@
 
   - [date now dayOfYear](#date-now-dayOfYear)
 
-  - [time seconds epoch](#time-seconds-epoch)
-
-  - [time now local](#time-now-local)
+  - [date now short](#date-now-short)
 
   - [date now monthName](#date-now-monthName)
 
   - [date now monthNumber](#date-now-monthNumber)
-
-  - [date now short](#date-now-short)
-
-  - [time now UTC](#time-now-UTC)
 
   - [date now UTC](#date-now-UTC)
 
@@ -86,15 +80,17 @@
 
 - event
 
-  - [event terminate](#event-terminate)
+  - [event CTRL+C](#event-CTRL+C)
 
-  - [event exit](#event-exit)
+  - [event EXIT](#event-EXIT)
 
 - filesystem
 
   - [directory create nested](#directory-create-nested)
 
   - [directory create](#directory-create)
+
+  - [directory delete nested](#directory-delete-nested)
 
   - [file delete](#file-delete)
 
@@ -306,13 +302,13 @@
 
   - [switch case](#switch-case)
 
-  - [until](#until)
+  - [loop until](#loop-until)
 
-  - [while](#while)
+  - [loop while](#loop-while)
 
 - ip
 
-  - [ips](#ips)
+  - [ip local IPs](#ip-local-IPs)
 
   - [ip info](#ip-info)
 
@@ -338,8 +334,6 @@
 
   - [math /](#math-/)
 
-  - [math 0.00](#math-0.00)
-
   - [math ++](#math-++)
 
   - [math -=](#math--=)
@@ -355,6 +349,8 @@
   - [math +=](#math-+=)
 
   - [math ^](#math-^)
+
+  - [math 0.00](#math-0.00)
 
   - [math random](#math-random)
 
@@ -374,7 +370,7 @@
 
   - [region](#region)
 
-  - [bash](#bash)
+  - [shebang](#shebang)
 
   - [sleep](#sleep)
 
@@ -415,6 +411,14 @@
   - [format italic](#format-italic)
 
   - [format reverse](#format-reverse)
+
+- process
+
+  - [process ID](#process-ID)
+
+  - [process kill](#process-kill)
+
+  - [process list](#process-list)
 
 - string
 
@@ -468,12 +472,6 @@
 
   - [system memory info](#system-memory-info)
 
-  - [process ID](#process-ID)
-
-  - [process kill](#process-kill)
-
-  - [process list](#process-list)
-
   - [system processor architecture](#system-processor-architecture)
 
   - [system processor count](#system-processor-count)
@@ -485,6 +483,14 @@
   - [service manage](#service-manage)
 
   - [system uptime](#system-uptime)
+
+- time
+
+  - [time seconds epoch](#time-seconds-epoch)
+
+  - [time now local](#time-now-local)
+
+  - [time now UTC](#time-now-UTC)
 
 ## `archive compress tar.gz`
 
@@ -661,7 +667,7 @@ sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} command
 Change running process priority. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
 
 ```bash
-for p in $(pidof "${process_name}"); do sudo renice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -p $p; done
+for p in $(pidof "process_name"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p "$p"; done
 ```
 
 ## `cmd`
@@ -730,20 +736,12 @@ current day of year (1..366) [&uarr;](#Commands)
 dayOfYear=`date +%j`
 ```
 
-## `time seconds epoch`
+## `date now short`
 
-seconds since epoch (1970-01-01 00:00:00) [&uarr;](#Commands)
-
-```bash
-timeNowSecondsEpoch=`date +%s`
-```
-
-## `time now local`
-
-current local time (24hrs/12hrs R/r) [&uarr;](#Commands)
+yyyy/mm/dd [&uarr;](#Commands)
 
 ```bash
-timeNowLocal=`date +%${1|R,r|}`
+dateShort=`date -I`
 ```
 
 ## `date now monthName`
@@ -762,22 +760,6 @@ current month number (1..12) [&uarr;](#Commands)
 monthNumber=`date +%m`
 ```
 
-## `date now short`
-
-yyyy/mm/dd [&uarr;](#Commands)
-
-```bash
-dateShort=`date -I`
-```
-
-## `time now UTC`
-
-current UTC time [&uarr;](#Commands)
-
-```bash
-timeNowUTC=`date -u +%R`
-```
-
 ## `date now UTC`
 
 coordinated Universal Time [&uarr;](#Commands)
@@ -794,7 +776,7 @@ current Year [&uarr;](#Commands)
 year=`date +%Y`
 ```
 
-## `event terminate,event CTRL+C`
+## `event CTRL+C,event terminated`
 
 register a function (handler) to run on script termination (CTRL+C) [&uarr;](#Commands)
 
@@ -812,7 +794,7 @@ function on_ctrl_c() {
 trap on_ctrl_c SIGINT
 ```
 
-## `event exit`
+## `event EXIT`
 
 register a function (handler) to run on script exit [&uarr;](#Commands)
 
@@ -845,12 +827,20 @@ create directory [&uarr;](#Commands)
 mkdir "dirname"
 ```
 
+## `directory delete nested,directory remove nested`
+
+delete directory and all contents [&uarr;](#Commands)
+
+```bash
+rm -rf /path/to/directory
+```
+
 ## `file delete,file remove`
 
 delete file(s) [&uarr;](#Commands)
 
 ```bash
-rm -f ./path/file
+rm -f /path/to/file
 ```
 
 ## `file read`
@@ -893,7 +883,7 @@ EOL
 
 ## `file write`
 
-write a file [&uarr;](#Commands)
+write to a file [&uarr;](#Commands)
 
 ```bash
 echo "sample header" > ${2:/path/to/file}
@@ -932,7 +922,7 @@ fi
 
 ## `if file link`
 
-if file exists and is a symbolic link [&uarr;](#Commands)
+if given path is a symbolic link [&uarr;](#Commands)
 
 ```bash
 if [ -h "$file" ]; then
@@ -1916,7 +1906,7 @@ case "$item" in
 esac
 ```
 
-## `until`
+## `loop until`
 
 until loop [&uarr;](#Commands)
 
@@ -1926,7 +1916,7 @@ until [ condition ]; do
 done
 ```
 
-## `while`
+## `loop while`
 
 while loop [&uarr;](#Commands)
 
@@ -1936,7 +1926,7 @@ while [ condition ]; do
 done
 ```
 
-## `ips`
+## `ip local IPs`
 
 Array of local IPs [&uarr;](#Commands)
 
@@ -2032,14 +2022,6 @@ divide var1 by var2 [&uarr;](#Commands)
 result=$((var1 / var2))
 ```
 
-## `math 0.00`
-
-math operations with up to scale decimal places precision [&uarr;](#Commands)
-
-```bash
-result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc`
-```
-
 ## `math ++`
 
 increment variable [&uarr;](#Commands)
@@ -2102,6 +2084,14 @@ exponentiate base to power [&uarr;](#Commands)
 
 ```bash
 result=$((base ** power))
+```
+
+## `math 0.00`
+
+math operations with up to scale decimal places precision [&uarr;](#Commands)
+
+```bash
+result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc`
 ```
 
 ## `math random`
@@ -2191,7 +2181,7 @@ $0
 # <<<<<<<<<<<<<<<<<<<<<<<< name <<<<<<<<<<<<<<<<<<<<<<<<
 ```
 
-## `bash,shebang`
+## `shebang,bash`
 
 bash shebang [&uarr;](#Commands)
 
@@ -2363,6 +2353,30 @@ write in reverse [&uarr;](#Commands)
 
 ```bash
 echo `tput rev`reversed text`tput sgr0`
+```
+
+## `process ID`
+
+Find process id (PID) [&uarr;](#Commands)
+
+```bash
+pgrep process_name
+```
+
+## `process kill`
+
+Kill process by name [&uarr;](#Commands)
+
+```bash
+sudo kill -9 `pgrep process_name`
+```
+
+## `process list`
+
+List processes [&uarr;](#Commands)
+
+```bash
+ps -A
 ```
 
 ## `string concat`
@@ -2568,30 +2582,6 @@ System memory information in kilobytes (KB) [&uarr;](#Commands)
 sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1`
 ```
 
-## `process ID`
-
-Find process id (PID) [&uarr;](#Commands)
-
-```bash
-pgrep process_name
-```
-
-## `process kill`
-
-Kill process by name [&uarr;](#Commands)
-
-```bash
-sudo kill -9 `pgrep process_name`
-```
-
-## `process list`
-
-List processes [&uarr;](#Commands)
-
-```bash
-ps -A
-```
-
 ## `system processor architecture`
 
 Processor architecture (i.e. x86_64) [&uarr;](#Commands)
@@ -2638,5 +2628,29 @@ System uptime (hh:mm:ss) [&uarr;](#Commands)
 
 ```bash
 sys_uptime=`uptime | cut -d ' ' -f2`
+```
+
+## `time seconds epoch`
+
+seconds since epoch (1970-01-01 00:00:00) [&uarr;](#Commands)
+
+```bash
+timeNowSecondsEpoch=`date +%s`
+```
+
+## `time now local`
+
+current local time (24hrs/12hrs R/r) [&uarr;](#Commands)
+
+```bash
+timeNowLocal=`date +%${1|R,r|}`
+```
+
+## `time now UTC`
+
+current UTC time [&uarr;](#Commands)
+
+```bash
+timeNowUTC=`date -u +%R`
 ```
 

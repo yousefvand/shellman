@@ -1,7 +1,7 @@
 {
   "prefix": [
-    "event terminate",
-    "event CTRL+C"
+    "event CTRL+C",
+    "event terminated"
   ],
   "body": [
     "# CTRL+C event handler",

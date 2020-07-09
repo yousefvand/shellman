@@ -6,5 +6,5 @@
     "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
     "done\n"
   ],
-  "description": "write a file"
+  "description": "write to a file"
 }

@@ -1,18 +1,21 @@
 # Change Log
 
-## 4.6.1
+## 4.7.0
 
 - New `Shellman ebook` release. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi)
 - Fixed issues [#20](https://github.com/yousefvand/shellman/issues/20) and [#21](https://github.com/yousefvand/shellman/issues/21).
+- directory
+  - `directory delete nested` | `directory remove nested`: delete directory and all contents.
 - Updated `summary` snippet to include exit codes.
-- Samples:
+- Added `loop` to `while` and `until` prefix.
+- Added samples:
   - Step by step [sample script](samples/backup-tool) tutorial.
 
 ## 4.6.0
 
 - Fixed issue [#19](https://github.com/yousefvand/shellman/issues/19)
 - Handle events `event ...`
-  - `exit`: Run commands when script exits.
+  - `EXIT`: Run commands when script exits.
   - `CTRL+C`: Run commands when script is interrupted.
 - Animation
   - Define animation frame.

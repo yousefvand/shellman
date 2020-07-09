@@ -1,5 +1,5 @@
 {
-  "prefix": "event exit",
+  "prefix": "event EXIT",
   "body": [
     "# Exit event handler",
     "function on_exit() {",

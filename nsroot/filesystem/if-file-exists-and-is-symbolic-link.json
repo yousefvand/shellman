@@ -5,5 +5,5 @@
     "\t${0:echo symbolic link}",
     "fi\n"
   ],
-  "description": "if file exists and is a symbolic link"
+  "description": "if given path is a symbolic link"
 }

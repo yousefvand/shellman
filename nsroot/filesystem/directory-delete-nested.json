@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "directory delete nested",
+    "directory remove nested"
+  ],
+  "body": "rm -rf ${1:/path/to/directory}\n",
+  "description": "delete directory and all contents"
+}

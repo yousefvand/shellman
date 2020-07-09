@@ -37,6 +37,7 @@
     "mylib",
     "nsroot",
     "pgrep",
+    "pidof",
     "proto",
     "quickstart",
     "renice",
