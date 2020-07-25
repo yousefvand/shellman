@@ -2183,7 +2183,7 @@ $0
 
 ## `shebang,bash`
 
-bash shebang [&uarr;](#Commands)
+shell shebang [&uarr;](#Commands)
 
 ```bash
 #!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}

@@ -9,7 +9,7 @@
 
 Shell script snippet
 
-Learn Bash Scripting with Shellman, examples included. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi).
+Learn Shell Scripting with Shellman, examples included. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi).
 
 Read [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
@@ -86,7 +86,7 @@ git commands
 
 `if...`
 
-Wide range of logical conditions which are more common in bash scripts.
+Wide range of logical conditions which are more common in shell scripts.
 
 `math...`
 

@@ -1360,7 +1360,7 @@
       "bash"
     ],
     "body": "#!/usr/bin/env ${1|bash,node,perl,php,python,python3,ruby|}\n\n",
-    "description": "bash shebang"
+    "description": "shell shebang"
   },
   "misc.sleep": {
     "prefix": "sleep",
