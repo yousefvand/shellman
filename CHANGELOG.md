@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.8.0
+
+- `loop infinite`: Infinite loop.
+
 ## 4.7.0
 
 - New `Shellman ebook` release. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi)

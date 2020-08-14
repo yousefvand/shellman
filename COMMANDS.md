@@ -300,6 +300,8 @@
 
   - [iff](#iff)
 
+  - [loop infinite](#loop-infinite)
+
   - [switch case](#switch-case)
 
   - [loop until](#loop-until)
@@ -1886,6 +1888,16 @@ if condition is true then run command (short circuit) [&uarr;](#Commands)
 
 ```bash
 [ condition ] && command
+```
+
+## `loop infinite`
+
+infinite loop [&uarr;](#Commands)
+
+```bash
+while true; do
+  # body
+done
 ```
 
 ## `switch case`

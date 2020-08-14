@@ -133,13 +133,6 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-### 4.7.0
+## 4.8.0
 
-- New `Shellman ebook` release. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi)
-- Fixed issues [#20](https://github.com/yousefvand/shellman/issues/20) and [#21](https://github.com/yousefvand/shellman/issues/21).
-- directory
-  - `directory delete nested` | `directory remove nested`: delete directory and all contents.
-- Updated `summary` snippet to include exit codes.
-- Added `loop` to `while` and `until` prefix.
-- Added samples:
-  - Step by step [sample script](samples/backup-tool) tutorial.
+- `loop infinite`: Infinite loop.

@@ -1,0 +1,9 @@
+{
+  "prefix": "loop infinite",
+  "body": [
+    "while true; do",
+    "\t${0:# body}",
+    "done\n"
+  ],
+  "description": "infinite loop"
+}

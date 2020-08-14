@@ -1142,6 +1142,15 @@
     "body": "[ ${1:condition} ] && ${2:command}\n",
     "description": "if condition is true then run command (short circuit)"
   },
+  "internal.infinite-loop": {
+    "prefix": "loop infinite",
+    "body": [
+      "while true; do",
+      "\t${0:# body}",
+      "done\n"
+    ],
+    "description": "infinite loop"
+  },
   "internal.switch": {
     "prefix": "switch case",
     "body": [
