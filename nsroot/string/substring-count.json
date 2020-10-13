@@ -1,8 +1,5 @@
 {
-  "prefix": [
-    "string substring count",
-    "string substring frequency"
-  ],
-  "body": "frequency=`sed -E 's/(.)/\\1\\n/g' <<<\"${1:string}\" | grep -c \"${2:substring}\"`\n",
+  "prefix": ["string substring count", "string substring frequency"],
+  "body": "${0:frequency}=`sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\"`\n",
   "description": "Frequency of a substring in a string (may need character escaping)"
 }

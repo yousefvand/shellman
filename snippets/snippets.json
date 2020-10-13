@@ -1504,7 +1504,7 @@
   },
   "string.concat": {
     "prefix": "string concat",
-    "body": "${0:str}=\"\\${${1:str1}}\\${${2:str2}}\"\n",
+    "body": "${0:string}=\"\\${${1:string1}}\\${${2:string2}}\"\n",
     "description": "concatenate two strings"
   },
   "string.contains": {
@@ -1571,17 +1571,17 @@
   },
   "string.length": {
     "prefix": "string length",
-    "body": "length=\\${#${1:variable}}\n",
+    "body": "${0:length}=\\${#${1:string}}\n",
     "description": "length of string in characters"
   },
   "string.replace": {
     "prefix": "string replace",
-    "body": "${1:replaced}=`echo -e \"\\${${2:var}}\" | sed -e 's/${3:find}/${4:replace}/g'`",
+    "body": "${0:replaced}=`echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g'`\n",
     "description": "find all occurrences of a substrings and replace them"
   },
   "string.reverse": {
     "prefix": "string reverse",
-    "body": "reversed=`echo -e \"\\${${1:var}}\" | rev`",
+    "body": "${0:reversed}=`echo -e \"\\${${1:var}}\" | rev`\n",
     "description": "reverse string characters"
   },
   "string.substring-count": {
@@ -1589,42 +1589,42 @@
       "string substring count",
       "string substring frequency"
     ],
-    "body": "frequency=`sed -E 's/(.)/\\1\\n/g' <<<\"${1:string}\" | grep -c \"${2:substring}\"`\n",
+    "body": "${0:frequency}=`sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\"`\n",
     "description": "Frequency of a substring in a string (may need character escaping)"
   },
   "string.substring": {
     "prefix": "string substring",
-    "body": "substring=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n",
-    "description": "part of the string from offset with length characters"
+    "body": "${0:substring}=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n",
+    "description": "part of the string from offset (zero indexed) with length characters"
   },
   "string.to-lower": {
     "prefix": "string toLower",
-    "body": "toLower=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`",
+    "body": "${0:toLower}=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`\n",
     "description": "convert string to lowercase"
   },
   "string.to-upper": {
     "prefix": "string toUpper",
-    "body": "toUpper=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`",
+    "body": "${0:toUpper}=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`\n",
     "description": "convert string to uppercase"
   },
   "string.trim-all": {
     "prefix": "string trim all",
-    "body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | tr -d '[[:space:]]'`",
+    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]'`\n",
     "description": "remove all white space(s)"
   },
   "string.trim-left": {
     "prefix": "string trim left",
-    "body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | sed -e 's/^[[:space:]]*//'`",
+    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//'`\n",
     "description": "remove leading white space(s)"
   },
   "string.trim-right": {
     "prefix": "string trim right",
-    "body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" | sed -e 's/[[:space:]]*$//'`",
+    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//'`\n",
     "description": "remove trailing white space(s)"
   },
   "string.trim": {
     "prefix": "string trim",
-    "body": "${1:trimmed}=`echo -e \"\\${${2:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`",
+    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`\n",
     "description": "remove leading and trailing white space(s)"
   },
   "system.distro-codename": {

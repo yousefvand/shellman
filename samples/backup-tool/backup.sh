@@ -12,6 +12,7 @@
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# 4   backup failed due to tar error
 
 # >>>>>>>>>>>>>>>>>>>>>>>> variables >>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -93,10 +94,6 @@ Options:
 "
 }
 
-function play_animation () {
-  echo "TODO: play animation"
-}
-
 function backup () {
   echo `tput setaf 2`Backup started...`tput sgr0`
   echo # empty line
@@ -107,7 +104,7 @@ function backup () {
   if [[ $? != 0 ]]; then
     echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`
     cd "$current_path" # restore current directory
-    exit 4 # TODO: document error code
+    exit 4
   fi
 
   cd "$current_path" # restore current directory
@@ -172,8 +169,13 @@ done
 : "${backup_dir:=$HOME/backups}"
 : "${play_animation:=false}"
 
+# Another way to handle "default vaules" is defining them before argument parsing
+# in "variables" and setting them to default values. Later in argument parsing you
+# can override default values when user has provided an alternative value.
+
 backup_file=`date -I`.tar.gz
 
+# Check if "backup directory" exists.
 if [ ! -d "$backup_dir" ]; then
   echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
   exit 3

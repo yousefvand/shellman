@@ -2,7 +2,7 @@
 
 `nsroot` is the root folder of namespaces and each namespace has its own folder inside it.
 
-Only one depth level is allowed (due to readability).
+Only one depth level is allowed (to maintain readability).
 
 Add new folder for a new namespace.
 

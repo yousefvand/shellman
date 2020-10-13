@@ -2396,7 +2396,7 @@ ps -A
 concatenate two strings [&uarr;](#Commands)
 
 ```bash
-str="${str1}${str2}"
+string="${string1}${string2}"
 ```
 
 ## `string contains,if string contains`
@@ -2463,7 +2463,7 @@ fi
 length of string in characters [&uarr;](#Commands)
 
 ```bash
-length=${#variable}
+length=${#string}
 ```
 
 ## `string replace`
@@ -2471,7 +2471,7 @@ length=${#variable}
 find all occurrences of a substrings and replace them [&uarr;](#Commands)
 
 ```bash
-replaced=`echo -e "${var}" | sed -e 's/find/replace/g'`
+replaced=`echo -e "${string}" | sed -e 's/find/replace/g'`
 ```
 
 ## `string reverse`
@@ -2487,12 +2487,12 @@ reversed=`echo -e "${var}" | rev`
 Frequency of a substring in a string (may need character escaping) [&uarr;](#Commands)
 
 ```bash
-frequency=`sed -E 's/(.)/\1\n/g' <<<"string" | grep -c "substring"`
+frequency=`sed -E 's/(.)/\1\n/g' <<<"$string" | grep -c "$substring"`
 ```
 
 ## `string substring`
 
-part of the string from offset with length characters [&uarr;](#Commands)
+part of the string from offset (zero indexed) with length characters [&uarr;](#Commands)
 
 ```bash
 substring=`echo -e "${var:offset:length}"`
@@ -2665,4 +2665,3 @@ current UTC time [&uarr;](#Commands)
 ```bash
 timeNowUTC=`date -u +%R`
 ```
-

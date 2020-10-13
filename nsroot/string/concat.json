@@ -1,5 +1,5 @@
 {
   "prefix": "string concat",
-  "body": "${0:str}=\"\\${${1:str1}}\\${${2:str2}}\"\n",
+  "body": "${0:string}=\"\\${${1:string1}}\\${${2:string2}}\"\n",
   "description": "concatenate two strings"
 }

@@ -7,12 +7,12 @@ First we create our script structure.
 ## Script structure
 
 1. shebang
-2. summary
+2. summary & error codes
 3. event handlers (related functions before them)
 4. animation frames
 5. functions
 6. argument parsing
-7. main code
+7. main code (entry point)
 
 Create an empty file named `backup.sh`. Continue with following steps:
 
@@ -41,21 +41,19 @@ Type `summary` and press `ENTER`. Use `TAB` and fill out fields.
 # Exit codes
 # ==========
 # 0   no error
-# 1   script interrupted
-# 2   unknown argument
-# 3   backup folder doesn't exist
+# TODO: more later
 
 ```
 
 ### event handlers
 
-We want to capture `CTRL+C` if script is interrupted by use so we can run our cleanup code.
+We want to capture `CTRL+C` if script is interrupted by user so we can run our cleanup code.
 
 Use `region` snippet to create `event handling` region. Inside that region:
 
-Type `event` and with arrow up/down keys select `event CTRL+C` and hit `ENTER`. This process is using code snippets. We already have used `shebang`, `summary` snippets.
+Type `event` and with arrow up/down keys select `event CTRL+C` and hit `ENTER`. We are using code snippets from Shellman. We already have used `shebang`, `summary` snippets.
 
-Call `cleanup` function in `on_ctrl_c` function and use `color` snippet (type `color`) and select `red` to print an error message. Above `on_ctrl_c` function use `func` snippet to define a function. Type `cleanup` as function name and add a `TODO` comment as a place holder.
+Call `cleanup` function in `on_ctrl_c` function and use `color` snippet (type `color`) and select `red` to print an error message. Above `on_ctrl_c` function use `func` snippet to define a function. Type `cleanup` as function name and add a `TODO` comment as a place holder. define `1` as error code for interruption in `Exit codes` section.
 
 ```bash
 #!/usr/bin/env bash
@@ -70,8 +68,7 @@ Call `cleanup` function in `on_ctrl_c` function and use `color` snippet (type `c
 # ==========
 # 0   no error
 # 1   script interrupted
-# 2   unknown argument
-# 3   backup folder doesn't exist
+# TODO: more later
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
@@ -85,7 +82,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -113,8 +110,7 @@ Create a `animation frames` region using `region` snippet. Add two animation fra
 # ==========
 # 0   no error
 # 1   script interrupted
-# 2   unknown argument
-# 3   backup folder doesn't exist
+# TODO: more later
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
@@ -128,7 +124,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -166,7 +162,7 @@ EOF
 
 ### functions
 
-Add a `functions` region. Put a `TODO` comments. Later we write functions which are gonna do the real job here.
+Add a `functions` region. Put a `TODO` comments. Later we write functions here which are gonna do the real job.
 
 ```bash
 #!/usr/bin/env bash
@@ -181,8 +177,7 @@ Add a `functions` region. Put a `TODO` comments. Later we write functions which 
 # ==========
 # 0   no error
 # 1   script interrupted
-# 2   unknown argument
-# 3   backup folder doesn't exist
+# TODO: more later
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
@@ -196,7 +191,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -240,16 +235,16 @@ EOF
 
 ### argument parsing
 
-Add a `argument parsing` region and use `argument parsing` snippet as a scaffold for our parsing process. We need to design our script interface now. As a good practice we add `help` and `version` flags to every script. Also we accept `output` folder as a switch and if it was not passed to our script we are gonna use `~/backups` as default. To add a flag as an example lets play `animation` if such a flag is passed to our script (default to not show). Here is our design summary:
+Add a `argument parsing` region and use `argument parsing` snippet as a scaffold for your parsing process. We need to design our script interface now. As a good practice we add `help` and `version` flags to all scripts. Also we accept `output` folder as a switch (a switch accepts parameter(s) while a flag does not) and if it was not passed to our script we are gonna use `~/backups` as default. To add a flag as an example lets play `animation` if such a flag is passed to our script (default to not play animation). Here is our design summary:
 
-| short |      long    |        Description
-|-------|--------------|---------------------------
-|  -h   | --help       | Prints help message
-|  -v   | --version    | Prints version info
-|  -o   | --output     | Backup directory
-|  -a   | --animation  | Show animation after backup completed
+| short | long        | Description                           | Type   |
+| ----- | ----------- | ------------------------------------- | ------ |
+| -h    | --help      | Prints help message                   | Flag   |
+| -v    | --version   | Prints version info                   | Flag   |
+| -o    | --output    | Backup directory                      | Switch |
+| -a    | --animation | Show animation after backup completed | Flag   |
 
-We define functions when needed and add a place holder for that function in `function` region so we can write those functions later. It turns out we need a variable to store script version. Define it as top of the script as `VERSION` (in summary section). To write error messages use `color` snippet with `red` ink.
+We define functions when needed and add a place holder for that function in `functions` region so we can write those functions later. It turns out we need a variable to store script version. Define it as top of the script as `VERSION` (in summary section). To write error messages use `color` snippet with `red` ink.
 
 ```bash
 #!/usr/bin/env bash
@@ -267,6 +262,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# 4   backup failed due to tar error
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
@@ -280,7 +276,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -394,6 +390,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# TODO: more later
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
@@ -407,7 +404,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -516,7 +513,7 @@ if [ ! -d "$backup_dir" ]; then
 fi
 ```
 
-Now we need to write the actual backup code inside `backup` function and call it but we should take care of few things before that. Since desired folders to backup are known and are not gonna change frequently we use an array at the top of script to hard-code source paths. Use `array declare` snippet to define this array. Also we need to chose a name for our backup file and store it inside a variable. I'm gonna use `yyyy-mm-dd.tar.gz` using `date now short` snippet.
+Now we need to write the actual backup code inside `backup` function and call it but we should take care of few things before that. Since desired folders to backup are known and are not gonna change frequently we use an array at the top of script to hard-code those paths. Use `array declare` snippet to define this array. Also we need to chose a name for our backup file and store it inside a variable. I'm gonna use `yyyy-mm-dd.tar.gz` using `date now short` snippet.
 
 ```bash
 #!/usr/bin/env bash
@@ -534,6 +531,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# TODO: more later
 
 source_paths=(
   '~/Desktop'
@@ -554,7 +552,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -679,6 +677,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# TODO: more later
 
 # assuming all in user home directory
 source_paths=(
@@ -700,7 +699,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -815,7 +814,7 @@ backup
 
 ```
 
-If user interrupts script we need to delete incomplete `tar.gz` file. In this example `cleanup` function doesn't worth to be written as a separate function (delete the file inside `on_ctrl_c` function) but this is an example an usually cleanup code is more than a single line.
+If user interrupts script we need to delete incomplete `tar.gz` file. In this example `cleanup` function doesn't worth to be written as a separate function (delete the file inside `on_ctrl_c` function) but this is a toy example and usually cleanup code is more than just a single line of code.
 
 ```bash
 #!/usr/bin/env bash
@@ -833,6 +832,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# TODO: more later
 
 # assuming all in user home directory
 source_paths=(
@@ -854,7 +854,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -963,7 +963,7 @@ backup
 
 ```
 
-Inside `backup` function we need to make sure `tar` has completed successfully (if `tar` returned `0`). Use `cmd failure check` snippet for that. It turns out we need a new error code for when `tar` fails.
+Inside `backup` function we need to make sure `tar` has completed successfully (if `tar` returned `0`). Use `cmd failure check` snippet for that. It turns out we need a new error code for when `tar` fails. Document error code `4` as when `tar` fails.
 
 ```bash
 #!/usr/bin/env bash
@@ -981,6 +981,7 @@ VERSION="1.0.0"
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# 4   backup failed due to tar error
 
 # assuming all in user home directory
 source_paths=(
@@ -989,12 +990,10 @@ source_paths=(
   '.bash_history'
 )
 
-
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
   rm "$backup_dir"/"$backup_file"
 }
-
 
 # CTRL+C event handler
 function on_ctrl_c() {
@@ -1002,7 +1001,7 @@ function on_ctrl_c() {
   tput cnorm # show cursor. You need this if animation is used.
   cleanup # Call cleanup function
   echo `tput setaf 1`Backup canceled by user!`tput sgr0`
-  
+
   exit 1 # Don't remove. Use a number (1-255) for error code.
 }
 # Put this line at the beginning of your script entry point (after functions used by event handlers).
@@ -1065,7 +1064,7 @@ function backup () {
   if [[ $? != 0 ]]; then
     echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`
     cd "$current_path" # restore current directory
-    exit 4 # TODO: document error code
+    exit 4
   fi
 
   cd "$current_path" # restore current directory
@@ -1120,7 +1119,7 @@ backup
 
 Finally play the animation if flag `-a` or `--animation` is passed to script. Use `if string =` snippet and check if `play_animation` variable is equal to `true`.
 
-For playing animation we need the `animate` function. Inside `functions` region use `fn animation animate` snippet to add this function. As this function documentation says we need to comment out `CTRL+C` event handler because we already have `tput cnorm` in `on_ctrl_c` function which makes cursor visible. Now we can call `animate` function at the end of our script. Use `fx animation animate` snippet to do that.
+For playing animation we need the `animate` function. Inside `functions` region use `fn animation animate` snippet to add this function. As this function documentation says we need to comment out `CTRL+C` event handler because we already have `tput cnorm` in `on_ctrl_c` function which makes cursor visible. Now we can call `animate` function at the end of our script. Use `fx animation animate` snippet to call `animate` function and pass it arguments.
 
 Here we face a new problem. To stop animation user needs to press `CTRL+C` but currently we consider this as an incomplete backup. We need a variable to ignore this if backup is already successfully completed (define `backup_success` variable). Here is the [final script](backup.sh).
 
@@ -1139,6 +1138,7 @@ Here we face a new problem. To stop animation user needs to press `CTRL+C` but c
 # 1   script interrupted
 # 2   unknown argument
 # 3   backup folder doesn't exist
+# 4   backup failed due to tar error
 
 # >>>>>>>>>>>>>>>>>>>>>>>> variables >>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -1234,7 +1234,7 @@ function backup () {
   if [[ $? != 0 ]]; then
     echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`
     cd "$current_path" # restore current directory
-    exit 4 # TODO: document error code
+    exit 4
   fi
 
   cd "$current_path" # restore current directory
@@ -1317,3 +1317,5 @@ if [ "$play_animation" = "true" ]; then
 fi
 
 ```
+
+Congratulations! You wrote a complete shell script to automate some task. This is an investment of your time. You consumed more time now to learn shell scripting so you can automate repetitive tasks and consume less time in the future.
