@@ -1574,6 +1574,11 @@
     "body": "${0:length}=\\${#${1:string}}\n",
     "description": "length of string in characters"
   },
+  "string.random": {
+    "prefix": "string random",
+    "body": "${0:randomString}=$(tr -dc ${1:A-Za-z0-9} </dev/urandom | head -c ${2:8} ; echo '')\n",
+    "description": "random string from provided characters with desired length"
+  },
   "string.replace": {
     "prefix": "string replace",
     "body": "${0:replaced}=`echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g'`\n",

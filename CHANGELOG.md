@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.9.0
+
+- `string random`: Random string from provided characters with desired length.
+
 ## 4.8.0
 
 - `loop infinite`: Infinite loop.

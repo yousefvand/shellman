@@ -440,6 +440,8 @@
 
   - [string length](#string-length)
 
+  - [string random](#string-random)
+
   - [string replace](#string-replace)
 
   - [string reverse](#string-reverse)
@@ -2464,6 +2466,14 @@ length of string in characters [&uarr;](#Commands)
 
 ```bash
 length=${#string}
+```
+
+## `string random`
+
+random string from provided characters with desired length [&uarr;](#Commands)
+
+```bash
+randomString=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8 ; echo '')
 ```
 
 ## `string replace`

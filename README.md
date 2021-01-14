@@ -133,6 +133,6 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-## 4.8.0
+## 4.9.0
 
-- `loop infinite`: Infinite loop.
+- `string random`: Random string from provided characters with desired length.
