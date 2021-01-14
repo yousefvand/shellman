@@ -35,5 +35,8 @@
   "scripts": {
     "build": "node build.js",
     "spellcheck": "npx cspell ./**/*"
+  },
+  "dependencies": {
+    "ovsx": "0.1.0-next.ae88c6d"
   }
 }
