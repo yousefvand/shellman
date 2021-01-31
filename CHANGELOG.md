@@ -1,5 +1,10 @@
 # Change Log
 
+## 4.10.0
+
+- `fn/fx urlencode`: Encode URL.
+- `fn/fx urldecode`: Decode URL.
+
 ## 4.9.0
 
 - `string random`: Random string from provided characters with desired length.

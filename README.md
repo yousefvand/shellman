@@ -133,6 +133,7 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-## 4.9.0
+## 4.10.0
 
-- `string random`: Random string from provided characters with desired length.
+- `fn/fx urlencode`: Encode URL.
+- `fn/fx urldecode`: Decode URL.

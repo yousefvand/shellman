@@ -670,6 +670,36 @@
     ],
     "description": "Scan host's port range (tcp/udp)"
   },
+  "fn-fx.fn-urldecode": {
+    "prefix": "fn urldecode",
+    "body": [
+      "# Usage: urldecode url",
+      "# Credit: https://unix.stackexchange.com/a/187256",
+      "function urldecode () {",
+      "\tlocal url_encoded=\"\\${1//+/ }\"",
+      "\tprintf '%b' \"\\${url_encoded//%/\\\\\\\\x}\"",
+      "}\n"
+    ],
+    "description": "Decodes encoded URL"
+  },
+  "fn-fx.fn-urlencode": {
+    "prefix": "fn urlencode",
+    "body": [
+      "# Usage: urlencode url",
+      "# Credit: https://unix.stackexchange.com/a/187256",
+      "function urlencode () {",
+      "\tlocal length=\"\\${#1}\"",
+      "\tfor (( i = 0; i < length; i++ )); do",
+      "\t\tlocal c=\"\\${1:i:1}\"",
+      "\t\tcase \\$c in",
+      "\t\t\t[a-zA-Z0-9.~_-]) printf \"\\$c\" ;;",
+      "\t\t\t*) printf '%%%02X' \"'\\$c\" ;;",
+      "\t\tesac",
+      "\tdone",
+      "}\n"
+    ],
+    "description": "Encodes URL"
+  },
   "fn-fx.fn-version-compare": {
     "prefix": [
       "fn version compare",
@@ -770,6 +800,16 @@
     "prefix": "fx scan",
     "body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4: toPort}",
     "description": "call scan function to scan a host over a port range"
+  },
+  "fn-fx.fx-urldecode": {
+    "prefix": "fx urldecode",
+    "body": "urldecode ${1:encodedUrl}",
+    "description": "Call urldecode function"
+  },
+  "fn-fx.fx-urlencode": {
+    "prefix": "fx urlencode",
+    "body": "urlencode ${1:url}",
+    "description": "Call urlencode function"
   },
   "fn-fx.fx-version-compare": {
     "prefix": [

@@ -1,0 +1,18 @@
+{
+  "prefix": "fn urlencode",
+  "body": [
+    "# Usage: urlencode url",
+    "# Credit: https://unix.stackexchange.com/a/187256",
+    "function urlencode () {",
+    "\tlocal length=\"\\${#1}\"",
+    "\tfor (( i = 0; i < length; i++ )); do",
+    "\t\tlocal c=\"\\${1:i:1}\"",
+    "\t\tcase \\$c in",
+    "\t\t\t[a-zA-Z0-9.~_-]) printf \"\\$c\" ;;",
+    "\t\t\t*) printf '%%%02X' \"'\\$c\" ;;",
+    "\t\tesac",
+    "\tdone",
+    "}\n"
+  ],
+  "description": "Encodes URL"
+}

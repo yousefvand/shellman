@@ -154,6 +154,10 @@
 
   - [fn scan](#fn-scan)
 
+  - [fn urldecode](#fn-urldecode)
+
+  - [fn urlencode](#fn-urlencode)
+
   - [fn version compare](#fn-version-compare)
 
   - [fx animation animate](#fx-animation-animate)
@@ -177,6 +181,10 @@
   - [fx progress](#fx-progress)
 
   - [fx scan](#fx-scan)
+
+  - [fx urldecode](#fx-urldecode)
+
+  - [fx urlencode](#fx-urlencode)
 
   - [fx version compare](#fx-version-compare)
 
@@ -1283,6 +1291,38 @@ function scan () {
 }
 ```
 
+## `fn urldecode`
+
+Decodes encoded URL [&uarr;](#Commands)
+
+```bash
+# Usage: urldecode url
+# Credit: https://unix.stackexchange.com/a/187256
+function urldecode () {
+  local url_encoded="${1//+/ }"
+  printf '%b' "${url_encoded//%/\\\\x}"
+}
+```
+
+## `fn urlencode`
+
+Encodes URL [&uarr;](#Commands)
+
+```bash
+# Usage: urlencode url
+# Credit: https://unix.stackexchange.com/a/187256
+function urlencode () {
+  local length="${#1}"
+  for (( i = 0; i < length; i++ )); do
+    local c="i:1"
+    case $c in
+      [a-zA-Z0-9.~_-]) printf "$c" ;;
+      *) printf '%%X' "'$c" ;;
+    esac
+  done
+}
+```
+
 ## `fn version compare,fn semver compare`
 
 function: compares two semvers and returns >, < or = [&uarr;](#Commands)
@@ -1407,6 +1447,22 @@ call scan function to scan a host over a port range [&uarr;](#Commands)
 
 ```bash
 scan ${1|tcp,udp|} host fromPort  toPort
+```
+
+## `fx urldecode`
+
+Call urldecode function [&uarr;](#Commands)
+
+```bash
+urldecode encodedUrl
+```
+
+## `fx urlencode`
+
+Call urlencode function [&uarr;](#Commands)
+
+```bash
+urlencode url
 ```
 
 ## `fx version compare,fx semver compare`
