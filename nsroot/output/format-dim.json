@@ -1,5 +1,5 @@
 {
   "prefix": "format dim",
-  "body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n",
+  "body": "echo $(tput dim$(${0:dimmed text})tput sgr0)\n",
   "description": "write in dim"
 }

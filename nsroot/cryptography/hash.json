@@ -1,5 +1,5 @@
 {
   "prefix": "crypto hash",
-  "body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n",
+  "body": "${1:hash}=$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n",
   "description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
 }

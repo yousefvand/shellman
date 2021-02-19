@@ -1,5 +1,5 @@
 {
   "prefix": "ip public",
-  "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
+  "body": "PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n",
   "description": "public ip address"
 }

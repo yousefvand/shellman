@@ -4,9 +4,9 @@
     "# Usage: banner_simple \"my title\"\n",
     "function banner_simple() {",
     "\tlocal msg=\"* \\$* *\"",
-    "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
+    "\tlocal edge=$(echo \"\\$msg\" | sed 's/./*/g')",
     "\techo \"\\$edge\"",
-    "\techo \"`tput bold`\\$msg`tput sgr0`\"",
+    "\techo \"$(tput bold$(\\$msg)tput sgr0)\"",
     "\techo \"\\$edge\"",
     "\techo",
     "}\n"

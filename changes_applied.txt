@@ -1,0 +1,209 @@
+Changing "    "body": "${1:filtered}=(`for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}`)\n"," to "    "body": "${1:filtered}=($(for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}))\n"," in ./snippets/snippets.json
+Changing "      "if [ `command -v ${1:command}` ]; then"," to "      "if [ $(command -v ${1:command}) ]; then"," in ./snippets/snippets.json
+Changing "    "body": "${1:base64Decoded}=`echo -n \"\\$${2:variableToDecode}\" | base64 -d`\n"," to "    "body": "${1:base64Decoded}=$(echo -n \"\\$${2:variableToDecode}\" | base64 -d)\n"," in ./snippets/snippets.json
+Changing "    "body": "${1:base64Encoded}=`echo -n \"\\$${2:variableToEncode}\" | base64`\n"," to "    "body": "${1:base64Encoded}=$(echo -n \"\\$${2:variableToEncode}\" | base64)\n"," in ./snippets/snippets.json
+Changing "    "body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n"," to "    "body": "${1:hash}=$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n"," in ./snippets/snippets.json
+Changing "    "body": "dayOfMonth=`date +%d`\n"," to "    "body": "dayOfMonth=$(date +%d)\n"," in ./snippets/snippets.json
+Changing "    "body": "dayOfWeek=`date +%${1|A,a|}`\n"," to "    "body": "dayOfWeek=$(date +%${1|A,a|})\n"," in ./snippets/snippets.json
+Changing "    "body": "dayOfYear=`date +%j`\n"," to "    "body": "dayOfYear=$(date +%j)\n"," in ./snippets/snippets.json
+Changing "    "body": "dateShort=`date -I`\n"," to "    "body": "dateShort=$(date -I)\n"," in ./snippets/snippets.json
+Changing "    "body": "monthName=`date +%${1|B,b|}`\n"," to "    "body": "monthName=$(date +%${1|B,b|})\n"," in ./snippets/snippets.json
+Changing "    "body": "monthNumber=`date +%m`\n"," to "    "body": "monthNumber=$(date +%m)\n"," in ./snippets/snippets.json
+Changing "    "body": "dateUTC=`date -u`\n"," to "    "body": "dateUTC=$(date -u)\n"," in ./snippets/snippets.json
+Changing "    "body": "year=`date +%Y`\n"," to "    "body": "year=$(date +%Y)\n"," in ./snippets/snippets.json
+Changing "    "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +`\n"," to "    "body": "result=$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +)\n"," in ./snippets/snippets.json
+Changing "    "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n"," to "    "body": "result=$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\")\n"," in ./snippets/snippets.json
+Changing "      "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`"," to "      "\tlocal edge=$(echo \"\\$msg\" | sed 's/./*/g')"," in ./snippets/snippets.json
+Changing "      "\techo \"`tput bold`\\$msg`tput sgr0`\""," to "      "\techo \"$(tput bold$(\\$msg)tput sgr0)\""," in ./snippets/snippets.json
+Changing "      "\techo `tput sitm``tput dim`-\"Change selection: [up/down]  Select: [ENTER]\" `tput sgr0`"," to "      "\techo $(tput sitm$($(tput dim)-\"Change selection: [up/down]  Select: [ENTER]\" )tput sgr0)"," in ./snippets/snippets.json
+Changing "      "\tESC=`echo -e \"\\033\"`"," to "      "\tESC=$(echo -e \"\\033\")"," in ./snippets/snippets.json
+Changing "      "\tprint_option()     { echo  `tput dim` \"   \\$1\" `tput sgr0`; }"," to "      "\tprint_option()     { echo  $(tput dim$( \"   \\$1\" )tput sgr0); }"," in ./snippets/snippets.json
+Changing "      "\tprint_selected()   { echo `tput bold` \"=> \\$1\" `tput sgr0`; }"," to "      "\tprint_selected()   { echo $(tput bold$( \"=> \\$1\" )tput sgr0); }"," in ./snippets/snippets.json
+Changing "      "\tlocal lastrow=`get_cursor_row`"," to "      "\tlocal lastrow=$(get_cursor_row)"," in ./snippets/snippets.json
+Changing "      "\t\tcase `key_input` in"," to "      "\t\tcase $(key_input) in"," in ./snippets/snippets.json
+Changing "      "\t\ttemp=${1%%\".\"*} && indexOf=`echo ${1%%\".\"*} | echo ${#temp}`"," to "      "\t\ttemp=${1%%\".\"*} && indexOf=$(echo ${1%%\".\"*} | echo ${#temp})"," in ./snippets/snippets.json
+Changing "      "\tlocal v1=`echo -e \"\\${1}\" | tr -d '[[:space:]]'`"," to "      "\tlocal v1=$(echo -e \"\\${1}\" | tr -d '[[:space:]]')"," in ./snippets/snippets.json
+Changing "      "\tlocal v2=`echo -e \"\\${2}\" | tr -d '[[:space:]]'`"," to "      "\tlocal v2=$(echo -e \"\\${2}\" | tr -d '[[:space:]]')"," in ./snippets/snippets.json
+Changing "      "\tlocal v1_sub=`sub_ver \\$v1`"," to "      "\tlocal v1_sub=$(sub_ver \\$v1)"," in ./snippets/snippets.json
+Changing "      "\tlocal v2_sub=`sub_ver \\$v2`"," to "      "\tlocal v2_sub=$(sub_ver \\$v2)"," in ./snippets/snippets.json
+Changing "      "\t\tversion_compare `cut_dot \\$v1_sub \\$v1` `cut_dot \\$v2_sub \\$v2`"," to "      "\t\tversion_compare $(cut_dot \\$v1_sub \\$v1$( )cut_dot \\$v2_sub \\$v2)"," in ./snippets/snippets.json
+Changing "    "body": "result=`average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "    "body": "result=$(average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./snippets/snippets.json
+Changing "    "body": "result=`product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "    "body": "result=$(product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./snippets/snippets.json
+Changing "    "body": "result=`sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "    "body": "result=$(sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./snippets/snippets.json
+Changing "      "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do"," to "      "for ${1:col} in $(${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'); do"," in ./snippets/snippets.json
+Changing "    "body": "IPS=`hostname -I`\n"," to "    "body": "IPS=$(hostname -I)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n"," to "    "body": "echo $(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n"," in ./snippets/snippets.json
+Changing "    "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n"," to "    "body": "PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n"," in ./snippets/snippets.json
+Changing "    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n"," to "    "body": "${1:result}=$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc)\n"," in ./snippets/snippets.json
+Changing "    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n"," to "    "body": "${1:result}=$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 0$(${0:black text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 4$(${0:blue text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 6$(${0:cyan text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 2$(${0:green text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 5$(${0:magenta text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 1$(${0:red text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 7$(${0:white text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n"," to "    "body": "echo $(tput setaf 3$(${0:yellow text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput bold`${0:bold text}`tput sgr0`\n"," to "    "body": "echo $(tput bold$(${0:bold text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n"," to "    "body": "echo $(tput dim$(${0:dimmed text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput sitm`${0:italic text}`tput sgr0`\n"," to "    "body": "echo $(tput sitm$(${0:italic text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n"," to "    "body": "echo $(tput rev$(${0:reversed text})tput sgr0)\n"," in ./snippets/snippets.json
+Changing "    "body": "sudo kill -9 `pgrep ${1:process_name}`\n"," to "    "body": "sudo kill -9 $(pgrep ${1:process_name})\n"," in ./snippets/snippets.json
+Changing "      "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=`echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp}`"," to "      "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=$(echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp})"," in ./snippets/snippets.json
+Changing "    "body": "${0:replaced}=`echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g'`\n"," to "    "body": "${0:replaced}=$(echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:reversed}=`echo -e \"\\${${1:var}}\" | rev`\n"," to "    "body": "${0:reversed}=$(echo -e \"\\${${1:var}}\" | rev)\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:frequency}=`sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\"`\n"," to "    "body": "${0:frequency}=$(sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\")\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:substring}=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n"," to "    "body": "${0:substring}=$(echo -e \"\\${${1:var}:${2:offset}:${3:length}}\")\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:toLower}=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`\n"," to "    "body": "${0:toLower}=$(echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:toUpper}=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`\n"," to "    "body": "${0:toUpper}=$(echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]'`\n"," to "    "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//'`\n"," to "    "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//'`\n"," to "    "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//')\n"," in ./snippets/snippets.json
+Changing "    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`\n"," to "    "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n"," in ./snippets/snippets.json
+Changing "    "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n"," to "    "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)\n"," in ./snippets/snippets.json
+Changing "    "body": "sys_uptime=`uptime | cut -d ' ' -f2`\n"," to "    "body": "sys_uptime=$(uptime | cut -d ' ' -f2)\n"," in ./snippets/snippets.json
+Changing "    "body": "timeNowSecondsEpoch=`date +%s`\n"," to "    "body": "timeNowSecondsEpoch=$(date +%s)\n"," in ./snippets/snippets.json
+Changing "    "body": "timeNowLocal=`date +%${1|R,r|}`\n"," to "    "body": "timeNowLocal=$(date +%${1|R,r|})\n"," in ./snippets/snippets.json
+Changing "    "body": "timeNowUTC=`date -u +%R`\n"," to "    "body": "timeNowUTC=$(date -u +%R)\n"," in ./snippets/snippets.json
+Changing "  "body": "${1:filtered}=(`for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}`)\n"," to "  "body": "${1:filtered}=($(for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}))\n"," in ./nsroot/array/filter.json
+Changing "  "body": "${1:base64Encoded}=`echo -n \"\\$${2:variableToEncode}\" | base64`\n"," to "  "body": "${1:base64Encoded}=$(echo -n \"\\$${2:variableToEncode}\" | base64)\n"," in ./nsroot/cryptography/base64-encode.json
+Changing "  "body": "${1:base64Decoded}=`echo -n \"\\$${2:variableToDecode}\" | base64 -d`\n"," to "  "body": "${1:base64Decoded}=$(echo -n \"\\$${2:variableToDecode}\" | base64 -d)\n"," in ./nsroot/cryptography/base64-decode.json
+Changing "  "body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n"," to "  "body": "${1:hash}=$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n"," in ./nsroot/cryptography/hash.json
+Changing "  "body": "dateUTC=`date -u`\n"," to "  "body": "dateUTC=$(date -u)\n"," in ./nsroot/date/utc-long.json
+Changing "  "body": "year=`date +%Y`\n"," to "  "body": "year=$(date +%Y)\n"," in ./nsroot/date/year-current.json
+Changing "  "body": "monthNumber=`date +%m`\n"," to "  "body": "monthNumber=$(date +%m)\n"," in ./nsroot/date/month-number-current.json
+Changing "  "body": "dateShort=`date -I`\n"," to "  "body": "dateShort=$(date -I)\n"," in ./nsroot/date/local-short.json
+Changing "  "body": "dayOfMonth=`date +%d`\n"," to "  "body": "dayOfMonth=$(date +%d)\n"," in ./nsroot/date/day-of-month-current.json
+Changing "  "body": "monthName=`date +%${1|B,b|}`\n"," to "  "body": "monthName=$(date +%${1|B,b|})\n"," in ./nsroot/date/month-name-current.json
+Changing "  "body": "dayOfWeek=`date +%${1|A,a|}`\n"," to "  "body": "dayOfWeek=$(date +%${1|A,a|})\n"," in ./nsroot/date/day-of-week-current.json
+Changing "  "body": "dayOfYear=`date +%j`\n"," to "  "body": "dayOfYear=$(date +%j)\n"," in ./nsroot/date/day-of-year-current.json
+Changing "    "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do"," to "    "for ${1:col} in $(${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'); do"," in ./nsroot/internal/for-in-column.json
+Changing "  "body": "echo `tput bold`${0:bold text}`tput sgr0`\n"," to "  "body": "echo $(tput bold$(${0:bold text})tput sgr0)\n"," in ./nsroot/output/format-bold.json
+Changing "  "body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 3$(${0:yellow text})tput sgr0)\n"," in ./nsroot/output/color-yellow.json
+Changing "  "body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 2$(${0:green text})tput sgr0)\n"," in ./nsroot/output/color-green.json
+Changing "  "body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n"," to "  "body": "echo $(tput dim$(${0:dimmed text})tput sgr0)\n"," in ./nsroot/output/format-dim.json
+Changing "  "body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 0$(${0:black text})tput sgr0)\n"," in ./nsroot/output/color-black.json
+Changing "  "body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 5$(${0:magenta text})tput sgr0)\n"," in ./nsroot/output/color-magenta.json
+Changing "  "body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 6$(${0:cyan text})tput sgr0)\n"," in ./nsroot/output/color-cyan.json
+Changing "  "body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 4$(${0:blue text})tput sgr0)\n"," in ./nsroot/output/color-blue.json
+Changing "  "body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 7$(${0:white text})tput sgr0)\n"," in ./nsroot/output/color-white.json
+Changing "  "body": "echo `tput sitm`${0:italic text}`tput sgr0`\n"," to "  "body": "echo $(tput sitm$(${0:italic text})tput sgr0)\n"," in ./nsroot/output/format-italic.json
+Changing "  "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n"," to "  "body": "echo $(tput rev$(${0:reversed text})tput sgr0)\n"," in ./nsroot/output/format-reverse.json
+Changing "  "body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n"," to "  "body": "echo $(tput setaf 1$(${0:red text})tput sgr0)\n"," in ./nsroot/output/color-red.json
+Changing "  "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +`\n"," to "  "body": "result=$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +)\n"," in ./nsroot/filesystem/file-search.json
+Changing "  "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n"," to "  "body": "result=$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\")\n"," in ./nsroot/filesystem/find-files-or-directories.json
+Changing "  "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n"," to "  "body": "${1:result}=$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc)\n"," in ./nsroot/math/sqrt.json
+Changing "  "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n"," to "  "body": "${1:result}=$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc)\n"," in ./nsroot/math/precision.json
+Changing "  "body": "timeNowSecondsEpoch=`date +%s`\n"," to "  "body": "timeNowSecondsEpoch=$(date +%s)\n"," in ./nsroot/time/epoch-seconds.json
+Changing "  "body": "timeNowUTC=`date -u +%R`\n"," to "  "body": "timeNowUTC=$(date -u +%R)\n"," in ./nsroot/time/time-utc.json
+Changing "  "body": "timeNowLocal=`date +%${1|R,r|}`\n"," to "  "body": "timeNowLocal=$(date +%${1|R,r|})\n"," in ./nsroot/time/local-time-current.json
+Changing "  "body": "sys_uptime=`uptime | cut -d ' ' -f2`\n"," to "  "body": "sys_uptime=$(uptime | cut -d ' ' -f2)\n"," in ./nsroot/system/uptime.json
+Changing "  "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n"," to "  "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)\n"," in ./nsroot/system/memory-info.json
+Changing "  "body": "result=`product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "  "body": "result=$(product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./nsroot/fn-fx/fx-math-product.json
+Changing "  "body": "result=`average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "  "body": "result=$(average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./nsroot/fn-fx/fx-math-average.json
+Changing "  "body": "result=`sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n"," to "  "body": "result=$(sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n"," in ./nsroot/fn-fx/fx-math-sum.json
+Changing "    "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`"," to "    "\tlocal edge=$(echo \"\\$msg\" | sed 's/./*/g')"," in ./nsroot/fn-fx/fn-banner-simple.json
+Changing "    "\techo \"`tput bold`\\$msg`tput sgr0`\""," to "    "\techo \"$(tput bold$(\\$msg)tput sgr0)\""," in ./nsroot/fn-fx/fn-banner-simple.json
+Changing "    "\techo `tput sitm``tput dim`-\"Change selection: [up/down]  Select: [ENTER]\" `tput sgr0`"," to "    "\techo $(tput sitm$($(tput dim)-\"Change selection: [up/down]  Select: [ENTER]\" )tput sgr0)"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\tESC=`echo -e \"\\033\"`"," to "    "\tESC=$(echo -e \"\\033\")"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\tprint_option()     { echo  `tput dim` \"   \\$1\" `tput sgr0`; }"," to "    "\tprint_option()     { echo  $(tput dim$( \"   \\$1\" )tput sgr0); }"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\tprint_selected()   { echo `tput bold` \"=> \\$1\" `tput sgr0`; }"," to "    "\tprint_selected()   { echo $(tput bold$( \"=> \\$1\" )tput sgr0); }"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\tlocal lastrow=`get_cursor_row`"," to "    "\tlocal lastrow=$(get_cursor_row)"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\t\tcase `key_input` in"," to "    "\t\tcase $(key_input) in"," in ./nsroot/fn-fx/fn-options.json
+Changing "    "\t\ttemp=${1%%\".\"*} && indexOf=`echo ${1%%\".\"*} | echo ${#temp}`"," to "    "\t\ttemp=${1%%\".\"*} && indexOf=$(echo ${1%%\".\"*} | echo ${#temp})"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "    "\tlocal v1=`echo -e \"\\${1}\" | tr -d '[[:space:]]'`"," to "    "\tlocal v1=$(echo -e \"\\${1}\" | tr -d '[[:space:]]')"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "    "\tlocal v2=`echo -e \"\\${2}\" | tr -d '[[:space:]]'`"," to "    "\tlocal v2=$(echo -e \"\\${2}\" | tr -d '[[:space:]]')"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "    "\tlocal v1_sub=`sub_ver \\$v1`"," to "    "\tlocal v1_sub=$(sub_ver \\$v1)"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "    "\tlocal v2_sub=`sub_ver \\$v2`"," to "    "\tlocal v2_sub=$(sub_ver \\$v2)"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "    "\t\tversion_compare `cut_dot \\$v1_sub \\$v1` `cut_dot \\$v2_sub \\$v2`"," to "    "\t\tversion_compare $(cut_dot \\$v1_sub \\$v1$( )cut_dot \\$v2_sub \\$v2)"," in ./nsroot/fn-fx/fn-version-compare.json
+Changing "  "body": "${0:substring}=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n"," to "  "body": "${0:substring}=$(echo -e \"\\${${1:var}:${2:offset}:${3:length}}\")\n"," in ./nsroot/string/substring.json
+Changing "  "body": "${0:toLower}=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`\n"," to "  "body": "${0:toLower}=$(echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]')\n"," in ./nsroot/string/to-lower.json
+Changing "  "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//'`\n"," to "  "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//')\n"," in ./nsroot/string/trim-right.json
+Changing "    "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=`echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp}`"," to "    "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=$(echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp})"," in ./nsroot/string/first-index-substring.json
+Changing "  "body": "${0:frequency}=`sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\"`\n"," to "  "body": "${0:frequency}=$(sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\")\n"," in ./nsroot/string/substring-count.json
+Changing "  "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`\n"," to "  "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n"," in ./nsroot/string/trim.json
+Changing "  "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//'`\n"," to "  "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//')\n"," in ./nsroot/string/trim-left.json
+Changing "  "body": "${0:replaced}=`echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g'`\n"," to "  "body": "${0:replaced}=$(echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g')\n"," in ./nsroot/string/replace.json
+Changing "  "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]'`\n"," to "  "body": "${0:trimmed}=$(echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]')\n"," in ./nsroot/string/trim-all.json
+Changing "  "body": "${0:reversed}=`echo -e \"\\${${1:var}}\" | rev`\n"," to "  "body": "${0:reversed}=$(echo -e \"\\${${1:var}}\" | rev)\n"," in ./nsroot/string/reverse.json
+Changing "  "body": "${0:toUpper}=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`\n"," to "  "body": "${0:toUpper}=$(echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]')\n"," in ./nsroot/string/to-upper.json
+Changing "    "if [ `command -v ${1:command}` ]; then"," to "    "if [ $(command -v ${1:command}) ]; then"," in ./nsroot/command/if-exists.json
+Changing "  "body": "IPS=`hostname -I`\n"," to "  "body": "IPS=$(hostname -I)\n"," in ./nsroot/ip/array-of-local.json
+Changing "  "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n"," to "  "body": "PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n"," in ./nsroot/ip/public-address.json
+Changing "  "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n"," to "  "body": "echo $(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n"," in ./nsroot/ip/info.json
+Changing "  "body": "sudo kill -9 `pgrep ${1:process_name}`\n"," to "  "body": "sudo kill -9 $(pgrep ${1:process_name})\n"," in ./nsroot/process/process-kill.json
+Changing "    echo `tput setaf 1`Backup canceled by user!`tput sgr0`" to "    echo $(tput setaf 1$(Backup canceled by user!)tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "  echo `tput setaf 2`Backup started...`tput sgr0`" to "  echo $(tput setaf 2$(Backup started...)tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "  current_path=`pwd` # save current directory" to "  current_path=$(pwd) # save current directory" in ./samples/backup-tool/backup.sh
+Changing "    echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`" to "    echo $(tput setaf 1$(Unknown error. Backup failed!)tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`" to "    echo $(tput setaf 1$(Error! Unknown argument: "$1")tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "backup_file=`date -I`.tar.gz" to "backup_file=$(date -I).tar.gz" in ./samples/backup-tool/backup.sh
+Changing "  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`" to "  echo $(tput setaf 1$("Error! Backup directory doesn't exist: $backup_dir")tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "echo `tput setaf 4`Backup complete.`tput sgr0`" to "echo $(tput setaf 4$(Backup complete.)tput sgr0)" in ./samples/backup-tool/backup.sh
+Changing "filtered=(`for i in ${myArray[@]} ; do echo $i; done | grep pattern`)" to "filtered=($(for i in ${myArray[@]} ; do echo $i; done | grep pattern))" in ./COMMANDS.md
+Changing "if [ `command -v command` ]; then" to "if [ $(command -v command) ]; then" in ./COMMANDS.md
+Changing "base64Decoded=`echo -n "$variableToDecode" | base64 -d`" to "base64Decoded=$(echo -n "$variableToDecode" | base64 -d)" in ./COMMANDS.md
+Changing "base64Encoded=`echo -n "$variableToEncode" | base64`" to "base64Encoded=$(echo -n "$variableToEncode" | base64)" in ./COMMANDS.md
+Changing "hash=`echo -n "$variableToHash" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`" to "hash=$(echo -n "$variableToHash" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')" in ./COMMANDS.md
+Changing "dayOfMonth=`date +%d`" to "dayOfMonth=$(date +%d)" in ./COMMANDS.md
+Changing "dayOfWeek=`date +%${1|A,a|}`" to "dayOfWeek=$(date +%${1|A,a|})" in ./COMMANDS.md
+Changing "dayOfYear=`date +%j`" to "dayOfYear=$(date +%j)" in ./COMMANDS.md
+Changing "dateShort=`date -I`" to "dateShort=$(date -I)" in ./COMMANDS.md
+Changing "monthName=`date +%${1|B,b|}`" to "monthName=$(date +%${1|B,b|})" in ./COMMANDS.md
+Changing "monthNumber=`date +%m`" to "monthNumber=$(date +%m)" in ./COMMANDS.md
+Changing "dateUTC=`date -u`" to "dateUTC=$(date -u)" in ./COMMANDS.md
+Changing "year=`date +%Y`" to "year=$(date +%Y)" in ./COMMANDS.md
+Changing "result=`find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +`" to "result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +)" in ./COMMANDS.md
+Changing "result=`find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name "criteria"`" to "result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name "criteria")" in ./COMMANDS.md
+Changing "  local edge=`echo "$msg" | sed 's/./*/g'`" to "  local edge=$(echo "$msg" | sed 's/./*/g')" in ./COMMANDS.md
+Changing "  echo "`tput bold`$msg`tput sgr0`"" to "  echo "$(tput bold$($msg)tput sgr0)"" in ./COMMANDS.md
+Changing "  echo `tput sitm``tput dim`-"Change selection: [up/down]  Select: [ENTER]" `tput sgr0`" to "  echo $(tput sitm$($(tput dim)-"Change selection: [up/down]  Select: [ENTER]" )tput sgr0)" in ./COMMANDS.md
+Changing "  ESC=`echo -e "\033"`" to "  ESC=$(echo -e "\033")" in ./COMMANDS.md
+Changing "  print_option()     { echo  `tput dim` "   $1" `tput sgr0`; }" to "  print_option()     { echo  $(tput dim$( "   $1" )tput sgr0); }" in ./COMMANDS.md
+Changing "  print_selected()   { echo `tput bold` "=> $1" `tput sgr0`; }" to "  print_selected()   { echo $(tput bold$( "=> $1" )tput sgr0); }" in ./COMMANDS.md
+Changing "  local lastrow=`get_cursor_row`" to "  local lastrow=$(get_cursor_row)" in ./COMMANDS.md
+Changing "    case `key_input` in" to "    case $(key_input) in" in ./COMMANDS.md
+Changing "    temp=${1%%"."*} && indexOf=`echo ${1%%"."*} | echo ${#temp}`" to "    temp=${1%%"."*} && indexOf=$(echo ${1%%"."*} | echo ${#temp})" in ./COMMANDS.md
+Changing "  local v1=`echo -e "${1}" | tr -d '[[:space:]]'`" to "  local v1=$(echo -e "${1}" | tr -d '[[:space:]]')" in ./COMMANDS.md
+Changing "  local v2=`echo -e "${2}" | tr -d '[[:space:]]'`" to "  local v2=$(echo -e "${2}" | tr -d '[[:space:]]')" in ./COMMANDS.md
+Changing "  local v1_sub=`sub_ver $v1`" to "  local v1_sub=$(sub_ver $v1)" in ./COMMANDS.md
+Changing "  local v2_sub=`sub_ver $v2`" to "  local v2_sub=$(sub_ver $v2)" in ./COMMANDS.md
+Changing "    version_compare `cut_dot $v1_sub $v1` `cut_dot $v2_sub $v2`" to "    version_compare $(cut_dot $v1_sub $v1$( )cut_dot $v2_sub $v2)" in ./COMMANDS.md
+Changing "result=`average $var1 $var2 $var3`" to "result=$(average $var1 $var2 $var3)" in ./COMMANDS.md
+Changing "result=`product $var1 $var2 $var3`" to "result=$(product $var1 $var2 $var3)" in ./COMMANDS.md
+Changing "result=`sum $var1 $var2 $var3`" to "result=$(sum $var1 $var2 $var3)" in ./COMMANDS.md
+Changing "for col in `docker images | awk '{ print $1":"$2 }'`; do" to "for col in $(docker images | awk '{ print $1":"$2 }'); do" in ./COMMANDS.md
+Changing "IPS=`hostname -I`" to "IPS=$(hostname -I)" in ./COMMANDS.md
+Changing "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`" to "echo $(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})" in ./COMMANDS.md
+Changing "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`" to "PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})" in ./COMMANDS.md
+Changing "result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc`" to "result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc)" in ./COMMANDS.md
+Changing "result=`echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt($var)" | bc`" to "result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt($var)" | bc)" in ./COMMANDS.md
+Changing "echo `tput setaf 0`black text`tput sgr0`" to "echo $(tput setaf 0$(black text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 4`blue text`tput sgr0`" to "echo $(tput setaf 4$(blue text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 6`cyan text`tput sgr0`" to "echo $(tput setaf 6$(cyan text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 2`green text`tput sgr0`" to "echo $(tput setaf 2$(green text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 5`magenta text`tput sgr0`" to "echo $(tput setaf 5$(magenta text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 1`red text`tput sgr0`" to "echo $(tput setaf 1$(red text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 7`white text`tput sgr0`" to "echo $(tput setaf 7$(white text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput setaf 3`yellow text`tput sgr0`" to "echo $(tput setaf 3$(yellow text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput bold`bold text`tput sgr0`" to "echo $(tput bold$(bold text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput dim`dimmed text`tput sgr0`" to "echo $(tput dim$(dimmed text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput sitm`italic text`tput sgr0`" to "echo $(tput sitm$(italic text)tput sgr0)" in ./COMMANDS.md
+Changing "echo `tput rev`reversed text`tput sgr0`" to "echo $(tput rev$(reversed text)tput sgr0)" in ./COMMANDS.md
+Changing "sudo kill -9 `pgrep process_name`" to "sudo kill -9 $(pgrep process_name)" in ./COMMANDS.md
+Changing "temp=${string%%"substring"*} && indexOf=`echo ${string%%"substring"*} | echo ${#temp}`" to "temp=${string%%"substring"*} && indexOf=$(echo ${string%%"substring"*} | echo ${#temp})" in ./COMMANDS.md
+Changing "replaced=`echo -e "${string}" | sed -e 's/find/replace/g'`" to "replaced=$(echo -e "${string}" | sed -e 's/find/replace/g')" in ./COMMANDS.md
+Changing "reversed=`echo -e "${var}" | rev`" to "reversed=$(echo -e "${var}" | rev)" in ./COMMANDS.md
+Changing "frequency=`sed -E 's/(.)/\1\n/g' <<<"$string" | grep -c "$substring"`" to "frequency=$(sed -E 's/(.)/\1\n/g' <<<"$string" | grep -c "$substring")" in ./COMMANDS.md
+Changing "substring=`echo -e "${var:offset:length}"`" to "substring=$(echo -e "${var:offset:length}")" in ./COMMANDS.md
+Changing "toLower=`echo -e "${var}" | tr '[:upper:]' '[:lower:]'`" to "toLower=$(echo -e "${var}" | tr '[:upper:]' '[:lower:]')" in ./COMMANDS.md
+Changing "toUpper=`echo -e "${var}" | tr '[:lower:]' '[:upper:]'`" to "toUpper=$(echo -e "${var}" | tr '[:lower:]' '[:upper:]')" in ./COMMANDS.md
+Changing "trimmed=`echo -e "${var}" | tr -d '[[:space:]]'`" to "trimmed=$(echo -e "${var}" | tr -d '[[:space:]]')" in ./COMMANDS.md
+Changing "trimmed=`echo -e "${var}" | sed -e 's/^[[:space:]]*//'`" to "trimmed=$(echo -e "${var}" | sed -e 's/^[[:space:]]*//')" in ./COMMANDS.md
+Changing "trimmed=`echo -e "${var}" | sed -e 's/[[:space:]]*$//'`" to "trimmed=$(echo -e "${var}" | sed -e 's/[[:space:]]*$//')" in ./COMMANDS.md
+Changing "trimmed=`echo -e "${var}" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//'`" to "trimmed=$(echo -e "${var}" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//')" in ./COMMANDS.md
+Changing "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1`" to "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=$(cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1)" in ./COMMANDS.md
+Changing "sys_uptime=`uptime | cut -d ' ' -f2`" to "sys_uptime=$(uptime | cut -d ' ' -f2)" in ./COMMANDS.md
+Changing "timeNowSecondsEpoch=`date +%s`" to "timeNowSecondsEpoch=$(date +%s)" in ./COMMANDS.md
+Changing "timeNowLocal=`date +%${1|R,r|}`" to "timeNowLocal=$(date +%${1|R,r|})" in ./COMMANDS.md
+Changing "timeNowUTC=`date -u +%R`" to "timeNowUTC=$(date -u +%R)" in ./COMMANDS.md

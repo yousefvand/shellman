@@ -1,5 +1,5 @@
 {
   "prefix": "array filter",
-  "body": "${1:filtered}=(`for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}`)\n",
+  "body": "${1:filtered}=($(for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}))\n",
   "description": "filter elements of an array based on given pattern"
 }

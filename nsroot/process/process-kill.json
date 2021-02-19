@@ -1,5 +1,5 @@
 {
   "prefix": "process kill",
-  "body": "sudo kill -9 `pgrep ${1:process_name}`\n",
+  "body": "sudo kill -9 $(pgrep ${1:process_name})\n",
   "description": "Kill process by name"
 }

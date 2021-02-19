@@ -1,7 +1,7 @@
 {
   "prefix": "for in column",
   "body": [
-    "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
+    "for ${1:col} in $(${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'); do",
     "\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
     "\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
     "done\n"

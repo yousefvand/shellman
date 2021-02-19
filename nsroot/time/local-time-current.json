@@ -1,5 +1,5 @@
 {
   "prefix": "time now local",
-  "body": "timeNowLocal=`date +%${1|R,r|}`\n",
+  "body": "timeNowLocal=$(date +%${1|R,r|})\n",
   "description": "current local time (24hrs/12hrs R/r)"
 }

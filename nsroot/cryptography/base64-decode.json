@@ -1,5 +1,5 @@
 {
   "prefix": "crypto base64 decode",
-  "body": "${1:base64Decoded}=`echo -n \"\\$${2:variableToDecode}\" | base64 -d`\n",
+  "body": "${1:base64Decoded}=$(echo -n \"\\$${2:variableToDecode}\" | base64 -d)\n",
   "description": "decode variable from base64"
 }
