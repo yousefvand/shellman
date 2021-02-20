@@ -1,5 +1,5 @@
 {
   "prefix": "date now monthName",
-  "body": "monthName=`date +%${1|B,b|}`\n",
+  "body": "monthName=\\$(date +%${1|B,b|})\n",
   "description": "current month name (full/abbreviated B/b)"
 }
