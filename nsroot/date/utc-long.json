@@ -1,5 +1,5 @@
 {
   "prefix": "date now UTC",
-  "body": "dateUTC=`date -u`\n",
+  "body": "dateUTC=\\$(date -u)\n",
   "description": "coordinated Universal Time"
 }

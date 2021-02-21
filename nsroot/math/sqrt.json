@@ -1,5 +1,5 @@
 {
   "prefix": "math √",
-  "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
+  "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc)\n",
   "description": "square root of var up to scale decimal places"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "fx math product",
-  "body": "result=`product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n",
+  "body": "result=\\$(product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
   "description": "Call math product function"
 }

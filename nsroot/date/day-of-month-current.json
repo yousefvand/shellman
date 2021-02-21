@@ -1,5 +1,5 @@
 {
   "prefix": "date now dayOfMonth",
-  "body": "dayOfMonth=`date +%d`\n",
+  "body": "dayOfMonth=\\$(date +%d)\n",
   "description": "current day of month (1..31)"
 }

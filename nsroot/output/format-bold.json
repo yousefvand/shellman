@@ -1,5 +1,5 @@
 {
   "prefix": "format bold",
-  "body": "echo `tput bold`${0:bold text}`tput sgr0`\n",
+  "body": "echo \\$(tput bold\\$(${0:bold text})tput sgr0)\n",
   "description": "write in bold"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "color blue",
-  "body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n",
+  "body": "echo \\$(tput setaf 4\\$(${0:blue text})tput sgr0)\n",
   "description": "write in blue"
 }

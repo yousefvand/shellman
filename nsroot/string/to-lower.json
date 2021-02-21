@@ -1,5 +1,5 @@
 {
   "prefix": "string toLower",
-  "body": "${0:toLower}=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`\n",
+  "body": "${0:toLower}=\\$(echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]')\n",
   "description": "convert string to lowercase"
 }
