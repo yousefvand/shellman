@@ -1,5 +1,5 @@
 {
   "prefix": "format italic",
-  "body": "echo \\$(tput sitm\\$(${0:italic text})tput sgr0)\n",
+  "body": "echo \\$(tput sitm)${0:italic text}\\$(tput sgr0)\n",
   "description": "write in italic"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "format reverse",
-  "body": "echo \\$(tput rev\\$(${0:reversed text})tput sgr0)\n",
+  "body": "echo \\$(tput rev)${0:reversed text}\\$(tput sgr0)\n",
   "description": "write in reverse"
 }

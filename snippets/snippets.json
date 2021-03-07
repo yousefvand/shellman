@@ -57,7 +57,7 @@
   },
   "array.filter": {
     "prefix": "array filter",
-    "body": "${1:filtered}=(`for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}`)\n",
+    "body": "${1:filtered}=(\\$(for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}))\n",
     "description": "filter elements of an array based on given pattern"
   },
   "array.iterate": {
@@ -115,7 +115,7 @@
   "command.if-exists": {
     "prefix": "if cmd exists",
     "body": [
-      "if [ `command -v ${1:command}` ]; then",
+      "if [ \\$(command -v ${1:command}) ]; then",
       "\t${2:# body}",
       "fi\n"
     ],
@@ -147,57 +147,57 @@
   },
   "cryptography.base64-decode": {
     "prefix": "crypto base64 decode",
-    "body": "${1:base64Decoded}=`echo -n \"\\$${2:variableToDecode}\" | base64 -d`\n",
+    "body": "${1:base64Decoded}=\\$(echo -n \"\\$${2:variableToDecode}\" | base64 -d)\n",
     "description": "decode variable from base64"
   },
   "cryptography.base64-encode": {
     "prefix": "crypto base64 encode",
-    "body": "${1:base64Encoded}=`echo -n \"\\$${2:variableToEncode}\" | base64`\n",
+    "body": "${1:base64Encoded}=\\$(echo -n \"\\$${2:variableToEncode}\" | base64)\n",
     "description": "encode variable to base64"
   },
   "cryptography.hash": {
     "prefix": "crypto hash",
-    "body": "${1:hash}=`echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' '`\n",
+    "body": "${1:hash}=\\$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n",
     "description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
   },
   "date.day-of-month-current": {
     "prefix": "date now dayOfMonth",
-    "body": "dayOfMonth=`date +%d`\n",
+    "body": "dayOfMonth=\\$(date +%d)\n",
     "description": "current day of month (1..31)"
   },
   "date.day-of-week-current": {
     "prefix": "date now dayOfWeek",
-    "body": "dayOfWeek=`date +%${1|A,a|}`\n",
+    "body": "dayOfWeek=\\$(date +%${1|A,a|})\n",
     "description": "current day of week name (full/abbreviated A/a)"
   },
   "date.day-of-year-current": {
     "prefix": "date now dayOfYear",
-    "body": "dayOfYear=`date +%j`\n",
+    "body": "dayOfYear=\\$(date +%j)\n",
     "description": "current day of year (1..366)"
   },
   "date.local-short": {
     "prefix": "date now short",
-    "body": "dateShort=`date -I`\n",
+    "body": "dateShort=\\$(date -I)\n",
     "description": "yyyy/mm/dd"
   },
   "date.month-name-current": {
     "prefix": "date now monthName",
-    "body": "monthName=`date +%${1|B,b|}`\n",
+    "body": "monthName=\\$(date +%${1|B,b|})\n",
     "description": "current month name (full/abbreviated B/b)"
   },
   "date.month-number-current": {
     "prefix": "date now monthNumber",
-    "body": "monthNumber=`date +%m`\n",
+    "body": "monthNumber=\\$(date +%m)\n",
     "description": "current month number (1..12)"
   },
   "date.utc-long": {
     "prefix": "date now UTC",
-    "body": "dateUTC=`date -u`\n",
+    "body": "dateUTC=\\$(date -u)\n",
     "description": "coordinated Universal Time"
   },
   "date.year-current": {
     "prefix": "date now year",
-    "body": "year=`date +%Y`\n",
+    "body": "year=\\$(date +%Y)\n",
     "description": "current Year"
   },
   "event.on-ctrl-c": {
@@ -277,7 +277,7 @@
       "search in files",
       "find in files"
     ],
-    "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +`\n",
+    "body": "result=\\$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +)\n",
     "description": "find files which contain search criteria"
   },
   "filesystem.file-write-multiline-sudo": {
@@ -313,7 +313,7 @@
       "file find",
       "directory find"
     ],
-    "body": "result=`find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\"`\n",
+    "body": "result=\\$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name \"${4:criteria}\")\n",
     "description": "find files (-type f) or directories (-type d) by name"
   },
   "filesystem.if-directory-exists": {
@@ -532,9 +532,9 @@
       "# Usage: banner_simple \"my title\"\n",
       "function banner_simple() {",
       "\tlocal msg=\"* \\$* *\"",
-      "\tlocal edge=`echo \"\\$msg\" | sed 's/./*/g'`",
+      "\tlocal edge=\\$(echo \"\\$msg\" | sed 's/./*/g')",
       "\techo \"\\$edge\"",
-      "\techo \"`tput bold`\\$msg`tput sgr0`\"",
+      "\techo \"\\$(tput bold)\\$msg\\$(tput sgr0)\"",
       "\techo \"\\$edge\"",
       "\techo",
       "}\n"
@@ -602,18 +602,18 @@
       "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"\n",
       "function chooseOption() {",
       "\techo \"\\$1\"; shift",
-      "\techo `tput sitm``tput dim`-\"Change selection: [up/down]  Select: [ENTER]\" `tput sgr0`",
+      "\techo \\$(tput sitm)\\$(tput dim)-\"Change selection: [up/down]  Select: [ENTER]\" \\$(tput sgr0)",
       "\tlocal selected=\"\\$1\"; shift\n",
-      "\tESC=`echo -e \"\\033\"`",
+      "\tESC=\\$(echo -e \"\\033\")",
       "\tcursor_blink_on()  { tput cnorm; }",
       "\tcursor_blink_off() { tput civis; }",
       "\tcursor_to()        { tput cup \\$((\\$1-1)); }",
-      "\tprint_option()     { echo  `tput dim` \"   \\$1\" `tput sgr0`; }",
-      "\tprint_selected()   { echo `tput bold` \"=> \\$1\" `tput sgr0`; }",
+      "\tprint_option()     { echo  \\$(tput dim) \"   \\$1\" \\$(tput sgr0); }",
+      "\tprint_selected()   { echo \\$(tput bold) \"=> \\$1\" \\$(tput sgr0); }",
       "\tget_cursor_row()   { IFS=';' read -sdR -p \\$'\\E[6n' ROW COL; echo \\${ROW#*[}; }",
       "\tkey_input()        { read -s -n3 key 2>/dev/null >&2; [[ \\$key = \\$ESC[A ]] && echo up; [[ \\$key = \\$ESC[B ]] && echo down; [[ \\$key = \"\" ]] && echo enter; }\n",
       "\tfor opt; do echo; done\n",
-      "\tlocal lastrow=`get_cursor_row`",
+      "\tlocal lastrow=\\$(get_cursor_row)",
       "\tlocal startrow=\\$((\\$lastrow - \\$#))",
       "\ttrap \"cursor_blink_on; echo; echo; exit\" 2",
       "\tcursor_blink_off\n",
@@ -629,7 +629,7 @@
       "\t\t\tfi",
       "\t\t\t((idx++))",
       "\t\tdone\n",
-      "\t\tcase `key_input` in",
+      "\t\tcase \\$(key_input) in",
       "\t\t\tenter) break;;",
       "\t\t\tup)    ((selected--)); [ \\$selected -lt 0 ] && selected=\\$((\\$# - 1));;",
       "\t\t\tdown)  ((selected++)); [ \\$selected -ge \\$# ] && selected=0;;",
@@ -710,7 +710,7 @@
       "function version_compare () {",
       "\tfunction sub_ver () {",
       "\t\tlocal len=${#1}",
-      "\t\ttemp=${1%%\".\"*} && indexOf=`echo ${1%%\".\"*} | echo ${#temp}`",
+      "\t\ttemp=${1%%\".\"*} && indexOf=\\$(echo ${1%%\".\"*} | echo ${#temp})",
       "\t\techo -e \"\\${1:0:indexOf}\"",
       "\t}",
       "\tfunction cut_dot () {",
@@ -721,16 +721,16 @@
       "\tif [ -z \"\\$1\" ] || [ -z \"\\$2\" ]; then",
       "\t\techo \"=\" && exit 0",
       "\tfi",
-      "\tlocal v1=`echo -e \"\\${1}\" | tr -d '[[:space:]]'`",
-      "\tlocal v2=`echo -e \"\\${2}\" | tr -d '[[:space:]]'`",
-      "\tlocal v1_sub=`sub_ver \\$v1`",
-      "\tlocal v2_sub=`sub_ver \\$v2`",
+      "\tlocal v1=\\$(echo -e \"\\${1}\" | tr -d '[[:space:]]')",
+      "\tlocal v2=\\$(echo -e \"\\${2}\" | tr -d '[[:space:]]')",
+      "\tlocal v1_sub=\\$(sub_ver \\$v1)",
+      "\tlocal v2_sub=\\$(sub_ver \\$v2)",
       "\tif (( v1_sub > v2_sub )); then",
       "\t\techo \">\"",
       "\telif (( v1_sub < v2_sub )); then",
       "\t\techo \"<\"",
       "\telse",
-      "\t\tversion_compare `cut_dot \\$v1_sub \\$v1` `cut_dot \\$v2_sub \\$v2`",
+      "\t\tversion_compare \\$(cut_dot \\$v1_sub \\$v1) \\$(cut_dot \\$v2_sub \\$v2)",
       "\tfi",
       "}\n"
     ],
@@ -769,17 +769,17 @@
   },
   "fn-fx.fx-math-average": {
     "prefix": "fx math average",
-    "body": "result=`average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n",
+    "body": "result=\\$(average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
     "description": "Call math average function"
   },
   "fn-fx.fx-math-product": {
     "prefix": "fx math product",
-    "body": "result=`product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n",
+    "body": "result=\\$(product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
     "description": "Call math product function"
   },
   "fn-fx.fx-math-sum": {
     "prefix": "fx math sum",
-    "body": "result=`sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3}`\n",
+    "body": "result=\\$(sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
     "description": "Call math sum function"
   },
   "fn-fx.fx-options": {
@@ -1152,7 +1152,7 @@
   "internal.for-in-column": {
     "prefix": "for in column",
     "body": [
-      "for ${1:col} in `${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'`; do",
+      "for ${1:col} in \\$(${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'); do",
       "\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
       "\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
       "done\n"
@@ -1228,17 +1228,17 @@
   },
   "ip.array-of-local": {
     "prefix": "ip local IPs",
-    "body": "IPS=`hostname -I`\n",
+    "body": "IPS=\\$(hostname -I)\n",
     "description": "Array of local IPs"
   },
   "ip.info": {
     "prefix": "ip info",
-    "body": "echo `curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|}`\n",
+    "body": "echo \\$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n",
     "description": "public ip information"
   },
   "ip.public-address": {
     "prefix": "ip public",
-    "body": "PUBLIC_IP=`curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|}`\n",
+    "body": "PUBLIC_IP=\\$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n",
     "description": "public ip address"
   },
   "math.add": {
@@ -1328,7 +1328,7 @@
   },
   "math.precision": {
     "prefix": "math 0.00",
-    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc`\n",
+    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc)\n",
     "description": "math operations with up to scale decimal places precision"
   },
   "math.random-number": {
@@ -1338,7 +1338,7 @@
   },
   "math.sqrt": {
     "prefix": "math √",
-    "body": "${1:result}=`echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc`\n",
+    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc)\n",
     "description": "square root of var up to scale decimal places"
   },
   "math.subtract": {
@@ -1469,62 +1469,62 @@
   },
   "output.color-black": {
     "prefix": "color black",
-    "body": "echo `tput setaf 0`${0:black text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 0)${0:black text}\\$(tput sgr0)\n",
     "description": "write in black"
   },
   "output.color-blue": {
     "prefix": "color blue",
-    "body": "echo `tput setaf 4`${0:blue text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 4)${0:blue text}\\$(tput sgr0)\n",
     "description": "write in blue"
   },
   "output.color-cyan": {
     "prefix": "color cyan",
-    "body": "echo `tput setaf 6`${0:cyan text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 6)${0:cyan text}\\$(tput sgr0)\n",
     "description": "write in cyan"
   },
   "output.color-green": {
     "prefix": "color green",
-    "body": "echo `tput setaf 2`${0:green text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 2)${0:green text}\\$(tput sgr0)\n",
     "description": "write in green"
   },
   "output.color-magenta": {
     "prefix": "color magenta",
-    "body": "echo `tput setaf 5`${0:magenta text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 5)${0:magenta text}\\$(tput sgr0)\n",
     "description": "write in magenta"
   },
   "output.color-red": {
     "prefix": "color red",
-    "body": "echo `tput setaf 1`${0:red text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 1)${0:red text}\\$(tput sgr0)\n",
     "description": "write in red"
   },
   "output.color-white": {
     "prefix": "color white",
-    "body": "echo `tput setaf 7`${0:white text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 7)${0:white text}$(tput sgr0)\n",
     "description": "write in white"
   },
   "output.color-yellow": {
     "prefix": "color yellow",
-    "body": "echo `tput setaf 3`${0:yellow text}`tput sgr0`\n",
+    "body": "echo \\$(tput setaf 3)${0:yellow text}\\$(tput sgr0)\n",
     "description": "write in yellow"
   },
   "output.format-bold": {
     "prefix": "format bold",
-    "body": "echo `tput bold`${0:bold text}`tput sgr0`\n",
+    "body": "echo \\$(tput bold)${0:bold text}$(tput sgr0)\n",
     "description": "write in bold"
   },
   "output.format-dim": {
     "prefix": "format dim",
-    "body": "echo `tput dim`${0:dimmed text}`tput sgr0`\n",
+    "body": "echo \\$(tput dim)${0:dimmed text}\\$(tput sgr0)\n",
     "description": "write in dim"
   },
   "output.format-italic": {
     "prefix": "format italic",
-    "body": "echo `tput sitm`${0:italic text}`tput sgr0`\n",
+    "body": "echo \\$(tput sitm)${0:italic text}\\$(tput sgr0)\n",
     "description": "write in italic"
   },
   "output.format-reverse": {
     "prefix": "format reverse",
-    "body": "echo `tput rev`${0:reversed text}`tput sgr0`\n",
+    "body": "echo \\$(tput rev)${0:reversed text}\\$(tput sgr0)\n",
     "description": "write in reverse"
   },
   "process.process-id": {
@@ -1534,7 +1534,7 @@
   },
   "process.process-kill": {
     "prefix": "process kill",
-    "body": "sudo kill -9 `pgrep ${1:process_name}`\n",
+    "body": "sudo kill -9 \\$(pgrep ${1:process_name})\n",
     "description": "Kill process by name"
   },
   "process.process-list": {
@@ -1562,7 +1562,7 @@
   "string.first-index-substring": {
     "prefix": "string indexOf",
     "body": [
-      "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=`echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp}`",
+      "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=\\$(echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp})",
       "${0:# echo \\$indexOf}"
     ],
     "description": "first index of substring in string"
@@ -1621,12 +1621,12 @@
   },
   "string.replace": {
     "prefix": "string replace",
-    "body": "${0:replaced}=`echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g'`\n",
+    "body": "${0:replaced}=\\$(echo -e \"\\${${1:string}}\" | sed -e 's/${2:find}/${3:replace}/g')\n",
     "description": "find all occurrences of a substrings and replace them"
   },
   "string.reverse": {
     "prefix": "string reverse",
-    "body": "${0:reversed}=`echo -e \"\\${${1:var}}\" | rev`\n",
+    "body": "${0:reversed}=\\$(echo -e \"\\${${1:var}}\" | rev)\n",
     "description": "reverse string characters"
   },
   "string.substring-count": {
@@ -1634,42 +1634,42 @@
       "string substring count",
       "string substring frequency"
     ],
-    "body": "${0:frequency}=`sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\"`\n",
+    "body": "${0:frequency}=\\$(sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\")\n",
     "description": "Frequency of a substring in a string (may need character escaping)"
   },
   "string.substring": {
     "prefix": "string substring",
-    "body": "${0:substring}=`echo -e \"\\${${1:var}:${2:offset}:${3:length}}\"`\n",
+    "body": "${0:substring}=\\$(echo -e \"\\${${1:var}:${2:offset}:${3:length}}\")\n",
     "description": "part of the string from offset (zero indexed) with length characters"
   },
   "string.to-lower": {
     "prefix": "string toLower",
-    "body": "${0:toLower}=`echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]'`\n",
+    "body": "${0:toLower}=\\$(echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]')\n",
     "description": "convert string to lowercase"
   },
   "string.to-upper": {
     "prefix": "string toUpper",
-    "body": "${0:toUpper}=`echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]'`\n",
+    "body": "${0:toUpper}=\\$(echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]')\n",
     "description": "convert string to uppercase"
   },
   "string.trim-all": {
     "prefix": "string trim all",
-    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]'`\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]')\n",
     "description": "remove all white space(s)"
   },
   "string.trim-left": {
     "prefix": "string trim left",
-    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//'`\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//')\n",
     "description": "remove leading white space(s)"
   },
   "string.trim-right": {
     "prefix": "string trim right",
-    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//'`\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//')\n",
     "description": "remove trailing white space(s)"
   },
   "string.trim": {
     "prefix": "string trim",
-    "body": "${0:trimmed}=`echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//'`\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n",
     "description": "remove leading and trailing white space(s)"
   },
   "system.distro-codename": {
@@ -1699,7 +1699,7 @@
   },
   "system.memory-info": {
     "prefix": "system memory info",
-    "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=`cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1`\n",
+    "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)\n",
     "description": "System memory information in kilobytes (KB)"
   },
   "system.processor-architecture": {
@@ -1729,22 +1729,22 @@
   },
   "system.uptime": {
     "prefix": "system uptime",
-    "body": "sys_uptime=`uptime | cut -d ' ' -f2`\n",
+    "body": "sys_uptime=\\$(uptime | cut -d ' ' -f2)\n",
     "description": "System uptime (hh:mm:ss)"
   },
   "time.epoch-seconds": {
     "prefix": "time seconds epoch",
-    "body": "timeNowSecondsEpoch=`date +%s`\n",
+    "body": "timeNowSecondsEpoch=\\$(date +%s)\n",
     "description": "seconds since epoch (1970-01-01 00:00:00)"
   },
   "time.local-time-current": {
     "prefix": "time now local",
-    "body": "timeNowLocal=`date +%${1|R,r|}`\n",
+    "body": "timeNowLocal=\\$(date +%${1|R,r|})\n",
     "description": "current local time (24hrs/12hrs R/r)"
   },
   "time.time-utc": {
     "prefix": "time now UTC",
-    "body": "timeNowUTC=`date -u +%R`\n",
+    "body": "timeNowUTC=\\$(date -u +%R)\n",
     "description": "current UTC time"
   }
 }

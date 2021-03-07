@@ -44,7 +44,7 @@ function on_ctrl_c() {
     exit 0
   else
     cleanup # Call cleanup function
-    echo $(tput setaf 1$(Backup canceled by user!)tput sgr0)
+    echo $(tput setaf 1)Backup canceled by user!$(tput sgr0)
     exit 1 # Don't remove. Use a number (1-255) for error code.
   fi
 }
@@ -95,14 +95,14 @@ Options:
 }
 
 function backup () {
-  echo $(tput setaf 2$(Backup started...)tput sgr0)
+  echo $(tput setaf 2)Backup started...$(tput sgr0)
   echo # empty line
   current_path=$(pwd) # save current directory
   cd "$HOME"
   tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
 
   if [[ $? != 0 ]]; then
-    echo $(tput setaf 1$(Unknown error. Backup failed!)tput sgr0)
+    echo $(tput setaf 1)Unknown error. Backup failed!$(tput sgr0)
     cd "$current_path" # restore current directory
     exit 4
   fi
@@ -157,7 +157,7 @@ while [[ $# > 0 ]]; do
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo $(tput setaf 1$(Error! Unknown argument: "$1")tput sgr0)
+    echo $(tput setaf 1)Error! Unknown argument: "$1"$(tput sgr0)
     exit 2
     ;;
   esac
@@ -177,14 +177,14 @@ backup_file=$(date -I).tar.gz
 
 # Check if "backup directory" exists.
 if [ ! -d "$backup_dir" ]; then
-  echo $(tput setaf 1$("Error! Backup directory doesn't exist: $backup_dir")tput sgr0)
+  echo $(tput setaf 1)"Error! Backup directory doesn't exist: $backup_dir"$(tput sgr0)
   exit 3
 fi
 
 # call backup function. It has access to global variables.
 backup
 
-echo $(tput setaf 4$(Backup complete.)tput sgr0)
+echo $(tput setaf 4)Backup complete.$(tput sgr0)
 backup_success="true"
 
 if [ "$play_animation" = "true" ]; then
