@@ -1,5 +1,5 @@
 {
   "prefix": "math *=",
-  "body": "((${1:var1} *= ${2:var2}))\n",
-  "description": "multiply var1 by var2 and assign the result to var1"
+  "body": "((${1:int1} *= ${2:int2}))\n",
+  "description": "multiply int1 by int2 and assign the result to int1"
 }

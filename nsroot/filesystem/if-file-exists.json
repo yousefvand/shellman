@@ -1,7 +1,7 @@
 {
   "prefix": "if file exists",
   "body": [
-    "if [ -f \"\\$${1:file}\" ]; then",
+    "if [ -f \"\\${${1:filePath}\\}\" ]; then",
     "\t${2:echo file exists}",
     "fi\n"
   ],

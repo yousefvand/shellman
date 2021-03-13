@@ -1,5 +1,5 @@
 {
   "prefix": "fx math sum",
-  "body": "result=\\$(sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
+  "body": "result=\\$(sum \\${${1:num1}\\} \\${${2:num2}\\} \\${${3:num3}\\})\n",
   "description": "Call math sum function"
 }

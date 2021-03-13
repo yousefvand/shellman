@@ -1,7 +1,7 @@
 {
   "prefix": "if file not empty",
   "body": [
-    "if [ -s \"\\$${1:file}\" ]; then",
+    "if [ -s \"\\${${1:filePath}\\}\" ]; then",
     "\t${2:echo file not empty}",
     "fi\n"
   ],

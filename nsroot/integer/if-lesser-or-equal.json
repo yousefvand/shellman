@@ -1,8 +1,8 @@
 {
   "prefix": "if int <=",
   "body": [
-    "if (( ${1:int} <= ${2:val} )); then",
-    "\t${3:echo lesser equal}",
+    "if (( ${1:int1} <= ${2:int2} )); then",
+    "\t${3:echo lesser or equal}",
     "fi\n"
   ],
   "description": "if integer lesser than or equal value"

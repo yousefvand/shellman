@@ -5,7 +5,7 @@
   ],
   "body": [
     "for item in \"${${1:myArray}[@]}\"; do",
-    "\t${2:echo \"\\$item\"}",
+    "\t${2:echo \"\\${item\\}\"}",
     "done\n"
   ],
   "description": "iterate array elements"

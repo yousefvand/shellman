@@ -1,5 +1,5 @@
 {
   "prefix": "stopwatch stop",
-  "body": "STOPWATCH_END_TIME=\\$(date +%s)\n",
+  "body": "stopwatchEndTime=\\$(date +%s)\n",
   "description": "stop stopwatch"
 }

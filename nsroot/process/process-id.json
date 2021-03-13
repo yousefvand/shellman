@@ -1,5 +1,8 @@
 {
-  "prefix": "process ID",
-  "body": "pgrep ${1:process_name}\n",
-  "description": "Find process id (PID)"
+  "prefix": "process ID(s)",
+  "body": [
+    "processIDsArray=(\\$(pgrep ${1:process_name}))",
+    "${0:echo \"\\${processIDsArray[@]\\}\"}\n"
+  ],
+  "description": "Find process ID(s) aka PIDs"
 }

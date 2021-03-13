@@ -1,7 +1,7 @@
 {
   "prefix": "if file newer",
   "body": [
-    "if [ \"\\$${1:file1}\" -nt \"\\$${2:file2}\" ]; then",
+    "if [ \"\\${${1:file1}\\}\" -nt \"\\${${2:file2}\\}\" ]; then",
     "\t${0:echo file1 is newer than file2}",
     "fi\n"
   ],

@@ -1,5 +1,8 @@
 {
   "prefix": "system distro name",
-  "body": "lsb_release -i | awk '{print \\$3}'\n",
+  "body": [
+    "${1:distroName}=\\$(lsb_release -i | awk '{print \\$3}')",
+    "${0:echo \"\\${${1:distroName}\\}\"}\n"
+  ],
   "description": "OS ID (i.e. Ubuntu)"
 }

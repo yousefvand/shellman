@@ -1,5 +1,8 @@
 {
-  "prefix": "service manage",
-  "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:service}\n",
+  "prefix": [
+    "service manage",
+    "systemd manage"
+  ],
+  "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:serviceName}\n",
   "description": "Manage service operations"
 }

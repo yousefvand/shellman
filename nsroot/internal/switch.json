@@ -1,15 +1,15 @@
 {
   "prefix": "switch case",
   "body": [
-    "case \"\\$${1:item}\" in",
+    "case \"\\${${1:item}\\}\" in",
     "\t${2:1})",
-    "\t\t${3:echo \"case 1\"}",
+    "\t\t${3:echo \"item = 1\"}",
     "\t;;",
     "\t${4:2|3})",
-    "\t\t${5:echo \"case 2 or 3\"}",
+    "\t\t${5:echo \"item = 2 or item = 3\"}",
     "\t;;",
     "\t*)",
-    "\t\t${6:echo \"default\"}",
+    "\t\t${6:echo \"default (none of above)\"}",
     "\t;;",
     "esac\n"
   ],

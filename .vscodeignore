@@ -5,7 +5,7 @@ samples/**
 _config.yml
 .gitattributes
 .gitignore
-build.js
+build*
 Dockerfile
-publish.sh
-test.sh
+publish*
+test*

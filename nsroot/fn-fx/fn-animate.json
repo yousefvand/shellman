@@ -16,8 +16,8 @@
     "\twhile true; do",
     "\t\tfor frame in \"\\${frames[@]}\"; do",
     "\t\t\ttput rc # restore cursor position",
-    "\t\t\techo \"\\$frame\"",
-    "\t\t\tsleep \"\\$interval\"",
+    "\t\t\techo \"\\${frame\\}\"",
+    "\t\t\tsleep \"\\${interval\\}\"",
     "\t\tdone",
     "\tdone",
     "}\n${0:}"

@@ -126,9 +126,9 @@
 
   - [if file =](#if-file-=)
 
-  - [if exists](#if-exists)
+  - [if path exists](#if-path-exists)
 
-  - [remove files older](#remove-files-older)
+  - [remove old files](#remove-old-files)
 
 - fn-fx
 
@@ -208,7 +208,7 @@
 
   - [func](#func)
 
-  - [func ret val](#func-ret-val)
+  - [func return value](#func-return-value)
 
 - git
 
@@ -424,7 +424,9 @@
 
 - process
 
-  - [process ID](#process-ID)
+  - [process ID(s)](#process-ID(s))
+
+  - [process list](#process-list)
 
   - [process kill](#process-kill)
 
@@ -541,7 +543,7 @@ tar -C /extract/to/path -xf /path/to/archive.tar.xz
 all array elements [&uarr;](#Commands)
 
 ```bash
-${myArray[@]}
+"${myArray[@]}"
 ```
 
 ## `array at index`
@@ -602,16 +604,16 @@ iterate array elements [&uarr;](#Commands)
 
 ```bash
 for item in "${myArray[@]}"; do
-  echo "$item"
+  echo "${item\"}
 done
 ```
 
 ## `array length`
 
-length of array [&uarr;](#Commands)
+length of an array [&uarr;](#Commands)
 
 ```bash
-${#myArray[@]}
+length=${#myArray[@]}
 ```
 
 ## `array push,array add`
@@ -627,7 +629,7 @@ myArray+=('newItem')
 elements of array from index, equal to count numbers [&uarr;](#Commands)
 
 ```bash
-${myArray[@]:from:count}
+newArray="${myArray[@]:from:count}"
 ```
 
 ## `array replace`
@@ -635,7 +637,7 @@ ${myArray[@]:from:count}
 find and replace elements in array using regex [&uarr;](#Commands)
 
 ```bash
-${myArray[@]//find/replace}
+newArray=${myArray[@]//find/replace}
 ```
 
 ## `array set element`
@@ -643,7 +645,7 @@ ${myArray[@]//find/replace}
 set array element at index [&uarr;](#Commands)
 
 ```bash
-myArray[index]=value
+myArray[index]="value"
 ```
 
 ## `cmd failure check`
@@ -687,7 +689,7 @@ for p in $(pidof "process_name"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15
 run command (command substitution) [&uarr;](#Commands)
 
 ```bash
-$(command)
+result=$(command)
 ```
 
 ## `cmd success check`
@@ -696,7 +698,7 @@ check if last command succeed [&uarr;](#Commands)
 
 ```bash
 if [[ $? == 0 ]]; then
-  echo command succeed
+  echo "command succeed"
 fi
 ```
 
@@ -705,7 +707,7 @@ fi
 decode variable from base64 [&uarr;](#Commands)
 
 ```bash
-base64Decoded=$(echo -n "$variableToDecode" | base64 -d)
+base64Decoded=$(echo -n "${variableToDecode\}" | base64 -d)
 ```
 
 ## `crypto base64 encode`
@@ -713,7 +715,7 @@ base64Decoded=$(echo -n "$variableToDecode" | base64 -d)
 encode variable to base64 [&uarr;](#Commands)
 
 ```bash
-base64Encoded=$(echo -n "$variableToEncode" | base64)
+base64Encoded=$(echo -n "${variableToEncode\}" | base64)
 ```
 
 ## `crypto hash`
@@ -734,7 +736,7 @@ dayOfMonth=$(date +%d)
 
 ## `date now dayOfWeek`
 
-current day of week name (full/abbreviated A/a) [&uarr;](#Commands)
+current day of week name (A: full | a: abbreviated) [&uarr;](#Commands)
 
 ```bash
 dayOfWeek=$(date +%${1|A,a|})
@@ -758,7 +760,7 @@ dateShort=$(date -I)
 
 ## `date now monthName`
 
-current month name (full/abbreviated B/b) [&uarr;](#Commands)
+current month name (B: full | b: abbreviated) [&uarr;](#Commands)
 
 ```bash
 monthName=$(date +%${1|B,b|})
@@ -860,17 +862,17 @@ rm -f /path/to/file
 read a file [&uarr;](#Commands)
 
 ```bash
-cat "$filepath" | while read line; do
-  echo "$line"
+cat "${filePath\}" | while read line; do
+  echo "${line\"}
 done
 ```
 
 ## `file search,search in files,find in files`
 
-find files which contain search criteria [&uarr;](#Commands)
+find files which contain search criteria in given path and below [&uarr;](#Commands)
 
 ```bash
-result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +)
+result=$(find path/to/search -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +)
 ```
 
 ## `file write multiline sudo`
@@ -878,7 +880,7 @@ result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "cri
 write multiple lines into file with sudo permission [&uarr;](#Commands)
 
 ```bash
-cat << EOL | sudo tee filepath
+cat << EOL | sudo tee filePath
 # text here
 EOL
 ```
@@ -888,7 +890,7 @@ EOL
 write multiple lines into file [&uarr;](#Commands)
 
 ```bash
-cat >filepath <<EOL
+cat >filePath <<EOL
 # text here
 EOL
 ```
@@ -900,7 +902,7 @@ write to a file [&uarr;](#Commands)
 ```bash
 echo "sample header" > ${2:/path/to/file}
 for line in ${lines}; do
-  echo "$line" >> /path/to/file
+  echo "${line\}" >> /path/to/file
 done
 ```
 
@@ -917,7 +919,7 @@ result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name "
 if directory exists [&uarr;](#Commands)
 
 ```bash
-if [ -d "$directory" ]; then
+if [ -d "${directory\}" ]; then
   echo directory exists
 fi
 ```
@@ -927,7 +929,7 @@ fi
 if file executable [&uarr;](#Commands)
 
 ```bash
-if [ -x "$file" ]; then
+if [ -x "${filePath\}" ]; then
   echo file is executable
 fi
 ```
@@ -937,7 +939,7 @@ fi
 if given path is a symbolic link [&uarr;](#Commands)
 
 ```bash
-if [ -h "$file" ]; then
+if [ -h "${filePath\}" ]; then
   echo symbolic link
 fi
 ```
@@ -947,7 +949,7 @@ fi
 if file exists [&uarr;](#Commands)
 
 ```bash
-if [ -f "$file" ]; then
+if [ -f "${filePath\}" ]; then
   echo file exists
 fi
 ```
@@ -957,7 +959,7 @@ fi
 if file size is greater than zero [&uarr;](#Commands)
 
 ```bash
-if [ -s "$file" ]; then
+if [ -s "${filePath\}" ]; then
   echo file not empty
 fi
 ```
@@ -967,7 +969,7 @@ fi
 if file readable [&uarr;](#Commands)
 
 ```bash
-if [ -r "$file" ]; then
+if [ -r "${filePath\}" ]; then
   echo file is readable
 fi
 ```
@@ -977,7 +979,7 @@ fi
 if file writeable [&uarr;](#Commands)
 
 ```bash
-if [ -w "$file" ]; then
+if [ -w "${filePath\}" ]; then
   echo file is writeable
 fi
 ```
@@ -987,7 +989,7 @@ fi
 if file1 newer than file2 [&uarr;](#Commands)
 
 ```bash
-if [ "$file1" -nt "$file2" ]; then
+if [ "${file1\}" -nt "${file2\}" ]; then
   echo file1 is newer than file2
 fi
 ```
@@ -997,7 +999,7 @@ fi
 if file1 older than file2 [&uarr;](#Commands)
 
 ```bash
-if [ "$file1" -ot "$file2" ]; then
+if [ "${file1\}" -ot "${file2\}" ]; then
   echo file1 is older than file2
 fi
 ```
@@ -1007,27 +1009,27 @@ fi
 if files are equal [&uarr;](#Commands)
 
 ```bash
-if [ "$file1" -ef "$file2" ]; then
+if [ "${file1\}" -ef "${file2\}" ]; then
   echo files are equal
 fi
 ```
 
-## `if exists`
+## `if path exists`
 
 if path exists (file, directory, link...) [&uarr;](#Commands)
 
 ```bash
-if [ -e "$path" ]; then
-  echo exists
+if [ -e "${path\}" ]; then
+  echo "path exists"
 fi
 ```
 
-## `remove files older`
+## `remove old files`
 
 find and remove files older than x days [&uarr;](#Commands)
 
 ```bash
-find "$path" -mtime +days | xargs rm -f
+find "${path\}" -mtime +days | xargs rm -f
 ```
 
 ## `fn animation animate`
@@ -1050,8 +1052,8 @@ function animate () {
   while true; do
     for frame in "${frames[@]}"; do
       tput rc # restore cursor position
-      echo "$frame"
-      sleep "$interval"
+      echo "${frame\}"
+      sleep "${interval\}"
     done
   done
 }
@@ -1065,10 +1067,10 @@ Pacman animation (eating input text) [&uarr;](#Commands)
 # Usage: pac_man inputString interval pad
 # Example: pacman "Hello World" 0.5 "*"
 function pac_man () {
-  local string="$1"
-  local interval="$2"
+  local string="${1\}"
+  local interval="${2\}"
   : "${interval:=0.2}"
-  local pad="$3"
+  local pad="${3\}"
   : "${pad:=.}"
   local length=${#string}
   local padding=""
@@ -1080,17 +1082,17 @@ function pac_man () {
 
   for((i=0;i<=length;i++)); do
     tput rc
-    echo "$padding"c"${string:i:length}"
+    echo "${padding\}c${string:i:length}"
     sleep "$interval"
     tput rc
-    echo "$padding"C"${string:i:length}"
-    sleep "$interval"
-    padding+="$pad"
+    echo "${padding\}C${string:i:length}"
+    sleep "${interval\}"
+    padding+="${pad\}"
   done
 
   tput cnorm
   tput rc
-  echo "$padding"
+  echo "${padding\}"
 }
 ```
 
@@ -1103,7 +1105,7 @@ print a color banner. [&uarr;](#Commands)
 function banner_color() {
   local color=$1
   shift
-  case $color in
+  case ${color\} in
     black) color=0
     ;;
     red) color=1
@@ -1125,13 +1127,13 @@ function banner_color() {
   esac
   local s=("$@") b w
   for l in "${s[@]}"; do
-    ((w<${#l})) && { b="$l"; w="${#l}"; }
+    ((w<${#l})) && { b="${l\}"; w="${#l}"; }
   done
   tput setaf $color
   echo " =${b//?/=}=
 | ${b//?/ } |"
   for l in "${s[@]}"; do
-    printf '| %s%*s%s |\n' "$(tput setaf $color)" "-$w" "$l" "$(tput setaf $color)"
+    printf '| %s%*s%s |\n' "$(tput setaf ${color\})" "-${w\}" "${l\}" "$(tput setaf ${color\})"
   done
   echo "| ${b//?/ } |
  =${b//?/=}="
@@ -1147,10 +1149,10 @@ function: print a banner with provided title [&uarr;](#Commands)
 # Usage: banner_simple "my title"
 function banner_simple() {
   local msg="* $* *"
-  local edge=$(echo "$msg" | sed 's/./*/g')
-  echo "$edge"
-  echo "$(tput bold)$msg$(tput sgr0)"
-  echo "$edge"
+  local edge=$(echo "${msg\}" | sed 's/./*/g')
+  echo "${edge\}"
+  echo "$(tput bold)${msg\}$(tput sgr0)"
+  echo "${edge\}"
   echo
 }
 ```
@@ -1162,11 +1164,11 @@ import functions from other shellscript files [&uarr;](#Commands)
 ```bash
 # Usage: import "mylib"
 function import() {
-  local file="./lib/$1.sh"
-  if [ -f "$file" ]; then
-    source "$file"
+  local file="./lib/${1\}.sh"
+  if [ -f "${file\}" ]; then
+    source "${file\}"
   else
-    echo "Error: Cannot find library at: $file"
+    echo "Error: Cannot find library at: ${file\}"
     exit 1
   fi
 }
@@ -1196,7 +1198,7 @@ function product () {
   for item in $@; do
     ((result *= item))
   done
-  echo $result
+  echo ${result\}
 }
 ```
 
@@ -1210,7 +1212,7 @@ function sum () {
   for item in $@; do
     ((result += item))
   done
-  echo $result
+  echo ${result\}
 }
 ```
 
@@ -1221,9 +1223,9 @@ provide a list of options to user and return the index of selected option [&uarr
 ```bash
 # Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
 function chooseOption() {
-  echo "$1"; shift
+  echo "${1\}"; shift
   echo $(tput sitm)$(tput dim)-"Change selection: [up/down]  Select: [ENTER]" $(tput sgr0)
-  local selected="$1"; shift
+  local selected="${1\}"; shift
   ESC=$(echo -e "\033")
   cursor_blink_on()  { tput cnorm; }
   cursor_blink_off() { tput civis; }
@@ -1242,23 +1244,23 @@ function chooseOption() {
     local idx=0
     for opt; do
       cursor_to $(($startrow + $idx))
-      if [ $idx -eq $selected ]; then
-        print_selected "$opt"
+      if [ ${idx\} -eq ${selected\} ]; then
+        print_selected "${opt\}"
       else
-        print_option "$opt"
+        print_option "${opt\}"
       fi
       ((idx++))
     done
     case $(key_input) in
       enter) break;;
-      up)    ((selected--)); [ $selected -lt 0 ] && selected=$(($# - 1));;
-      down)  ((selected++)); [ $selected -ge $# ] && selected=0;;
+      up)    ((selected--)); [ "${selected}" -lt 0 ] && selected=$(($# - 1));;
+      down)  ((selected++)); [ "${selected}" -ge $# ] && selected=0;;
     esac
   done
-  cursor_to $lastrow
+  cursor_to "${lastrow\}"
   cursor_blink_on
   echo
-  return $selected
+  return "${selected\}"
 }
 ```
 
@@ -1315,9 +1317,9 @@ function urlencode () {
   local length="${#1}"
   for (( i = 0; i < length; i++ )); do
     local c="i:1"
-    case $c in
-      [a-zA-Z0-9.~_-]) printf "$c" ;;
-      *) printf '%%X' "'$c" ;;
+    case "${c\}" in
+      [a-zA-Z0-9.~_-]) printf "${c\}" ;;
+      *) printf '%%X' "'${c\}" ;;
     esac
   done
 }
@@ -1340,7 +1342,7 @@ function version_compare () {
     local length=${#2}
     echo -e "((++offset)):length"
   }
-  if [ -z "$1" ] || [ -z "$2" ]; then
+  if [ -z "${1\}" ] || [ -z "${2\}" ]; then
     echo "=" && exit 0
   fi
   local v1=$(echo -e "${1}" | tr -d '[[:space:]]')
@@ -1372,7 +1374,7 @@ Call Pacman animation (eating input text) function [&uarr;](#Commands)
 
 ```bash
 # Usage: pac_man inputString interval pad
-pac_man "Hello World" ${2:0.5} "*"
+pac_man "Hello World" ${2:0.3} "."
 ```
 
 ## `fx banner color`
@@ -1404,7 +1406,7 @@ import "libname"
 Call math average function [&uarr;](#Commands)
 
 ```bash
-result=$(average $var1 $var2 $var3)
+result=$(average ${num1\} ${num2\} ${num3\})
 ```
 
 ## `fx math product`
@@ -1412,7 +1414,7 @@ result=$(average $var1 $var2 $var3)
 Call math product function [&uarr;](#Commands)
 
 ```bash
-result=$(product $var1 $var2 $var3)
+result=$(product ${num1\} ${num2\} ${num3\})
 ```
 
 ## `fx math sum`
@@ -1420,7 +1422,7 @@ result=$(product $var1 $var2 $var3)
 Call math sum function [&uarr;](#Commands)
 
 ```bash
-result=$(sum $var1 $var2 $var3)
+result=$(sum ${num1\} ${num2\} ${num3\})
 ```
 
 ## `fx options`
@@ -1446,7 +1448,7 @@ progressBar ${1|.1,.2,.3,.4,.5,1,2,5|} "Installing foo..."
 call scan function to scan a host over a port range [&uarr;](#Commands)
 
 ```bash
-scan ${1|tcp,udp|} host fromPort  toPort
+scan ${1|tcp,udp|} host fromPort toPort
 ```
 
 ## `fx urldecode`
@@ -1454,7 +1456,7 @@ scan ${1|tcp,udp|} host fromPort  toPort
 Call urldecode function [&uarr;](#Commands)
 
 ```bash
-urldecode encodedUrl
+urldecode "encodedUrl"
 ```
 
 ## `fx urlencode`
@@ -1462,7 +1464,7 @@ urldecode encodedUrl
 Call urlencode function [&uarr;](#Commands)
 
 ```bash
-urlencode url
+urlencode "url"
 ```
 
 ## `fx version compare,fx semver compare`
@@ -1539,7 +1541,7 @@ function name () {
 }
 ```
 
-## `func ret val`
+## `func return value`
 
 last function/command return code [&uarr;](#Commands)
 
@@ -1811,8 +1813,8 @@ curl --request ${1|POST,PUT|} -sL \
 Ask question with default answer [&uarr;](#Commands)
 
 ```bash
-read -ep "Question here? " -i Default answer ANSWER
-echo "$ANSWER"
+read -ep "Question here? " -i "Default answer" answer
+echo "${answer\"}
 ```
 
 ## `if int =`
@@ -1830,8 +1832,8 @@ fi
 if integer greater than or equal value [&uarr;](#Commands)
 
 ```bash
-if (( int >= ${2:val} )); then
-  echo greater equal
+if (( int1 >= ${2:int2} )); then
+  echo greater or equal
 fi
 ```
 
@@ -1840,7 +1842,7 @@ fi
 if integer greater than value [&uarr;](#Commands)
 
 ```bash
-if (( int > ${2:val} )); then
+if (( int1 > ${2:int2} )); then
   echo greater
 fi
 ```
@@ -1850,8 +1852,8 @@ fi
 if integer lesser than or equal value [&uarr;](#Commands)
 
 ```bash
-if (( int <= ${2:val} )); then
-  echo lesser equal
+if (( int1 <= ${2:int2} )); then
+  echo lesser or equal
 fi
 ```
 
@@ -1860,7 +1862,7 @@ fi
 if integer lesser than value [&uarr;](#Commands)
 
 ```bash
-if (( int < ${2:val} )); then
+if (( int1 < ${2:int2} )); then
   echo lesser
 fi
 ```
@@ -1882,7 +1884,7 @@ for loop by index [&uarr;](#Commands)
 ```bash
 for((i=0;i<n;i++)); do
   for((j=0;j<m;j++)); do
-    echo "$i, $j"
+    echo "${i\, ${j\}"}
   done
 done
 ```
@@ -1893,7 +1895,7 @@ for loop by index [&uarr;](#Commands)
 
 ```bash
 for((i=0;i<n;i++)); do
-  echo "$i"
+  echo "${i\"}
 done
 ```
 
@@ -1902,8 +1904,8 @@ done
 for loop in collection [&uarr;](#Commands)
 
 ```bash
-for item in {a..z}; do
-  echo "$item"
+for item in {a..${3:z}}; do
+  echo "${item\}"
 done
 ```
 
@@ -1913,8 +1915,8 @@ for loop in collection [&uarr;](#Commands)
 
 ```bash
 for col in $(docker images | awk '{ print $1":"$2 }'); do
-  echo "$col" | cut -d ':' -f 1
-  echo "$col" | cut -d ':' -f 2
+  echo "${${1:col\}" | cut -d ':' -f 1}
+  echo "${${1:col\}" | cut -d ':' -f 2}
 done
 ```
 
@@ -1924,11 +1926,11 @@ if [&uarr;](#Commands)
 
 ```bash
 if [ condition ]; then
-   # body
+   # if body
 elif [ condition ]; then
-   # body
+   # else if body
 else
-   # body
+   # else body
 fi
 ```
 
@@ -1963,15 +1965,15 @@ done
 switch case [&uarr;](#Commands)
 
 ```bash
-case "$item" in
+case "${item\}" in
   1)
-    echo "case 1"
+    echo "item = 1"
   ;;
   2|3)
-    echo "case 2 or 3"
+    echo "item = 2 or item = 3"
   ;;
   *)
-    echo "default"
+    echo "default (none of above)"
   ;;
 esac
 ```
@@ -2009,7 +2011,7 @@ IPS=$(hostname -I)
 public ip information [&uarr;](#Commands)
 
 ```bash
-echo $(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})
+info=$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})
 ```
 
 ## `ip public`
@@ -2017,7 +2019,7 @@ echo $(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})
 public ip address [&uarr;](#Commands)
 
 ```bash
-PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})
+publicIp=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})
 ```
 
 ## `math +`
@@ -2025,7 +2027,7 @@ PUBLIC_IP=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,ican
 add two variables [&uarr;](#Commands)
 
 ```bash
-result=$((var1 + var2))
+result=$((int1 + int2))
 ```
 
 ## `math const 𝛾`
@@ -2070,82 +2072,82 @@ MATH_PI='3.14159265358979323846264338327950288'
 
 ## `math --`
 
-decrement variable [&uarr;](#Commands)
+decrement integer variable [&uarr;](#Commands)
 
 ```bash
-((${1|var--,--var|}))
+((${1|int--,--int|}))
 ```
 
 ## `math /=`
 
-divide var1 by var2 and assign the result to var1 [&uarr;](#Commands)
+divide int1 by int2 and assign the whole part to int1 [&uarr;](#Commands)
 
 ```bash
-((var1 /= var2))
+((int1 /= int2))
 ```
 
 ## `math /`
 
-divide var1 by var2 [&uarr;](#Commands)
+divide int1 by int2 as integers and returns whole part [&uarr;](#Commands)
 
 ```bash
-result=$((var1 / var2))
+result=$((int1 / int2))
 ```
 
 ## `math ++`
 
-increment variable [&uarr;](#Commands)
+increment integer variable by 1 [&uarr;](#Commands)
 
 ```bash
-((${1|var++,++var|}))
+((${1|int++,++int|}))
 ```
 
 ## `math -=`
 
-subtract var2 from var1 and assign the result to var1 [&uarr;](#Commands)
+subtract int2 from int1 and assign the result to int1 [&uarr;](#Commands)
 
 ```bash
-((var1 -= var2))
+((int1 -= int2))
 ```
 
 ## `math %=`
 
-divide var1 by var2 and assign the reminder to var1 [&uarr;](#Commands)
+divide int1 by int2 and assign the reminder to int1 [&uarr;](#Commands)
 
 ```bash
-((var1 %= var2))
+((int1 %= int2))
 ```
 
 ## `math %`
 
-reminder of dividing var1 by var2 (modulus) [&uarr;](#Commands)
+reminder of dividing int1 by int2 (modulus) [&uarr;](#Commands)
 
 ```bash
-result=$((var1 % var2))
+result=$((int1 % int2))
 ```
 
 ## `math *=`
 
-multiply var1 by var2 and assign the result to var1 [&uarr;](#Commands)
+multiply int1 by int2 and assign the result to int1 [&uarr;](#Commands)
 
 ```bash
-((var1 *= var2))
+((int1 *= int2))
 ```
 
 ## `math *`
 
-multiply var1 by var2 [&uarr;](#Commands)
+multiply int1 by int2 [&uarr;](#Commands)
 
 ```bash
-result=$((var1 * var2))
+result=$((int1 * int2))
 ```
 
 ## `math +=`
 
-add var1 and var2 and assign the result to var1 [&uarr;](#Commands)
+add int1 and int2 and assign the result to int1 [&uarr;](#Commands)
 
 ```bash
-((var1 += var2))
+((int1 += int2))
 ```
 
 ## `math ^`
@@ -2161,7 +2163,7 @@ result=$((base ** power))
 math operations with up to scale decimal places precision [&uarr;](#Commands)
 
 ```bash
-result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};($var1 ${4|+,-,*,/,^|} $var2)" | bc)
+result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};(${var1\} ${4|+,-,*,/,^|} ${var2\})" | bc)
 ```
 
 ## `math random`
@@ -2177,15 +2179,15 @@ result=$((min + RANDOM % $((max-min))))
 square root of var up to scale decimal places [&uarr;](#Commands)
 
 ```bash
-result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt($var)" | bc)
+result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${var\})" | bc)
 ```
 
 ## `math -`
 
-subtract var2 from var1 [&uarr;](#Commands)
+subtract int2 from int1 [&uarr;](#Commands)
 
 ```bash
-result=$((var1 - var2))
+result=$((int1 - int2))
 ```
 
 ## `animation frame`
@@ -2195,7 +2197,7 @@ Define animation frame [&uarr;](#Commands)
 ```bash
 # Your frames need to have the exact same width and height.
 # If they are different in size, fill unused space with `space`s (no `TAB`s).
-IFS='' read -r -d '' frames[${2:1}] <<"EOF"
+IFS='' read -r -d '' frames[${2|1,2,3,4,5,6,7,8,9|}] <<"EOF"
 # Frame here
 EOF
 ```
@@ -2207,17 +2209,17 @@ parse command line arguments (flags/switches) [&uarr;](#Commands)
 ```bash
 POSITIONAL=()
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1\}" in
     -f|--flag)
-    echo flag: $1
+    echo flag: "${1\}"
     shift # shift once since flags have no values
     ;;
     -s|--switch)
-    echo switch $1 with value: $2
+    echo "switch: ${1\} with value: ${2\}"
     shift 2 # shift twice to bypass switch and its value
     ;;
     *) # unknown flag/switch
-    POSITIONAL+=("$1")
+    POSITIONAL+=("${1\}")
     shift
     ;;
   esac
@@ -2227,18 +2229,18 @@ set -- "${POSITIONAL[@]}" # restore positional params
 
 ## `expr`
 
-arithmetic operations [&uarr;](#Commands)
+arithmetic operations on integers [&uarr;](#Commands)
 
 ```bash
-expr 2 ${2|+,-,\*,/,%|} 3
+result=$(expr $int1 ${2|+,-,\*,/,%|} $int2)
 ```
 
 ## `let`
 
-arithmetic operations [&uarr;](#Commands)
+arithmetic operations on integers [&uarr;](#Commands)
 
 ```bash
-let "result = var1 ${3|+,-,*,/,%|} var2"
+let "result = int1 ${3|+,-,*,/,%|} int2"
 ```
 
 ## `region`
@@ -2272,10 +2274,10 @@ sleep 30${2|s,m,h,d|}
 elapsed time [&uarr;](#Commands)
 
 ```bash
-STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))
-STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))
-STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))
-echo elapsed $STOPWATCH_ELAPSED_MINUTES minutes and $STOPWATCH_ELAPSED_SECONDS seconds
+stopwatchElapsedTotalSeconds=$((stopwatchEndTime - stopwatchStartTime))
+stopwatchElapsedMinutes=$((stopwatchElapsedTotalSeconds / 60))
+stopwatchElapsedSeconds=$((stopwatchElapsedTotalSeconds % 60))
+echo "elapsed ${stopwatchElapsedMinutes\ minutes and ${stopwatchElapsedSeconds\} seconds}."
 ```
 
 ## `stopwatch start`
@@ -2283,7 +2285,7 @@ echo elapsed $STOPWATCH_ELAPSED_MINUTES minutes and $STOPWATCH_ELAPSED_SECONDS s
 start stopwatch [&uarr;](#Commands)
 
 ```bash
-STOPWATCH_START_TIME=$(date +%s)
+stopwatchStartTime=$(date +%s)
 ```
 
 ## `stopwatch stop`
@@ -2291,7 +2293,7 @@ STOPWATCH_START_TIME=$(date +%s)
 stop stopwatch [&uarr;](#Commands)
 
 ```bash
-STOPWATCH_END_TIME=$(date +%s)
+stopwatchEndTime=$(date +%s)
 ```
 
 ## `summary`
@@ -2323,10 +2325,10 @@ timeout seconds command
 
 ## `assign if empty,variable default value`
 
-assign default to variable if variable is empty or null [&uarr;](#Commands)
+assign default value to variable if variable is empty otherwise assign null [&uarr;](#Commands)
 
 ```bash
-: "${variable:=default}"
+: "${variable:=defaultValue}"
 ```
 
 ## `color black`
@@ -2425,12 +2427,21 @@ write in reverse [&uarr;](#Commands)
 echo $(tput rev)reversed text$(tput sgr0)
 ```
 
-## `process ID`
+## `process ID(s)`
 
-Find process id (PID) [&uarr;](#Commands)
+Find process ID(s) aka PIDs [&uarr;](#Commands)
 
 ```bash
-pgrep process_name
+processIDsArray=($(pgrep process_name))
+echo "${processIDsArray[@]\"}
+```
+
+## `process list`
+
+List processes [&uarr;](#Commands)
+
+```bash
+processInstances=$(ps -A | grep "${processName\}")
 ```
 
 ## `process kill`
@@ -2462,18 +2473,18 @@ string="${string1}${string2}"
 check whether string contains substring [&uarr;](#Commands)
 
 ```bash
-if [[ "$string" = *substring* ]]; then
-  # body
+if [[ "${string\}" = *${substring\}* ]]; then
+  echo "${${1:string\} contains: ${substring\}"}
 fi
 ```
 
 ## `string indexOf`
 
-first index of substring in string [&uarr;](#Commands)
+first index of substring in a string [&uarr;](#Commands)
 
 ```bash
-temp=${string%%"substring"*} && indexOf=$(echo ${string%%"substring"*} | echo ${#temp})
-# echo $indexOf
+temp=${string%%${${2:substring}}*} && index=${#temp\}
+echo "index of \"${${2:substring\}\" in \"${string\}\" is ${index\}"}
 ```
 
 ## `if string empty`
@@ -2481,8 +2492,8 @@ temp=${string%%"substring"*} && indexOf=$(echo ${string%%"substring"*} | echo ${
 if string is empty [&uarr;](#Commands)
 
 ```bash
-if [ -z "$string" ]; then
-  # body
+if [ -z "${string\}" ]; then
+  echo "empty string"
 fi
 ```
 
@@ -2491,8 +2502,8 @@ fi
 if strings are equal [&uarr;](#Commands)
 
 ```bash
-if [ "$string1" = "$string2" ]; then
-  # body
+if [ "${string1\}" = "${string2\}" ]; then
+  echo "The two strings are the same"
 fi
 ```
 
@@ -2501,8 +2512,8 @@ fi
 if string is not empty [&uarr;](#Commands)
 
 ```bash
-if [ -n "$string" ]; then
-  # body
+if [ -n "${string\}" ]; then
+  echo "string is not empty"
 fi
 ```
 
@@ -2511,8 +2522,8 @@ fi
 if strings are not equal [&uarr;](#Commands)
 
 ```bash
-if [ "$string1" != "$string2" ]; then
-  # body
+if [ "${string1\}" != "${string2\}" ]; then
+  echo "The two strings are different"
 fi
 ```
 
@@ -2545,7 +2556,7 @@ replaced=$(echo -e "${string}" | sed -e 's/find/replace/g')
 reverse string characters [&uarr;](#Commands)
 
 ```bash
-reversed=$(echo -e "${var}" | rev)
+reversed=$(echo -e "${string}" | rev)
 ```
 
 ## `string substring count,string substring frequency`
@@ -2553,7 +2564,8 @@ reversed=$(echo -e "${var}" | rev)
 Frequency of a substring in a string (may need character escaping) [&uarr;](#Commands)
 
 ```bash
-frequency=$(sed -E 's/(.)/\1\n/g' <<<"$string" | grep -c "$substring")
+tmp="${string//$substring\}" && frequency=$(((${#string\} - ${#tmp\}) / ${#substring}))
+echo "${${3:frequency\}"}
 ```
 
 ## `string substring`
@@ -2561,7 +2573,7 @@ frequency=$(sed -E 's/(.)/\1\n/g' <<<"$string" | grep -c "$substring")
 part of the string from offset (zero indexed) with length characters [&uarr;](#Commands)
 
 ```bash
-substring=$(echo -e "${var:offset:length}")
+substring=$(echo -e "${string:${offset\}:${length\}}")
 ```
 
 ## `string toLower`
@@ -2569,7 +2581,7 @@ substring=$(echo -e "${var:offset:length}")
 convert string to lowercase [&uarr;](#Commands)
 
 ```bash
-toLower=$(echo -e "${var}" | tr '[:upper:]' '[:lower:]')
+toLower=$(echo -e "${string}" | tr '[:upper:]' '[:lower:]')
 ```
 
 ## `string toUpper`
@@ -2577,7 +2589,7 @@ toLower=$(echo -e "${var}" | tr '[:upper:]' '[:lower:]')
 convert string to uppercase [&uarr;](#Commands)
 
 ```bash
-toUpper=$(echo -e "${var}" | tr '[:lower:]' '[:upper:]')
+toUpper=$(echo -e "${string}" | tr '[:lower:]' '[:upper:]')
 ```
 
 ## `string trim all`
@@ -2585,7 +2597,7 @@ toUpper=$(echo -e "${var}" | tr '[:lower:]' '[:upper:]')
 remove all white space(s) [&uarr;](#Commands)
 
 ```bash
-trimmed=$(echo -e "${var}" | tr -d '[[:space:]]')
+trimmed=$(echo -e "${string}" | tr -d '[[:space:]]')
 ```
 
 ## `string trim left`
@@ -2593,7 +2605,7 @@ trimmed=$(echo -e "${var}" | tr -d '[[:space:]]')
 remove leading white space(s) [&uarr;](#Commands)
 
 ```bash
-trimmed=$(echo -e "${var}" | sed -e 's/^[[:space:]]*//')
+trimmed=$(echo -e "${string}" | sed -e 's/^[[:space:]]*//')
 ```
 
 ## `string trim right`
@@ -2601,7 +2613,7 @@ trimmed=$(echo -e "${var}" | sed -e 's/^[[:space:]]*//')
 remove trailing white space(s) [&uarr;](#Commands)
 
 ```bash
-trimmed=$(echo -e "${var}" | sed -e 's/[[:space:]]*$//')
+trimmed=$(echo -e "${string}" | sed -e 's/[[:space:]]*$//')
 ```
 
 ## `string trim`
@@ -2609,15 +2621,16 @@ trimmed=$(echo -e "${var}" | sed -e 's/[[:space:]]*$//')
 remove leading and trailing white space(s) [&uarr;](#Commands)
 
 ```bash
-trimmed=$(echo -e "${var}" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//')
+trimmed=$(echo -e "${string}" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//')
 ```
 
 ## `system distro codename`
 
-OS codename (i.e. xenial) [&uarr;](#Commands)
+OS codename (i.e. Focal Fossa) [&uarr;](#Commands)
 
 ```bash
-lsb_release -c | awk '{print $2}'
+distroCodeName=$(lsb_release -c | awk '{print $2}')
+echo "${${1:distroCodeName\}"}
 ```
 
 ## `system distro name`
@@ -2625,15 +2638,17 @@ lsb_release -c | awk '{print $2}'
 OS ID (i.e. Ubuntu) [&uarr;](#Commands)
 
 ```bash
-lsb_release -i | awk '{print $3}'
+distroName=$(lsb_release -i | awk '{print $3}')
+echo "${${1:distroName\}"}
 ```
 
 ## `system distro version`
 
-OS Release (i.e. 16.04) [&uarr;](#Commands)
+OS Release (i.e. 20.04.2) [&uarr;](#Commands)
 
 ```bash
-lsb_release -r | awk '{print $2}'
+distroVersion=$(lsb_release -r | awk '{print $2}')
+echo "${${1:distroVersion\}"}
 ```
 
 ## `system kernel name`
@@ -2641,7 +2656,8 @@ lsb_release -r | awk '{print $2}'
 OS kernel name (i.e. Linux) [&uarr;](#Commands)
 
 ```bash
-uname -s
+kernelName=$(uname -s)
+echo "${${1:kernelName\}"}
 ```
 
 ## `system kernel release`
@@ -2649,7 +2665,8 @@ uname -s
 OS kernel release (i.e. 4.4.0-140-generic) [&uarr;](#Commands)
 
 ```bash
-uname -r
+kernelRelease=$(uname -r)
+echo "${${1:kernelRelease\}"}
 ```
 
 ## `system memory info`
@@ -2658,54 +2675,60 @@ System memory information in kilobytes (KB) [&uarr;](#Commands)
 
 ```bash
 sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=$(cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1)
+echo "${sysMemory${1\}"}
 ```
 
-## `system processor architecture`
+## `system processor architecture,system cpu architecture`
 
 Processor architecture (i.e. x86_64) [&uarr;](#Commands)
 
 ```bash
-lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1
+arch=$(lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1)
+echo "${${1:arch\}"}
 ```
 
-## `system processor count`
+## `system processor count,system cpu count`
 
 Processor count (cores) [&uarr;](#Commands)
 
 ```bash
-lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1
+cores=$(lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1)
+echo "${${1:cores\}"}
 ```
 
-## `system processor model`
+## `system processor model,system cpu model`
 
 Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz) [&uarr;](#Commands)
 
 ```bash
-lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//'
+cpuModel=$(lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//')
+echo "${${1:cpuModel\}"}
 ```
 
-## `system processor type`
+## `system processor type,system cpu type`
 
 OS processor type (i.e. x86_64) [&uarr;](#Commands)
 
 ```bash
-uname -p
+cpuType=$(uname -p)
+echo "${${1:cpuType\}"}
 ```
 
-## `service manage`
+## `service manage,systemd manage`
 
 Manage service operations [&uarr;](#Commands)
 
 ```bash
-sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} service
+sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} serviceName
 ```
 
 ## `system uptime`
 
-System uptime (hh:mm:ss) [&uarr;](#Commands)
+System uptime. -p: --pretty, -s: since [&uarr;](#Commands)
 
 ```bash
-sys_uptime=$(uptime | cut -d ' ' -f2)
+systemUptime=$(uptime ${2|-p,-s|})
+echo "${${1:systemUptime\}"}
 ```
 
 ## `time seconds epoch`
@@ -2714,14 +2737,16 @@ seconds since epoch (1970-01-01 00:00:00) [&uarr;](#Commands)
 
 ```bash
 timeNowSecondsEpoch=$(date +%s)
+echo "${${1:timeNowSecondsEpoch\}"}
 ```
 
 ## `time now local`
 
-current local time (24hrs/12hrs R/r) [&uarr;](#Commands)
+current local time (R: 24hrs, r: 12hrs) [&uarr;](#Commands)
 
 ```bash
-timeNowLocal=$(date +%${1|R,r|})
+timeNowLocal=$(date +%${2|R,r|})
+echo "${${1:timeNowLocal\}"}
 ```
 
 ## `time now UTC`
@@ -2730,4 +2755,5 @@ current UTC time [&uarr;](#Commands)
 
 ```bash
 timeNowUTC=$(date -u +%R)
+echo ${${1:timeNowUTC\}}
 ```

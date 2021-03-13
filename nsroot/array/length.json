@@ -1,5 +1,5 @@
 {
   "prefix": "array length",
-  "body": "${#${1:myArray}[@]}\n",
-  "description": "length of array"
+  "body": "${0:length}=${#${1:myArray}[@]}",
+  "description": "length of an array"
 }

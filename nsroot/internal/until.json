@@ -2,7 +2,7 @@
   "prefix": "loop until",
   "body": [
     "until [ ${1:condition} ]; do",
-    "\t${0:# body}",
+    "\t${2:# body}",
     "done\n"
   ],
   "description": "until loop"

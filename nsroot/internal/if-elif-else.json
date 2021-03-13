@@ -2,11 +2,11 @@
   "prefix": "if",
   "body": [
     "if [ ${1:condition} ]; then",
-    "\t${2: # body}",
+    "\t${2: # if body}",
     "elif [ ${3:condition} ]; then",
-    "\t${4: # body}",
+    "\t${4: # else if body}",
     "else",
-    "\t${5: # body}",
+    "\t${5: # else body}",
     "fi\n"
   ],
   "description": "if"

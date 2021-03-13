@@ -1,5 +1,5 @@
 {
   "prefix": "math -",
-  "body": "${1:result}=\\$((${2:var1} - ${3:var2}))\n",
-  "description": "subtract var2 from var1"
+  "body": "${1:result}=\\$((${2:int1} - ${3:int2}))\n",
+  "description": "subtract int2 from int1"
 }

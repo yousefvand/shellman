@@ -16,7 +16,7 @@
     "\t\tlocal length=${#2}",
     "\t\techo -e \"\\${2:((++offset)):length}\"",
     "\t}",
-    "\tif [ -z \"\\$1\" ] || [ -z \"\\$2\" ]; then",
+    "\tif [ -z \"\\${1\\}\" ] || [ -z \"\\${2\\}\" ]; then",
     "\t\techo \"=\" && exit 0",
     "\tfi",
     "\tlocal v1=\\$(echo -e \"\\${1}\" | tr -d '[[:space:]]')",

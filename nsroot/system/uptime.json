@@ -1,5 +1,8 @@
 {
   "prefix": "system uptime",
-  "body": "sys_uptime=\\$(uptime | cut -d ' ' -f2)\n",
-  "description": "System uptime (hh:mm:ss)"
+  "body": [
+    "${1:systemUptime}=\\$(uptime ${2|-p,-s|})",
+    "${0:echo \"\\${${1:systemUptime}\\}\"}\n"
+  ],
+  "description": "System uptime. -p: --pretty, -s: since"
 }

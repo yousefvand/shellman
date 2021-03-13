@@ -21,7 +21,7 @@
   },
   "array.all-elements": {
     "prefix": "array all",
-    "body": "${myArray[@]}\n",
+    "body": "\"${myArray[@]}\"\n",
     "description": "all array elements"
   },
   "array.at-index": {
@@ -67,15 +67,15 @@
     ],
     "body": [
       "for item in \"${${1:myArray}[@]}\"; do",
-      "\t${2:echo \"\\$item\"}",
+      "\t${2:echo \"\\${item\\}\"}",
       "done\n"
     ],
     "description": "iterate array elements"
   },
   "array.length": {
     "prefix": "array length",
-    "body": "${#${1:myArray}[@]}\n",
-    "description": "length of array"
+    "body": "${0:length}=${#${1:myArray}[@]}",
+    "description": "length of an array"
   },
   "array.push": {
     "prefix": [
@@ -90,17 +90,17 @@
       "array slice",
       "array range"
     ],
-    "body": "${myArray[@]:${1:from}:${2:count}}\n",
+    "body": "${0:newArray}=\"${${1:myArray}[@]:${2:from}:${3:count}}\"\n",
     "description": "elements of array from index, equal to count numbers"
   },
   "array.replace": {
     "prefix": "array replace",
-    "body": "${myArray[@]//${1:find}/${2:replace}}\n",
+    "body": "${0:newArray}=${${1:myArray}[@]//${2:find}/${3:replace}}\n",
     "description": "find and replace elements in array using regex"
   },
   "array.set-element-at": {
     "prefix": "array set element",
-    "body": "myArray[${1:index}]=${2:value}\n",
+    "body": "${0:myArray}[${1:index}]=\"${2:value}\"\n",
     "description": "set array element at index"
   },
   "command.failure-check": {
@@ -128,31 +128,31 @@
   },
   "command.renice": {
     "prefix": "cmd renice",
-    "body": "for p in \\$(pidof \"${1:process_name}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done",
+    "body": "for p in \\$(pidof \"${1:process_name}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n",
     "description": "Change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.run": {
     "prefix": "cmd",
-    "body": "$(${1:command})\n",
+    "body": "${0:result}=$(${1:command})\n",
     "description": "run command (command substitution)"
   },
   "command.success-check": {
     "prefix": "cmd success check",
     "body": [
       "if [[ \\$? == 0 ]]; then",
-      "\t${3:echo command succeed}",
+      "\t${3:echo \"command succeed\"}",
       "fi\n"
     ],
     "description": "check if last command succeed"
   },
   "cryptography.base64-decode": {
     "prefix": "crypto base64 decode",
-    "body": "${1:base64Decoded}=\\$(echo -n \"\\$${2:variableToDecode}\" | base64 -d)\n",
+    "body": "${1:base64Decoded}=\\$(echo -n \"\\${${2:variableToDecode}\\}\" | base64 -d)\n",
     "description": "decode variable from base64"
   },
   "cryptography.base64-encode": {
     "prefix": "crypto base64 encode",
-    "body": "${1:base64Encoded}=\\$(echo -n \"\\$${2:variableToEncode}\" | base64)\n",
+    "body": "${1:base64Encoded}=\\$(echo -n \"\\${${2:variableToEncode}\\}\" | base64)\n",
     "description": "encode variable to base64"
   },
   "cryptography.hash": {
@@ -168,7 +168,7 @@
   "date.day-of-week-current": {
     "prefix": "date now dayOfWeek",
     "body": "dayOfWeek=\\$(date +%${1|A,a|})\n",
-    "description": "current day of week name (full/abbreviated A/a)"
+    "description": "current day of week name (A: full | a: abbreviated)"
   },
   "date.day-of-year-current": {
     "prefix": "date now dayOfYear",
@@ -183,7 +183,7 @@
   "date.month-name-current": {
     "prefix": "date now monthName",
     "body": "monthName=\\$(date +%${1|B,b|})\n",
-    "description": "current month name (full/abbreviated B/b)"
+    "description": "current month name (B: full | b: abbreviated)"
   },
   "date.month-number-current": {
     "prefix": "date now monthNumber",
@@ -265,8 +265,8 @@
   "filesystem.file-read": {
     "prefix": "file read",
     "body": [
-      "cat ${1:\"\\$filepath\"} | while read ${2:line}; do",
-      "\t${3:echo \"\\$line\"}",
+      "cat \"\\${${1:filePath}\\}\" | while read ${2:line}; do",
+      "\t${3:echo \"\\${line\\}\"}",
       "done\n"
     ],
     "description": "read a file"
@@ -277,24 +277,24 @@
       "search in files",
       "find in files"
     ],
-    "body": "result=\\$(find ${1:./path} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +)\n",
-    "description": "find files which contain search criteria"
+    "body": "result=\\$(find ${1:path/to/search} -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${3:criteria}\" {} +)\n",
+    "description": "find files which contain search criteria in given path and below"
   },
   "filesystem.file-write-multiline-sudo": {
     "prefix": "file write multiline sudo",
     "body": [
-      "cat << EOL | sudo tee ${1:filepath}",
+      "cat << EOL | sudo tee ${1:filePath}",
       "${0:# text here}",
-      "EOL"
+      "EOL\n"
     ],
     "description": "write multiple lines into file with sudo permission"
   },
   "filesystem.file-write-multiline": {
     "prefix": "file write multiline",
     "body": [
-      "cat >${1:filepath} <<EOL",
-      "# text here",
-      "EOL"
+      "cat >${1:filePath} <<EOL",
+      "${0:# text here}",
+      "EOL\n"
     ],
     "description": "write multiple lines into file"
   },
@@ -303,7 +303,7 @@
     "body": [
       "echo \"${1:sample header}\" > ${2:/path/to/file}",
       "for ${3:line} in \\${${4:lines}}; do",
-      "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
+      "\techo \"\\${${3:line}\\}\" >> ${2:/path/to/file}",
       "done\n"
     ],
     "description": "write to a file"
@@ -319,7 +319,7 @@
   "filesystem.if-directory-exists": {
     "prefix": "if directory exists",
     "body": [
-      "if [ -d \"\\$${1:directory}\" ]; then",
+      "if [ -d \"\\${${1:directory}\\}\" ]; then",
       "\t${0:echo directory exists}",
       "fi\n"
     ],
@@ -328,7 +328,7 @@
   "filesystem.if-file-executable": {
     "prefix": "if file executable",
     "body": [
-      "if [ -x \"\\$${1:file}\" ]; then",
+      "if [ -x \"\\${${1:filePath}\\}\" ]; then",
       "\t${0:echo file is executable}",
       "fi\n"
     ],
@@ -337,7 +337,7 @@
   "filesystem.if-file-exists-and-is-symbolic-link": {
     "prefix": "if file link",
     "body": [
-      "if [ -h \"\\$${1:file}\" ]; then",
+      "if [ -h \"\\${${1:filePath}\\}\" ]; then",
       "\t${0:echo symbolic link}",
       "fi\n"
     ],
@@ -346,7 +346,7 @@
   "filesystem.if-file-exists": {
     "prefix": "if file exists",
     "body": [
-      "if [ -f \"\\$${1:file}\" ]; then",
+      "if [ -f \"\\${${1:filePath}\\}\" ]; then",
       "\t${2:echo file exists}",
       "fi\n"
     ],
@@ -355,7 +355,7 @@
   "filesystem.if-file-not-empty": {
     "prefix": "if file not empty",
     "body": [
-      "if [ -s \"\\$${1:file}\" ]; then",
+      "if [ -s \"\\${${1:filePath}\\}\" ]; then",
       "\t${2:echo file not empty}",
       "fi\n"
     ],
@@ -364,7 +364,7 @@
   "filesystem.if-file-readable": {
     "prefix": "if file readable",
     "body": [
-      "if [ -r \"\\$${1:file}\" ]; then",
+      "if [ -r \"\\${${1:filePath}\\}\" ]; then",
       "\t${0:echo file is readable}",
       "fi\n"
     ],
@@ -373,7 +373,7 @@
   "filesystem.if-file-writeable": {
     "prefix": "if file writeable",
     "body": [
-      "if [ -w \"\\$${1:file}\" ]; then",
+      "if [ -w \"\\${${1:filePath}\\}\" ]; then",
       "\t${0:echo file is writeable}",
       "fi\n"
     ],
@@ -382,7 +382,7 @@
   "filesystem.if-file1-newer-than-file2": {
     "prefix": "if file newer",
     "body": [
-      "if [ \"\\$${1:file1}\" -nt \"\\$${2:file2}\" ]; then",
+      "if [ \"\\${${1:file1}\\}\" -nt \"\\${${2:file2}\\}\" ]; then",
       "\t${0:echo file1 is newer than file2}",
       "fi\n"
     ],
@@ -391,7 +391,7 @@
   "filesystem.if-file1-older-than-file2": {
     "prefix": "if file older",
     "body": [
-      "if [ \"\\$${1:file1}\" -ot \"\\$${2:file2}\" ]; then",
+      "if [ \"\\${${1:file1}\\}\" -ot \"\\${${2:file2}\\}\" ]; then",
       "\t${0:echo file1 is older than file2}",
       "fi\n"
     ],
@@ -400,24 +400,24 @@
   "filesystem.if-files-are-equal": {
     "prefix": "if file =",
     "body": [
-      "if [ \"\\$${1:file1}\" -ef \"\\$${2:file2}\" ]; then",
+      "if [ \"\\${${1:file1}\\}\" -ef \"\\${${2:file2}\\}\" ]; then",
       "\t${0:echo files are equal}",
       "fi\n"
     ],
     "description": "if files are equal"
   },
   "filesystem.if-path-exists": {
-    "prefix": "if exists",
+    "prefix": "if path exists",
     "body": [
-      "if [ -e \"\\$${1:path}\" ]; then",
-      "\t${0:echo exists}",
+      "if [ -e \"\\${${1:path}\\}\" ]; then",
+      "\t${0:echo \"path exists\"}",
       "fi\n"
     ],
     "description": "if path exists (file, directory, link...)"
   },
   "filesystem.remove-files-older-than": {
-    "prefix": "remove files older",
-    "body": "find \"\\$${1:path}\" -mtime +${2:days} | xargs rm -f\n",
+    "prefix": "remove old files",
+    "body": "find \"\\${${1:path}\\}\" -mtime +${2:days} | xargs rm -f\n",
     "description": "find and remove files older than x days"
   },
   "fn-fx.fn-animate": {
@@ -438,8 +438,8 @@
       "\twhile true; do",
       "\t\tfor frame in \"\\${frames[@]}\"; do",
       "\t\t\ttput rc # restore cursor position",
-      "\t\t\techo \"\\$frame\"",
-      "\t\t\tsleep \"\\$interval\"",
+      "\t\t\techo \"\\${frame\\}\"",
+      "\t\t\tsleep \"\\${interval\\}\"",
       "\t\tdone",
       "\tdone",
       "}\n${0:}"
@@ -452,10 +452,10 @@
       "# Usage: pac_man inputString interval pad",
       "# Example: pacman \"Hello World\" 0.5 \"*\"",
       "function pac_man () {",
-      "\tlocal string=\"\\$1\"",
-      "\tlocal interval=\"\\$2\"",
+      "\tlocal string=\"\\${1\\}\"",
+      "\tlocal interval=\"\\${2\\}\"",
       "\t: \"\\${interval:=0.2}\"",
-      "\tlocal pad=\"\\$3\"",
+      "\tlocal pad=\"\\${3\\}\"",
       "\t: \"\\${pad:=.}\"",
       "\tlocal length=\\${#string}",
       "\tlocal padding=\"\"",
@@ -467,17 +467,17 @@
       "",
       "\tfor((i=0;i<=length;i++)); do",
       "\t\ttput rc",
-      "\t\techo \"\\$padding\"c\"\\${string:i:length}\"",
+      "\t\techo \"\\${padding\\}c\\${string:i:length}\"",
       "\t\tsleep \"\\$interval\"",
       "\t\ttput rc",
-      "\t\techo \"\\$padding\"C\"\\${string:i:length}\"",
-      "\t\tsleep \"\\$interval\"",
-      "\t\tpadding+=\"\\$pad\"",
+      "\t\techo \"\\${padding\\}C\\${string:i:length}\"",
+      "\t\tsleep \"\\${interval\\}\"",
+      "\t\tpadding+=\"\\${pad\\}\"",
       "\tdone",
       "",
       "\ttput cnorm",
       "\ttput rc",
-      "\techo \"\\$padding\"",
+      "\techo \"\\${padding\\}\"",
       "}\n${0:}"
     ],
     "description": "Pacman animation (eating input text)"
@@ -489,7 +489,7 @@
       "function banner_color() {",
       "\tlocal color=\\$1",
       "\tshift\n",
-      "\tcase \\$color in",
+      "\tcase \\${color\\} in",
       "\t\tblack) color=0",
       "\t\t;;",
       "\t\tred) color=1",
@@ -511,13 +511,13 @@
       "\tesac\n",
       "\tlocal s=(\"$@\") b w",
       "\tfor l in \"\\${s[@]}\"; do",
-      "\t\t((w<${#l})) && { b=\"\\$l\"; w=\"\\${#l}\"; }",
+      "\t\t((w<${#l})) && { b=\"\\${l\\}\"; w=\"\\${#l}\"; }",
       "\tdone",
       "\ttput setaf \\$color",
       "\techo \" =\\${b//?/=}=",
       "| \\${b//?/ } |\"",
       "\tfor l in \"\\${s[@]}\"; do",
-      "\t\tprintf '| %s%*s%s |\\n' \"\\$(tput setaf \\$color)\" \"-\\$w\" \"\\$l\" \"\\$(tput setaf \\$color)\"",
+      "\t\tprintf '| %s%*s%s |\\n' \"\\$(tput setaf \\${color\\})\" \"-\\${w\\}\" \"\\${l\\}\" \"\\$(tput setaf \\${color\\})\"",
       "\tdone\n",
       "\techo \"| ${b//?/ } |",
       " =${b//?/=}=\"",
@@ -532,10 +532,10 @@
       "# Usage: banner_simple \"my title\"\n",
       "function banner_simple() {",
       "\tlocal msg=\"* \\$* *\"",
-      "\tlocal edge=\\$(echo \"\\$msg\" | sed 's/./*/g')",
-      "\techo \"\\$edge\"",
-      "\techo \"\\$(tput bold)\\$msg\\$(tput sgr0)\"",
-      "\techo \"\\$edge\"",
+      "\tlocal edge=\\$(echo \"\\${msg\\}\" | sed 's/./*/g')",
+      "\techo \"\\${edge\\}\"",
+      "\techo \"\\$(tput bold)\\${msg\\}\\$(tput sgr0)\"",
+      "\techo \"\\${edge\\}\"",
       "\techo",
       "}\n"
     ],
@@ -546,11 +546,11 @@
     "body": [
       "# Usage: import \"mylib\"\n",
       "function import() {",
-      "\tlocal file=\"./${0:lib}/\\$1.sh\"",
-      "\tif [ -f \"\\$file\" ]; then",
-      "\t\tsource \"\\$file\"",
+      "\tlocal file=\"./${0:lib}/\\${1\\}.sh\"",
+      "\tif [ -f \"\\${file\\}\" ]; then",
+      "\t\tsource \"\\${file\\}\"",
       "\telse",
-      "\t\techo \"Error: Cannot find library at: \\$file\"",
+      "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
       "\t\texit 1",
       "\tfi",
       "}\n"
@@ -578,7 +578,7 @@
       "\tfor item in $@; do",
       "\t\t((result *= item))",
       "\tdone",
-      "\techo \\$result",
+      "\techo \\${result\\}",
       "}\n"
     ],
     "description": "Calculate product of given integers"
@@ -591,7 +591,7 @@
       "\tfor item in \\$@; do",
       "\t\t((result += item))",
       "\tdone",
-      "\techo \\$result",
+      "\techo \\${result\\}",
       "}\n"
     ],
     "description": "Calculate sum of given integers"
@@ -601,9 +601,9 @@
     "body": [
       "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"\n",
       "function chooseOption() {",
-      "\techo \"\\$1\"; shift",
+      "\techo \"\\${1\\}\"; shift",
       "\techo \\$(tput sitm)\\$(tput dim)-\"Change selection: [up/down]  Select: [ENTER]\" \\$(tput sgr0)",
-      "\tlocal selected=\"\\$1\"; shift\n",
+      "\tlocal selected=\"\\${1\\}\"; shift\n",
       "\tESC=\\$(echo -e \"\\033\")",
       "\tcursor_blink_on()  { tput cnorm; }",
       "\tcursor_blink_off() { tput civis; }",
@@ -622,23 +622,23 @@
       "\t\tlocal idx=0",
       "\t\tfor opt; do",
       "\t\t\tcursor_to \\$((\\$startrow + \\$idx))",
-      "\t\t\tif [ \\$idx -eq \\$selected ]; then",
-      "\t\t\t\tprint_selected \"\\$opt\"",
+      "\t\t\tif [ \\${idx\\} -eq \\${selected\\} ]; then",
+      "\t\t\t\tprint_selected \"\\${opt\\}\"",
       "\t\t\telse",
-      "\t\t\t\tprint_option \"\\$opt\"",
+      "\t\t\t\tprint_option \"\\${opt\\}\"",
       "\t\t\tfi",
       "\t\t\t((idx++))",
       "\t\tdone\n",
       "\t\tcase \\$(key_input) in",
       "\t\t\tenter) break;;",
-      "\t\t\tup)    ((selected--)); [ \\$selected -lt 0 ] && selected=\\$((\\$# - 1));;",
-      "\t\t\tdown)  ((selected++)); [ \\$selected -ge \\$# ] && selected=0;;",
+      "\t\t\tup)    ((selected--)); [ \"\\${selected}\" -lt 0 ] && selected=\\$((\\$# - 1));;",
+      "\t\t\tdown)  ((selected++)); [ \"\\${selected}\" -ge \\$# ] && selected=0;;",
       "\t\tesac",
       "\tdone\n",
-      "\tcursor_to \\$lastrow",
+      "\tcursor_to \"\\${lastrow\\}\"",
       "\tcursor_blink_on",
       "\techo\n",
-      "\treturn \\$selected",
+      "\treturn \"\\${selected\\}\"",
       "}\n"
     ],
     "description": "provide a list of options to user and return the index of selected option"
@@ -691,9 +691,9 @@
       "\tlocal length=\"\\${#1}\"",
       "\tfor (( i = 0; i < length; i++ )); do",
       "\t\tlocal c=\"\\${1:i:1}\"",
-      "\t\tcase \\$c in",
-      "\t\t\t[a-zA-Z0-9.~_-]) printf \"\\$c\" ;;",
-      "\t\t\t*) printf '%%%02X' \"'\\$c\" ;;",
+      "\t\tcase \"\\${c\\}\" in",
+      "\t\t\t[a-zA-Z0-9.~_-]) printf \"\\${c\\}\" ;;",
+      "\t\t\t*) printf '%%%02X' \"'\\${c\\}\" ;;",
       "\t\tesac",
       "\tdone",
       "}\n"
@@ -718,7 +718,7 @@
       "\t\tlocal length=${#2}",
       "\t\techo -e \"\\${2:((++offset)):length}\"",
       "\t}",
-      "\tif [ -z \"\\$1\" ] || [ -z \"\\$2\" ]; then",
+      "\tif [ -z \"\\${1\\}\" ] || [ -z \"\\${2\\}\" ]; then",
       "\t\techo \"=\" && exit 0",
       "\tfi",
       "\tlocal v1=\\$(echo -e \"\\${1}\" | tr -d '[[:space:]]')",
@@ -748,7 +748,7 @@
     "prefix": "fx animation pacman",
     "body": [
       "# Usage: pac_man inputString interval pad",
-      "pac_man \"${1:Hello World}\" ${2:0.5} \"${3:*}\"\n"
+      "pac_man \"${1:Hello World}\" ${2:0.3} \"${3:.}\"\n"
     ],
     "description": "Call Pacman animation (eating input text) function"
   },
@@ -769,17 +769,17 @@
   },
   "fn-fx.fx-math-average": {
     "prefix": "fx math average",
-    "body": "result=\\$(average ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
+    "body": "result=\\$(average \\${${1:num1}\\} \\${${2:num2}\\} \\${${3:num3}\\})\n",
     "description": "Call math average function"
   },
   "fn-fx.fx-math-product": {
     "prefix": "fx math product",
-    "body": "result=\\$(product ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
+    "body": "result=\\$(product \\${${1:num1}\\} \\${${2:num2}\\} \\${${3:num3}\\})\n",
     "description": "Call math product function"
   },
   "fn-fx.fx-math-sum": {
     "prefix": "fx math sum",
-    "body": "result=\\$(sum ${1:\\$var1} ${2:\\$var2} ${3:\\$var3})\n",
+    "body": "result=\\$(sum \\${${1:num1}\\} \\${${2:num2}\\} \\${${3:num3}\\})\n",
     "description": "Call math sum function"
   },
   "fn-fx.fx-options": {
@@ -798,17 +798,17 @@
   },
   "fn-fx.fx-scan": {
     "prefix": "fx scan",
-    "body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4: toPort}",
+    "body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4:toPort}\n",
     "description": "call scan function to scan a host over a port range"
   },
   "fn-fx.fx-urldecode": {
     "prefix": "fx urldecode",
-    "body": "urldecode ${1:encodedUrl}",
+    "body": "urldecode \"${1:encodedUrl}\"\n",
     "description": "Call urldecode function"
   },
   "fn-fx.fx-urlencode": {
     "prefix": "fx urlencode",
-    "body": "urlencode ${1:url}",
+    "body": "urlencode \"${1:url}\"\n",
     "description": "Call urlencode function"
   },
   "fn-fx.fx-version-compare": {
@@ -858,13 +858,13 @@
     "prefix": "func",
     "body": [
       "function ${1:name} () {",
-      "\t${2:echo \"\\$1\" # arguments are accessible through $1, $2,...}",
+      "\t${2:echo \"\\$1\" # arguments are accessible through \\$1, \\$2,...}",
       "}\n"
     ],
     "description": "function"
   },
   "function.return-value": {
-    "prefix": "func ret val",
+    "prefix": "func return value",
     "body": "echo \"$?\"",
     "description": "last function/command return code"
   },
@@ -1061,8 +1061,8 @@
   "input.ask-question": {
     "prefix": "ask question",
     "body": [
-      "read -ep \"${1:Question here? }\" -i ${2:Default answer} ANSWER",
-      "${3:echo \"\\$ANSWER\"}\n"
+      "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
+      "${3:echo \"\\${answer\\}\"}\n"
     ],
     "description": "Ask question with default answer"
   },
@@ -1078,8 +1078,8 @@
   "integer.if-greater-or-equal": {
     "prefix": "if int >=",
     "body": [
-      "if (( ${1:int} >= ${2:val} )); then",
-      "\t${3:echo greater equal}",
+      "if (( ${1:int1} >= ${2:int2} )); then",
+      "\t${3:echo greater or equal}",
       "fi\n"
     ],
     "description": "if integer greater than or equal value"
@@ -1087,7 +1087,7 @@
   "integer.if-greater": {
     "prefix": "if int >",
     "body": [
-      "if (( ${1:int} > ${2:val} )); then",
+      "if (( ${1:int1} > ${2:int2} )); then",
       "\t${3:echo greater}",
       "fi\n"
     ],
@@ -1096,8 +1096,8 @@
   "integer.if-lesser-or-equal": {
     "prefix": "if int <=",
     "body": [
-      "if (( ${1:int} <= ${2:val} )); then",
-      "\t${3:echo lesser equal}",
+      "if (( ${1:int1} <= ${2:int2} )); then",
+      "\t${3:echo lesser or equal}",
       "fi\n"
     ],
     "description": "if integer lesser than or equal value"
@@ -1105,7 +1105,7 @@
   "integer.if-lesser": {
     "prefix": "if int <",
     "body": [
-      "if (( ${1:int} < ${2:val} )); then",
+      "if (( ${1:int1} < ${2:int2} )); then",
       "\t${3:echo lesser}",
       "fi\n"
     ],
@@ -1125,7 +1125,7 @@
     "body": [
       "for((i=0;i<${1:n};i++)); do",
       "\tfor((j=0;j<${2:m};j++)); do",
-      "\t\t${0:echo \"\\$i, \\$j\"}",
+      "\t\t${0:echo \"\\${i\\}, \\${j\\}\"}",
       "\tdone",
       "done\n"
     ],
@@ -1135,7 +1135,7 @@
     "prefix": "for i",
     "body": [
       "for((i=0;i<${1:n};i++)); do",
-      "\t${0:echo \"\\$i\"}",
+      "\t${0:echo \"\\${i\\}\"}",
       "done\n"
     ],
     "description": "for loop by index"
@@ -1143,8 +1143,8 @@
   "internal.for-in-collection": {
     "prefix": "for in",
     "body": [
-      "for ${1:item} in {${2:a..z}}; do",
-      "\techo \"\\$${1:item}\"",
+      "for ${1:item} in {${2:a}..${3:z}}; do",
+      "\techo \"\\${${1:item}\\}\"",
       "done\n"
     ],
     "description": "for loop in collection"
@@ -1153,8 +1153,8 @@
     "prefix": "for in column",
     "body": [
       "for ${1:col} in \\$(${2:docker images} | awk '{ print ${3:\\$1\":\"\\$2} }'); do",
-      "\t${4:echo \"\\$col\" | cut -d ':' -f 1}",
-      "\t${5:echo \"\\$col\" | cut -d ':' -f 2}",
+      "\t${4:echo \"\\${${1:col}\\}\" | cut -d ':' -f 1}",
+      "\t${5:echo \"\\${${1:col}\\}\" | cut -d ':' -f 2}",
       "done\n"
     ],
     "description": "for loop in collection"
@@ -1163,11 +1163,11 @@
     "prefix": "if",
     "body": [
       "if [ ${1:condition} ]; then",
-      "\t${2: # body}",
+      "\t${2: # if body}",
       "elif [ ${3:condition} ]; then",
-      "\t${4: # body}",
+      "\t${4: # else if body}",
       "else",
-      "\t${5: # body}",
+      "\t${5: # else body}",
       "fi\n"
     ],
     "description": "if"
@@ -1194,15 +1194,15 @@
   "internal.switch": {
     "prefix": "switch case",
     "body": [
-      "case \"\\$${1:item}\" in",
+      "case \"\\${${1:item}\\}\" in",
       "\t${2:1})",
-      "\t\t${3:echo \"case 1\"}",
+      "\t\t${3:echo \"item = 1\"}",
       "\t;;",
       "\t${4:2|3})",
-      "\t\t${5:echo \"case 2 or 3\"}",
+      "\t\t${5:echo \"item = 2 or item = 3\"}",
       "\t;;",
       "\t*)",
-      "\t\t${6:echo \"default\"}",
+      "\t\t${6:echo \"default (none of above)\"}",
       "\t;;",
       "esac\n"
     ],
@@ -1212,7 +1212,7 @@
     "prefix": "loop until",
     "body": [
       "until [ ${1:condition} ]; do",
-      "\t${0:# body}",
+      "\t${2:# body}",
       "done\n"
     ],
     "description": "until loop"
@@ -1221,7 +1221,7 @@
     "prefix": "loop while",
     "body": [
       "while [ ${1:condition} ]; do",
-      "\t${0:# body}",
+      "\t${2:# body}",
       "done\n"
     ],
     "description": "while loop"
@@ -1233,17 +1233,17 @@
   },
   "ip.info": {
     "prefix": "ip info",
-    "body": "echo \\$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n",
+    "body": "${0:info}=\\$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n",
     "description": "public ip information"
   },
   "ip.public-address": {
     "prefix": "ip public",
-    "body": "PUBLIC_IP=\\$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n",
+    "body": "${0:publicIp}=\\$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})\n",
     "description": "public ip address"
   },
   "math.add": {
     "prefix": "math +",
-    "body": "${1:result}=\\$((${2:var1} + ${3:var2}))\n",
+    "body": "${1:result}=\\$((${2:int1} + ${3:int2}))\n",
     "description": "add two variables"
   },
   "math.const-gamma": {
@@ -1273,53 +1273,53 @@
   },
   "math.decrement": {
     "prefix": "math --",
-    "body": "((${1|var--,--var|}))\n",
-    "description": "decrement variable"
+    "body": "((${1|int--,--int|}))\n",
+    "description": "decrement integer variable"
   },
   "math.divide-equal": {
     "prefix": "math /=",
-    "body": "((${1:var1} /= ${2:var2}))\n",
-    "description": "divide var1 by var2 and assign the result to var1"
+    "body": "((${1:int1} /= ${2:int2}))\n",
+    "description": "divide int1 by int2 and assign the whole part to int1"
   },
   "math.divide": {
     "prefix": "math /",
-    "body": "${1:result}=\\$((${2:var1} / ${3:var2}))\n",
-    "description": "divide var1 by var2"
+    "body": "${1:result}=\\$((${2:int1} / ${3:int2}))\n",
+    "description": "divide int1 by int2 as integers and returns whole part"
   },
   "math.increment": {
     "prefix": "math ++",
-    "body": "((${1|var++,++var|}))\n",
-    "description": "increment variable"
+    "body": "((${1|int++,++int|}))\n",
+    "description": "increment integer variable by 1"
   },
   "math.minus-equal": {
     "prefix": "math -=",
-    "body": "((${1:var1} -= ${2:var2}))\n",
-    "description": "subtract var2 from var1 and assign the result to var1"
+    "body": "((${1:int1} -= ${2:int2}))\n",
+    "description": "subtract int2 from int1 and assign the result to int1"
   },
   "math.modulus-equal": {
     "prefix": "math %=",
-    "body": "((${1:var1} %= ${2:var2}))\n",
-    "description": "divide var1 by var2 and assign the reminder to var1"
+    "body": "((${1:int1} %= ${2:int2}))\n",
+    "description": "divide int1 by int2 and assign the reminder to int1"
   },
   "math.modulus": {
     "prefix": "math %",
-    "body": "${1:result}=\\$((${2:var1} % ${3:var2}))\n",
-    "description": "reminder of dividing var1 by var2 (modulus)"
+    "body": "${1:result}=\\$((${2:int1} % ${3:int2}))\n",
+    "description": "reminder of dividing int1 by int2 (modulus)"
   },
   "math.multiply-equal": {
     "prefix": "math *=",
-    "body": "((${1:var1} *= ${2:var2}))\n",
-    "description": "multiply var1 by var2 and assign the result to var1"
+    "body": "((${1:int1} *= ${2:int2}))\n",
+    "description": "multiply int1 by int2 and assign the result to int1"
   },
   "math.multiply": {
     "prefix": "math *",
-    "body": "${1:result}=\\$((${2:var1} * ${3:var2}))\n",
-    "description": "multiply var1 by var2"
+    "body": "${1:result}=\\$((${2:int1} * ${3:int2}))\n",
+    "description": "multiply int1 by int2"
   },
   "math.plus-equal": {
     "prefix": "math +=",
-    "body": "((${1:var1} += ${2:var2}))\n",
-    "description": "add var1 and var2 and assign the result to var1"
+    "body": "((${1:int1} += ${2:int2}))\n",
+    "description": "add int1 and int2 and assign the result to int1"
   },
   "math.power": {
     "prefix": "math ^",
@@ -1328,7 +1328,7 @@
   },
   "math.precision": {
     "prefix": "math 0.00",
-    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(${3:\\$var1} ${4|+,-,*,/,^|} ${5:\\$var2})\" | bc)\n",
+    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};(\\${${3:var1}\\} ${4|+,-,*,/,^|} \\${${5:var2}\\})\" | bc)\n",
     "description": "math operations with up to scale decimal places precision"
   },
   "math.random-number": {
@@ -1338,20 +1338,20 @@
   },
   "math.sqrt": {
     "prefix": "math √",
-    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3:\\$var})\" | bc)\n",
+    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(\\${${3:var}\\})\" | bc)\n",
     "description": "square root of var up to scale decimal places"
   },
   "math.subtract": {
     "prefix": "math -",
-    "body": "${1:result}=\\$((${2:var1} - ${3:var2}))\n",
-    "description": "subtract var2 from var1"
+    "body": "${1:result}=\\$((${2:int1} - ${3:int2}))\n",
+    "description": "subtract int2 from int1"
   },
   "misc.animation-frame": {
     "prefix": "animation frame",
     "body": [
       "# Your frames need to have the exact same width and height.",
       "# If they are different in size, fill unused space with `space`s (no `TAB`s).",
-      "IFS='' read -r -d '' ${1:frames}[${2:1}] <<\"EOF\"",
+      "IFS='' read -r -d '' ${1:frames}[${2|1,2,3,4,5,6,7,8,9|}] <<\"EOF\"",
       "${3:# Frame here}",
       "EOF\n"
     ],
@@ -1365,17 +1365,17 @@
     "body": [
       "POSITIONAL=()",
       "while [[ \\$# > 0 ]]; do",
-      "\tcase \"\\$1\" in",
+      "\tcase \"\\${1\\}\" in",
       "\t\t-f|--flag)",
-      "\t\techo flag: \\$1",
+      "\t\techo flag: \"\\${1\\}\"",
       "\t\tshift # shift once since flags have no values",
       "\t\t;;",
       "\t\t-s|--switch)",
-      "\t\techo switch \\$1 with value: \\$2",
+      "\t\techo \"switch: \\${1\\} with value: \\${2\\}\"",
       "\t\tshift 2 # shift twice to bypass switch and its value",
       "\t\t;;",
       "\t\t*) # unknown flag/switch",
-      "\t\tPOSITIONAL+=(\"\\$1\")",
+      "\t\tPOSITIONAL+=(\"\\${1\\}\")",
       "\t\tshift",
       "\t\t;;",
       "\tesac",
@@ -1386,13 +1386,13 @@
   },
   "misc.expr": {
     "prefix": "expr",
-    "body": "expr ${1:2} ${2|+,-,\\*,/,%|} ${3:3}\n",
-    "description": "arithmetic operations"
+    "body": "${0:result}=\\$(expr ${1:\\$int1} ${2|+,-,\\*,/,%|} ${3:\\$int2})\n",
+    "description": "arithmetic operations on integers"
   },
   "misc.let": {
     "prefix": "let",
-    "body": "let \"${1:result} = ${2:var1} ${3|+,-,*,/,%|} ${4:var2}\"\n",
-    "description": "arithmetic operations"
+    "body": "let \"${1:result} = ${2:int1} ${3|+,-,*,/,%|} ${4:int2}\"\n",
+    "description": "arithmetic operations on integers"
   },
   "misc.region": {
     "prefix": "region",
@@ -1419,21 +1419,21 @@
   "misc.stopwatch-elapsed": {
     "prefix": "stopwatch elapsed",
     "body": [
-      "STOPWATCH_ELAPSED_TOTAL_SECONDS=$((STOPWATCH_END_TIME - STOPWATCH_START_TIME))",
-      "STOPWATCH_ELAPSED_MINUTES=$((STOPWATCH_ELAPSED_TOTAL_SECONDS / 60))",
-      "STOPWATCH_ELAPSED_SECONDS=$((STOPWATCH_ELAPSED_TOTAL_SECONDS % 60))",
-      "${1:echo elapsed \\$STOPWATCH_ELAPSED_MINUTES minutes and \\$STOPWATCH_ELAPSED_SECONDS seconds}\n"
+      "stopwatchElapsedTotalSeconds=$((stopwatchEndTime - stopwatchStartTime))",
+      "stopwatchElapsedMinutes=$((stopwatchElapsedTotalSeconds / 60))",
+      "stopwatchElapsedSeconds=$((stopwatchElapsedTotalSeconds % 60))",
+      "${1:echo \"elapsed \\${stopwatchElapsedMinutes\\} minutes and \\${stopwatchElapsedSeconds\\} seconds}.\"\n"
     ],
     "description": "elapsed time"
   },
   "misc.stopwatch-start": {
     "prefix": "stopwatch start",
-    "body": "STOPWATCH_START_TIME=\\$(date +%s)\n",
+    "body": "stopwatchStartTime=\\$(date +%s)\n",
     "description": "start stopwatch"
   },
   "misc.stopwatch-stop": {
     "prefix": "stopwatch stop",
-    "body": "STOPWATCH_END_TIME=\\$(date +%s)\n",
+    "body": "stopwatchEndTime=\\$(date +%s)\n",
     "description": "stop stopwatch"
   },
   "misc.summary": {
@@ -1464,8 +1464,8 @@
       "assign if empty",
       "variable default value"
     ],
-    "body": ": \"\\${${1:variable}:=${2:default}}\"",
-    "description": "assign default to variable if variable is empty or null"
+    "body": ": \"\\${${1:variable}:=${2:defaultValue}}\"\n",
+    "description": "assign default value to variable if variable is empty otherwise assign null"
   },
   "output.color-black": {
     "prefix": "color black",
@@ -1528,9 +1528,17 @@
     "description": "write in reverse"
   },
   "process.process-id": {
-    "prefix": "process ID",
-    "body": "pgrep ${1:process_name}\n",
-    "description": "Find process id (PID)"
+    "prefix": "process ID(s)",
+    "body": [
+      "processIDsArray=(\\$(pgrep ${1:process_name}))",
+      "${0:echo \"\\${processIDsArray[@]\\}\"}\n"
+    ],
+    "description": "Find process ID(s) aka PIDs"
+  },
+  "process.process-instances": {
+    "prefix": "process list",
+    "body": "${1:processInstances}=\\$(ps -A | grep \"\\${${2:processName}\\}\")\n",
+    "description": "List processes"
   },
   "process.process-kill": {
     "prefix": "process kill",
@@ -1553,8 +1561,8 @@
       "if string contains"
     ],
     "body": [
-      "if [[ \"\\$${1:string}\" = *${2:substring}* ]]; then",
-      "\t${3:# body}",
+      "if [[ \"\\${${1:string}\\}\" = *\\${${2:substring}\\}* ]]; then",
+      "\t${3:echo \"\\${${1:string}\\} contains: \\${${2:substring}\\}\"}",
       "fi\n"
     ],
     "description": "check whether string contains substring"
@@ -1562,16 +1570,16 @@
   "string.first-index-substring": {
     "prefix": "string indexOf",
     "body": [
-      "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=\\$(echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp})",
-      "${0:# echo \\$indexOf}"
+      "temp=\\${${1:string}%%\\${${2:substring}}*} && index=\\${#temp\\}",
+      "${0:echo \"index of \\\"\\${${2:substring}\\}\\\" in \\\"\\${${1:string}\\}\\\" is \\${index\\}\"}"
     ],
-    "description": "first index of substring in string"
+    "description": "first index of substring in a string"
   },
   "string.if-empty": {
     "prefix": "if string empty",
     "body": [
-      "if [ -z \"\\$${1:string}\" ]; then",
-      "\t${2:# body}",
+      "if [ -z \"\\${${1:string}\\}\" ]; then",
+      "\t${2:echo \"empty string\"}",
       "fi\n"
     ],
     "description": "if string is empty"
@@ -1582,8 +1590,8 @@
       "string equal"
     ],
     "body": [
-      "if [ \"\\$${1:string1}\" = \"\\$${2:string2}\" ]; then",
-      "\t${3:# body}",
+      "if [ \"\\${${1:string1}\\}\" = \"\\${${2:string2}\\}\" ]; then",
+      "\t${3:echo \"The two strings are the same\"}",
       "fi\n"
     ],
     "description": "if strings are equal"
@@ -1591,8 +1599,8 @@
   "string.if-not-empty": {
     "prefix": "if string not empty",
     "body": [
-      "if [ -n \"\\$${1:string}\" ]; then",
-      "\t${2:# body}",
+      "if [ -n \"\\${${1:string}\\}\" ]; then",
+      "\t${2:echo \"string is not empty\"}",
       "fi\n"
     ],
     "description": "if string is not empty"
@@ -1603,8 +1611,8 @@
       "string not equal"
     ],
     "body": [
-      "if [ \"\\$${1:string1}\" != \"\\$${2:string2}\" ]; then",
-      "\t${3:# body}",
+      "if [ \"\\${${1:string1}\\}\" != \"\\${${2:string2}\\}\" ]; then",
+      "\t${3:echo \"The two strings are different\"}",
       "fi\n"
     ],
     "description": "if strings are not equal"
@@ -1626,7 +1634,7 @@
   },
   "string.reverse": {
     "prefix": "string reverse",
-    "body": "${0:reversed}=\\$(echo -e \"\\${${1:var}}\" | rev)\n",
+    "body": "${0:reversed}=\\$(echo -e \"\\${${1:string}}\" | rev)\n",
     "description": "reverse string characters"
   },
   "string.substring-count": {
@@ -1634,117 +1642,177 @@
       "string substring count",
       "string substring frequency"
     ],
-    "body": "${0:frequency}=\\$(sed -E 's/(.)/\\1\\n/g' <<<\"\\$${1:string}\" | grep -c \"\\$${2:substring}\")\n",
+    "body": [
+      "tmp=\"\\${${1:string}//\\$${2:substring}\\}\" && ${3:frequency}=\\$(((\\${#${1:string}\\} - \\${#tmp\\}) / \\${#${2:substring}}))",
+      "${0:echo \"\\${${3:frequency}\\}\"}\n"
+    ],
     "description": "Frequency of a substring in a string (may need character escaping)"
   },
   "string.substring": {
     "prefix": "string substring",
-    "body": "${0:substring}=\\$(echo -e \"\\${${1:var}:${2:offset}:${3:length}}\")\n",
+    "body": "${0:substring}=\\$(echo -e \"\\${${1:string}:\\${${2:offset}\\}:\\${${3:length}\\}}\")\n",
     "description": "part of the string from offset (zero indexed) with length characters"
   },
   "string.to-lower": {
     "prefix": "string toLower",
-    "body": "${0:toLower}=\\$(echo -e \"\\${${1:var}}\" | tr '[:upper:]' '[:lower:]')\n",
+    "body": "${0:toLower}=\\$(echo -e \"\\${${1:string}}\" | tr '[:upper:]' '[:lower:]')\n",
     "description": "convert string to lowercase"
   },
   "string.to-upper": {
     "prefix": "string toUpper",
-    "body": "${0:toUpper}=\\$(echo -e \"\\${${1:var}}\" | tr '[:lower:]' '[:upper:]')\n",
+    "body": "${0:toUpper}=\\$(echo -e \"\\${${1:string}}\" | tr '[:lower:]' '[:upper:]')\n",
     "description": "convert string to uppercase"
   },
   "string.trim-all": {
     "prefix": "string trim all",
-    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | tr -d '[[:space:]]')\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" | tr -d '[[:space:]]')\n",
     "description": "remove all white space(s)"
   },
   "string.trim-left": {
     "prefix": "string trim left",
-    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | sed -e 's/^[[:space:]]*//')\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" | sed -e 's/^[[:space:]]*//')\n",
     "description": "remove leading white space(s)"
   },
   "string.trim-right": {
     "prefix": "string trim right",
-    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" | sed -e 's/[[:space:]]*$//')\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" | sed -e 's/[[:space:]]*$//')\n",
     "description": "remove trailing white space(s)"
   },
   "string.trim": {
     "prefix": "string trim",
-    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:var}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n",
+    "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n",
     "description": "remove leading and trailing white space(s)"
   },
   "system.distro-codename": {
     "prefix": "system distro codename",
-    "body": "lsb_release -c | awk '{print \\$2}'\n",
-    "description": "OS codename (i.e. xenial)"
+    "body": [
+      "${1:distroCodeName}=\\$(lsb_release -c | awk '{print \\$2}')",
+      "${0:echo \"\\${${1:distroCodeName}\\}\"}\n"
+    ],
+    "description": "OS codename (i.e. Focal Fossa)"
   },
   "system.distro-name": {
     "prefix": "system distro name",
-    "body": "lsb_release -i | awk '{print \\$3}'\n",
+    "body": [
+      "${1:distroName}=\\$(lsb_release -i | awk '{print \\$3}')",
+      "${0:echo \"\\${${1:distroName}\\}\"}\n"
+    ],
     "description": "OS ID (i.e. Ubuntu)"
   },
   "system.distro-version": {
     "prefix": "system distro version",
-    "body": "lsb_release -r | awk '{print \\$2}'\n",
-    "description": "OS Release (i.e. 16.04)"
+    "body": [
+      "${1:distroVersion}=\\$(lsb_release -r | awk '{print \\$2}')",
+      "${0:echo \"\\${${1:distroVersion}\\}\"}\n"
+    ],
+    "description": "OS Release (i.e. 20.04.2)"
   },
   "system.kernel-name": {
     "prefix": "system kernel name",
-    "body": "uname -s\n",
+    "body": [
+      "${1:kernelName}=\\$(uname -s)",
+      "${0:echo \"\\${${1:kernelName}\\}\"}\n"
+    ],
     "description": "OS kernel name (i.e. Linux)"
   },
   "system.kernel-release": {
     "prefix": "system kernel release",
-    "body": "uname -r\n",
+    "body": [
+      "${1:kernelRelease}=\\$(uname -r)",
+      "${0:echo \"\\${${1:kernelRelease}\\}\"}\n"
+    ],
     "description": "OS kernel release (i.e. 4.4.0-140-generic)"
   },
   "system.memory-info": {
     "prefix": "system memory info",
-    "body": "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)\n",
+    "body": [
+      "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)",
+      "${0:echo \"\\${sysMemory${1}\\}\"}\n"
+    ],
     "description": "System memory information in kilobytes (KB)"
   },
   "system.processor-architecture": {
-    "prefix": "system processor architecture",
-    "body": "lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1\n",
+    "prefix": [
+      "system processor architecture",
+      "system cpu architecture"
+    ],
+    "body": [
+      "${1:arch}=\\$(lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1)",
+      "${0:echo \"\\${${1:arch}\\}\"}\n"
+    ],
     "description": "Processor architecture (i.e. x86_64)"
   },
   "system.processor-count": {
-    "prefix": "system processor count",
-    "body": "lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1\n",
+    "prefix": [
+      "system processor count",
+      "system cpu count"
+    ],
+    "body": [
+      "${1:cores}=\\$(lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1)",
+      "${0:echo \"\\${${1:cores}\\}\"}\n"
+    ],
     "description": "Processor count (cores)"
   },
   "system.processor-model": {
-    "prefix": "system processor model",
-    "body": "lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//'\n",
+    "prefix": [
+      "system processor model",
+      "system cpu model"
+    ],
+    "body": [
+      "${1:cpuModel}=\\$(lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//')",
+      "${0:echo \"\\${${1:cpuModel}\\}\"}\n"
+    ],
     "description": "Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz)"
   },
   "system.processor-type": {
-    "prefix": "system processor type",
-    "body": "uname -p\n",
+    "prefix": [
+      "system processor type",
+      "system cpu type"
+    ],
+    "body": [
+      "${1:cpuType}=\\$(uname -p)",
+      "${0:echo \"\\${${1:cpuType}\\}\"}\n"
+    ],
     "description": "OS processor type (i.e. x86_64)"
   },
   "system.service-manage": {
-    "prefix": "service manage",
-    "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:service}\n",
+    "prefix": [
+      "service manage",
+      "systemd manage"
+    ],
+    "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2:serviceName}\n",
     "description": "Manage service operations"
   },
   "system.uptime": {
     "prefix": "system uptime",
-    "body": "sys_uptime=\\$(uptime | cut -d ' ' -f2)\n",
-    "description": "System uptime (hh:mm:ss)"
+    "body": [
+      "${1:systemUptime}=\\$(uptime ${2|-p,-s|})",
+      "${0:echo \"\\${${1:systemUptime}\\}\"}\n"
+    ],
+    "description": "System uptime. -p: --pretty, -s: since"
   },
   "time.epoch-seconds": {
     "prefix": "time seconds epoch",
-    "body": "timeNowSecondsEpoch=\\$(date +%s)\n",
+    "body": [
+      "${1:timeNowSecondsEpoch}=\\$(date +%s)",
+      "${0:echo \"\\${${1:timeNowSecondsEpoch}\\}\"}\n"
+    ],
     "description": "seconds since epoch (1970-01-01 00:00:00)"
   },
   "time.local-time-current": {
     "prefix": "time now local",
-    "body": "timeNowLocal=\\$(date +%${1|R,r|})\n",
-    "description": "current local time (24hrs/12hrs R/r)"
+    "body": [
+      "${1:timeNowLocal}=\\$(date +%${2|R,r|})",
+      "${0:echo \"\\${${1:timeNowLocal}\\}\"}\n"
+    ],
+    "description": "current local time (R: 24hrs, r: 12hrs)"
   },
   "time.time-utc": {
     "prefix": "time now UTC",
-    "body": "timeNowUTC=\\$(date -u +%R)\n",
+    "body": [
+      "${1:timeNowUTC}=\\$(date -u +%R)\n",
+      "${0:echo \\${${1:timeNowUTC}\\}}"
+    ],
     "description": "current UTC time"
   }
 }

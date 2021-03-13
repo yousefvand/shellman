@@ -3,6 +3,6 @@
     "assign if empty",
     "variable default value"
   ],
-  "body": ": \"\\${${1:variable}:=${2:default}}\"",
-  "description": "assign default to variable if variable is empty or null"
+  "body": ": \"\\${${1:variable}:=${2:defaultValue}}\"\n",
+  "description": "assign default value to variable if variable is empty otherwise assign null"
 }

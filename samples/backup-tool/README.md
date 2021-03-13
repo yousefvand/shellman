@@ -312,9 +312,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -325,7 +325,7 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
@@ -338,27 +338,27 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
-    echo "$backup_dir" # test. TODO: remove
+    echo "${backupDirectory}" # test. TODO: remove
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
-    echo "$play_animation" # test. TODO: remove
+    echo "${playAnimation}" # test. TODO: remove
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -372,7 +372,7 @@ Test your script's argument parsing then remove test echo commands.
 
 ### main code
 
-Now we have parsed arguments and need to set default values if any variable is not set. To do so use `assign if empty` snippet to set default values for `backup_dir` and `play_animation` variables.
+Now we have parsed arguments and need to set default values if any variable is not set. To do so use `assign if empty` snippet to set default values for `backupDirectory` and `playAnimation` variables.
 
 ```bash
 #!/usr/bin/env bash
@@ -440,9 +440,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -453,7 +453,7 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
@@ -466,25 +466,25 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -493,12 +493,12 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=~/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=~/backups}"
+: "${playAnimation:=false}"
 
 # Test default values. TODO: remove
-echo "$backup_dir"
-echo "$play_animation"
+echo "${backupDirectory}"
+echo "${playAnimation}"
 
 ```
 
@@ -507,8 +507,8 @@ Test script and remove test echos for default values.
 First we check if backup folder exists and if not we exit with error code 3 as documented before. Use `if directory exists` and a negation (`!`) to run the code when backup directory doesn't exist:
 
 ```bash
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 ```
@@ -533,7 +533,7 @@ VERSION="1.0.0"
 # 3   backup folder doesn't exist
 # TODO: more later
 
-source_paths=(
+sourcePaths=(
   '~/Desktop'
   '~/.config'
   '.bash_history'
@@ -588,9 +588,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -601,7 +601,7 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
@@ -614,25 +614,25 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -641,19 +641,19 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=~/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=~/backups}"
+: "${playAnimation:=false}"
 
 # test array. TODO: remove
-echo "${source_paths[@]}"
+echo "${sourcePaths[@]}"
 
-backup_file=`date -I`.tar.gz
+backupFile=`date -I`.tar.gz
 
 # test backup file name. TODO: remove
-echo "$backup_file"
+echo "${backupFile}"
 
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 
@@ -680,7 +680,7 @@ VERSION="1.0.0"
 # TODO: more later
 
 # assuming all in user home directory
-source_paths=(
+sourcePaths=(
   'Desktop'
   '.config'
   '.bash_history'
@@ -735,9 +735,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -748,17 +748,17 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
 function backup () {
   echo `tput setaf 2`Backup started...`tput sgr0`
   echo # empty line
-  current_path=`pwd` # save current directory
-  cd "$HOME"
-  tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
-  cd "$current_path" # restore current directory
+  currentPath=`pwd` # save current directory
+  cd "${HOME}"
+  tar -czvf "${backupDirectory}/${backupFile}" "${sourcePaths[@]}"
+  cd "${currentPath}" # restore current directory
 }
 
 # <<<<<<<<<<<<<<<<<<<<<<<< functions <<<<<<<<<<<<<<<<<<<<<<<<
@@ -766,25 +766,25 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -793,19 +793,19 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=$HOME/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=$HOME/backups}"
+: "${playAnimation:=false}"
 
 # test array. TODO: remove
-echo "${source_paths[@]}"
+echo "${sourcePaths[@]}"
 
-backup_file=`date -I`.tar.gz
+backupFile=`date -I`.tar.gz
 
 # test backup file name. TODO: remove
-echo "$backup_file"
+echo "${backupFile}"
 
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 
@@ -835,7 +835,7 @@ VERSION="1.0.0"
 # TODO: more later
 
 # assuming all in user home directory
-source_paths=(
+sourcePaths=(
   'Desktop'
   '.config'
   '.bash_history'
@@ -844,7 +844,7 @@ source_paths=(
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
-  rm "$backup_dir"/"$backup_file"
+  rm "${backupDirectory}/${backupFile}"
 }
 
 
@@ -890,9 +890,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -903,17 +903,17 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
 function backup () {
   echo `tput setaf 2`Backup started...`tput sgr0`
   echo # empty line
-  current_path=`pwd` # save current directory
-  cd "$HOME"
-  tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
-  cd "$current_path" # restore current directory
+  currentPath=`pwd` # save current directory
+  cd "${HOME}"
+  tar -czvf "${backupDirectory}/${backupFile}" "${sourcePaths[@]}"
+  cd "${currentPath}" # restore current directory
 }
 
 # <<<<<<<<<<<<<<<<<<<<<<<< functions <<<<<<<<<<<<<<<<<<<<<<<<
@@ -921,25 +921,25 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -948,13 +948,13 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=$HOME/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=$HOME/backups}"
+: "${playAnimation:=false}"
 
-backup_file=`date -I`.tar.gz
+backupFile=`date -I`.tar.gz
 
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 
@@ -984,7 +984,7 @@ VERSION="1.0.0"
 # 4   backup failed due to tar error
 
 # assuming all in user home directory
-source_paths=(
+sourcePaths=(
   'Desktop'
   '.config'
   '.bash_history'
@@ -992,7 +992,7 @@ source_paths=(
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
-  rm "$backup_dir"/"$backup_file"
+  rm "${backupDirectory}/${backupFile}"
 }
 
 # CTRL+C event handler
@@ -1037,9 +1037,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -1050,24 +1050,24 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
 function backup () {
   echo `tput setaf 2`Backup started...`tput sgr0`
   echo # empty line
-  current_path=`pwd` # save current directory
-  cd "$HOME"
-  tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
+  currentPath=`pwd` # save current directory
+  cd "${HOME}"
+  tar -czvf "${backupDirectory}/${backupFile}" "${sourcePaths[@]}"
 
   if [[ $? != 0 ]]; then
     echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`
-    cd "$current_path" # restore current directory
+    cd "${currentPath}" # restore current directory
     exit 4
   fi
 
-  cd "$current_path" # restore current directory
+  cd "${currentPath}" # restore current directory
 }
 
 # <<<<<<<<<<<<<<<<<<<<<<<< functions <<<<<<<<<<<<<<<<<<<<<<<<
@@ -1075,25 +1075,25 @@ function backup () {
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -1102,13 +1102,13 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=$HOME/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=$HOME/backups}"
+: "${playAnimation:=false}"
 
-backup_file=`date -I`.tar.gz
+backupFile=`date -I`.tar.gz
 
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 
@@ -1117,11 +1117,11 @@ backup
 
 ```
 
-Finally play the animation if flag `-a` or `--animation` is passed to script. Use `if string =` snippet and check if `play_animation` variable is equal to `true`.
+Finally play the animation if flag `-a` or `--animation` is passed to script. Use `if string =` snippet and check if `playAnimation` variable is equal to `true`.
 
 For playing animation we need the `animate` function. Inside `functions` region use `fn animation animate` snippet to add this function. As this function documentation says we need to comment out `CTRL+C` event handler because we already have `tput cnorm` in `on_ctrl_c` function which makes cursor visible. Now we can call `animate` function at the end of our script. Use `fx animation animate` snippet to call `animate` function and pass it arguments.
 
-Here we face a new problem. To stop animation user needs to press `CTRL+C` but currently we consider this as an incomplete backup. We need a variable to ignore this if backup is already successfully completed (define `backup_success` variable). Here is the [final script](backup.sh).
+Here we face a new problem. To stop animation user needs to press `CTRL+C` but currently we consider this as an incomplete backup. We need a variable to ignore this if backup is already successfully completed (define `backupSuccess` variable). Here is the [final script](backup.sh).
 
 ```bash
 #!/usr/bin/env bash
@@ -1145,19 +1145,19 @@ Here we face a new problem. To stop animation user needs to press `CTRL+C` but c
 VERSION="1.0.0"
 
 # assuming all in user home directory
-source_paths=(
+sourcePaths=(
   'Desktop'
   '.config'
   '.bash_history'
 )
 
-backup_success="false"
+backupSuccess="false"
 
 # <<<<<<<<<<<<<<<<<<<<<<<< variables <<<<<<<<<<<<<<<<<<<<<<<<
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
-  rm "$backup_dir"/"$backup_file"
+  rm "${backupDirectory}/${backupFile}"
 }
 
 
@@ -1166,7 +1166,7 @@ function on_ctrl_c() {
   echo # Set cursor to the next line of '^C'
   tput cnorm # show cursor. You need this if animation is used.
 
-  if [ "$backup_success" = "true" ]; then
+  if [ "${backupSuccess}" = "true" ]; then
     exit 0
   else
     cleanup # Call cleanup function
@@ -1207,9 +1207,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -1220,24 +1220,24 @@ Options:
 "
 }
 
-function play_animation () {
+function playAnimation () {
   echo "TODO: play animation"
 }
 
 function backup () {
   echo `tput setaf 2`Backup started...`tput sgr0`
   echo # empty line
-  current_path=`pwd` # save current directory
-  cd "$HOME"
-  tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
+  currentPath=`pwd` # save current directory
+  cd "${HOME}"
+  tar -czvf "${backupDirectory}/${backupFile}" "${sourcePaths[@]}"
 
   if [[ $? != 0 ]]; then
     echo `tput setaf 1`Unknown error. Backup failed!`tput sgr0`
-    cd "$current_path" # restore current directory
+    cd "${currentPath}" # restore current directory
     exit 4
   fi
 
-  cd "$current_path" # restore current directory
+  cd "${currentPath}" # restore current directory
 }
 
 # Usage: animate frames_array interval
@@ -1257,37 +1257,36 @@ function animate () {
   while true; do
     for frame in "${frames[@]}"; do
       tput rc # restore cursor position
-      echo "$frame"
-      sleep "$interval"
+      echo "${frame}"
+      sleep "${interval}"
     done
   done
 }
-
 
 # <<<<<<<<<<<<<<<<<<<<<<<< functions <<<<<<<<<<<<<<<<<<<<<<<<
 
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo `tput setaf 1`Error! Unknown argument: "$1"`tput sgr0`
+    echo `tput setaf 1`Error! Unknown argument: "${1}"`tput sgr0`
     exit 2
     ;;
   esac
@@ -1296,13 +1295,13 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=$HOME/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=$HOME/backups}"
+: "${playAnimation:=false}"
 
-backup_file=`date -I`.tar.gz
+backupFile=`date -I`.tar.gz
 
-if [ ! -d "$backup_dir" ]; then
-  echo `tput setaf 1`"Error! Backup directory doesn't exist: $backup_dir"`tput sgr0`
+if [ ! -d "${backupDirectory}" ]; then
+  echo `tput setaf 1`"Error! Backup directory doesn't exist: ${backupDirectory}"`tput sgr0`
   exit 3
 fi
 
@@ -1310,9 +1309,9 @@ fi
 backup
 
 echo `tput setaf 4`Backup complete.`tput sgr0`
-backup_success="true"
+backupSuccess="true"
 
-if [ "$play_animation" = "true" ]; then
+if [ "${playAnimation}" = "true" ]; then
   animate "${frames[@]}" 0.5
 fi
 

@@ -1,8 +1,8 @@
 {
   "prefix": "if string empty",
   "body": [
-    "if [ -z \"\\$${1:string}\" ]; then",
-    "\t${2:# body}",
+    "if [ -z \"\\${${1:string}\\}\" ]; then",
+    "\t${2:echo \"empty string\"}",
     "fi\n"
   ],
   "description": "if string is empty"

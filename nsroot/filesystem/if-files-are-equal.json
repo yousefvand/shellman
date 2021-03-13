@@ -1,7 +1,7 @@
 {
   "prefix": "if file =",
   "body": [
-    "if [ \"\\$${1:file1}\" -ef \"\\$${2:file2}\" ]; then",
+    "if [ \"\\${${1:file1}\\}\" -ef \"\\${${2:file2}\\}\" ]; then",
     "\t${0:echo files are equal}",
     "fi\n"
   ],

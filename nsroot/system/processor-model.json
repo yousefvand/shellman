@@ -1,5 +1,11 @@
 {
-  "prefix": "system processor model",
-  "body": "lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//'\n",
+  "prefix": [
+    "system processor model",
+    "system cpu model"
+  ],
+  "body": [
+    "${1:cpuModel}=\\$(lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//')",
+    "${0:echo \"\\${${1:cpuModel}\\}\"}\n"
+  ],
   "description": "Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz)"
 }

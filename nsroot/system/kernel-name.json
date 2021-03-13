@@ -1,5 +1,8 @@
 {
   "prefix": "system kernel name",
-  "body": "uname -s\n",
+  "body": [
+    "${1:kernelName}=\\$(uname -s)",
+    "${0:echo \"\\${${1:kernelName}\\}\"}\n"
+  ],
   "description": "OS kernel name (i.e. Linux)"
 }

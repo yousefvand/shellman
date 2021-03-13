@@ -1,5 +1,5 @@
 {
   "prefix": "math ++",
-  "body": "((${1|var++,++var|}))\n",
-  "description": "increment variable"
+  "body": "((${1|int++,++int|}))\n",
+  "description": "increment integer variable by 1"
 }

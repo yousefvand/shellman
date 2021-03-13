@@ -26,7 +26,7 @@ function animate () {
   unset frames[last_index]
 
   # Comment out next two lines if you are using CTRL+C event handler.
-	trap 'tput cnorm; echo' EXIT
+  trap 'tput cnorm; echo' EXIT
   trap 'exit 127' HUP INT TERM
 
   tput civis # hide cursor
@@ -35,8 +35,8 @@ function animate () {
   while true; do
     for frame in "${frames[@]}"; do
       tput rc # restore cursor position
-      echo "$frame"
-      sleep "$interval"
+      echo "${frame}"
+      sleep "${interval}"
     done
   done
 }

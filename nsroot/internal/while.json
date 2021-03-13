@@ -2,7 +2,7 @@
   "prefix": "loop while",
   "body": [
     "while [ ${1:condition} ]; do",
-    "\t${0:# body}",
+    "\t${2:# body}",
     "done\n"
   ],
   "description": "while loop"

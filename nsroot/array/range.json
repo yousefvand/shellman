@@ -3,6 +3,6 @@
     "array slice",
     "array range"
   ],
-  "body": "${myArray[@]:${1:from}:${2:count}}\n",
+  "body": "${0:newArray}=\"${${1:myArray}[@]:${2:from}:${3:count}}\"\n",
   "description": "elements of array from index, equal to count numbers"
 }

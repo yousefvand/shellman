@@ -1,5 +1,11 @@
 {
-  "prefix": "system processor count",
-  "body": "lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1\n",
+  "prefix": [
+    "system processor count",
+    "system cpu count"
+  ],
+  "body": [
+    "${1:cores}=\\$(lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1)",
+    "${0:echo \"\\${${1:cores}\\}\"}\n"
+  ],
   "description": "Processor count (cores)"
 }

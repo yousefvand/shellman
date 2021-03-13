@@ -1,5 +1,5 @@
 {
   "prefix": "math /",
-  "body": "${1:result}=\\$((${2:var1} / ${3:var2}))\n",
-  "description": "divide var1 by var2"
+  "body": "${1:result}=\\$((${2:int1} / ${3:int2}))\n",
+  "description": "divide int1 by int2 as integers and returns whole part"
 }

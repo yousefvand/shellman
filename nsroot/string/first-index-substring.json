@@ -1,8 +1,8 @@
 {
   "prefix": "string indexOf",
   "body": [
-    "temp=\\${${1:string}%%\"${2:substring}\"*} && indexOf=\\$(echo \\${${1:string}%%\"${2:substring}\"*} | echo \\${#temp})",
-    "${0:# echo \\$indexOf}"
+    "temp=\\${${1:string}%%\\${${2:substring}}*} && index=\\${#temp\\}",
+    "${0:echo \"index of \\\"\\${${2:substring}\\}\\\" in \\\"\\${${1:string}\\}\\\" is \\${index\\}\"}"
   ],
-  "description": "first index of substring in string"
+  "description": "first index of substring in a string"
 }

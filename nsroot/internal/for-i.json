@@ -2,7 +2,7 @@
   "prefix": "for i",
   "body": [
     "for((i=0;i<${1:n};i++)); do",
-    "\t${0:echo \"\\$i\"}",
+    "\t${0:echo \"\\${i\\}\"}",
     "done\n"
   ],
   "description": "for loop by index"

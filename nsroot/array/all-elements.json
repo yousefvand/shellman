@@ -1,5 +1,5 @@
 {
   "prefix": "array all",
-  "body": "${myArray[@]}\n",
+  "body": "\"${myArray[@]}\"\n",
   "description": "all array elements"
 }

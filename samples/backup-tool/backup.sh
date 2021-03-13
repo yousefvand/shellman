@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# NOTE: This script has been refactored without testing. In case of error open an issue.
+
 # Title:         Backup tool
 # Description:   Backups defined folders into backups folder in home directory
 # Author:        Remisa Yousefvand <remisa.yousefvand@gmail.com>
@@ -19,19 +21,19 @@
 VERSION="1.0.0"
 
 # assuming all in user home directory
-source_paths=(
+sourcePaths=(
   'Desktop'
   '.config'
   '.bash_history'
 )
 
-backup_success="false"
+backupSuccess="false"
 
 # <<<<<<<<<<<<<<<<<<<<<<<< variables <<<<<<<<<<<<<<<<<<<<<<<<
 
 # >>>>>>>>>>>>>>>>>>>>>>>> event handling >>>>>>>>>>>>>>>>>>>>>>>>
 function cleanup () {
-  rm "$backup_dir"/"$backup_file"
+  rm "${backupDirectory}/${backupFile}"
 }
 
 
@@ -40,7 +42,7 @@ function on_ctrl_c() {
   echo # Set cursor to the next line of '^C'
   tput cnorm # show cursor. You need this if animation is used.
 
-  if [ "$backup_success" = "true" ]; then
+  if [ "${backupSuccess}" = "true" ]; then
     exit 0
   else
     cleanup # Call cleanup function
@@ -81,9 +83,9 @@ EOF
 
 # >>>>>>>>>>>>>>>>>>>>>>>> functions >>>>>>>>>>>>>>>>>>>>>>>>
 
-function show_help () {
+function help () {
   echo "
-Usage: $0 [options]
+Usage: ${0} [options]
 
 Options:
   -a, --animation   Show animation after
@@ -97,17 +99,17 @@ Options:
 function backup () {
   echo $(tput setaf 2)Backup started...$(tput sgr0)
   echo # empty line
-  current_path=$(pwd) # save current directory
-  cd "$HOME"
-  tar -czvf "$backup_dir"/"$backup_file" "${source_paths[@]}"
+  currentPath=$(pwd) # save current directory
+  cd "${HOME}"
+  tar -czvf "${backupDirectory}/${backupFile}" "${sourcePaths[@]}"
 
   if [[ $? != 0 ]]; then
     echo $(tput setaf 1)Unknown error. Backup failed!$(tput sgr0)
-    cd "$current_path" # restore current directory
+    cd "${currentPath}" # restore current directory
     exit 4
   fi
 
-  cd "$current_path" # restore current directory
+  cd "${currentPath}" # restore current directory
 }
 
 # Usage: animate frames_array interval
@@ -118,7 +120,7 @@ function animate () {
   unset frames[last_index]
 
   # Comment out next two lines if you are using CTRL+C event handler.
-	# trap 'tput cnorm; echo' EXIT
+  # trap 'tput cnorm; echo' EXIT
   # trap 'exit 127' HUP INT TERM
 
   tput civis # hide cursor
@@ -127,37 +129,36 @@ function animate () {
   while true; do
     for frame in "${frames[@]}"; do
       tput rc # restore cursor position
-      echo "$frame"
-      sleep "$interval"
+      echo "${frame}"
+      sleep "${interval}"
     done
   done
 }
-
 
 # <<<<<<<<<<<<<<<<<<<<<<<< functions <<<<<<<<<<<<<<<<<<<<<<<<
 
 # >>>>>>>>>>>>>>>>>>>>>>>> argument parsing >>>>>>>>>>>>>>>>>>>>>>>>
 
 while [[ $# > 0 ]]; do
-  case "$1" in
+  case "${1}" in
     -h|--help)
-    show_help # call "show_help" function
+    help # call "help" function
     exit 0 # we don't process any other argument
     ;;
     -v|--version)
-    echo "Backup tool v. $VERSION"
+    echo "Backup tool v. ${VERSION}"
     exit 0 # we don't process any other argument
     ;;
     -o|--output)
-    backup_dir="$2"
+    backupDirectory="${2}"
     shift 2 # one for switch and another for its value
     ;;
     -a|--animation)
-    play_animation="true"
+    playAnimation="true"
     shift # shift one for flag itself (we know it is either -a or --animation)
     ;;
     *) # unknown flag/switch
-    echo $(tput setaf 1)Error! Unknown argument: "$1"$(tput sgr0)
+    echo $(tput setaf 1)Error! Unknown argument: "${1}"$(tput sgr0)
     exit 2
     ;;
   esac
@@ -166,18 +167,18 @@ done
 # <<<<<<<<<<<<<<<<<<<<<<<< argument parsing <<<<<<<<<<<<<<<<<<<<<<<<
 
 # Setting default values
-: "${backup_dir:=$HOME/backups}"
-: "${play_animation:=false}"
+: "${backupDirectory:=$HOME/backups}"
+: "${playAnimation:=false}"
 
 # Another way to handle "default vaules" is defining them before argument parsing
 # in "variables" and setting them to default values. Later in argument parsing you
 # can override default values when user has provided an alternative value.
 
-backup_file=$(date -I).tar.gz
+backupFile=$(date -I).tar.gz
 
 # Check if "backup directory" exists.
-if [ ! -d "$backup_dir" ]; then
-  echo $(tput setaf 1)"Error! Backup directory doesn't exist: $backup_dir"$(tput sgr0)
+if [ ! -d "${backupDirectory}" ]; then
+  echo $(tput setaf 1)"Error! Backup directory doesn't exist: ${backupDirectory}"$(tput sgr0)
   exit 3
 fi
 
@@ -185,8 +186,8 @@ fi
 backup
 
 echo $(tput setaf 4)Backup complete.$(tput sgr0)
-backup_success="true"
+backupSuccess="true"
 
-if [ "$play_animation" = "true" ]; then
+if [ "${playAnimation}" = "true" ]; then
   animate "${frames[@]}" 0.5
 fi

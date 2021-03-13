@@ -1,8 +1,8 @@
 {
   "prefix": "file read",
   "body": [
-    "cat ${1:\"\\$filepath\"} | while read ${2:line}; do",
-    "\t${3:echo \"\\$line\"}",
+    "cat \"\\${${1:filePath}\\}\" | while read ${2:line}; do",
+    "\t${3:echo \"\\${line\\}\"}",
     "done\n"
   ],
   "description": "read a file"

@@ -1,5 +1,5 @@
 {
   "prefix": "fx urldecode",
-  "body": "urldecode ${1:encodedUrl}",
+  "body": "urldecode \"${1:encodedUrl}\"\n",
   "description": "Call urldecode function"
 }

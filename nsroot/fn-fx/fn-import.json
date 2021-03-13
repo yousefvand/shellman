@@ -3,11 +3,11 @@
   "body": [
     "# Usage: import \"mylib\"\n",
     "function import() {",
-    "\tlocal file=\"./${0:lib}/\\$1.sh\"",
-    "\tif [ -f \"\\$file\" ]; then",
-    "\t\tsource \"\\$file\"",
+    "\tlocal file=\"./${0:lib}/\\${1\\}.sh\"",
+    "\tif [ -f \"\\${file\\}\" ]; then",
+    "\t\tsource \"\\${file\\}\"",
     "\telse",
-    "\t\techo \"Error: Cannot find library at: \\$file\"",
+    "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
     "\t\texit 1",
     "\tfi",
     "}\n"

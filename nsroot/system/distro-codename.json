@@ -1,5 +1,8 @@
 {
   "prefix": "system distro codename",
-  "body": "lsb_release -c | awk '{print \\$2}'\n",
-  "description": "OS codename (i.e. xenial)"
+  "body": [
+    "${1:distroCodeName}=\\$(lsb_release -c | awk '{print \\$2}')",
+    "${0:echo \"\\${${1:distroCodeName}\\}\"}\n"
+  ],
+  "description": "OS codename (i.e. Focal Fossa)"
 }

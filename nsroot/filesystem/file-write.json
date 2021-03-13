@@ -3,7 +3,7 @@
   "body": [
     "echo \"${1:sample header}\" > ${2:/path/to/file}",
     "for ${3:line} in \\${${4:lines}}; do",
-    "\techo \"\\$${3:line}\" >> ${2:/path/to/file}",
+    "\techo \"\\${${3:line}\\}\" >> ${2:/path/to/file}",
     "done\n"
   ],
   "description": "write to a file"

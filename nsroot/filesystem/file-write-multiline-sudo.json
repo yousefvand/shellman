@@ -1,9 +1,9 @@
 {
   "prefix": "file write multiline sudo",
   "body": [
-    "cat << EOL | sudo tee ${1:filepath}",
+    "cat << EOL | sudo tee ${1:filePath}",
     "${0:# text here}",
-    "EOL"
+    "EOL\n"
   ],
   "description": "write multiple lines into file with sudo permission"
 }
