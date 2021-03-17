@@ -1,12 +1,12 @@
 {
   "prefix": "fn animation animate",
   "body": [
-    "# Usage: animate frames_array interval",
+    "# Usage: animate framesArray interval",
     "function animate () {",
     "\tlocal frames=(\"$@\")",
-    "\t((last_index=\\${#frames[@]} - 1))",
-    "\tlocal interval=\\${frames[last_index]}",
-    "\tunset frames[last_index]",
+    "\t((lastIndex=\\${#frames[@]} - 1))",
+    "\tlocal interval=\\${frames[lastIndex]}",
+    "\tunset frames[lastIndex]",
     "",
     "\t# Comment out next two lines if you are using CTRL+C event handler.",
     "${1:\ttrap 'tput cnorm; echo' EXIT\n\ttrap 'exit 127' HUP INT TERM}\n",
@@ -22,5 +22,5 @@
     "\tdone",
     "}\n${0:}"
   ],
-  "description": "Animate frames of animation"
+  "description": "Animate frames of animation with interval seconds between frames"
 }

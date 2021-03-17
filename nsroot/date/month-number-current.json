@@ -1,5 +1,5 @@
 {
   "prefix": "date now monthNumber",
-  "body": "monthNumber=\\$(date +%m)\n",
+  "body": "${1:monthNumber}=\\$(date +%m)\n",
   "description": "current month number (1..12)"
 }

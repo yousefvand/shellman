@@ -3,6 +3,6 @@
     "directory delete nested",
     "directory remove nested"
   ],
-  "body": "rm -rf ${1:/path/to/directory}\n",
-  "description": "delete directory and all contents"
+  "body": "rm -rf ${1|/path/to/directory,${pathToDirectory}|}\n",
+  "description": "delete directory and all contents!"
 }

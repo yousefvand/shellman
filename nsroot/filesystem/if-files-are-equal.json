@@ -1,9 +1,9 @@
 {
   "prefix": "if file =",
   "body": [
-    "if [ \"\\${${1:file1}\\}\" -ef \"\\${${2:file2}\\}\" ]; then",
-    "\t${0:echo files are equal}",
+    "if cmp -s \"${1|/path/to/file1,${filePath1}|}\" \"${2|/path/to/file2,${filePath2}|}\"; then",
+      "\t${3:echo \"File \\\"${1}\\\" is equal to file \\\"${2}\\\"\"}",
     "fi\n"
   ],
-  "description": "if files are equal"
+  "description": "check if files are equal"
 }

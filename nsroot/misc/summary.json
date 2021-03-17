@@ -11,8 +11,7 @@
     "# ==========",
     "# 0   no error",
     "# 1   script interrupted",
-    "# ${6:2}   ${7:error description}",
-    ""
+    "# ${6:2}   ${7:error description}\n\n"
   ],
   "description": "script summary"
 }

@@ -1,9 +1,9 @@
 {
   "prefix": "fn animation pacman",
   "body": [
-    "# Usage: pac_man inputString interval pad",
+    "# Usage: pacMan inputString interval pad",
     "# Example: pacman \"Hello World\" 0.5 \"*\"",
-    "function pac_man () {",
+    "function pacMan () {",
     "\tlocal string=\"\\${1\\}\"",
     "\tlocal interval=\"\\${2\\}\"",
     "\t: \"\\${interval:=0.2}\"",

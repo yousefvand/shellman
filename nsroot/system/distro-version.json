@@ -2,7 +2,7 @@
   "prefix": "system distro version",
   "body": [
     "${1:distroVersion}=\\$(lsb_release -r | awk '{print \\$2}')",
-    "${0:echo \"\\${${1:distroVersion}\\}\"}\n"
+    "${2:echo \"\\${${1:distroVersion}\\}\"}\n"
   ],
   "description": "OS Release (i.e. 20.04.2)"
 }

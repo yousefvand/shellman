@@ -1,9 +1,9 @@
 {
   "prefix": "if directory exists",
   "body": [
-    "if [ -d \"\\${${1:directory}\\}\" ]; then",
-    "\t${0:echo directory exists}",
+    "if [ -d \"${1|/path/to/directory,${pathToDirectory}|}\" ]; then",
+    "\t${2:echo \"directory \\\"${1}\\\" exists\"}",
     "fi\n"
   ],
-  "description": "if directory exists"
+  "description": "check if a directory exists"
 }

@@ -1,9 +1,9 @@
 {
   "prefix": "fn import",
   "body": [
-    "# Usage: import \"mylib\"\n",
+    "# Usage: import \"mylib\"",
     "function import() {",
-    "\tlocal file=\"./${0:lib}/\\${1\\}.sh\"",
+    "\tlocal file=\"./${1:lib}/\\${1\\}.sh\"",
     "\tif [ -f \"\\${file\\}\" ]; then",
     "\t\tsource \"\\${file\\}\"",
     "\telse",

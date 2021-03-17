@@ -1,5 +1,5 @@
 {
   "prefix": "string trim all",
-  "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" | tr -d '[[:space:]]')\n",
+  "body": "${1:trimmed}=\\$(echo -e \"\\${${2:string}}\" | tr -d '[[:space:]]')\n",
   "description": "remove all white space(s)"
 }

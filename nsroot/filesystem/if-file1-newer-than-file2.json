@@ -1,9 +1,9 @@
 {
   "prefix": "if file newer",
   "body": [
-    "if [ \"\\${${1:file1}\\}\" -nt \"\\${${2:file2}\\}\" ]; then",
-    "\t${0:echo file1 is newer than file2}",
+    "if [ \"${1|/path/to/file1,${filePath1}|}\" -nt \"${2|/path/to/file2,${filePath2}|}\" ]; then",
+      "\t${3:echo \"Path \\\"${1}\\\" is newer than path \\\"${2}\\\"\"}",
     "fi\n"
   ],
-  "description": "if file1 newer than file2"
+  "description": "check if file1 is newer than file2"
 }

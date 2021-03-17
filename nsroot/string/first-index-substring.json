@@ -2,7 +2,7 @@
   "prefix": "string indexOf",
   "body": [
     "temp=\\${${1:string}%%\\${${2:substring}}*} && index=\\${#temp\\}",
-    "${0:echo \"index of \\\"\\${${2:substring}\\}\\\" in \\\"\\${${1:string}\\}\\\" is \\${index\\}\"}"
+    "${3:echo \"index of \\\"\\${${2:substring}\\}\\\" in \\\"\\${${1:string}\\}\\\" is \\${index\\}\"\n}"
   ],
   "description": "first index of substring in a string"
 }

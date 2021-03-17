@@ -1,9 +1,9 @@
 {
   "prefix": "file write",
   "body": [
-    "echo \"${1:sample header}\" > ${2:/path/to/file}",
-    "for ${3:line} in \\${${4:lines}}; do",
-    "\techo \"\\${${3:line}\\}\" >> ${2:/path/to/file}",
+    "echo \"${1:sample header}\" > \"${2|/path/to/file,${pathToFile}|}\"",
+    "for ${3:line} in \\${${4:lines}[@]}; do",
+    "\techo \"\\${${3:line}\\}\" >> \"${2}\"",
     "done\n"
   ],
   "description": "write to a file"

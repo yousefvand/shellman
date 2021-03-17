@@ -1,7 +1,7 @@
 {
   "prefix": [
-    "assign if empty",
-    "variable default value"
+    "variable default value",
+    "assign if empty"
   ],
   "body": ": \"\\${${1:variable}:=${2:defaultValue}}\"\n",
   "description": "assign default value to variable if variable is empty otherwise assign null"

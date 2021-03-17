@@ -1,5 +1,9 @@
 {
-  "prefix": "fx scan",
-  "body": "scan ${1|tcp,udp|} ${2:host} ${3:fromPort} ${4:toPort}\n",
-  "description": "call scan function to scan a host over a port range"
+  "prefix": "fx scan local",
+  "body": [
+    "# Usage: scan proto host fromPort toPort",
+    "openPorts=( \\$(scan ${1|tcp,udp|} \"${2|localhost,127.0.0.1,::1|}\" ${3:fromPort} ${4:toPort}) )",
+    "${5:echo \"\\${openPorts[@]\\}\"}\n"
+  ],
+  "description": "call scan function to scan localhost over a port range"
 }

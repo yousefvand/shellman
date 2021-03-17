@@ -1,9 +1,9 @@
 {
   "prefix": "if file older",
   "body": [
-    "if [ \"\\${${1:file1}\\}\" -ot \"\\${${2:file2}\\}\" ]; then",
-    "\t${0:echo file1 is older than file2}",
+    "if [ \"${1|/path/to/file1,${filePath1}|}\" -ot \"${2|/path/to/file2,${filePath2}|}\" ]; then",
+      "\t${3:echo \"Path \\\"${1}\\\" is older than path \\\"${2}\\\"\"}",
     "fi\n"
   ],
-  "description": "if file1 older than file2"
+  "description": "check if file1 is older than file2"
 }

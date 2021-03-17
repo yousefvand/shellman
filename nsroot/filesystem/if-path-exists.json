@@ -1,8 +1,8 @@
 {
   "prefix": "if path exists",
   "body": [
-    "if [ -e \"\\${${1:path}\\}\" ]; then",
-    "\t${0:echo \"path exists\"}",
+    "if [ -e \"${1|/path/to/something,${pathToSomething}|}\" ]; then",
+    "\t${2:echo \"Path \\\"${1}\\\" exists\"}",
     "fi\n"
   ],
   "description": "if path exists (file, directory, link...)"

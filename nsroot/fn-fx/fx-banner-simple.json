@@ -1,5 +1,8 @@
 {
   "prefix": "fx banner simple",
-  "body": "banner_simple \"${1:my title}\"\n",
-  "description": "call banner_simple function"
+  "body": [
+    "# Usage: bannerSimple \"my title\" \"*\"",
+    "bannerSimple \"${1:my title}\" \"${2|*,:,+,.,x,o,$|}\"\n"
+  ],
+  "description": "call bannerSimple function"
 }

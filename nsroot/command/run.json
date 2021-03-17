@@ -1,5 +1,8 @@
 {
-  "prefix": "cmd",
-  "body": "${0:result}=$(${1:command})\n",
+  "prefix": [
+    "cmd",
+    "cmd substitution"
+  ],
+  "body": "${1:result}=$(${2:command})\n",
   "description": "run command (command substitution)"
 }

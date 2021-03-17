@@ -1,9 +1,9 @@
 {
   "prefix": "if file executable",
   "body": [
-    "if [ -x \"\\${${1:filePath}\\}\" ]; then",
-    "\t${0:echo file is executable}",
+    "if [ -x \"${1|/path/to/file,${filePath}|}\" ]; then",
+    "\t${2:echo \"file \\\"${1}\\\" is executable\"}",
     "fi\n"
   ],
-  "description": "if file executable"
+  "description": "check if file is executable"
 }

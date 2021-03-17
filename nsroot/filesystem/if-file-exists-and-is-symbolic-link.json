@@ -1,8 +1,8 @@
 {
   "prefix": "if file link",
   "body": [
-    "if [ -h \"\\${${1:filePath}\\}\" ]; then",
-    "\t${0:echo symbolic link}",
+    "if [ -h \"${1|/path/to/file,${filePath}|}\" ]; then",
+    "\t${2:echo \"Path \\\"${1}\\\" is a symbolic link\"}",
     "fi\n"
   ],
   "description": "if given path is a symbolic link"

@@ -1,5 +1,5 @@
 {
   "prefix": "string trim",
-  "body": "${0:trimmed}=\\$(echo -e \"\\${${1:string}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n",
+  "body": "${1:trimmed}=\\$(echo -e \"\\${${2:string}}\" |  sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*\\$//')\n",
   "description": "remove leading and trailing white space(s)"
 }

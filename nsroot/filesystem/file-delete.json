@@ -3,6 +3,6 @@
     "file delete",
     "file remove"
   ],
-  "body": "rm -f ${1:/path/to/file}\n",
+  "body": "rm -f ${1|/path/to/file,${pathToFile}|}\n",
   "description": "delete file(s)"
 }

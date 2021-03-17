@@ -2,7 +2,7 @@
   "prefix": "time now local",
   "body": [
     "${1:timeNowLocal}=\\$(date +%${2|R,r|})",
-    "${0:echo \"\\${${1:timeNowLocal}\\}\"}\n"
+    "${3:echo \"\\${${1}\\}\"}\n"
   ],
   "description": "current local time (R: 24hrs, r: 12hrs)"
 }

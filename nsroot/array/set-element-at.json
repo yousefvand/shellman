@@ -1,5 +1,5 @@
 {
   "prefix": "array set element",
-  "body": "${0:myArray}[${1:index}]=\"${2:value}\"\n",
-  "description": "set array element at index"
+  "body": "${1:myArray}[${2:index}]=\"${3:value}\"\n",
+  "description": "set array element at specified index"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "string random",
-  "body": "${0:randomString}=$(tr -dc ${1:A-Za-z0-9} </dev/urandom | head -c ${2:8} ; echo '')\n",
-  "description": "random string from provided characters with desired length"
+  "body": "${1:randomString}=$(tr -dc ${2:A-Za-z0-9} </dev/urandom | head -c ${3:8} ; echo '')\n",
+  "description": "random string from provided characters with desired length (default: 8)"
 }

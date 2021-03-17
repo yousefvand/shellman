@@ -1,14 +1,19 @@
 {
   "prefix": "fn progress",
   "body": [
+    "# Usage: progressBar \"message\" currentStep totalSteps",
     "function progressBar() {",
-    "\tlocal BAR='████████████████████'",
-    "\tlocal SPACE='                    '",
-    "\tfor i in {1..20}; do",
-    "\t\techo -ne \"\\r|\\${BAR:0:\\$i}\\${SPACE:\\$i:20}| \\$((\\$i*5))% [ \\$2 ] \"",
-    "\t\tsleep \\$1",
-    "\tdone",
-    "\techo -ne '\n'",
+    "\tlocal   bar='████████████████████'",
+    "\tlocal space='                    '",
+    "\tlocal wheel=('\\' '|' '/' '-')",
+    "",
+    "\tlocal msg=\"\\${1\\}\"",
+    "\tlocal current=\\${2\\}",
+    "\tlocal total=\\${3\\}",
+    "\tlocal wheelIndex=\\$((current % 4))",
+    "\tlocal position=\\$((20 * current / total))",
+    "",
+    "\techo -ne \"\\r|\\${bar:0:\\$position}\\${space:\\$position:20}| \\${wheel[wheelIndex]} \\$((\\$position*5))% [ \\${msg} ] \"",
     "}\n"
   ],
   "description": "progress bar function"

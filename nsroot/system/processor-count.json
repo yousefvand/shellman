@@ -5,7 +5,7 @@
   ],
   "body": [
     "${1:cores}=\\$(lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1)",
-    "${0:echo \"\\${${1:cores}\\}\"}\n"
+    "${2:echo \"\\${${1:cores}\\}\"}\n"
   ],
   "description": "Processor count (cores)"
 }

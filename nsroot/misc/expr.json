@@ -1,5 +1,8 @@
 {
-  "prefix": "expr",
-  "body": "${0:result}=\\$(expr ${1:\\$int1} ${2|+,-,\\*,/,%|} ${3:\\$int2})\n",
+  "prefix": [
+    "expr",
+    "arithmetic"
+  ],
+  "body": "${1:result}=\\$(expr \\${${2:int1}\\} ${3|+,-,\\*,/,%|} \\${${4:int2}\\})\n",
   "description": "arithmetic operations on integers"
 }

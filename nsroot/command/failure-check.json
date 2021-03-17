@@ -2,7 +2,7 @@
   "prefix": "cmd failure check",
   "body": [
     "if [[ \\$? != 0 ]]; then",
-    "\t${3:echo command failed}",
+    "\t${1:echo \"Last command failed\"}",
     "fi\n"
   ],
   "description": "check if last command failed"

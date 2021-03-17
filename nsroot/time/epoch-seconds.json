@@ -2,7 +2,7 @@
   "prefix": "time seconds epoch",
   "body": [
     "${1:timeNowSecondsEpoch}=\\$(date +%s)",
-    "${0:echo \"\\${${1:timeNowSecondsEpoch}\\}\"}\n"
+    "${2:echo \"\\${${1}\\}\"}\n"
   ],
   "description": "seconds since epoch (1970-01-01 00:00:00)"
 }

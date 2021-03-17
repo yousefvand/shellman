@@ -1,5 +1,5 @@
 {
   "prefix": "date now year",
-  "body": "year=\\$(date +%Y)\n",
-  "description": "current Year"
+  "body": "${1:year}=\\$(date +%${2|Y,y|})\n",
+  "description": "current Year (Y: full, y: last two digits)"
 }

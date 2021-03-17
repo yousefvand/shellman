@@ -2,7 +2,7 @@
   "prefix": "system distro name",
   "body": [
     "${1:distroName}=\\$(lsb_release -i | awk '{print \\$3}')",
-    "${0:echo \"\\${${1:distroName}\\}\"}\n"
+    "${2:echo \"\\${${1:distroName}\\}\"}\n"
   ],
   "description": "OS ID (i.e. Ubuntu)"
 }

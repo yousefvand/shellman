@@ -1,5 +1,8 @@
 {
   "prefix": "fx math average",
-  "body": "result=\\$(average \\${${1:num1}\\} \\${${2:num2}\\} \\${${3:num3}\\})\n",
+  "body": [
+    "# Usage: average int1 int2 ...",
+    "result=\\$(average \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
+  ],
   "description": "Call math average function"
 }

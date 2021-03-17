@@ -1,9 +1,12 @@
 {
-  "prefix": "region",
+  "prefix": [
+    "region",
+    "section"
+  ],
   "body": [
-    "# >>>>>>>>>>>>>>>>>>>>>>>> ${1:name} >>>>>>>>>>>>>>>>>>>>>>>>",
+    "# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>",
     "$0",
-    "# <<<<<<<<<<<<<<<<<<<<<<<< ${1:name} <<<<<<<<<<<<<<<<<<<<<<<<"
+    "# <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<"
   ],
   "description": "Comment out a special region (i.e. variable declarations"
 }

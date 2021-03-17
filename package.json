@@ -38,6 +38,7 @@
     "spellcheck": "npx cspell ./**/*"
   },
   "dependencies": {
-    "ovsx": "0.1.0-next.a9154dc"
+    "ovsx": "0.1.0-next.a9154dc",
+    "vsce": "^1.87.0"
   }
 }

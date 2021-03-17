@@ -1,8 +1,8 @@
 {
   "prefix": "if file writeable",
   "body": [
-    "if [ -w \"\\${${1:filePath}\\}\" ]; then",
-    "\t${0:echo file is writeable}",
+    "if [ -w \"${1|/path/to/file,${filePath}|}\" ]; then",
+      "\t${2:echo \"File \\\"${1}\\\" is writeable\"}",
     "fi\n"
   ],
   "description": "if file writeable"

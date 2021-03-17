@@ -1,8 +1,8 @@
 {
   "prefix": ["string substring count", "string substring frequency"],
   "body": [
-    "tmp=\"\\${${1:string}//\\$${2:substring}\\}\" && ${3:frequency}=\\$(((\\${#${1:string}\\} - \\${#tmp\\}) / \\${#${2:substring}}))",
+    "tmp=\"\\${${1:string}//\\$${2:substring}\\}\" && ${3:frequency}=\\$(((\\${#${1}\\} - \\${#tmp\\}) / \\${#${2:substring}}))",
     "${0:echo \"\\${${3:frequency}\\}\"}\n"
   ],
-  "description": "Frequency of a substring in a string (may need character escaping)"
+  "description": "frequency of a substring in a string"
 }

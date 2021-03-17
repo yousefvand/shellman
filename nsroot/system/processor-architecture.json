@@ -1,11 +1,12 @@
 {
   "prefix": [
     "system processor architecture",
-    "system cpu architecture"
+    "system cpu architecture",
+    "system cpu arch"
   ],
   "body": [
     "${1:arch}=\\$(lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1)",
-    "${0:echo \"\\${${1:arch}\\}\"}\n"
+    "${2:echo \"\\${${1:arch}\\}\"}\n"
   ],
   "description": "Processor architecture (i.e. x86_64)"
 }

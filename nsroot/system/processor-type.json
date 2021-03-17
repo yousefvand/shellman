@@ -5,7 +5,7 @@
   ],
   "body": [
     "${1:cpuType}=\\$(uname -p)",
-    "${0:echo \"\\${${1:cpuType}\\}\"}\n"
+    "${2:echo \"\\${${1:cpuType}\\}\"}\n"
   ],
   "description": "OS processor type (i.e. x86_64)"
 }

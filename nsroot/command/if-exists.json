@@ -2,7 +2,7 @@
   "prefix": "if cmd exists",
   "body": [
     "if [ \\$(command -v ${1:command}) ]; then",
-    "\t${2:# body}",
+    "\t${2:echo \"command \\\"${1:command}\\\" exists on system\"}",
     "fi\n"
   ],
   "description": "check if command exists"

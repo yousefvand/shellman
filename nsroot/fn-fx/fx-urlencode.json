@@ -1,5 +1,8 @@
 {
   "prefix": "fx urlencode",
-  "body": "urlencode \"${1:url}\"\n",
+  "body": [
+    "# Usage: urlencode url",
+    "urlencode \"${1|url,${url}|}\"\n"
+  ],
   "description": "Call urlencode function"
 }

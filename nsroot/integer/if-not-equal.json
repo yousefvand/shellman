@@ -2,7 +2,7 @@
   "prefix": "if int !=",
   "body": [
     "if (( ${1:int1} != ${2:int2} )); then",
-    "\t${3:echo not equal}",
+    "\t${3:echo \"not equal\"}",
     "fi\n"
   ],
   "description": "if integers are not equal"

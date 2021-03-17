@@ -1,5 +1,5 @@
 {
   "prefix": "directory create",
-  "body": "mkdir \"${1:dirname}\"\n",
+  "body": "mkdir \"${1:directory name}\"\n",
   "description": "create directory"
 }

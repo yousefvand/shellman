@@ -2,7 +2,7 @@
   "prefix": "loop infinite",
   "body": [
     "while true; do",
-    "\t${0:# body}",
+    "${1:\techo \"infinite loop\"\n\tsleep 1s}",
     "done\n"
   ],
   "description": "infinite loop"

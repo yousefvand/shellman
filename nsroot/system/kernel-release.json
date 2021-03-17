@@ -2,7 +2,7 @@
   "prefix": "system kernel release",
   "body": [
     "${1:kernelRelease}=\\$(uname -r)",
-    "${0:echo \"\\${${1:kernelRelease}\\}\"}\n"
+    "${2:echo \"\\${${1:kernelRelease}\\}\"}\n"
   ],
   "description": "OS kernel release (i.e. 4.4.0-140-generic)"
 }

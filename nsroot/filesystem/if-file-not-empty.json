@@ -1,9 +1,9 @@
 {
   "prefix": "if file not empty",
   "body": [
-    "if [ -s \"\\${${1:filePath}\\}\" ]; then",
-    "\t${2:echo file not empty}",
+    "if [ -s \"${1|/path/to/file,${filePath}|}\" ]; then",
+      "\t${2:echo \"File \\\"${1}\\\" is not empty\"}",
     "fi\n"
   ],
-  "description": "if file size is greater than zero"
+  "description": "check if file size is greater than zero"
 }

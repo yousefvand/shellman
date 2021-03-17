@@ -2,7 +2,7 @@
   "prefix": "if int >=",
   "body": [
     "if (( ${1:int1} >= ${2:int2} )); then",
-    "\t${3:echo greater or equal}",
+    "\t${3:echo \"greater or equal\"}",
     "fi\n"
   ],
   "description": "if integer greater than or equal value"

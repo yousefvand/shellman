@@ -1,5 +1,5 @@
 {
   "prefix": "string reverse",
-  "body": "${0:reversed}=\\$(echo -e \"\\${${1:string}}\" | rev)\n",
+  "body": "${1:reversed}=\\$(echo -e \"\\${${2:string}}\" | rev)\n",
   "description": "reverse string characters"
 }

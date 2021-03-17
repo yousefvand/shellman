@@ -152,7 +152,7 @@
 
   - [fn progress](#fn-progress)
 
-  - [fn scan](#fn-scan)
+  - [fn scan local](#fn-scan-local)
 
   - [fn urldecode](#fn-urldecode)
 
@@ -180,7 +180,7 @@
 
   - [fx progress](#fx-progress)
 
-  - [fx scan](#fx-scan)
+  - [fx scan local](#fx-scan-local)
 
   - [fx urldecode](#fx-urldecode)
 
@@ -298,9 +298,11 @@
 
   - [for i](#for-i)
 
-  - [for in](#for-in)
+  - [for in collection](#for-in-collection)
 
   - [for in column](#for-in-column)
+
+  - [for in range](#for-in-range)
 
   - [if](#if)
 
@@ -394,8 +396,6 @@
 
   - [timeout](#timeout)
 
-  - [assign if empty](#assign-if-empty)
-
 - output
 
   - [color black](#color-black)
@@ -426,11 +426,11 @@
 
   - [process ID(s)](#process-ID(s))
 
-  - [process list](#process-list)
+  - [process instances](#process-instances)
 
   - [process kill](#process-kill)
 
-  - [process list](#process-list)
+  - [process list all](#process-list-all)
 
 - string
 
@@ -506,12 +506,16 @@
 
   - [time now UTC](#time-now-UTC)
 
+- variable
+
+  - [variable default value](#variable-default-value)
+
 ## `archive compress tar.gz`
 
 compress file/folder to a .tar.gz file [&uarr;](#Commands)
 
 ```bash
-tar -czvf /path/to/archive.tar.gz /path/to/directory-or-file
+tar -czvf ${1|/path/to/archive, "${pathToArchive}"|}.tar.gz ${2|/path/to/directory-or-file, "${pathToDirectoryOrFile}"|}
 ```
 
 ## `archive compress tar.xz`
@@ -519,7 +523,7 @@ tar -czvf /path/to/archive.tar.gz /path/to/directory-or-file
 compress file/folder to a .tar.xz file [&uarr;](#Commands)
 
 ```bash
-tar -cJf /path/to/archive.tar.xz /path/to/directory-or-file
+tar -cJf ${1|/path/to/archive, "${pathToArchive}"|}.tar.xz ${2|/path/to/directory-or-file, "${pathToDirectoryOrFile}"|}
 ```
 
 ## `archive decompress tar.gz`
@@ -527,7 +531,7 @@ tar -cJf /path/to/archive.tar.xz /path/to/directory-or-file
 decompress a .tar.gz file to specified path [&uarr;](#Commands)
 
 ```bash
-tar -C /extract/to/path -xzvf /path/to/archive.tar.gz
+tar -C ${1|/extract/to/path, "${extractToPath}"|} -xzvf ${2|/path/to/archive, "${pathToArchive}"|}.tar.gz
 ```
 
 ## `archive decompress tar.xz`
@@ -535,23 +539,23 @@ tar -C /extract/to/path -xzvf /path/to/archive.tar.gz
 decompress a .tar.xz file to specified path [&uarr;](#Commands)
 
 ```bash
-tar -C /extract/to/path -xf /path/to/archive.tar.xz
+tar -C ${1|/extract/to/path, "${extractToPath}"|} -xf ${2|/path/to/archive, "${pathToArchive}"|}.tar.xz
 ```
 
 ## `array all`
 
-all array elements [&uarr;](#Commands)
+access all array elements [&uarr;](#Commands)
 
 ```bash
-"${myArray[@]}"
+echo "${myArray[@]}"
 ```
 
 ## `array at index`
 
-retrieve element at specified index (zero based) [&uarr;](#Commands)
+retrieve element from array at specified index (zero based) [&uarr;](#Commands)
 
 ```bash
-${myArray[index]}
+echo "${myArray[index]}"
 ```
 
 ## `array concat`
@@ -568,9 +572,9 @@ declare an array [&uarr;](#Commands)
 
 ```bash
 myArray=(
-  'one 1'
-  'two 2'
-  'three 3'
+  'constant'
+  "${variable\}"
+  'another constant'
 )
 ```
 
@@ -626,10 +630,10 @@ myArray+=('newItem')
 
 ## `array slice,array range`
 
-elements of array from index, equal to count numbers [&uarr;](#Commands)
+n elements of an array from specified index (zero based) [&uarr;](#Commands)
 
 ```bash
-newArray="${myArray[@]:from:count}"
+newArray="${myArray[@]:fromIndex:n}"
 ```
 
 ## `array replace`
@@ -642,7 +646,7 @@ newArray=${myArray[@]//find/replace}
 
 ## `array set element`
 
-set array element at index [&uarr;](#Commands)
+set array element at specified index [&uarr;](#Commands)
 
 ```bash
 myArray[index]="value"
@@ -654,7 +658,7 @@ check if last command failed [&uarr;](#Commands)
 
 ```bash
 if [[ $? != 0 ]]; then
-  echo command failed
+  echo "Last command failed"
 fi
 ```
 
@@ -664,7 +668,7 @@ check if command exists [&uarr;](#Commands)
 
 ```bash
 if [ $(command -v command) ]; then
-  # body
+  echo "command \"${1:command\" exists on system"}
 fi
 ```
 
@@ -681,10 +685,10 @@ sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} command
 Change running process priority. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
 
 ```bash
-for p in $(pidof "process_name"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p "$p"; done
+for p in $(pidof "processName"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p "$p"; done
 ```
 
-## `cmd`
+## `cmd,cmd substitution`
 
 run command (command substitution) [&uarr;](#Commands)
 
@@ -698,7 +702,7 @@ check if last command succeed [&uarr;](#Commands)
 
 ```bash
 if [[ $? == 0 ]]; then
-  echo "command succeed"
+  echo "Last command succeed"
 fi
 ```
 
@@ -707,7 +711,7 @@ fi
 decode variable from base64 [&uarr;](#Commands)
 
 ```bash
-base64Decoded=$(echo -n "${variableToDecode\}" | base64 -d)
+base64Decoded=$(echo -n "${2|stringToDecode,${variableToDecode}|}" | base64 -d)
 ```
 
 ## `crypto base64 encode`
@@ -715,7 +719,7 @@ base64Decoded=$(echo -n "${variableToDecode\}" | base64 -d)
 encode variable to base64 [&uarr;](#Commands)
 
 ```bash
-base64Encoded=$(echo -n "${variableToEncode\}" | base64)
+base64Encoded=$(echo -n "${2|stringToEncode,${variableToEncode}|}" | base64)
 ```
 
 ## `crypto hash`
@@ -736,10 +740,10 @@ dayOfMonth=$(date +%d)
 
 ## `date now dayOfWeek`
 
-current day of week name (A: full | a: abbreviated) [&uarr;](#Commands)
+current day of week name (A: full, a: abbreviated) [&uarr;](#Commands)
 
 ```bash
-dayOfWeek=$(date +%${1|A,a|})
+dayOfWeek=$(date +%${2|A,a|})
 ```
 
 ## `date now dayOfYear`
@@ -755,15 +759,15 @@ dayOfYear=$(date +%j)
 yyyy/mm/dd [&uarr;](#Commands)
 
 ```bash
-dateShort=$(date -I)
+dateShort=$(date -I) # format: yyyy/mm/dd
 ```
 
 ## `date now monthName`
 
-current month name (B: full | b: abbreviated) [&uarr;](#Commands)
+current month name (B: full, b: abbreviated) [&uarr;](#Commands)
 
 ```bash
-monthName=$(date +%${1|B,b|})
+monthName=$(date +%${2|B,b|})
 ```
 
 ## `date now monthNumber`
@@ -784,10 +788,10 @@ dateUTC=$(date -u)
 
 ## `date now year`
 
-current Year [&uarr;](#Commands)
+current Year (Y: full, y: last two digits) [&uarr;](#Commands)
 
 ```bash
-year=$(date +%Y)
+year=$(date +%${2|Y,y|})
 ```
 
 ## `event CTRL+C,event terminated`
@@ -830,7 +834,7 @@ trap on_exit EXIT
 create nested directories [&uarr;](#Commands)
 
 ```bash
-mkdir -p "parent dir"/"child dir"
+mkdir -p ${1|"parent dir/child dir","${pathToCreate}"|}
 ```
 
 ## `directory create`
@@ -838,15 +842,15 @@ mkdir -p "parent dir"/"child dir"
 create directory [&uarr;](#Commands)
 
 ```bash
-mkdir "dirname"
+mkdir "directory name"
 ```
 
 ## `directory delete nested,directory remove nested`
 
-delete directory and all contents [&uarr;](#Commands)
+delete directory and all contents! [&uarr;](#Commands)
 
 ```bash
-rm -rf /path/to/directory
+rm -rf ${1|/path/to/directory,${pathToDirectory}|}
 ```
 
 ## `file delete,file remove`
@@ -854,7 +858,7 @@ rm -rf /path/to/directory
 delete file(s) [&uarr;](#Commands)
 
 ```bash
-rm -f /path/to/file
+rm -f ${1|/path/to/file,${pathToFile}|}
 ```
 
 ## `file read`
@@ -862,8 +866,8 @@ rm -f /path/to/file
 read a file [&uarr;](#Commands)
 
 ```bash
-cat "${filePath\}" | while read line; do
-  echo "${line\"}
+cat "${1|/path/to/file,${filePath}|}" | while read line; do
+  echo "${${2:line\}"}
 done
 ```
 
@@ -872,17 +876,17 @@ done
 find files which contain search criteria in given path and below [&uarr;](#Commands)
 
 ```bash
-result=$(find path/to/search -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +)
+result=$(find "${2|/path/to/search,${pathToSearch}|}" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type f -exec grep "criteria" {} +)
 ```
 
 ## `file write multiline sudo`
 
-write multiple lines into file with sudo permission [&uarr;](#Commands)
+write multiple lines into file when sudo permission is required [&uarr;](#Commands)
 
 ```bash
-cat << EOL | sudo tee filePath
-# text here
-EOL
+cat << EOF | sudo tee "${1|/path/to/file,${filePath}|}" >/dev/null
+first linesecond line...
+EOF
 ```
 
 ## `file write multiline`
@@ -890,9 +894,9 @@ EOL
 write multiple lines into file [&uarr;](#Commands)
 
 ```bash
-cat >filePath <<EOL
-# text here
-EOL
+cat >"${1|/path/to/file,${filePath}|}" <<EOF
+first linesecond line...
+EOF
 ```
 
 ## `file write`
@@ -900,37 +904,37 @@ EOL
 write to a file [&uarr;](#Commands)
 
 ```bash
-echo "sample header" > ${2:/path/to/file}
-for line in ${lines}; do
-  echo "${line\}" >> /path/to/file
+echo "sample header" > "${2|/path/to/file,${pathToFile}|}"
+for line in ${lines[@]}; do
+  echo "${line\}" >> "${2}"
 done
 ```
 
 ## `file find,directory find`
 
-find files (-type f) or directories (-type d) by name [&uarr;](#Commands)
+find files (-type f) or directories (-type d) by name or pattern (*.jpg) [&uarr;](#Commands)
 
 ```bash
-result=$(find ./path -maxdepth ${2|0,1,2,3,4,5,6,7,8,9|} -type ${3|f,d|} -name "criteria")
+resultArray=($(find "${2|/path/to/search,${pathToSearch}|}" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type ${4|f,d|} -name "criteria"))
 ```
 
 ## `if directory exists`
 
-if directory exists [&uarr;](#Commands)
+check if a directory exists [&uarr;](#Commands)
 
 ```bash
-if [ -d "${directory\}" ]; then
-  echo directory exists
+if [ -d "${1|/path/to/directory,${pathToDirectory}|}" ]; then
+  echo "directory \"${1\" exists"}
 fi
 ```
 
 ## `if file executable`
 
-if file executable [&uarr;](#Commands)
+check if file is executable [&uarr;](#Commands)
 
 ```bash
-if [ -x "${filePath\}" ]; then
-  echo file is executable
+if [ -x "${1|/path/to/file,${filePath}|}" ]; then
+  echo "file \"${1\" is executable"}
 fi
 ```
 
@@ -939,38 +943,38 @@ fi
 if given path is a symbolic link [&uarr;](#Commands)
 
 ```bash
-if [ -h "${filePath\}" ]; then
-  echo symbolic link
+if [ -h "${1|/path/to/file,${filePath}|}" ]; then
+  echo "Path \"${1\" is a symbolic link"}
 fi
 ```
 
 ## `if file exists`
 
-if file exists [&uarr;](#Commands)
+check if file exists [&uarr;](#Commands)
 
 ```bash
-if [ -f "${filePath\}" ]; then
-  echo file exists
+if [ -f "${1|/path/to/file,${filePath}|}" ]; then
+  echo "File \"${1\" exists"}
 fi
 ```
 
 ## `if file not empty`
 
-if file size is greater than zero [&uarr;](#Commands)
+check if file size is greater than zero [&uarr;](#Commands)
 
 ```bash
-if [ -s "${filePath\}" ]; then
-  echo file not empty
+if [ -s "${1|/path/to/file,${filePath}|}" ]; then
+  echo "File \"${1\" is not empty"}
 fi
 ```
 
 ## `if file readable`
 
-if file readable [&uarr;](#Commands)
+check if file readable [&uarr;](#Commands)
 
 ```bash
-if [ -r "${filePath\}" ]; then
-  echo file is readable
+if [ -r "${1|/path/to/file,${filePath}|}" ]; then
+  echo "File \"${1\" is readable"}
 fi
 ```
 
@@ -979,38 +983,38 @@ fi
 if file writeable [&uarr;](#Commands)
 
 ```bash
-if [ -w "${filePath\}" ]; then
-  echo file is writeable
+if [ -w "${1|/path/to/file,${filePath}|}" ]; then
+  echo "File \"${1\" is writeable"}
 fi
 ```
 
 ## `if file newer`
 
-if file1 newer than file2 [&uarr;](#Commands)
+check if file1 is newer than file2 [&uarr;](#Commands)
 
 ```bash
-if [ "${file1\}" -nt "${file2\}" ]; then
-  echo file1 is newer than file2
+if [ "${1|/path/to/file1,${filePath1}|}" -nt "${2|/path/to/file2,${filePath2}|}" ]; then
+  echo "Path \"${1\" is newer than path \"${2}\""}
 fi
 ```
 
 ## `if file older`
 
-if file1 older than file2 [&uarr;](#Commands)
+check if file1 is older than file2 [&uarr;](#Commands)
 
 ```bash
-if [ "${file1\}" -ot "${file2\}" ]; then
-  echo file1 is older than file2
+if [ "${1|/path/to/file1,${filePath1}|}" -ot "${2|/path/to/file2,${filePath2}|}" ]; then
+  echo "Path \"${1\" is older than path \"${2}\""}
 fi
 ```
 
 ## `if file =`
 
-if files are equal [&uarr;](#Commands)
+check if files are equal [&uarr;](#Commands)
 
 ```bash
-if [ "${file1\}" -ef "${file2\}" ]; then
-  echo files are equal
+if cmp -s "${1|/path/to/file1,${filePath1}|}" "${2|/path/to/file2,${filePath2}|}"; then
+  echo "File \"${1\" is equal to file \"${2}\""}
 fi
 ```
 
@@ -1019,8 +1023,8 @@ fi
 if path exists (file, directory, link...) [&uarr;](#Commands)
 
 ```bash
-if [ -e "${path\}" ]; then
-  echo "path exists"
+if [ -e "${1|/path/to/something,${pathToSomething}|}" ]; then
+  echo "Path \"${1\" exists"}
 fi
 ```
 
@@ -1029,20 +1033,20 @@ fi
 find and remove files older than x days [&uarr;](#Commands)
 
 ```bash
-find "${path\}" -mtime +days | xargs rm -f
+find "${1|/path/to/directory,${pathToDirectory}|}" -mtime +days | xargs rm -f
 ```
 
 ## `fn animation animate`
 
-Animate frames of animation [&uarr;](#Commands)
+Animate frames of animation with interval seconds between frames [&uarr;](#Commands)
 
 ```bash
-# Usage: animate frames_array interval
+# Usage: animate framesArray interval
 function animate () {
   local frames=("$@")
-  ((last_index=${#frames[@]} - 1))
-  local interval=${frames[last_index]}
-  unset frames[last_index]
+  ((lastIndex=${#frames[@]} - 1))
+  local interval=${frames[lastIndex]}
+  unset frames[lastIndex]
 
   # Comment out next two lines if you are using CTRL+C event handler.
   trap 'tput cnorm; echo' EXIT  trap 'exit 127' HUP INT TERM
@@ -1064,9 +1068,9 @@ function animate () {
 Pacman animation (eating input text) [&uarr;](#Commands)
 
 ```bash
-# Usage: pac_man inputString interval pad
+# Usage: pacMan inputString interval pad
 # Example: pacman "Hello World" 0.5 "*"
-function pac_man () {
+function pacMan () {
   local string="${1\}"
   local interval="${2\}"
   : "${interval:=0.2}"
@@ -1101,11 +1105,9 @@ function pac_man () {
 print a color banner. [&uarr;](#Commands)
 
 ```bash
-# Usage: banner_color green "my title"
-function banner_color() {
-  local color=$1
-  shift
-  case ${color\} in
+# Usage: bannerColor "my title" "red" "*"
+function bannerColor() {
+  case ${2\} in
     black) color=0
     ;;
     red) color=1
@@ -1125,31 +1127,27 @@ function banner_color() {
     *) echo "color is not set"; exit 1
     ;;
   esac
-  local s=("$@") b w
-  for l in "${s[@]}"; do
-    ((w<${#l})) && { b="${l\}"; w="${#l}"; }
-  done
-  tput setaf $color
-  echo " =${b//?/=}=
-| ${b//?/ } |"
-  for l in "${s[@]}"; do
-    printf '| %s%*s%s |\n' "$(tput setaf ${color\})" "-${w\}" "${l\}" "$(tput setaf ${color\})"
-  done
-  echo "| ${b//?/ } |
- =${b//?/=}="
+  local msg="${3\} ${1\} ${3\}"
+  local edge=$(echo "${msg}" | sed "s/./${3}/g")
+  tput setaf ${color\}
+  tput bold
+  echo "${edge}"
+  echo "${msg\}"
+  echo "${edge}"
   tput sgr 0
+  echo
 }
 ```
 
 ## `fn banner simple`
 
-function: print a banner with provided title [&uarr;](#Commands)
+function: print a banner with provided title and surrounding character [&uarr;](#Commands)
 
 ```bash
-# Usage: banner_simple "my title"
-function banner_simple() {
-  local msg="* $* *"
-  local edge=$(echo "${msg\}" | sed 's/./*/g')
+# Usage: bannerSimple "my title" "*"
+function bannerSimple() {
+  local msg="${2\} ${1\} ${2\}"
+  local edge=$(echo "${msg\}" | sed "s/./"${2}"/g")
   echo "${edge\}"
   echo "$(tput bold)${msg\}$(tput sgr0)"
   echo "${edge\}"
@@ -1179,12 +1177,13 @@ function import() {
 Calculate average of given integers [&uarr;](#Commands)
 
 ```bash
+# Usage: average int1 int2 ...
 function average () {
-  local result=0
-  for item in $@; do
-    ((result += item))
+  local sum=0
+  for int in $@; do
+    ((sum += int))
   done
-  echo $((result / $#))
+  echo $((sum / $#))
 }
 ```
 
@@ -1193,10 +1192,11 @@ function average () {
 Calculate product of given integers [&uarr;](#Commands)
 
 ```bash
+# Usage: product int1 int2 ...
 function product () {
   local result=1
-  for item in $@; do
-    ((result *= item))
+  for int in $@; do
+    ((result *= int))
   done
   echo ${result\}
 }
@@ -1207,10 +1207,11 @@ function product () {
 Calculate sum of given integers [&uarr;](#Commands)
 
 ```bash
+# Usage: sum int1 int2 ...
 function sum () {
   local result=0
-  for item in $@; do
-    ((result += item))
+  for int in $@; do
+    ((result += int))
   done
   echo ${result\}
 }
@@ -1224,14 +1225,14 @@ provide a list of options to user and return the index of selected option [&uarr
 # Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
 function chooseOption() {
   echo "${1\}"; shift
-  echo $(tput sitm)$(tput dim)-"Change selection: [up/down]  Select: [ENTER]" $(tput sgr0)
+  echo $(tput dim)-"Change selection: [up/down], Select: [ENTER]" $(tput sgr0)
   local selected="${1\}"; shift
   ESC=$(echo -e "\033")
   cursor_blink_on()  { tput cnorm; }
   cursor_blink_off() { tput civis; }
   cursor_to()        { tput cup $(($1-1)); }
-  print_option()     { echo  $(tput dim) "   $1" $(tput sgr0); }
-  print_selected()   { echo $(tput bold) "=> $1" $(tput sgr0); }
+  print_option()     { echo $(tput sgr0) "$1" $(tput sgr0); }
+  print_selected()   { echo $(tput rev) "$1" $(tput sgr0); }
   get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
   key_input()        { read -s -n3 key 2>/dev/null >&2; [[ $key = $ESC[A ]] && echo up; [[ $key = $ESC[B ]] && echo down; [[ $key = "" ]] && echo enter; }
   for opt; do echo; done
@@ -1269,27 +1270,34 @@ function chooseOption() {
 progress bar function [&uarr;](#Commands)
 
 ```bash
+# Usage: progressBar "message" currentStep totalSteps
 function progressBar() {
-  local BAR='████████████████████'
-  local SPACE='                    '
-  for i in {1..20}; do
-    echo -ne "\r|${BAR:0:$i}${SPACE:$i:20}| $(($i*5))% [ $2 ] "
-    sleep $1
-  done
-  echo -ne ''
+  local   bar='████████████████████'
+  local space='                    '
+  local wheel=('\' '|' '/' '-')
+
+  local msg="${1\}"
+  local current=${2\}
+  local total=${3\}
+  local wheelIndex=$((current % 4))
+  local position=$((20 * current / total))
+
+  echo -ne "\r|${bar:0:$position}${space:$position:20}| ${wheel[wheelIndex]} $(($position*5))% [ ${msg} ] "
 }
 ```
 
-## `fn scan`
+## `fn scan local`
 
-Scan host's port range (tcp/udp) [&uarr;](#Commands)
+Scan localhost's port range (tcp/udp) [&uarr;](#Commands)
 
 ```bash
 # Usage: scan proto host fromPort toPort
 function scan () {
-  for ((port=$3; port<=$4; port++)); do
-    (echo >/dev/$1/$2/$port) >/dev/null 2>&1 && echo "$1 $port => open"
+  local openPortsArray=()
+  for ((port=${3\}; port<=${4\}; port++)); do
+    (echo >/dev/${1\}/${2\}/${port\}) >/dev/null 2>&1 && openPortsArray+=("${port}")
   done
+  echo "${openPortsArray[@]}"
 }
 ```
 
@@ -1301,8 +1309,8 @@ Decodes encoded URL [&uarr;](#Commands)
 # Usage: urldecode url
 # Credit: https://unix.stackexchange.com/a/187256
 function urldecode () {
-  local url_encoded="${1//+/ }"
-  printf '%b' "${url_encoded//%/\\\\x}"
+  local urlEncoded="${1//+/ }"
+  printf '%b' "${urlEncoded//%/\\\\x}"
 }
 ```
 
@@ -1330,14 +1338,14 @@ function urlencode () {
 function: compares two semvers and returns >, < or = [&uarr;](#Commands)
 
 ```bash
-# Usage: version_compare "1.2.3" "1.1.7"
-function version_compare () {
-  function sub_ver () {
+# Usage: versionCompare "1.2.3" "1.1.7"
+function versionCompare () {
+  function subVersion () {
     local len=${#1}
     temp=${1%%"."*} && indexOf=$(echo ${1%%"."*} | echo ${#temp})
     echo -e "0:indexOf"
   }
-  function cut_dot () {
+  function cutDot () {
     local offset=${#1}
     local length=${#2}
     echo -e "((++offset)):length"
@@ -1347,14 +1355,14 @@ function version_compare () {
   fi
   local v1=$(echo -e "${1}" | tr -d '[[:space:]]')
   local v2=$(echo -e "${2}" | tr -d '[[:space:]]')
-  local v1_sub=$(sub_ver $v1)
-  local v2_sub=$(sub_ver $v2)
-  if (( v1_sub > v2_sub )); then
+  local v1Sub=$(subVersion $v1)
+  local v2Sub=$(subVersion $v2)
+  if (( v1Sub > v2Sub )); then
     echo ">"
-  elif (( v1_sub < v2_sub )); then
+  elif (( v1Sub < v2Sub )); then
     echo "<"
   else
-    version_compare $(cut_dot $v1_sub $v1) $(cut_dot $v2_sub $v2)
+    versionCompare $(cutDot $v1Sub $v1) $(cutDot $v2Sub $v2)
   fi
 }
 ```
@@ -1364,8 +1372,8 @@ function version_compare () {
 call animate function to start animation [&uarr;](#Commands)
 
 ```bash
-# Usage: animate frames_array interval
-animate "${frames[@]}" 0.5
+# Usage: animate framesArray interval
+animate "${frames[@]}" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|}
 ```
 
 ## `fx animation pacman`
@@ -1373,31 +1381,34 @@ animate "${frames[@]}" 0.5
 Call Pacman animation (eating input text) function [&uarr;](#Commands)
 
 ```bash
-# Usage: pac_man inputString interval pad
-pac_man "Hello World" ${2:0.3} "."
+# Usage: pacMan inputString interval pad
+pacMan "Hello World" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|} "${3|.,*,+,-,~,x,o|}"
 ```
 
 ## `fx banner color`
 
-call banner_color function [&uarr;](#Commands)
+call bannerColor function [&uarr;](#Commands)
 
 ```bash
-banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} "my title"
+# Usage: bannerColor "my title" "red" "*"
+bannerColor "my title" "${2|black,red,green,yellow,blue,magenta,cyan,white|}" "${3|*,:,+,.,x,o,$|}"
 ```
 
 ## `fx banner simple`
 
-call banner_simple function [&uarr;](#Commands)
+call bannerSimple function [&uarr;](#Commands)
 
 ```bash
-banner_simple "my title"
+# Usage: bannerSimple "my title" "*"
+bannerSimple "my title" "${2|*,:,+,.,x,o,$|}"
 ```
 
 ## `fx import`
 
-call import function, to import functions from other shellscript files located in a directory (default: lib) relative to current script file [&uarr;](#Commands)
+import functions from other shellscript files located in a directory (default: lib) relative to current file [&uarr;](#Commands)
 
 ```bash
+# Usage: import "filename"
 import "libname"
 ```
 
@@ -1406,7 +1417,8 @@ import "libname"
 Call math average function [&uarr;](#Commands)
 
 ```bash
-result=$(average ${num1\} ${num2\} ${num3\})
+# Usage: average int1 int2 ...
+result=$(average ${int1\} ${int2\} ${int3\})
 ```
 
 ## `fx math product`
@@ -1414,7 +1426,8 @@ result=$(average ${num1\} ${num2\} ${num3\})
 Call math product function [&uarr;](#Commands)
 
 ```bash
-result=$(product ${num1\} ${num2\} ${num3\})
+# Usage: product int1 int2 ...
+result=$(product ${int1\} ${int2\} ${int3\})
 ```
 
 ## `fx math sum`
@@ -1422,7 +1435,8 @@ result=$(product ${num1\} ${num2\} ${num3\})
 Call math sum function [&uarr;](#Commands)
 
 ```bash
-result=$(sum ${num1\} ${num2\} ${num3\})
+# Usage: sum int1 int2 ...
+result=$(sum ${int1\} ${int2\} ${int3\})
 ```
 
 ## `fx options`
@@ -1430,9 +1444,10 @@ result=$(sum ${num1\} ${num2\} ${num3\})
 call options function [&uarr;](#Commands)
 
 ```bash
-options=("one" "two" "three")
-chooseOption "Choose:" 1 "${options[@]}"; choice=$?
-echo "${options[$choice]}" selected
+# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
+options=(${2:"one" "two" "three"})
+chooseOption "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
+echo "${${1}[$choice]}" selected
 ```
 
 ## `fx progress`
@@ -1440,15 +1455,24 @@ echo "${options[$choice]}" selected
 call progress bar function [&uarr;](#Commands)
 
 ```bash
-progressBar ${1|.1,.2,.3,.4,.5,1,2,5|} "Installing foo..."
+# Usage: progressBar "message" currentStep totalSteps
+totalSteps=${2:100}
+
+for ((currentStep=${4:1}; ${3} <= ${1}; ${3}++)); do
+  sleep 0.1 # simulating one step of job
+  progressBar "Installing foo..." ${${3}\} ${${1}\}
+done
+echo
 ```
 
-## `fx scan`
+## `fx scan local`
 
-call scan function to scan a host over a port range [&uarr;](#Commands)
+call scan function to scan localhost over a port range [&uarr;](#Commands)
 
 ```bash
-scan ${1|tcp,udp|} host fromPort toPort
+# Usage: scan proto host fromPort toPort
+openPorts=( $(scan ${1|tcp,udp|} "${2|localhost,127.0.0.1,::1|}" fromPort ${4:toPort}) )
+echo "${openPorts[@]\"}
 ```
 
 ## `fx urldecode`
@@ -1456,7 +1480,8 @@ scan ${1|tcp,udp|} host fromPort toPort
 Call urldecode function [&uarr;](#Commands)
 
 ```bash
-urldecode "encodedUrl"
+# Usage: urldecode url
+urldecode "${1|encodedUrl,${encodedUrl}|}"
 ```
 
 ## `fx urlencode`
@@ -1464,7 +1489,8 @@ urldecode "encodedUrl"
 Call urlencode function [&uarr;](#Commands)
 
 ```bash
-urlencode "url"
+# Usage: urlencode url
+urlencode "${1|url,${url}|}"
 ```
 
 ## `fx version compare,fx semver compare`
@@ -1472,7 +1498,8 @@ urlencode "url"
 call version_compare function [&uarr;](#Commands)
 
 ```bash
-version_compare "major.minor.patch" "major.minor.patch"
+# Usage: versionCompare "1.2.3" "1.1.7"
+versionCompare "major.${2:minor}.patch" "${4:major}.minor.${6:patch}"
 ```
 
 ## `ftp delete file`
@@ -1517,7 +1544,7 @@ curl -T fileToUpload ftp://user:password@ipOrDomain/directoryPathOnServer/
 
 ## `func args`
 
-function arguments array [&uarr;](#Commands)
+function all arguments array [&uarr;](#Commands)
 
 ```bash
 echo "$@"
@@ -1639,10 +1666,10 @@ git log --all --grep='searchCriteria'
 
 ## `git commit undo`
 
-Undo last N commits (soft: preserve local changes | hard: delete local changes [&uarr;](#Commands)
+Undo last N commits (soft: preserve local changes, hard: delete local changes [&uarr;](#Commands)
 
 ```bash
-git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5|}
+git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5,6,7,8,9|}
 ```
 
 ## `git commit`
@@ -1674,7 +1701,7 @@ git config --${1|local,global|} ${2|user.name,user.email|} "value"
 Apply a patch from file. [&uarr;](#Commands)
 
 ```bash
-git apply < /path/to/patch1.patch
+git apply < "${1|/path/to/patch1.patch,${patchPath}|}"
 ```
 
 ## `git patch create`
@@ -1682,7 +1709,7 @@ git apply < /path/to/patch1.patch
 Create a patch from changes. [&uarr;](#Commands)
 
 ```bash
-git diff > /path/to/patch1.patch
+git diff > "${1|/path/to/patch1.patch,${patchPath}|}"
 ```
 
 ## `git remote list`
@@ -1748,8 +1775,8 @@ Send http request with cookies, using curl [&uarr;](#Commands)
 ```bash
 curl --request ${1|GET,POST,DELETE,PUT|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --cookie 'key=${4:value}' \
-  --url 'http://example.com'
+  --cookie ${3|'key=value',"${key}=${value}"|} \
+  --url ${4|'http://example.com',"${url}"|}
 ```
 
 ## `http download`
@@ -1759,8 +1786,8 @@ Download from url and save to /path/to/file, using curl [&uarr;](#Commands)
 ```bash
 curl --request ${1|GET,POST|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --output '/path/to/file' \
-  --url 'http://example.com/file.zip'
+  --output ${3|'/path/to/file',"${pathToFile}"|} \
+  --url ${4|'http://example.com/file.zip',"${downloadUrl}"|}
 ```
 
 ## `http GET,http DELETE`
@@ -1770,7 +1797,7 @@ Send http GET/DELETE request using curl [&uarr;](#Commands)
 ```bash
 curl --request ${1|GET,DELETE|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --url 'http://example.com'
+  --url ${3|'http://example.com',"${url}"|}
 ```
 
 ## `http header`
@@ -1780,8 +1807,8 @@ Send http request with custom header, using curl [&uarr;](#Commands)
 ```bash
 curl --request ${1|GET,POST,DELETE,PUT|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --header 'key: ${4:value}' \
-  --url 'http://example.com'
+  --header ${3|'key: value',"${key}": "${value}"|} \
+  --url ${4|'http://example.com',"${url}"|}
 ```
 
 ## `http POST file`
@@ -1791,9 +1818,9 @@ Send file with http POST, using curl [&uarr;](#Commands)
 ```bash
 curl --request POST -sL \
   --user-agent '${1|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --url 'http://example.com' \
-  --form 'key=${4:value}' \
-  --form 'file=@/path/to/file'
+  --url ${2|'http://example.com',"${url}"|} \
+  --form ${3|'key=value',"${key}"="${value}"|} \
+  --form ${4|'file=@/path/to/file',file=@"${pathToFile}"|}
 ```
 
 ## `http POST,http PUT`
@@ -1803,9 +1830,8 @@ Send data with http POST/PUT, using curl [&uarr;](#Commands)
 ```bash
 curl --request ${1|POST,PUT|} -sL \
   --user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \
-  --url 'http://example.com' \
-  --data 'key=${5:value}' \
-  --data 'key=${7:value}'
+  --url ${3|'http://example.com',"${url}"|} \
+  --data ${4|'key=value',"${key}"="${value}"|} 
 ```
 
 ## `ask question`
@@ -1823,7 +1849,7 @@ if integers are equal [&uarr;](#Commands)
 
 ```bash
 if (( int1 == ${2:int2} )); then
-  echo equal
+  echo "equal"
 fi
 ```
 
@@ -1833,7 +1859,7 @@ if integer greater than or equal value [&uarr;](#Commands)
 
 ```bash
 if (( int1 >= ${2:int2} )); then
-  echo greater or equal
+  echo "greater or equal"
 fi
 ```
 
@@ -1843,7 +1869,7 @@ if integer greater than value [&uarr;](#Commands)
 
 ```bash
 if (( int1 > ${2:int2} )); then
-  echo greater
+  echo "greater"
 fi
 ```
 
@@ -1853,7 +1879,7 @@ if integer lesser than or equal value [&uarr;](#Commands)
 
 ```bash
 if (( int1 <= ${2:int2} )); then
-  echo lesser or equal
+  echo "lesser or equal"
 fi
 ```
 
@@ -1863,7 +1889,7 @@ if integer lesser than value [&uarr;](#Commands)
 
 ```bash
 if (( int1 < ${2:int2} )); then
-  echo lesser
+  echo "lesser"
 fi
 ```
 
@@ -1873,7 +1899,7 @@ if integers are not equal [&uarr;](#Commands)
 
 ```bash
 if (( int1 != ${2:int2} )); then
-  echo not equal
+  echo "not equal"
 fi
 ```
 
@@ -1899,12 +1925,12 @@ for((i=0;i<n;i++)); do
 done
 ```
 
-## `for in`
+## `for in collection`
 
 for loop in collection [&uarr;](#Commands)
 
 ```bash
-for item in {a..${3:z}}; do
+for item in {"Hello World!",a,bc,1372}; do
   echo "${item\}"
 done
 ```
@@ -1917,6 +1943,16 @@ for loop in collection [&uarr;](#Commands)
 for col in $(docker images | awk '{ print $1":"$2 }'); do
   echo "${${1:col\}" | cut -d ':' -f 1}
   echo "${${1:col\}" | cut -d ':' -f 2}
+done
+```
+
+## `for in range`
+
+for loop in collection [&uarr;](#Commands)
+
+```bash
+for item in ${2|{a..z},{0..20}|}; do
+  echo "${item\}"
 done
 ```
 
@@ -1956,7 +1992,7 @@ infinite loop [&uarr;](#Commands)
 
 ```bash
 while true; do
-  # body
+  echo "infinite loop"  sleep 1s
 done
 ```
 
@@ -2003,7 +2039,7 @@ done
 Array of local IPs [&uarr;](#Commands)
 
 ```bash
-IPS=$(hostname -I)
+IPs=$(hostname -I)
 ```
 
 ## `ip info`
@@ -2011,7 +2047,7 @@ IPS=$(hostname -I)
 public ip information [&uarr;](#Commands)
 
 ```bash
-info=$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})
+info=$(curl -s ipinfo.io/${2|ip,city,region,country,loc,postal,org|})
 ```
 
 ## `ip public`
@@ -2019,7 +2055,7 @@ info=$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})
 public ip address [&uarr;](#Commands)
 
 ```bash
-publicIp=$(curl -s ${1|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})
+publicIp=$(curl -s ${2|bot.whatismyipaddress.com,ident.me,ipecho.net/plain,icanhazip.com,ifconfig.me,api.ipify.org,ipinfo.io/ip|})
 ```
 
 ## `math +`
@@ -2163,7 +2199,7 @@ result=$((base ** power))
 math operations with up to scale decimal places precision [&uarr;](#Commands)
 
 ```bash
-result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};(${var1\} ${4|+,-,*,/,^|} ${var2\})" | bc)
+result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};(${num1\} ${4|+,-,*,/,^|} ${num2\})" | bc)
 ```
 
 ## `math random`
@@ -2174,12 +2210,12 @@ generate random integer x such as min <= x <= max [&uarr;](#Commands)
 result=$((min + RANDOM % $((max-min))))
 ```
 
-## `math √`
+## `math √,math sqrt`
 
 square root of var up to scale decimal places [&uarr;](#Commands)
 
 ```bash
-result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${var\})" | bc)
+result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${num\})" | bc)
 ```
 
 ## `math -`
@@ -2227,12 +2263,12 @@ done
 set -- "${POSITIONAL[@]}" # restore positional params
 ```
 
-## `expr`
+## `expr,arithmetic`
 
 arithmetic operations on integers [&uarr;](#Commands)
 
 ```bash
-result=$(expr $int1 ${2|+,-,\*,/,%|} $int2)
+result=$(expr ${int1\} ${3|+,-,\*,/,%|} ${int2\})
 ```
 
 ## `let`
@@ -2243,17 +2279,17 @@ arithmetic operations on integers [&uarr;](#Commands)
 let "result = int1 ${3|+,-,*,/,%|} int2"
 ```
 
-## `region`
+## `region,section`
 
 Comment out a special region (i.e. variable declarations [&uarr;](#Commands)
 
 ```bash
-# >>>>>>>>>>>>>>>>>>>>>>>> name >>>>>>>>>>>>>>>>>>>>>>>>
+# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>
 $0
-# <<<<<<<<<<<<<<<<<<<<<<<< name <<<<<<<<<<<<<<<<<<<<<<<<
+# <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<
 ```
 
-## `shebang,bash`
+## `shebang,bash,first line`
 
 shell shebang [&uarr;](#Commands)
 
@@ -2312,7 +2348,6 @@ script summary [&uarr;](#Commands)
 # 0   no error
 # 1   script interrupted
 # 2   ${7:error description}
-
 ```
 
 ## `timeout`
@@ -2323,20 +2358,12 @@ Run command within a time frame [&uarr;](#Commands)
 timeout seconds command
 ```
 
-## `assign if empty,variable default value`
-
-assign default value to variable if variable is empty otherwise assign null [&uarr;](#Commands)
-
-```bash
-: "${variable:=defaultValue}"
-```
-
 ## `color black`
 
 write in black [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 0)black text$(tput sgr0)
+echo $(tput setaf 0)"black text"$(tput sgr0)
 ```
 
 ## `color blue`
@@ -2344,7 +2371,7 @@ echo $(tput setaf 0)black text$(tput sgr0)
 write in blue [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 4)blue text$(tput sgr0)
+echo $(tput setaf 4)"blue text"$(tput sgr0)
 ```
 
 ## `color cyan`
@@ -2352,7 +2379,7 @@ echo $(tput setaf 4)blue text$(tput sgr0)
 write in cyan [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 6)cyan text$(tput sgr0)
+echo $(tput setaf 6)"cyan text"$(tput sgr0)
 ```
 
 ## `color green`
@@ -2360,7 +2387,7 @@ echo $(tput setaf 6)cyan text$(tput sgr0)
 write in green [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 2)green text$(tput sgr0)
+echo $(tput setaf 2)"green text"$(tput sgr0)
 ```
 
 ## `color magenta`
@@ -2368,7 +2395,7 @@ echo $(tput setaf 2)green text$(tput sgr0)
 write in magenta [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 5)magenta text$(tput sgr0)
+echo $(tput setaf 5)"magenta text"$(tput sgr0)
 ```
 
 ## `color red`
@@ -2376,7 +2403,7 @@ echo $(tput setaf 5)magenta text$(tput sgr0)
 write in red [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 1)red text$(tput sgr0)
+echo $(tput setaf 1)"red text"$(tput sgr0)
 ```
 
 ## `color white`
@@ -2384,7 +2411,7 @@ echo $(tput setaf 1)red text$(tput sgr0)
 write in white [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 7)white text$(tput sgr0)
+echo $(tput setaf 7)"white text"$(tput sgr0)
 ```
 
 ## `color yellow`
@@ -2392,7 +2419,7 @@ echo $(tput setaf 7)white text$(tput sgr0)
 write in yellow [&uarr;](#Commands)
 
 ```bash
-echo $(tput setaf 3)yellow text$(tput sgr0)
+echo $(tput setaf 3)"yellow text"$(tput sgr0)
 ```
 
 ## `format bold`
@@ -2400,7 +2427,7 @@ echo $(tput setaf 3)yellow text$(tput sgr0)
 write in bold [&uarr;](#Commands)
 
 ```bash
-echo $(tput bold)bold text$(tput sgr0)
+echo $(tput bold)"bold text"$(tput sgr0)
 ```
 
 ## `format dim`
@@ -2408,7 +2435,7 @@ echo $(tput bold)bold text$(tput sgr0)
 write in dim [&uarr;](#Commands)
 
 ```bash
-echo $(tput dim)dimmed text$(tput sgr0)
+echo $(tput dim)"dimmed text"$(tput sgr0)
 ```
 
 ## `format italic`
@@ -2416,7 +2443,7 @@ echo $(tput dim)dimmed text$(tput sgr0)
 write in italic [&uarr;](#Commands)
 
 ```bash
-echo $(tput sitm)italic text$(tput sgr0)
+echo $(tput sitm)"italic text"$(tput sgr0)
 ```
 
 ## `format reverse`
@@ -2424,7 +2451,7 @@ echo $(tput sitm)italic text$(tput sgr0)
 write in reverse [&uarr;](#Commands)
 
 ```bash
-echo $(tput rev)reversed text$(tput sgr0)
+echo $(tput rev)"reversed text"$(tput sgr0)
 ```
 
 ## `process ID(s)`
@@ -2432,11 +2459,11 @@ echo $(tput rev)reversed text$(tput sgr0)
 Find process ID(s) aka PIDs [&uarr;](#Commands)
 
 ```bash
-processIDsArray=($(pgrep process_name))
-echo "${processIDsArray[@]\"}
+processIDsArray=($(pgrep processName))
+echo "${${1[@]\}"}
 ```
 
-## `process list`
+## `process instances`
 
 List processes [&uarr;](#Commands)
 
@@ -2449,10 +2476,10 @@ processInstances=$(ps -A | grep "${processName\}")
 Kill process by name [&uarr;](#Commands)
 
 ```bash
-sudo kill -9 $(pgrep process_name)
+sudo kill -9 $(pgrep processName)
 ```
 
-## `process list`
+## `process list all`
 
 List processes [&uarr;](#Commands)
 
@@ -2460,7 +2487,7 @@ List processes [&uarr;](#Commands)
 ps -A
 ```
 
-## `string concat`
+## `string concat,string + string`
 
 concatenate two strings [&uarr;](#Commands)
 
@@ -2537,7 +2564,7 @@ length=${#string}
 
 ## `string random`
 
-random string from provided characters with desired length [&uarr;](#Commands)
+random string from provided characters with desired length (default: 8) [&uarr;](#Commands)
 
 ```bash
 randomString=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8 ; echo '')
@@ -2548,7 +2575,7 @@ randomString=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8 ; echo '')
 find all occurrences of a substrings and replace them [&uarr;](#Commands)
 
 ```bash
-replaced=$(echo -e "${string}" | sed -e 's/find/replace/g')
+replaced=$(echo -e "${string}" | sed -e ${3|'s/find/replace/g',"s/${find}/${replace}/g"|})
 ```
 
 ## `string reverse`
@@ -2561,16 +2588,16 @@ reversed=$(echo -e "${string}" | rev)
 
 ## `string substring count,string substring frequency`
 
-Frequency of a substring in a string (may need character escaping) [&uarr;](#Commands)
+frequency of a substring in a string [&uarr;](#Commands)
 
 ```bash
-tmp="${string//$substring\}" && frequency=$(((${#string\} - ${#tmp\}) / ${#substring}))
+tmp="${string//$substring\}" && frequency=$(((${#${1}\} - ${#tmp\}) / ${#substring}))
 echo "${${3:frequency\}"}
 ```
 
 ## `string substring`
 
-part of the string from offset (zero indexed) with length characters [&uarr;](#Commands)
+part of the string from offset (zero indexed) up to characters length [&uarr;](#Commands)
 
 ```bash
 substring=$(echo -e "${string:${offset\}:${length\}}")
@@ -2678,7 +2705,7 @@ sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTo
 echo "${sysMemory${1\}"}
 ```
 
-## `system processor architecture,system cpu architecture`
+## `system processor architecture,system cpu architecture,system cpu arch`
 
 Processor architecture (i.e. x86_64) [&uarr;](#Commands)
 
@@ -2719,7 +2746,7 @@ echo "${${1:cpuType\}"}
 Manage service operations [&uarr;](#Commands)
 
 ```bash
-sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} serviceName
+sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',"${serviceName}"|}
 ```
 
 ## `system uptime`
@@ -2728,7 +2755,7 @@ System uptime. -p: --pretty, -s: since [&uarr;](#Commands)
 
 ```bash
 systemUptime=$(uptime ${2|-p,-s|})
-echo "${${1:systemUptime\}"}
+echo "${${1\}"}
 ```
 
 ## `time seconds epoch`
@@ -2737,7 +2764,7 @@ seconds since epoch (1970-01-01 00:00:00) [&uarr;](#Commands)
 
 ```bash
 timeNowSecondsEpoch=$(date +%s)
-echo "${${1:timeNowSecondsEpoch\}"}
+echo "${${1\}"}
 ```
 
 ## `time now local`
@@ -2746,7 +2773,7 @@ current local time (R: 24hrs, r: 12hrs) [&uarr;](#Commands)
 
 ```bash
 timeNowLocal=$(date +%${2|R,r|})
-echo "${${1:timeNowLocal\}"}
+echo "${${1\}"}
 ```
 
 ## `time now UTC`
@@ -2755,5 +2782,13 @@ current UTC time [&uarr;](#Commands)
 
 ```bash
 timeNowUTC=$(date -u +%R)
-echo ${${1:timeNowUTC\}}
+echo ${${1\}}
+```
+
+## `variable default value,assign if empty`
+
+assign default value to variable if variable is empty otherwise assign null [&uarr;](#Commands)
+
+```bash
+: "${variable:=defaultValue}"
 ```

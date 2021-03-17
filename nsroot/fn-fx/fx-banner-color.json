@@ -1,5 +1,8 @@
 {
   "prefix": "fx banner color",
-  "body": "banner_color ${1|black,red,green,yellow,blue,magenta,cyan,white|} \"${2:my title}\"\n",
-  "description": "call banner_color function"
+  "body": [
+    "# Usage: bannerColor \"my title\" \"red\" \"*\"",
+    "bannerColor \"${1:my title}\" \"${2|black,red,green,yellow,blue,magenta,cyan,white|}\" \"${3|*,:,+,.,x,o,$|}\"\n"
+  ],
+  "description": "call bannerColor function"
 }

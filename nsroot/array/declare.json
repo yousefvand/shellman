@@ -2,9 +2,9 @@
   "prefix": "array declare",
   "body": [
     "${1:myArray}=(",
-    "\t'${2:one 1}'",
-    "\t'${3:two 2}'",
-    "\t'${4:three 3}'",
+    "\t'${2:constant}'",
+    "\t\"${3:${variable\\}}\"",
+    "\t'${4:another constant}'",
     ")\n"
   ],
   "description": "declare an array"

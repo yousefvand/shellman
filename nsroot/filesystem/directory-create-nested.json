@@ -1,5 +1,5 @@
 {
   "prefix": "directory create nested",
-  "body": "mkdir -p \"${1:parent dir}\"/\"${2:child dir}\"\n",
+  "body": "mkdir -p ${1|\"parent dir/child dir\",\"${pathToCreate}\"|}\n",
   "description": "create nested directories"
 }

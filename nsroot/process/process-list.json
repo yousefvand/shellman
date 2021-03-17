@@ -1,5 +1,5 @@
 {
-  "prefix": "process list",
+  "prefix": "process list all",
   "body": "ps -A\n",
   "description": "List processes"
 }

@@ -1,9 +1,9 @@
 {
   "prefix": "if file readable",
   "body": [
-    "if [ -r \"\\${${1:filePath}\\}\" ]; then",
-    "\t${0:echo file is readable}",
+    "if [ -r \"${1|/path/to/file,${filePath}|}\" ]; then",
+      "\t${2:echo \"File \\\"${1}\\\" is readable\"}",
     "fi\n"
   ],
-  "description": "if file readable"
+  "description": "check if file readable"
 }

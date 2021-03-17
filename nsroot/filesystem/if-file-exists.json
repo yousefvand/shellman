@@ -1,9 +1,9 @@
 {
   "prefix": "if file exists",
   "body": [
-    "if [ -f \"\\${${1:filePath}\\}\" ]; then",
-    "\t${2:echo file exists}",
+    "if [ -f \"${1|/path/to/file,${filePath}|}\" ]; then",
+      "\t${2:echo \"File \\\"${1}\\\" exists\"}",
     "fi\n"
   ],
-  "description": "if file exists"
+  "description": "check if file exists"
 }

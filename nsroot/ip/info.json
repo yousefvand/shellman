@@ -1,5 +1,5 @@
 {
   "prefix": "ip info",
-  "body": "${0:info}=\\$(curl -s ipinfo.io/${1|ip,city,region,country,loc,postal,org|})\n",
+  "body": "${1:info}=\\$(curl -s ipinfo.io/${2|ip,city,region,country,loc,postal,org|})\n",
   "description": "public ip information"
 }

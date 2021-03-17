@@ -1,7 +1,7 @@
 {
-  "prefix": "for in collection",
+  "prefix": "for in range",
   "body": [
-    "for ${1:item} in {${2:\"Hello World!\",a,bc,1372}}; do",
+    "for ${1:item} in ${2|{a..z},{0..20}|}; do",
     "\techo \"\\${${1:item}\\}\"",
     "done\n"
   ],

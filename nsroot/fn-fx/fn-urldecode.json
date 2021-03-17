@@ -4,8 +4,8 @@
     "# Usage: urldecode url",
     "# Credit: https://unix.stackexchange.com/a/187256",
     "function urldecode () {",
-    "\tlocal url_encoded=\"\\${1//+/ }\"",
-    "\tprintf '%b' \"\\${url_encoded//%/\\\\\\\\x}\"",
+    "\tlocal urlEncoded=\"\\${1//+/ }\"",
+    "\tprintf '%b' \"\\${urlEncoded//%/\\\\\\\\x}\"",
     "}\n"
   ],
   "description": "Decodes encoded URL"

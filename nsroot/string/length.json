@@ -1,5 +1,5 @@
 {
   "prefix": "string length",
-  "body": "${0:length}=\\${#${1:string}}\n",
+  "body": "${1:length}=\\${#${2:string}}\n",
   "description": "length of string in characters"
 }
