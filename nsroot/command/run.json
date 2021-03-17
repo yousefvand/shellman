@@ -1,6 +1,8 @@
 {
   "prefix": [
+    "command",
     "cmd",
+    "command substitution",
     "cmd substitution"
   ],
   "body": "${1:result}=$(${2:command})\n",

@@ -133,7 +133,10 @@ Call function which is declared by `fn...`
 
 ## Latest release Notes
 
-## 4.10.0
+## 5.0.0
 
-- `fn/fx urlencode`: Encode URL.
-- `fn/fx urldecode`: Decode URL.
+- Default command substitution to `$(command)`.
+- Default variable expansion to `"${variable}"`.
+- Unified `TAB` ordering.
+- Some functions and snippets enhanced.
+- Descriptive aliases added to some snippets.

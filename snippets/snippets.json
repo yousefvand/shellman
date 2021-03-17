@@ -104,7 +104,10 @@
     "description": "set array element at specified index"
   },
   "command.failure-check": {
-    "prefix": "cmd failure check",
+    "prefix": [
+      "command failure check",
+      "cmd failure check"
+    ],
     "body": [
       "if [[ \\$? != 0 ]]; then",
       "\t${1:echo \"Last command failed\"}",
@@ -113,7 +116,10 @@
     "description": "check if last command failed"
   },
   "command.if-exists": {
-    "prefix": "if cmd exists",
+    "prefix": [
+      "if command exists",
+      "if cmd exists"
+    ],
     "body": [
       "if [ \\$(command -v ${1:command}) ]; then",
       "\t${2:echo \"command \\\"${1:command}\\\" exists on system\"}",
@@ -122,25 +128,36 @@
     "description": "check if command exists"
   },
   "command.nice": {
-    "prefix": "cmd nice",
+    "prefix": [
+      "command nice",
+      "cmd nice"
+    ],
     "body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${2:command}\n",
     "description": "run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.renice": {
-    "prefix": "cmd renice",
+    "prefix": [
+      "command renice",
+      "cmd renice"
+    ],
     "body": "for p in \\$(pidof \"${1:processName}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n",
-    "description": "Change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
+    "description": "change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.run": {
     "prefix": [
+      "command",
       "cmd",
+      "command substitution",
       "cmd substitution"
     ],
     "body": "${1:result}=$(${2:command})\n",
     "description": "run command (command substitution)"
   },
   "command.success-check": {
-    "prefix": "cmd success check",
+    "prefix": [
+      "command success check",
+      "cmd success check"
+    ],
     "body": [
       "if [[ \\$? == 0 ]]; then",
       "\t${1:echo \"Last command succeed\"}",
@@ -447,7 +464,7 @@
       "\tdone",
       "}\n${0:}"
     ],
-    "description": "Animate frames of animation with interval seconds between frames"
+    "description": "animate frames of animation with interval seconds between frames"
   },
   "fn-fx.fn-animation-pacman": {
     "prefix": "fn animation pacman",
@@ -483,7 +500,7 @@
       "\techo \"\\${padding\\}\"",
       "}\n${0:}"
     ],
-    "description": "Pacman animation (eating input text)"
+    "description": "pacMan animation (eating input text)"
   },
   "fn-fx.fn-banner-color": {
     "prefix": "fn banner color",
@@ -538,66 +555,11 @@
     ],
     "description": "function: print a banner with provided title and surrounding character"
   },
-  "fn-fx.fn-import": {
-    "prefix": "fn import",
-    "body": [
-      "# Usage: import \"mylib\"",
-      "function import() {",
-      "\tlocal file=\"./${1:lib}/\\${1\\}.sh\"",
-      "\tif [ -f \"\\${file\\}\" ]; then",
-      "\t\tsource \"\\${file\\}\"",
-      "\telse",
-      "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
-      "\t\texit 1",
-      "\tfi",
-      "}\n"
+  "fn-fx.fn-choice": {
+    "prefix": [
+      "fn options",
+      "fn input choice"
     ],
-    "description": "import functions from other shellscript files"
-  },
-  "fn-fx.fn-math-average": {
-    "prefix": "fn math average",
-    "body": [
-      "# Usage: average int1 int2 ...",
-      "function average () {",
-      "\tlocal sum=0",
-      "\tfor int in \\$@; do",
-      "\t\t((sum += int))",
-      "\tdone",
-      "\techo \\$((sum / \\$#))",
-      "}\n"
-    ],
-    "description": "Calculate average of given integers"
-  },
-  "fn-fx.fn-math-product": {
-    "prefix": "fn math product",
-    "body": [
-      "# Usage: product int1 int2 ...",
-      "function product () {",
-      "\tlocal result=1",
-      "\tfor int in $@; do",
-      "\t\t((result *= int))",
-      "\tdone",
-      "\techo \\${result\\}",
-      "}\n"
-    ],
-    "description": "Calculate product of given integers"
-  },
-  "fn-fx.fn-math-sum": {
-    "prefix": "fn math sum",
-    "body": [
-      "# Usage: sum int1 int2 ...",
-      "function sum () {",
-      "\tlocal result=0",
-      "\tfor int in \\$@; do",
-      "\t\t((result += int))",
-      "\tdone",
-      "\techo \\${result\\}",
-      "}\n"
-    ],
-    "description": "Calculate sum of given integers"
-  },
-  "fn-fx.fn-options": {
-    "prefix": "fn options",
     "body": [
       "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
       "function chooseOption() {",
@@ -643,6 +605,64 @@
     ],
     "description": "provide a list of options to user and return the index of selected option"
   },
+  "fn-fx.fn-import": {
+    "prefix": "fn import",
+    "body": [
+      "# Usage: import \"mylib\"",
+      "function import() {",
+      "\tlocal file=\"./${1:lib}/\\${1\\}.sh\"",
+      "\tif [ -f \"\\${file\\}\" ]; then",
+      "\t\tsource \"\\${file\\}\"",
+      "\telse",
+      "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
+      "\t\texit 1",
+      "\tfi",
+      "}\n"
+    ],
+    "description": "import functions from other shellscript files"
+  },
+  "fn-fx.fn-math-average": {
+    "prefix": "fn math average",
+    "body": [
+      "# Usage: average int1 int2 ...",
+      "function average () {",
+      "\tlocal sum=0",
+      "\tfor int in \\$@; do",
+      "\t\t((sum += int))",
+      "\tdone",
+      "\techo \\$((sum / \\$#))",
+      "}\n"
+    ],
+    "description": "calculate average of given integers"
+  },
+  "fn-fx.fn-math-product": {
+    "prefix": "fn math product",
+    "body": [
+      "# Usage: product int1 int2 ...",
+      "function product () {",
+      "\tlocal result=1",
+      "\tfor int in $@; do",
+      "\t\t((result *= int))",
+      "\tdone",
+      "\techo \\${result\\}",
+      "}\n"
+    ],
+    "description": "calculate product of given integers"
+  },
+  "fn-fx.fn-math-sum": {
+    "prefix": "fn math sum",
+    "body": [
+      "# Usage: sum int1 int2 ...",
+      "function sum () {",
+      "\tlocal result=0",
+      "\tfor int in \\$@; do",
+      "\t\t((result += int))",
+      "\tdone",
+      "\techo \\${result\\}",
+      "}\n"
+    ],
+    "description": "calculate sum of given integers"
+  },
   "fn-fx.fn-progress": {
     "prefix": "fn progress",
     "body": [
@@ -675,7 +695,7 @@
       "\techo \"\\${openPortsArray[@]}\"",
       "}\n"
     ],
-    "description": "Scan localhost's port range (tcp/udp)"
+    "description": "scan localhost's port range (tcp/udp)"
   },
   "fn-fx.fn-urldecode": {
     "prefix": "fn urldecode",
@@ -687,7 +707,7 @@
       "\tprintf '%b' \"\\${urlEncoded//%/\\\\\\\\x}\"",
       "}\n"
     ],
-    "description": "Decodes encoded URL"
+    "description": "decodes encoded URL"
   },
   "fn-fx.fn-urlencode": {
     "prefix": "fn urlencode",
@@ -705,7 +725,7 @@
       "\tdone",
       "}\n"
     ],
-    "description": "Encodes URL"
+    "description": "encodes URL"
   },
   "fn-fx.fn-version-compare": {
     "prefix": [
@@ -757,7 +777,7 @@
       "# Usage: pacMan inputString interval pad",
       "pacMan \"${1:Hello World}\" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|} \"${3|.,*,+,-,~,x,o|}\"\n"
     ],
-    "description": "Call Pacman animation (eating input text) function"
+    "description": "call pacMan animation (eating input text) function"
   },
   "fn-fx.fx-banner-color": {
     "prefix": "fx banner color",
@@ -775,6 +795,19 @@
     ],
     "description": "call bannerSimple function"
   },
+  "fn-fx.fx-choice": {
+    "prefix": [
+      "fx options",
+      "fn input choice"
+    ],
+    "body": [
+      "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
+      "${1:options}=(${2:\"one\" \"two\" \"three\"})",
+      "chooseOption \"${3:Choose:}\" ${4|0,1,2,3,4,5,6,7,8,9|} \"\\${${1}[@]}\"; choice=\\$?",
+      "echo \"\\${${1}[\\$choice]}\" selected\n"
+    ],
+    "description": "call options function"
+  },
   "fn-fx.fx-import": {
     "prefix": "fx import",
     "body": [
@@ -789,7 +822,7 @@
       "# Usage: average int1 int2 ...",
       "result=\\$(average \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
     ],
-    "description": "Call math average function"
+    "description": "call math average function"
   },
   "fn-fx.fx-math-product": {
     "prefix": "fx math product",
@@ -797,7 +830,7 @@
       "# Usage: product int1 int2 ...",
       "result=\\$(product \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
     ],
-    "description": "Call math product function"
+    "description": "call math product function"
   },
   "fn-fx.fx-math-sum": {
     "prefix": "fx math sum",
@@ -805,17 +838,7 @@
       "# Usage: sum int1 int2 ...",
       "result=\\$(sum \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
     ],
-    "description": "Call math sum function"
-  },
-  "fn-fx.fx-options": {
-    "prefix": "fx options",
-    "body": [
-      "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
-      "${1:options}=(${2:\"one\" \"two\" \"three\"})",
-      "chooseOption \"${3:Choose:}\" ${4|0,1,2,3,4,5,6,7,8,9|} \"\\${${1}[@]}\"; choice=\\$?",
-      "echo \"\\${${1}[\\$choice]}\" selected\n"
-    ],
-    "description": "call options function"
+    "description": "call math sum function"
   },
   "fn-fx.fx-progress": {
     "prefix": "fx progress",
@@ -846,7 +869,7 @@
       "# Usage: urldecode url",
       "urldecode \"${1|encodedUrl,${encodedUrl}|}\"\n"
     ],
-    "description": "Call urldecode function"
+    "description": "call urldecode function"
   },
   "fn-fx.fx-urlencode": {
     "prefix": "fx urlencode",
@@ -854,7 +877,7 @@
       "# Usage: urlencode url",
       "urlencode \"${1|url,${url}|}\"\n"
     ],
-    "description": "Call urlencode function"
+    "description": "call urlencode function"
   },
   "fn-fx.fx-version-compare": {
     "prefix": [
@@ -865,45 +888,54 @@
       "# Usage: versionCompare \"1.2.3\" \"1.1.7\"",
       "versionCompare \"${1:major}.${2:minor}.${3:patch}\" \"${4:major}.${5:minor}.${6:patch}\"\n"
     ],
-    "description": "call version_compare function"
+    "description": "call versionCompare function"
   },
   "ftp.delete": {
     "prefix": "ftp delete file",
     "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/${5:fileToDelete} -Q \"DELE ${5:fileToDelete}\"\n",
-    "description": "Delete specified file from ftp server"
+    "description": "delete specified file from ftp server"
   },
   "ftp.download": {
     "prefix": "ftp download",
     "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:filePathOnServer}/\n",
-    "description": "Download specified file from ftp server"
+    "description": "download specified file from ftp server"
   },
   "ftp.list-of-files": {
     "prefix": "ftp list",
     "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:directoryPathOnServer}/\n",
-    "description": "Get the list of files on the ftp server at specific path"
+    "description": "get the list of files on the ftp server at specific path"
   },
   "ftp.rename": {
     "prefix": "ftp rename",
     "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/ -Q \"-RNFR ${4:path}/${5:renameFrom}\" -Q \"-RNTO ${4:path}/${6:renameTo}\"\n",
-    "description": "Rename specified file/directory on ftp server"
+    "description": "rename specified file/directory on ftp server"
   },
   "ftp.upload": {
     "prefix": "ftp upload",
     "body": "curl -T ${1:fileToUpload} ftp://${2:user}:${3:password}@${4:ipOrDomain}/${5:directoryPathOnServer}/\n",
-    "description": "Upload specified file to ftp server"
+    "description": "upload specified file to ftp server"
   },
   "function.arguments-array": {
-    "prefix": "func args",
+    "prefix": [
+      "function arguments",
+      "func args"
+    ],
     "body": "echo \"$@\"",
     "description": "function all arguments array"
   },
   "function.arguments-count": {
-    "prefix": "func args count",
+    "prefix": [
+      "function arguments count",
+      "func args count"
+    ],
     "body": "echo $#",
     "description": "number of function arguments"
   },
   "function.declare": {
-    "prefix": "func",
+    "prefix": [
+      "function",
+      "func"
+    ],
     "body": [
       "function ${1:name} () {",
       "\t${2:echo \"\\$1\" # arguments are accessible through \\$1, \\$2,...}",
@@ -912,109 +944,112 @@
     "description": "function"
   },
   "function.return-value": {
-    "prefix": "func return value",
+    "prefix": [
+      "function return value",
+      "func return value"
+    ],
     "body": "echo \"$?\"",
     "description": "last function/command return code"
   },
   "git.branch-create": {
     "prefix": "git branch create",
     "body": "git checkout -b ${1:branchName}\n",
-    "description": "Create branch locally and switch into it."
+    "description": "create branch locally and switch into it."
   },
   "git.branch-delete-local": {
     "prefix": "git branch delete local",
     "body": "git branch --delete ${1:localBranch}\n",
-    "description": "Delete local branch."
+    "description": "delete local branch."
   },
   "git.branch-delete-remote": {
     "prefix": "git branch delete remote",
     "body": "git push origin --delete ${1:remoteBranch}\n",
-    "description": "Delete remote branch."
+    "description": "delete remote branch."
   },
   "git.branch-list": {
     "prefix": "git branch list",
     "body": "git branch\n",
-    "description": "List all branches."
+    "description": "list all branches."
   },
   "git.branch-push": {
     "prefix": "git branch push",
     "body": "git push origin ${1:branchName}\n",
-    "description": "Push branch to remote."
+    "description": "push branch to remote."
   },
   "git.branch-rename": {
     "prefix": "git branch rename",
     "body": "git branch -m ${1:newName}\n",
-    "description": "Rename current branch."
+    "description": "rename current branch."
   },
   "git.changes-revert": {
     "prefix": "git changes revert",
     "body": "git checkout .\n",
-    "description": "Revert tracked changes"
+    "description": "revert tracked changes"
   },
   "git.clone-branch": {
     "prefix": "git clone branch",
     "body": "git clone -b ${1:branchName} https://${2:github.com}/${3:user}/${4:repository}.git\n",
-    "description": "Clone a remote branch to local machine."
+    "description": "clone a remote branch to local machine."
   },
   "git.clone": {
     "prefix": "git clone",
     "body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "Clone remote repository to local machine."
+    "description": "clone remote repository to local machine."
   },
   "git.commit-list-notpushed": {
     "prefix": "git commit list notPushed",
     "body": "git log origin/master..HEAD\n",
-    "description": "List non pushed commits."
+    "description": "list non pushed commits."
   },
   "git.commit-search": {
     "prefix": "git commit search",
     "body": "git log --all --grep='${1:searchCriteria}'\n",
-    "description": "Search for a commit which contains searchCriteria."
+    "description": "search for a commit which contains searchCriteria."
   },
   "git.commit-undo": {
     "prefix": "git commit undo",
     "body": "git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5,6,7,8,9|}\n",
-    "description": "Undo last N commits (soft: preserve local changes, hard: delete local changes"
+    "description": "undo last N commits (soft: preserve local changes, hard: delete local changes"
   },
   "git.commit": {
     "prefix": "git commit",
     "body": "git commit -m \"${1:commit message}\"\n",
-    "description": "Commit changes."
+    "description": "commit changes."
   },
   "git.config-list": {
     "prefix": "git config list",
     "body": "git config --list\n",
-    "description": "List git configurations."
+    "description": "list git configurations."
   },
   "git.config-set": {
     "prefix": "git config set",
     "body": "git config --${1|local,global|} ${2|user.name,user.email|} \"${3:value}\"\n",
-    "description": "Configure git."
+    "description": "configure git."
   },
   "git.patch-apply": {
     "prefix": "git patch apply",
     "body": "git apply < \"${1|/path/to/patch1.patch,${patchPath}|}\"\n",
-    "description": "Apply a patch from file."
+    "description": "apply a patch from file"
   },
   "git.patch-create": {
     "prefix": "git patch create",
     "body": "git diff > \"${1|/path/to/patch1.patch,${patchPath}|}\"\n",
-    "description": "Create a patch from changes."
+    "description": "create a patch from changes"
   },
   "git.remote-list": {
     "prefix": "git remote list",
     "body": "git remote\n",
-    "description": "List all remotes."
+    "description": "list all remotes"
   },
   "git.remote-url-change": {
     "prefix": "git remote urlChange",
     "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "Change remote url."
+    "description": "change remote url"
   },
   "git.remote-urlAdd": {
     "prefix": "git remote urlAdd",
     "body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "Add remote url."
+    "description": "add remote url"
   },
   "git.tag-commit": {
     "prefix": [
@@ -1022,22 +1057,22 @@
       "git commit tag"
     ],
     "body": "git tag -a ${1:release/1.0.0} -m \"${2:1.0.0 release}\"\n",
-    "description": "Tag a commit."
+    "description": "tag a commit"
   },
   "git.tag-list": {
     "prefix": "git tag list",
     "body": "git tag\n",
-    "description": "List all tags."
+    "description": "list all tags"
   },
   "git.tag-remote-delete": {
     "prefix": "git tag remote delete",
     "body": "git push --delete origin ${1:tagName} && git push origin :${1:tagName}\n",
-    "description": "Delete tag from remote."
+    "description": "delete tag from remote"
   },
   "git.tag-remote-push": {
     "prefix": "git tag remote push",
     "body": "git push origin ${1:tagName}\n",
-    "description": "Push tag to remote."
+    "description": "push tag to remote"
   },
   "http.cookie": {
     "prefix": "http cookie",
@@ -1047,7 +1082,7 @@
       "\t--cookie ${3|'key=value',\"${key}=${value}\"|} \\",
       "\t--url ${4|'http://example.com',\"${url}\"|}\n"
     ],
-    "description": "Send http request with cookies, using curl"
+    "description": "send http request with cookies, using curl"
   },
   "http.download": {
     "prefix": "http download",
@@ -1057,7 +1092,7 @@
       "\t--output ${3|'/path/to/file',\"${pathToFile}\"|} \\",
       "\t--url ${4|'http://example.com/file.zip',\"${downloadUrl}\"|}\n"
     ],
-    "description": "Download from url and save to /path/to/file, using curl"
+    "description": "download from url and save to /path/to/file, using curl"
   },
   "http.get": {
     "prefix": [
@@ -1069,7 +1104,7 @@
       "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
       "\t--url ${3|'http://example.com',\"${url}\"|}\n"
     ],
-    "description": "Send http GET/DELETE request using curl"
+    "description": "send http GET/DELETE request using curl"
   },
   "http.header": {
     "prefix": "http header",
@@ -1079,7 +1114,7 @@
       "\t--header ${3|'key: value',\"${key}\": \"${value}\"|} \\",
       "\t--url ${4|'http://example.com',\"${url}\"|}\n"
     ],
-    "description": "Send http request with custom header, using curl"
+    "description": "send http request with custom header, using curl"
   },
   "http.post-send-file": {
     "prefix": "http POST file",
@@ -1090,7 +1125,7 @@
       "\t--form ${3|'key=value',\"${key}\"=\"${value}\"|} \\",
       "\t--form ${4|'file=@/path/to/file',file=@\"${pathToFile}\"|}\n"
     ],
-    "description": "Send file with http POST, using curl"
+    "description": "send file with http POST, using curl"
   },
   "http.post": {
     "prefix": [
@@ -1103,15 +1138,18 @@
       "\t--url ${3|'http://example.com',\"${url}\"|} \\",
       "\t--data ${4|'key=value',\"${key}\"=\"${value}\"|} \n"
     ],
-    "description": "Send data with http POST/PUT, using curl"
+    "description": "send data with http POST/PUT, using curl"
   },
-  "input.ask-question": {
-    "prefix": "ask question",
+  "input.text": {
+    "prefix": [
+      "input text",
+      "ask question"
+    ],
     "body": [
       "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
       "${3:echo \"\\${answer\\}\"}\n"
     ],
-    "description": "Ask question with default answer"
+    "description": "ask question with default answer"
   },
   "integer.if-equal": {
     "prefix": "if int =",
@@ -1285,7 +1323,7 @@
   "ip.array-of-local": {
     "prefix": "ip local IPs",
     "body": "${1:IPs}=\\$(hostname -I)\n",
-    "description": "Array of local IPs"
+    "description": "array of local IPs"
   },
   "ip.info": {
     "prefix": "ip info",
@@ -1342,10 +1380,23 @@
     "body": "${1:result}=\\$((${2:int1} / ${3:int2}))\n",
     "description": "divide int1 by int2 as integers and returns whole part"
   },
+  "math.expr": {
+    "prefix": [
+      "expr",
+      "arithmetic"
+    ],
+    "body": "${1:result}=\\$(expr \\${${2:int1}\\} ${3|+,-,\\*,/,%|} \\${${4:int2}\\})\n",
+    "description": "arithmetic operations on integers"
+  },
   "math.increment": {
     "prefix": "math ++",
     "body": "((${1|int++,++int|}))\n",
     "description": "increment integer variable by 1"
+  },
+  "math.let": {
+    "prefix": "let",
+    "body": "let \"${1:result} = ${2:int1} ${3|+,-,*,/,%|} ${4:int2}\"\n",
+    "description": "arithmetic operations on integers"
   },
   "math.minus-equal": {
     "prefix": "math -=",
@@ -1414,7 +1465,7 @@
       "${3:# Frame here}",
       "EOF\n"
     ],
-    "description": "Define animation frame"
+    "description": "define animation frame"
   },
   "misc.arguments-parse": {
     "prefix": [
@@ -1443,19 +1494,6 @@
     ],
     "description": "parse command line arguments (flags/switches)"
   },
-  "misc.expr": {
-    "prefix": [
-      "expr",
-      "arithmetic"
-    ],
-    "body": "${1:result}=\\$(expr \\${${2:int1}\\} ${3|+,-,\\*,/,%|} \\${${4:int2}\\})\n",
-    "description": "arithmetic operations on integers"
-  },
-  "misc.let": {
-    "prefix": "let",
-    "body": "let \"${1:result} = ${2:int1} ${3|+,-,*,/,%|} ${4:int2}\"\n",
-    "description": "arithmetic operations on integers"
-  },
   "misc.region": {
     "prefix": [
       "region",
@@ -1466,7 +1504,7 @@
       "$0",
       "# <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<"
     ],
-    "description": "Comment out a special region (i.e. variable declarations"
+    "description": "comment out a special region (i.e. variable declarations)"
   },
   "misc.shebang": {
     "prefix": [
@@ -1522,7 +1560,7 @@
   "misc.timeout": {
     "prefix": "timeout",
     "body": "timeout ${1:seconds} ${2:command}\n",
-    "description": "Run command within a time frame"
+    "description": "run command within a time frame"
   },
   "output.color-black": {
     "prefix": "color black",
@@ -1590,22 +1628,22 @@
       "${1:processIDsArray}=(\\$(pgrep ${2:processName}))",
       "${3:echo \"\\${${1}[@]\\}\"}\n"
     ],
-    "description": "Find process ID(s) aka PIDs"
+    "description": "find process ID(s) aka PIDs"
   },
   "process.process-instances": {
     "prefix": "process instances",
     "body": "${1:processInstances}=\\$(ps -A | grep \"\\${${2:processName}\\}\")\n",
-    "description": "List processes"
+    "description": "list processes"
   },
   "process.process-kill": {
     "prefix": "process kill",
     "body": "sudo kill -9 \\$(pgrep ${1:processName})\n",
-    "description": "Kill process by name"
+    "description": "kill process by name"
   },
   "process.process-list": {
     "prefix": "process list all",
     "body": "ps -A\n",
-    "description": "List processes"
+    "description": "list processes"
   },
   "string.concat": {
     "prefix": [
@@ -1789,7 +1827,7 @@
       "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)",
       "${2:echo \"\\${sysMemory${1}\\}\"}\n"
     ],
-    "description": "System memory information in kilobytes (KB)"
+    "description": "system memory information in kilobytes (KB)"
   },
   "system.processor-architecture": {
     "prefix": [
@@ -1801,7 +1839,7 @@
       "${1:arch}=\\$(lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1)",
       "${2:echo \"\\${${1:arch}\\}\"}\n"
     ],
-    "description": "Processor architecture (i.e. x86_64)"
+    "description": "processor architecture (i.e. x86_64)"
   },
   "system.processor-count": {
     "prefix": [
@@ -1812,7 +1850,7 @@
       "${1:cores}=\\$(lscpu | grep 'CPU(s)' |awk '{print \\$2}' | head -n 1)",
       "${2:echo \"\\${${1:cores}\\}\"}\n"
     ],
-    "description": "Processor count (cores)"
+    "description": "processor count (cores)"
   },
   "system.processor-model": {
     "prefix": [
@@ -1823,7 +1861,7 @@
       "${1:cpuModel}=\\$(lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//')",
       "${2:echo \"\\${${1:cpuModel}\\}\"}\n"
     ],
-    "description": "Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz)"
+    "description": "processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz)"
   },
   "system.processor-type": {
     "prefix": [
@@ -1842,7 +1880,7 @@
       "systemd manage"
     ],
     "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|}\n",
-    "description": "Manage service operations"
+    "description": "manage service operations"
   },
   "system.uptime": {
     "prefix": "system uptime",
@@ -1850,7 +1888,7 @@
       "${1:systemUptime}=\\$(uptime ${2|-p,-s|})",
       "${3:echo \"\\${${1}\\}\"}\n"
     ],
-    "description": "System uptime. -p: --pretty, -s: since"
+    "description": "system uptime. -p: --pretty, -s: since"
   },
   "time.epoch-seconds": {
     "prefix": "time seconds epoch",

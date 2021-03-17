@@ -1,5 +1,8 @@
 {
-  "prefix": "ask question",
+  "prefix": [
+    "input text",
+    "ask question"
+  ],
   "body": [
     "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
     "${3:echo \"\\${answer\\}\"}\n"

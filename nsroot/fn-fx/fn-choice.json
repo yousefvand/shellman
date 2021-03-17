@@ -1,5 +1,8 @@
 {
-  "prefix": "fn options",
+  "prefix": [
+    "fn options",
+    "fn input choice"
+  ],
   "body": [
     "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
     "function chooseOption() {",

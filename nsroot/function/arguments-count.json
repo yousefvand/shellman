@@ -1,5 +1,8 @@
 {
-  "prefix": "func args count",
+  "prefix": [
+    "function arguments count",
+    "func args count"
+  ],
   "body": "echo $#",
   "description": "number of function arguments"
 }

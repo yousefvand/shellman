@@ -1,5 +1,8 @@
 {
-  "prefix": "cmd failure check",
+  "prefix": [
+    "command failure check",
+    "cmd failure check"
+  ],
   "body": [
     "if [[ \\$? != 0 ]]; then",
     "\t${1:echo \"Last command failed\"}",

@@ -1,5 +1,8 @@
 {
-  "prefix": "fx options",
+  "prefix": [
+    "fx options",
+    "fn input choice"
+  ],
   "body": [
     "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
     "${1:options}=(${2:\"one\" \"two\" \"three\"})",

@@ -1,5 +1,8 @@
 {
-  "prefix": "cmd renice",
+  "prefix": [
+    "command renice",
+    "cmd renice"
+  ],
   "body": "for p in \\$(pidof \"${1:processName}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n",
   "description": "change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
 }

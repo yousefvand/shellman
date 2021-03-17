@@ -1,5 +1,8 @@
 {
-  "prefix": "func",
+  "prefix": [
+    "function",
+    "func"
+  ],
   "body": [
     "function ${1:name} () {",
     "\t${2:echo \"\\$1\" # arguments are accessible through \\$1, \\$2,...}",

@@ -1,5 +1,8 @@
 {
-  "prefix": "cmd success check",
+  "prefix": [
+    "command success check",
+    "cmd success check"
+  ],
   "body": [
     "if [[ \\$? == 0 ]]; then",
     "\t${1:echo \"Last command succeed\"}",

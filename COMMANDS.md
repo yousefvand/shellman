@@ -40,17 +40,17 @@
 
 - command
 
-  - [cmd failure check](#cmd-failure-check)
+  - [command failure check](#command-failure-check)
 
-  - [if cmd exists](#if-cmd-exists)
+  - [if command exists](#if-command-exists)
 
-  - [cmd nice](#cmd-nice)
+  - [command nice](#command-nice)
 
-  - [cmd renice](#cmd-renice)
+  - [command renice](#command-renice)
 
-  - [cmd](#cmd)
+  - [command](#command)
 
-  - [cmd success check](#cmd-success-check)
+  - [command success check](#command-success-check)
 
 - cryptography
 
@@ -140,6 +140,8 @@
 
   - [fn banner simple](#fn-banner-simple)
 
+  - [fn options](#fn-options)
+
   - [fn import](#fn-import)
 
   - [fn math average](#fn-math-average)
@@ -147,8 +149,6 @@
   - [fn math product](#fn-math-product)
 
   - [fn math sum](#fn-math-sum)
-
-  - [fn options](#fn-options)
 
   - [fn progress](#fn-progress)
 
@@ -168,6 +168,8 @@
 
   - [fx banner simple](#fx-banner-simple)
 
+  - [fx options](#fx-options)
+
   - [fx import](#fx-import)
 
   - [fx math average](#fx-math-average)
@@ -175,8 +177,6 @@
   - [fx math product](#fx-math-product)
 
   - [fx math sum](#fx-math-sum)
-
-  - [fx options](#fx-options)
 
   - [fx progress](#fx-progress)
 
@@ -202,13 +202,13 @@
 
 - function
 
-  - [func args](#func-args)
+  - [function arguments](#function-arguments)
 
-  - [func args count](#func-args-count)
+  - [function arguments count](#function-arguments-count)
 
-  - [func](#func)
+  - [function](#function)
 
-  - [func return value](#func-return-value)
+  - [function return value](#function-return-value)
 
 - git
 
@@ -276,7 +276,7 @@
 
 - input
 
-  - [ask question](#ask-question)
+  - [input text](#input-text)
 
 - integer
 
@@ -346,7 +346,11 @@
 
   - [math /](#math-/)
 
+  - [expr](#expr)
+
   - [math ++](#math-++)
+
+  - [let](#let)
 
   - [math -=](#math--=)
 
@@ -375,10 +379,6 @@
   - [animation frame](#animation-frame)
 
   - [argument parsing](#argument-parsing)
-
-  - [expr](#expr)
-
-  - [let](#let)
 
   - [region](#region)
 
@@ -652,7 +652,7 @@ set array element at specified index [&uarr;](#Commands)
 myArray[index]="value"
 ```
 
-## `cmd failure check`
+## `command failure check,cmd failure check`
 
 check if last command failed [&uarr;](#Commands)
 
@@ -662,7 +662,7 @@ if [[ $? != 0 ]]; then
 fi
 ```
 
-## `if cmd exists`
+## `if command exists,if cmd exists`
 
 check if command exists [&uarr;](#Commands)
 
@@ -672,7 +672,7 @@ if [ $(command -v command) ]; then
 fi
 ```
 
-## `cmd nice`
+## `command nice,cmd nice`
 
 run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
 
@@ -680,15 +680,15 @@ run command with desired privilege. n: -20 (highest priority) to 19 (lowest prio
 sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} command
 ```
 
-## `cmd renice`
+## `command renice,cmd renice`
 
-Change running process priority. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
+change running process priority. n: -20 (highest priority) to 19 (lowest priority) [&uarr;](#Commands)
 
 ```bash
 for p in $(pidof "processName"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p "$p"; done
 ```
 
-## `cmd,cmd substitution`
+## `command,cmd,command substitution,cmd substitution`
 
 run command (command substitution) [&uarr;](#Commands)
 
@@ -696,7 +696,7 @@ run command (command substitution) [&uarr;](#Commands)
 result=$(command)
 ```
 
-## `cmd success check`
+## `command success check,cmd success check`
 
 check if last command succeed [&uarr;](#Commands)
 
@@ -1038,7 +1038,7 @@ find "${1|/path/to/directory,${pathToDirectory}|}" -mtime +days | xargs rm -f
 
 ## `fn animation animate`
 
-Animate frames of animation with interval seconds between frames [&uarr;](#Commands)
+animate frames of animation with interval seconds between frames [&uarr;](#Commands)
 
 ```bash
 # Usage: animate framesArray interval
@@ -1065,7 +1065,7 @@ function animate () {
 
 ## `fn animation pacman`
 
-Pacman animation (eating input text) [&uarr;](#Commands)
+pacMan animation (eating input text) [&uarr;](#Commands)
 
 ```bash
 # Usage: pacMan inputString interval pad
@@ -1155,69 +1155,7 @@ function bannerSimple() {
 }
 ```
 
-## `fn import`
-
-import functions from other shellscript files [&uarr;](#Commands)
-
-```bash
-# Usage: import "mylib"
-function import() {
-  local file="./lib/${1\}.sh"
-  if [ -f "${file\}" ]; then
-    source "${file\}"
-  else
-    echo "Error: Cannot find library at: ${file\}"
-    exit 1
-  fi
-}
-```
-
-## `fn math average`
-
-Calculate average of given integers [&uarr;](#Commands)
-
-```bash
-# Usage: average int1 int2 ...
-function average () {
-  local sum=0
-  for int in $@; do
-    ((sum += int))
-  done
-  echo $((sum / $#))
-}
-```
-
-## `fn math product`
-
-Calculate product of given integers [&uarr;](#Commands)
-
-```bash
-# Usage: product int1 int2 ...
-function product () {
-  local result=1
-  for int in $@; do
-    ((result *= int))
-  done
-  echo ${result\}
-}
-```
-
-## `fn math sum`
-
-Calculate sum of given integers [&uarr;](#Commands)
-
-```bash
-# Usage: sum int1 int2 ...
-function sum () {
-  local result=0
-  for int in $@; do
-    ((result += int))
-  done
-  echo ${result\}
-}
-```
-
-## `fn options`
+## `fn options,fn input choice`
 
 provide a list of options to user and return the index of selected option [&uarr;](#Commands)
 
@@ -1265,6 +1203,68 @@ function chooseOption() {
 }
 ```
 
+## `fn import`
+
+import functions from other shellscript files [&uarr;](#Commands)
+
+```bash
+# Usage: import "mylib"
+function import() {
+  local file="./lib/${1\}.sh"
+  if [ -f "${file\}" ]; then
+    source "${file\}"
+  else
+    echo "Error: Cannot find library at: ${file\}"
+    exit 1
+  fi
+}
+```
+
+## `fn math average`
+
+calculate average of given integers [&uarr;](#Commands)
+
+```bash
+# Usage: average int1 int2 ...
+function average () {
+  local sum=0
+  for int in $@; do
+    ((sum += int))
+  done
+  echo $((sum / $#))
+}
+```
+
+## `fn math product`
+
+calculate product of given integers [&uarr;](#Commands)
+
+```bash
+# Usage: product int1 int2 ...
+function product () {
+  local result=1
+  for int in $@; do
+    ((result *= int))
+  done
+  echo ${result\}
+}
+```
+
+## `fn math sum`
+
+calculate sum of given integers [&uarr;](#Commands)
+
+```bash
+# Usage: sum int1 int2 ...
+function sum () {
+  local result=0
+  for int in $@; do
+    ((result += int))
+  done
+  echo ${result\}
+}
+```
+
 ## `fn progress`
 
 progress bar function [&uarr;](#Commands)
@@ -1288,7 +1288,7 @@ function progressBar() {
 
 ## `fn scan local`
 
-Scan localhost's port range (tcp/udp) [&uarr;](#Commands)
+scan localhost's port range (tcp/udp) [&uarr;](#Commands)
 
 ```bash
 # Usage: scan proto host fromPort toPort
@@ -1303,7 +1303,7 @@ function scan () {
 
 ## `fn urldecode`
 
-Decodes encoded URL [&uarr;](#Commands)
+decodes encoded URL [&uarr;](#Commands)
 
 ```bash
 # Usage: urldecode url
@@ -1316,7 +1316,7 @@ function urldecode () {
 
 ## `fn urlencode`
 
-Encodes URL [&uarr;](#Commands)
+encodes URL [&uarr;](#Commands)
 
 ```bash
 # Usage: urlencode url
@@ -1378,7 +1378,7 @@ animate "${frames[@]}" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|}
 
 ## `fx animation pacman`
 
-Call Pacman animation (eating input text) function [&uarr;](#Commands)
+call pacMan animation (eating input text) function [&uarr;](#Commands)
 
 ```bash
 # Usage: pacMan inputString interval pad
@@ -1403,6 +1403,17 @@ call bannerSimple function [&uarr;](#Commands)
 bannerSimple "my title" "${2|*,:,+,.,x,o,$|}"
 ```
 
+## `fx options,fn input choice`
+
+call options function [&uarr;](#Commands)
+
+```bash
+# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
+options=(${2:"one" "two" "three"})
+chooseOption "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
+echo "${${1}[$choice]}" selected
+```
+
 ## `fx import`
 
 import functions from other shellscript files located in a directory (default: lib) relative to current file [&uarr;](#Commands)
@@ -1414,7 +1425,7 @@ import "libname"
 
 ## `fx math average`
 
-Call math average function [&uarr;](#Commands)
+call math average function [&uarr;](#Commands)
 
 ```bash
 # Usage: average int1 int2 ...
@@ -1423,7 +1434,7 @@ result=$(average ${int1\} ${int2\} ${int3\})
 
 ## `fx math product`
 
-Call math product function [&uarr;](#Commands)
+call math product function [&uarr;](#Commands)
 
 ```bash
 # Usage: product int1 int2 ...
@@ -1432,22 +1443,11 @@ result=$(product ${int1\} ${int2\} ${int3\})
 
 ## `fx math sum`
 
-Call math sum function [&uarr;](#Commands)
+call math sum function [&uarr;](#Commands)
 
 ```bash
 # Usage: sum int1 int2 ...
 result=$(sum ${int1\} ${int2\} ${int3\})
-```
-
-## `fx options`
-
-call options function [&uarr;](#Commands)
-
-```bash
-# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
-options=(${2:"one" "two" "three"})
-chooseOption "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
-echo "${${1}[$choice]}" selected
 ```
 
 ## `fx progress`
@@ -1477,7 +1477,7 @@ echo "${openPorts[@]\"}
 
 ## `fx urldecode`
 
-Call urldecode function [&uarr;](#Commands)
+call urldecode function [&uarr;](#Commands)
 
 ```bash
 # Usage: urldecode url
@@ -1486,7 +1486,7 @@ urldecode "${1|encodedUrl,${encodedUrl}|}"
 
 ## `fx urlencode`
 
-Call urlencode function [&uarr;](#Commands)
+call urlencode function [&uarr;](#Commands)
 
 ```bash
 # Usage: urlencode url
@@ -1495,7 +1495,7 @@ urlencode "${1|url,${url}|}"
 
 ## `fx version compare,fx semver compare`
 
-call version_compare function [&uarr;](#Commands)
+call versionCompare function [&uarr;](#Commands)
 
 ```bash
 # Usage: versionCompare "1.2.3" "1.1.7"
@@ -1504,7 +1504,7 @@ versionCompare "major.${2:minor}.patch" "${4:major}.minor.${6:patch}"
 
 ## `ftp delete file`
 
-Delete specified file from ftp server [&uarr;](#Commands)
+delete specified file from ftp server [&uarr;](#Commands)
 
 ```bash
 curl ftp://user:password@ipOrDomain/path/fileToDelete -Q "DELE fileToDelete"
@@ -1512,7 +1512,7 @@ curl ftp://user:password@ipOrDomain/path/fileToDelete -Q "DELE fileToDelete"
 
 ## `ftp download`
 
-Download specified file from ftp server [&uarr;](#Commands)
+download specified file from ftp server [&uarr;](#Commands)
 
 ```bash
 curl ftp://user:password@ipOrDomain/filePathOnServer/
@@ -1520,7 +1520,7 @@ curl ftp://user:password@ipOrDomain/filePathOnServer/
 
 ## `ftp list`
 
-Get the list of files on the ftp server at specific path [&uarr;](#Commands)
+get the list of files on the ftp server at specific path [&uarr;](#Commands)
 
 ```bash
 curl ftp://user:password@ipOrDomain/directoryPathOnServer/
@@ -1528,7 +1528,7 @@ curl ftp://user:password@ipOrDomain/directoryPathOnServer/
 
 ## `ftp rename`
 
-Rename specified file/directory on ftp server [&uarr;](#Commands)
+rename specified file/directory on ftp server [&uarr;](#Commands)
 
 ```bash
 curl ftp://user:password@ipOrDomain/path/ -Q "-RNFR path/renameFrom" -Q "-RNTO path/renameTo"
@@ -1536,13 +1536,13 @@ curl ftp://user:password@ipOrDomain/path/ -Q "-RNFR path/renameFrom" -Q "-RNTO p
 
 ## `ftp upload`
 
-Upload specified file to ftp server [&uarr;](#Commands)
+upload specified file to ftp server [&uarr;](#Commands)
 
 ```bash
 curl -T fileToUpload ftp://user:password@ipOrDomain/directoryPathOnServer/
 ```
 
-## `func args`
+## `function arguments,func args`
 
 function all arguments array [&uarr;](#Commands)
 
@@ -1550,7 +1550,7 @@ function all arguments array [&uarr;](#Commands)
 echo "$@"
 ```
 
-## `func args count`
+## `function arguments count,func args count`
 
 number of function arguments [&uarr;](#Commands)
 
@@ -1558,7 +1558,7 @@ number of function arguments [&uarr;](#Commands)
 echo $#
 ```
 
-## `func`
+## `function,func`
 
 function [&uarr;](#Commands)
 
@@ -1568,7 +1568,7 @@ function name () {
 }
 ```
 
-## `func return value`
+## `function return value,func return value`
 
 last function/command return code [&uarr;](#Commands)
 
@@ -1578,7 +1578,7 @@ echo "$?"
 
 ## `git branch create`
 
-Create branch locally and switch into it. [&uarr;](#Commands)
+create branch locally and switch into it. [&uarr;](#Commands)
 
 ```bash
 git checkout -b branchName
@@ -1586,7 +1586,7 @@ git checkout -b branchName
 
 ## `git branch delete local`
 
-Delete local branch. [&uarr;](#Commands)
+delete local branch. [&uarr;](#Commands)
 
 ```bash
 git branch --delete localBranch
@@ -1594,7 +1594,7 @@ git branch --delete localBranch
 
 ## `git branch delete remote`
 
-Delete remote branch. [&uarr;](#Commands)
+delete remote branch. [&uarr;](#Commands)
 
 ```bash
 git push origin --delete remoteBranch
@@ -1602,7 +1602,7 @@ git push origin --delete remoteBranch
 
 ## `git branch list`
 
-List all branches. [&uarr;](#Commands)
+list all branches. [&uarr;](#Commands)
 
 ```bash
 git branch
@@ -1610,7 +1610,7 @@ git branch
 
 ## `git branch push`
 
-Push branch to remote. [&uarr;](#Commands)
+push branch to remote. [&uarr;](#Commands)
 
 ```bash
 git push origin branchName
@@ -1618,7 +1618,7 @@ git push origin branchName
 
 ## `git branch rename`
 
-Rename current branch. [&uarr;](#Commands)
+rename current branch. [&uarr;](#Commands)
 
 ```bash
 git branch -m newName
@@ -1626,7 +1626,7 @@ git branch -m newName
 
 ## `git changes revert`
 
-Revert tracked changes [&uarr;](#Commands)
+revert tracked changes [&uarr;](#Commands)
 
 ```bash
 git checkout .
@@ -1634,7 +1634,7 @@ git checkout .
 
 ## `git clone branch`
 
-Clone a remote branch to local machine. [&uarr;](#Commands)
+clone a remote branch to local machine. [&uarr;](#Commands)
 
 ```bash
 git clone -b branchName https://github.com/user/repository.git
@@ -1642,7 +1642,7 @@ git clone -b branchName https://github.com/user/repository.git
 
 ## `git clone`
 
-Clone remote repository to local machine. [&uarr;](#Commands)
+clone remote repository to local machine. [&uarr;](#Commands)
 
 ```bash
 git clone https://github.com/user/repository.git
@@ -1650,7 +1650,7 @@ git clone https://github.com/user/repository.git
 
 ## `git commit list notPushed`
 
-List non pushed commits. [&uarr;](#Commands)
+list non pushed commits. [&uarr;](#Commands)
 
 ```bash
 git log origin/master..HEAD
@@ -1658,7 +1658,7 @@ git log origin/master..HEAD
 
 ## `git commit search`
 
-Search for a commit which contains searchCriteria. [&uarr;](#Commands)
+search for a commit which contains searchCriteria. [&uarr;](#Commands)
 
 ```bash
 git log --all --grep='searchCriteria'
@@ -1666,7 +1666,7 @@ git log --all --grep='searchCriteria'
 
 ## `git commit undo`
 
-Undo last N commits (soft: preserve local changes, hard: delete local changes [&uarr;](#Commands)
+undo last N commits (soft: preserve local changes, hard: delete local changes [&uarr;](#Commands)
 
 ```bash
 git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5,6,7,8,9|}
@@ -1674,7 +1674,7 @@ git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5,6,7,8,9|}
 
 ## `git commit`
 
-Commit changes. [&uarr;](#Commands)
+commit changes. [&uarr;](#Commands)
 
 ```bash
 git commit -m "commit message"
@@ -1682,7 +1682,7 @@ git commit -m "commit message"
 
 ## `git config list`
 
-List git configurations. [&uarr;](#Commands)
+list git configurations. [&uarr;](#Commands)
 
 ```bash
 git config --list
@@ -1690,7 +1690,7 @@ git config --list
 
 ## `git config set`
 
-Configure git. [&uarr;](#Commands)
+configure git. [&uarr;](#Commands)
 
 ```bash
 git config --${1|local,global|} ${2|user.name,user.email|} "value"
@@ -1698,7 +1698,7 @@ git config --${1|local,global|} ${2|user.name,user.email|} "value"
 
 ## `git patch apply`
 
-Apply a patch from file. [&uarr;](#Commands)
+apply a patch from file [&uarr;](#Commands)
 
 ```bash
 git apply < "${1|/path/to/patch1.patch,${patchPath}|}"
@@ -1706,7 +1706,7 @@ git apply < "${1|/path/to/patch1.patch,${patchPath}|}"
 
 ## `git patch create`
 
-Create a patch from changes. [&uarr;](#Commands)
+create a patch from changes [&uarr;](#Commands)
 
 ```bash
 git diff > "${1|/path/to/patch1.patch,${patchPath}|}"
@@ -1714,7 +1714,7 @@ git diff > "${1|/path/to/patch1.patch,${patchPath}|}"
 
 ## `git remote list`
 
-List all remotes. [&uarr;](#Commands)
+list all remotes [&uarr;](#Commands)
 
 ```bash
 git remote
@@ -1722,7 +1722,7 @@ git remote
 
 ## `git remote urlChange`
 
-Change remote url. [&uarr;](#Commands)
+change remote url [&uarr;](#Commands)
 
 ```bash
 git remote set-url origin https://github.com/user/repository.git
@@ -1730,7 +1730,7 @@ git remote set-url origin https://github.com/user/repository.git
 
 ## `git remote urlAdd`
 
-Add remote url. [&uarr;](#Commands)
+add remote url [&uarr;](#Commands)
 
 ```bash
 git remote add origin https://github.com/user/repository.git
@@ -1738,7 +1738,7 @@ git remote add origin https://github.com/user/repository.git
 
 ## `git tag commit,git commit tag`
 
-Tag a commit. [&uarr;](#Commands)
+tag a commit [&uarr;](#Commands)
 
 ```bash
 git tag -a release/1.0.0 -m "1.0.0 release"
@@ -1746,7 +1746,7 @@ git tag -a release/1.0.0 -m "1.0.0 release"
 
 ## `git tag list`
 
-List all tags. [&uarr;](#Commands)
+list all tags [&uarr;](#Commands)
 
 ```bash
 git tag
@@ -1754,7 +1754,7 @@ git tag
 
 ## `git tag remote delete`
 
-Delete tag from remote. [&uarr;](#Commands)
+delete tag from remote [&uarr;](#Commands)
 
 ```bash
 git push --delete origin tagName && git push origin :tagName
@@ -1762,7 +1762,7 @@ git push --delete origin tagName && git push origin :tagName
 
 ## `git tag remote push`
 
-Push tag to remote. [&uarr;](#Commands)
+push tag to remote [&uarr;](#Commands)
 
 ```bash
 git push origin tagName
@@ -1770,7 +1770,7 @@ git push origin tagName
 
 ## `http cookie`
 
-Send http request with cookies, using curl [&uarr;](#Commands)
+send http request with cookies, using curl [&uarr;](#Commands)
 
 ```bash
 curl --request ${1|GET,POST,DELETE,PUT|} -sL \
@@ -1781,7 +1781,7 @@ curl --request ${1|GET,POST,DELETE,PUT|} -sL \
 
 ## `http download`
 
-Download from url and save to /path/to/file, using curl [&uarr;](#Commands)
+download from url and save to /path/to/file, using curl [&uarr;](#Commands)
 
 ```bash
 curl --request ${1|GET,POST|} -sL \
@@ -1792,7 +1792,7 @@ curl --request ${1|GET,POST|} -sL \
 
 ## `http GET,http DELETE`
 
-Send http GET/DELETE request using curl [&uarr;](#Commands)
+send http GET/DELETE request using curl [&uarr;](#Commands)
 
 ```bash
 curl --request ${1|GET,DELETE|} -sL \
@@ -1802,7 +1802,7 @@ curl --request ${1|GET,DELETE|} -sL \
 
 ## `http header`
 
-Send http request with custom header, using curl [&uarr;](#Commands)
+send http request with custom header, using curl [&uarr;](#Commands)
 
 ```bash
 curl --request ${1|GET,POST,DELETE,PUT|} -sL \
@@ -1813,7 +1813,7 @@ curl --request ${1|GET,POST,DELETE,PUT|} -sL \
 
 ## `http POST file`
 
-Send file with http POST, using curl [&uarr;](#Commands)
+send file with http POST, using curl [&uarr;](#Commands)
 
 ```bash
 curl --request POST -sL \
@@ -1825,7 +1825,7 @@ curl --request POST -sL \
 
 ## `http POST,http PUT`
 
-Send data with http POST/PUT, using curl [&uarr;](#Commands)
+send data with http POST/PUT, using curl [&uarr;](#Commands)
 
 ```bash
 curl --request ${1|POST,PUT|} -sL \
@@ -1834,9 +1834,9 @@ curl --request ${1|POST,PUT|} -sL \
   --data ${4|'key=value',"${key}"="${value}"|} 
 ```
 
-## `ask question`
+## `input text,ask question`
 
-Ask question with default answer [&uarr;](#Commands)
+ask question with default answer [&uarr;](#Commands)
 
 ```bash
 read -ep "Question here? " -i "Default answer" answer
@@ -2036,7 +2036,7 @@ done
 
 ## `ip local IPs`
 
-Array of local IPs [&uarr;](#Commands)
+array of local IPs [&uarr;](#Commands)
 
 ```bash
 IPs=$(hostname -I)
@@ -2130,12 +2130,28 @@ divide int1 by int2 as integers and returns whole part [&uarr;](#Commands)
 result=$((int1 / int2))
 ```
 
+## `expr,arithmetic`
+
+arithmetic operations on integers [&uarr;](#Commands)
+
+```bash
+result=$(expr ${int1\} ${3|+,-,\*,/,%|} ${int2\})
+```
+
 ## `math ++`
 
 increment integer variable by 1 [&uarr;](#Commands)
 
 ```bash
 ((${1|int++,++int|}))
+```
+
+## `let`
+
+arithmetic operations on integers [&uarr;](#Commands)
+
+```bash
+let "result = int1 ${3|+,-,*,/,%|} int2"
 ```
 
 ## `math -=`
@@ -2228,7 +2244,7 @@ result=$((int1 - int2))
 
 ## `animation frame`
 
-Define animation frame [&uarr;](#Commands)
+define animation frame [&uarr;](#Commands)
 
 ```bash
 # Your frames need to have the exact same width and height.
@@ -2263,25 +2279,9 @@ done
 set -- "${POSITIONAL[@]}" # restore positional params
 ```
 
-## `expr,arithmetic`
-
-arithmetic operations on integers [&uarr;](#Commands)
-
-```bash
-result=$(expr ${int1\} ${3|+,-,\*,/,%|} ${int2\})
-```
-
-## `let`
-
-arithmetic operations on integers [&uarr;](#Commands)
-
-```bash
-let "result = int1 ${3|+,-,*,/,%|} int2"
-```
-
 ## `region,section`
 
-Comment out a special region (i.e. variable declarations [&uarr;](#Commands)
+comment out a special region (i.e. variable declarations) [&uarr;](#Commands)
 
 ```bash
 # >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>
@@ -2352,7 +2352,7 @@ script summary [&uarr;](#Commands)
 
 ## `timeout`
 
-Run command within a time frame [&uarr;](#Commands)
+run command within a time frame [&uarr;](#Commands)
 
 ```bash
 timeout seconds command
@@ -2456,7 +2456,7 @@ echo $(tput rev)"reversed text"$(tput sgr0)
 
 ## `process ID(s)`
 
-Find process ID(s) aka PIDs [&uarr;](#Commands)
+find process ID(s) aka PIDs [&uarr;](#Commands)
 
 ```bash
 processIDsArray=($(pgrep processName))
@@ -2465,7 +2465,7 @@ echo "${${1[@]\}"}
 
 ## `process instances`
 
-List processes [&uarr;](#Commands)
+list processes [&uarr;](#Commands)
 
 ```bash
 processInstances=$(ps -A | grep "${processName\}")
@@ -2473,7 +2473,7 @@ processInstances=$(ps -A | grep "${processName\}")
 
 ## `process kill`
 
-Kill process by name [&uarr;](#Commands)
+kill process by name [&uarr;](#Commands)
 
 ```bash
 sudo kill -9 $(pgrep processName)
@@ -2481,7 +2481,7 @@ sudo kill -9 $(pgrep processName)
 
 ## `process list all`
 
-List processes [&uarr;](#Commands)
+list processes [&uarr;](#Commands)
 
 ```bash
 ps -A
@@ -2698,7 +2698,7 @@ echo "${${1:kernelRelease\}"}
 
 ## `system memory info`
 
-System memory information in kilobytes (KB) [&uarr;](#Commands)
+system memory information in kilobytes (KB) [&uarr;](#Commands)
 
 ```bash
 sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=$(cat /proc/meminfo | grep '${1}' | awk '{print $2}' | head -n 1)
@@ -2707,7 +2707,7 @@ echo "${sysMemory${1\}"}
 
 ## `system processor architecture,system cpu architecture,system cpu arch`
 
-Processor architecture (i.e. x86_64) [&uarr;](#Commands)
+processor architecture (i.e. x86_64) [&uarr;](#Commands)
 
 ```bash
 arch=$(lscpu | grep 'Architecture' |awk '{print $2}' | head -n 1)
@@ -2716,7 +2716,7 @@ echo "${${1:arch\}"}
 
 ## `system processor count,system cpu count`
 
-Processor count (cores) [&uarr;](#Commands)
+processor count (cores) [&uarr;](#Commands)
 
 ```bash
 cores=$(lscpu | grep 'CPU(s)' |awk '{print $2}' | head -n 1)
@@ -2725,7 +2725,7 @@ echo "${${1:cores\}"}
 
 ## `system processor model,system cpu model`
 
-Processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz) [&uarr;](#Commands)
+processor model name (i.e. Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz) [&uarr;](#Commands)
 
 ```bash
 cpuModel=$(lscpu | grep 'Model name' |cut -d ' ' -f 3- | sed -e 's/^[[:space:]]*//')
@@ -2743,7 +2743,7 @@ echo "${${1:cpuType\}"}
 
 ## `service manage,systemd manage`
 
-Manage service operations [&uarr;](#Commands)
+manage service operations [&uarr;](#Commands)
 
 ```bash
 sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',"${serviceName}"|}
@@ -2751,7 +2751,7 @@ sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'servic
 
 ## `system uptime`
 
-System uptime. -p: --pretty, -s: since [&uarr;](#Commands)
+system uptime. -p: --pretty, -s: since [&uarr;](#Commands)
 
 ```bash
 systemUptime=$(uptime ${2|-p,-s|})

@@ -1,5 +1,13 @@
 # Change Log
 
+## 5.0.0
+
+- Default command substitution to `$(command)`.
+- Default variable expansion to `"${variable}"`.
+- Unified `TAB` ordering.
+- Some functions and snippets enhanced.
+- Descriptive aliases added to some snippets.
+
 ## 4.10.0
 
 - `fn/fx urlencode`: Encode URL.
