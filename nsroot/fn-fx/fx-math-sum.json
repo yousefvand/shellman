@@ -4,5 +4,5 @@
     "# Usage: sum int1 int2 ...",
     "result=\\$(sum \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
   ],
-  "description": "Call math sum function"
+  "description": "call math sum function"
 }

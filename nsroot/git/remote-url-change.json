@@ -1,5 +1,5 @@
 {
   "prefix": "git remote urlChange",
   "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-  "description": "Change remote url."
+  "description": "change remote url"
 }

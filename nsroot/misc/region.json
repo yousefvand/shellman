@@ -8,5 +8,5 @@
     "$0",
     "# <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<"
   ],
-  "description": "Comment out a special region (i.e. variable declarations"
+  "description": "comment out a special region (i.e. variable declarations)"
 }

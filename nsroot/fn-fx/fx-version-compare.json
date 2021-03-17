@@ -7,5 +7,5 @@
     "# Usage: versionCompare \"1.2.3\" \"1.1.7\"",
     "versionCompare \"${1:major}.${2:minor}.${3:patch}\" \"${4:major}.${5:minor}.${6:patch}\"\n"
   ],
-  "description": "call version_compare function"
+  "description": "call versionCompare function"
 }

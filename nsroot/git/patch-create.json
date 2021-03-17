@@ -1,5 +1,5 @@
 {
   "prefix": "git patch create",
   "body": "git diff > \"${1|/path/to/patch1.patch,${patchPath}|}\"\n",
-  "description": "Create a patch from changes."
+  "description": "create a patch from changes"
 }

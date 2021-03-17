@@ -10,5 +10,5 @@
     "\techo \\${result\\}",
     "}\n"
   ],
-  "description": "Calculate product of given integers"
+  "description": "calculate product of given integers"
 }

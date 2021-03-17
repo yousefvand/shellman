@@ -8,5 +8,5 @@
     "\tprintf '%b' \"\\${urlEncoded//%/\\\\\\\\x}\"",
     "}\n"
   ],
-  "description": "Decodes encoded URL"
+  "description": "decodes encoded URL"
 }

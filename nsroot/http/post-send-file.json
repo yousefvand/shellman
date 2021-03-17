@@ -7,5 +7,5 @@
     "\t--form ${3|'key=value',\"${key}\"=\"${value}\"|} \\",
     "\t--form ${4|'file=@/path/to/file',file=@\"${pathToFile}\"|}\n"
   ],
-  "description": "Send file with http POST, using curl"
+  "description": "send file with http POST, using curl"
 }

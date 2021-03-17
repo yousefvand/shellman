@@ -6,5 +6,5 @@
     "\t--output ${3|'/path/to/file',\"${pathToFile}\"|} \\",
     "\t--url ${4|'http://example.com/file.zip',\"${downloadUrl}\"|}\n"
   ],
-  "description": "Download from url and save to /path/to/file, using curl"
+  "description": "download from url and save to /path/to/file, using curl"
 }

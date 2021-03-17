@@ -4,5 +4,5 @@
     "# Usage: product int1 int2 ...",
     "result=\\$(product \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
   ],
-  "description": "Call math product function"
+  "description": "call math product function"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "git changes revert",
   "body": "git checkout .\n",
-  "description": "Revert tracked changes"
+  "description": "revert tracked changes"
 }

@@ -6,5 +6,5 @@
     "\t--cookie ${3|'key=value',\"${key}=${value}\"|} \\",
     "\t--url ${4|'http://example.com',\"${url}\"|}\n"
   ],
-  "description": "Send http request with cookies, using curl"
+  "description": "send http request with cookies, using curl"
 }

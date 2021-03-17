@@ -4,5 +4,5 @@
     "${1:processIDsArray}=(\\$(pgrep ${2:processName}))",
     "${3:echo \"\\${${1}[@]\\}\"}\n"
   ],
-  "description": "Find process ID(s) aka PIDs"
+  "description": "find process ID(s) aka PIDs"
 }

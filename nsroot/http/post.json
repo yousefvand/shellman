@@ -9,5 +9,5 @@
     "\t--url ${3|'http://example.com',\"${url}\"|} \\",
     "\t--data ${4|'key=value',\"${key}\"=\"${value}\"|} \n"
   ],
-  "description": "Send data with http POST/PUT, using curl"
+  "description": "send data with http POST/PUT, using curl"
 }

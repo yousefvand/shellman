@@ -10,5 +10,5 @@
     "\techo \\$((sum / \\$#))",
     "}\n"
   ],
-  "description": "Calculate average of given integers"
+  "description": "calculate average of given integers"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "git tag remote delete",
   "body": "git push --delete origin ${1:tagName} && git push origin :${1:tagName}\n",
-  "description": "Delete tag from remote."
+  "description": "delete tag from remote"
 }

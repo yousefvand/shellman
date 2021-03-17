@@ -1,5 +1,5 @@
 {
   "prefix": "git commit",
   "body": "git commit -m \"${1:commit message}\"\n",
-  "description": "Commit changes."
+  "description": "commit changes."
 }

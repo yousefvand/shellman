@@ -1,5 +1,5 @@
 {
   "prefix": "git remote list",
   "body": "git remote\n",
-  "description": "List all remotes."
+  "description": "list all remotes"
 }

@@ -7,5 +7,5 @@
     "${3:# Frame here}",
     "EOF\n"
   ],
-  "description": "Define animation frame"
+  "description": "define animation frame"
 }

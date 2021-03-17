@@ -10,5 +10,5 @@
     "\techo \\${result\\}",
     "}\n"
   ],
-  "description": "Calculate sum of given integers"
+  "description": "calculate sum of given integers"
 }

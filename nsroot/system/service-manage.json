@@ -4,5 +4,5 @@
     "systemd manage"
   ],
   "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|}\n",
-  "description": "Manage service operations"
+  "description": "manage service operations"
 }

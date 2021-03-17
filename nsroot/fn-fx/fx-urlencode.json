@@ -4,5 +4,5 @@
     "# Usage: urlencode url",
     "urlencode \"${1|url,${url}|}\"\n"
   ],
-  "description": "Call urlencode function"
+  "description": "call urlencode function"
 }

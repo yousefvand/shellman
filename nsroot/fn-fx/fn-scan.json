@@ -10,5 +10,5 @@
     "\techo \"\\${openPortsArray[@]}\"",
     "}\n"
   ],
-  "description": "Scan localhost's port range (tcp/udp)"
+  "description": "scan localhost's port range (tcp/udp)"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "ftp upload",
   "body": "curl -T ${1:fileToUpload} ftp://${2:user}:${3:password}@${4:ipOrDomain}/${5:directoryPathOnServer}/\n",
-  "description": "Upload specified file to ftp server"
+  "description": "upload specified file to ftp server"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "git commit list notPushed",
   "body": "git log origin/master..HEAD\n",
-  "description": "List non pushed commits."
+  "description": "list non pushed commits."
 }

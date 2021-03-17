@@ -1,5 +1,5 @@
 {
   "prefix": "git tag remote push",
   "body": "git push origin ${1:tagName}\n",
-  "description": "Push tag to remote."
+  "description": "push tag to remote"
 }

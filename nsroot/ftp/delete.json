@@ -1,5 +1,5 @@
 {
   "prefix": "ftp delete file",
   "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:path}/${5:fileToDelete} -Q \"DELE ${5:fileToDelete}\"\n",
-  "description": "Delete specified file from ftp server"
+  "description": "delete specified file from ftp server"
 }

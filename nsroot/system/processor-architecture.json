@@ -8,5 +8,5 @@
     "${1:arch}=\\$(lscpu | grep 'Architecture' |awk '{print \\$2}' | head -n 1)",
     "${2:echo \"\\${${1:arch}\\}\"}\n"
   ],
-  "description": "Processor architecture (i.e. x86_64)"
+  "description": "processor architecture (i.e. x86_64)"
 }

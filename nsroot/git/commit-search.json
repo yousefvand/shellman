@@ -1,5 +1,5 @@
 {
   "prefix": "git commit search",
   "body": "git log --all --grep='${1:searchCriteria}'\n",
-  "description": "Search for a commit which contains searchCriteria."
+  "description": "search for a commit which contains searchCriteria."
 }

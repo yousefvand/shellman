@@ -1,5 +1,5 @@
 {
   "prefix": "timeout",
   "body": "timeout ${1:seconds} ${2:command}\n",
-  "description": "Run command within a time frame"
+  "description": "run command within a time frame"
 }

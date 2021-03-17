@@ -4,5 +4,5 @@
     "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)",
     "${2:echo \"\\${sysMemory${1}\\}\"}\n"
   ],
-  "description": "System memory information in kilobytes (KB)"
+  "description": "system memory information in kilobytes (KB)"
 }

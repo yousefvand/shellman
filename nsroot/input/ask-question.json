@@ -4,5 +4,5 @@
     "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
     "${3:echo \"\\${answer\\}\"}\n"
   ],
-  "description": "Ask question with default answer"
+  "description": "ask question with default answer"
 }

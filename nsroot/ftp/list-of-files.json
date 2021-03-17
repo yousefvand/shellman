@@ -1,5 +1,5 @@
 {
   "prefix": "ftp list",
   "body": "curl ftp://${1:user}:${2:password}@${3:ipOrDomain}/${4:directoryPathOnServer}/\n",
-  "description": "Get the list of files on the ftp server at specific path"
+  "description": "get the list of files on the ftp server at specific path"
 }

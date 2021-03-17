@@ -22,5 +22,5 @@
     "\tdone",
     "}\n${0:}"
   ],
-  "description": "Animate frames of animation with interval seconds between frames"
+  "description": "animate frames of animation with interval seconds between frames"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "git commit undo",
   "body": "git reset --${1|soft,hard|} HEAD~${2|1,2,3,4,5,6,7,8,9|}\n",
-  "description": "Undo last N commits (soft: preserve local changes, hard: delete local changes"
+  "description": "undo last N commits (soft: preserve local changes, hard: delete local changes"
 }

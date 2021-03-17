@@ -4,5 +4,5 @@
     "git commit tag"
   ],
   "body": "git tag -a ${1:release/1.0.0} -m \"${2:1.0.0 release}\"\n",
-  "description": "Tag a commit."
+  "description": "tag a commit"
 }

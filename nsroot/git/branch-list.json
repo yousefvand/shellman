@@ -1,5 +1,5 @@
 {
   "prefix": "git branch list",
   "body": "git branch\n",
-  "description": "List all branches."
+  "description": "list all branches."
 }

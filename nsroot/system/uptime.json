@@ -4,5 +4,5 @@
     "${1:systemUptime}=\\$(uptime ${2|-p,-s|})",
     "${3:echo \"\\${${1}\\}\"}\n"
   ],
-  "description": "System uptime. -p: --pretty, -s: since"
+  "description": "system uptime. -p: --pretty, -s: since"
 }
