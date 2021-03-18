@@ -7,5 +7,5 @@
     "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
     "${3:echo \"\\${answer\\}\"}\n"
   ],
-  "description": "ask question with default answer"
+  "description": "get text as input from user"
 }

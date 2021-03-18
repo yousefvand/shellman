@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "variable assign",
+    "variable set"
+  ],
+  "body": "${1:variable}=${2|'value',\"${anotherVariable}\"|}\n",
+  "description": "assign a value or another variable to a new variable"
+}

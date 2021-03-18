@@ -1,10 +1,24 @@
 # Change Log
 
+## 5.1.0
+
+- Smooth percentage for `fn progress`.
+- `echo text` and `echo variable` snippet added.
+- assign variable value via `variable assign` | `variable set` snippet.
+- `iterate files` snippet for iterating specific file extensions inside a path.
+- read/expand variable value via `var` | `variable read` | `variable expand` snippet.
+
+Now there is a `input` namespace for getting user input:
+
+- `input text`: formerly `ask question`.
+- `input password`: don't show input on screen.
+- `fn/fx input choice`: formerly `fn/fx options`.
+
 ## 5.0.0
 
 - Default command substitution to `$(command)`.
 - Default variable expansion to `"${variable}"`.
-- Unified `TAB` ordering.
+- Unified <kbd>TAB</kbd> ordering.
 - Some functions and snippets enhanced.
 - Descriptive aliases added to some snippets.
 

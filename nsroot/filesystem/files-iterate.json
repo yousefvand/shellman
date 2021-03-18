@@ -1,0 +1,9 @@
+{
+  "prefix": "iterate files",
+  "body": [
+    "for file in ${1|'/path/to/files/',\"${pathToFiles}\"|}*.{jpg,png\\}; do",
+    "\t${2:echo \"\\${file\\}\"}",
+    "done\n"
+  ],
+  "description": "write to a file"
+}

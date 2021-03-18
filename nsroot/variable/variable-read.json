@@ -1,0 +1,9 @@
+{
+  "prefix": [
+    "var",
+    "variable read",
+    "variable expand"
+  ],
+  "body": "\"\\${${1:variable}\\}\"\n",
+  "description": "read the value of a variable"
+}

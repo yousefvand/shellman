@@ -104,6 +104,8 @@
 
   - [file write](#file-write)
 
+  - [iterate files](#iterate-files)
+
   - [file find](#file-find)
 
   - [if directory exists](#if-directory-exists)
@@ -140,9 +142,9 @@
 
   - [fn banner simple](#fn-banner-simple)
 
-  - [fn options](#fn-options)
-
   - [fn import](#fn-import)
+
+  - [fn options](#fn-options)
 
   - [fn math average](#fn-math-average)
 
@@ -168,9 +170,9 @@
 
   - [fx banner simple](#fx-banner-simple)
 
-  - [fx options](#fx-options)
-
   - [fx import](#fx-import)
+
+  - [fx options](#fx-options)
 
   - [fx math average](#fx-math-average)
 
@@ -276,6 +278,8 @@
 
 - input
 
+  - [input password](#input-password)
+
   - [input text](#input-text)
 
 - integer
@@ -379,6 +383,10 @@
   - [animation frame](#animation-frame)
 
   - [argument parsing](#argument-parsing)
+
+  - [echo text](#echo-text)
+
+  - [echo variable](#echo-variable)
 
   - [region](#region)
 
@@ -508,7 +516,11 @@
 
 - variable
 
+  - [variable assign](#variable-assign)
+
   - [variable default value](#variable-default-value)
+
+  - [var](#var)
 
 ## `archive compress tar.gz`
 
@@ -910,6 +922,16 @@ for line in ${lines[@]}; do
 done
 ```
 
+## `iterate files`
+
+write to a file [&uarr;](#Commands)
+
+```bash
+for file in ${1|'/path/to/files/',"${pathToFiles}"|}*.{jpg,png\}; do
+  echo "${file\"}
+done
+```
+
 ## `file find,directory find`
 
 find files (-type f) or directories (-type d) by name or pattern (*.jpg) [&uarr;](#Commands)
@@ -1155,13 +1177,30 @@ function bannerSimple() {
 }
 ```
 
+## `fn import`
+
+import functions from other shellscript files [&uarr;](#Commands)
+
+```bash
+# Usage: import "mylib"
+function import() {
+  local file="./lib/${1\}.sh"
+  if [ -f "${file\}" ]; then
+    source "${file\}"
+  else
+    echo "Error: Cannot find library at: ${file\}"
+    exit 1
+  fi
+}
+```
+
 ## `fn options,fn input choice`
 
 provide a list of options to user and return the index of selected option [&uarr;](#Commands)
 
 ```bash
-# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
-function chooseOption() {
+# Usage: options=("one" "two" "three"); inputChoice "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
+function inputChoice() {
   echo "${1\}"; shift
   echo $(tput dim)-"Change selection: [up/down], Select: [ENTER]" $(tput sgr0)
   local selected="${1\}"; shift
@@ -1200,23 +1239,6 @@ function chooseOption() {
   cursor_blink_on
   echo
   return "${selected\}"
-}
-```
-
-## `fn import`
-
-import functions from other shellscript files [&uarr;](#Commands)
-
-```bash
-# Usage: import "mylib"
-function import() {
-  local file="./lib/${1\}.sh"
-  if [ -f "${file\}" ]; then
-    source "${file\}"
-  else
-    echo "Error: Cannot find library at: ${file\}"
-    exit 1
-  fi
 }
 ```
 
@@ -1280,9 +1302,10 @@ function progressBar() {
   local current=${2\}
   local total=${3\}
   local wheelIndex=$((current % 4))
-  local position=$((20 * current / total))
+  local position=$((100 * current / total))
+  local barPosition=$((position / 5))
 
-  echo -ne "\r|${bar:0:$position}${space:$position:20}| ${wheel[wheelIndex]} $(($position*5))% [ ${msg} ] "
+  echo -ne "\r|${bar:0:$barPosition}${space:$barPosition:20}| ${wheel[wheelIndex]} ${position}% [ ${msg} ] "
 }
 ```
 
@@ -1403,17 +1426,6 @@ call bannerSimple function [&uarr;](#Commands)
 bannerSimple "my title" "${2|*,:,+,.,x,o,$|}"
 ```
 
-## `fx options,fn input choice`
-
-call options function [&uarr;](#Commands)
-
-```bash
-# Usage: options=("one" "two" "three"); chooseOption "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
-options=(${2:"one" "two" "three"})
-chooseOption "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
-echo "${${1}[$choice]}" selected
-```
-
 ## `fx import`
 
 import functions from other shellscript files located in a directory (default: lib) relative to current file [&uarr;](#Commands)
@@ -1421,6 +1433,17 @@ import functions from other shellscript files located in a directory (default: l
 ```bash
 # Usage: import "filename"
 import "libname"
+```
+
+## `fx options,fx input choice`
+
+call options function [&uarr;](#Commands)
+
+```bash
+# Usage: options=("one" "two" "three"); inputChoice "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
+options=(${2:"one" "two" "three"})
+inputChoice "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
+echo "${${1}[$choice]}" selected
 ```
 
 ## `fx math average`
@@ -1834,9 +1857,19 @@ curl --request ${1|POST,PUT|} -sL \
   --data ${4|'key=value',"${key}"="${value}"|} 
 ```
 
+## `input password`
+
+get text as input from user without showing characters [&uarr;](#Commands)
+
+```bash
+echo "Please enter your password: "
+read -s password
+echo "${password\"}
+```
+
 ## `input text,ask question`
 
-ask question with default answer [&uarr;](#Commands)
+get text as input from user [&uarr;](#Commands)
 
 ```bash
 read -ep "Question here? " -i "Default answer" answer
@@ -2231,7 +2264,7 @@ result=$((min + RANDOM % $((max-min))))
 square root of var up to scale decimal places [&uarr;](#Commands)
 
 ```bash
-result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${num\})" | bc)
+result=$(echo "scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3|num,${num}|})" | bc)
 ```
 
 ## `math -`
@@ -2277,6 +2310,22 @@ while [[ $# > 0 ]]; do
   esac
 done
 set -- "${POSITIONAL[@]}" # restore positional params
+```
+
+## `echo text,print text`
+
+print text, variable or both [&uarr;](#Commands)
+
+```bash
+echo 'text here'
+```
+
+## `echo variable,print variable`
+
+print text, variable or both [&uarr;](#Commands)
+
+```bash
+echo "${variable\}"
 ```
 
 ## `region,section`
@@ -2785,10 +2834,26 @@ timeNowUTC=$(date -u +%R)
 echo ${${1\}}
 ```
 
+## `variable assign,variable set`
+
+assign a value or another variable to a new variable [&uarr;](#Commands)
+
+```bash
+variable=${2|'value',"${anotherVariable}"|}
+```
+
 ## `variable default value,assign if empty`
 
 assign default value to variable if variable is empty otherwise assign null [&uarr;](#Commands)
 
 ```bash
 : "${variable:=defaultValue}"
+```
+
+## `var,variable read,variable expand`
+
+read the value of a variable [&uarr;](#Commands)
+
+```bash
+"${variable\}"
 ```

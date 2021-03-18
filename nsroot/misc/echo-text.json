@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "echo text",
+    "print text"
+  ],
+  "body": "echo '${1:text here}'\n",
+  "description": "print text, variable or both"
+}

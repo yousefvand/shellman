@@ -4,8 +4,8 @@
     "fn input choice"
   ],
   "body": [
-    "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
-    "function chooseOption() {",
+    "# Usage: options=(\"one\" \"two\" \"three\"); inputChoice \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
+    "function inputChoice() {",
     "\techo \"\\${1\\}\"; shift",
     "\techo \\$(tput dim)-\"Change selection: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
     "\tlocal selected=\"\\${1\\}\"; shift\n",

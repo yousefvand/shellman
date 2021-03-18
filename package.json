@@ -2,7 +2,7 @@
   "name": "shellman",
   "displayName": "shellman",
   "description": "Shell script snippet",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "publisher": "Remisa",
   "icon": "images/icon.png",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^5.3.7",
+    "cspell": "^5.3.8",
     "path": "^0.12.7"
   },
   "scripts": {

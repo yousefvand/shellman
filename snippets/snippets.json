@@ -328,6 +328,15 @@
     ],
     "description": "write to a file"
   },
+  "filesystem.files-iterate": {
+    "prefix": "iterate files",
+    "body": [
+      "for file in ${1|'/path/to/files/',\"${pathToFiles}\"|}*.{jpg,png\\}; do",
+      "\t${2:echo \"\\${file\\}\"}",
+      "done\n"
+    ],
+    "description": "write to a file"
+  },
   "filesystem.find-files-or-directories": {
     "prefix": [
       "file find",
@@ -555,14 +564,30 @@
     ],
     "description": "function: print a banner with provided title and surrounding character"
   },
-  "fn-fx.fn-choice": {
+  "fn-fx.fn-import": {
+    "prefix": "fn import",
+    "body": [
+      "# Usage: import \"mylib\"",
+      "function import() {",
+      "\tlocal file=\"./${1:lib}/\\${1\\}.sh\"",
+      "\tif [ -f \"\\${file\\}\" ]; then",
+      "\t\tsource \"\\${file\\}\"",
+      "\telse",
+      "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
+      "\t\texit 1",
+      "\tfi",
+      "}\n"
+    ],
+    "description": "import functions from other shellscript files"
+  },
+  "fn-fx.fn-input-choice": {
     "prefix": [
       "fn options",
       "fn input choice"
     ],
     "body": [
-      "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
-      "function chooseOption() {",
+      "# Usage: options=(\"one\" \"two\" \"three\"); inputChoice \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
+      "function inputChoice() {",
       "\techo \"\\${1\\}\"; shift",
       "\techo \\$(tput dim)-\"Change selection: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
       "\tlocal selected=\"\\${1\\}\"; shift\n",
@@ -604,22 +629,6 @@
       "}\n"
     ],
     "description": "provide a list of options to user and return the index of selected option"
-  },
-  "fn-fx.fn-import": {
-    "prefix": "fn import",
-    "body": [
-      "# Usage: import \"mylib\"",
-      "function import() {",
-      "\tlocal file=\"./${1:lib}/\\${1\\}.sh\"",
-      "\tif [ -f \"\\${file\\}\" ]; then",
-      "\t\tsource \"\\${file\\}\"",
-      "\telse",
-      "\t\techo \"Error: Cannot find library at: \\${file\\}\"",
-      "\t\texit 1",
-      "\tfi",
-      "}\n"
-    ],
-    "description": "import functions from other shellscript files"
   },
   "fn-fx.fn-math-average": {
     "prefix": "fn math average",
@@ -676,9 +685,10 @@
       "\tlocal current=\\${2\\}",
       "\tlocal total=\\${3\\}",
       "\tlocal wheelIndex=\\$((current % 4))",
-      "\tlocal position=\\$((20 * current / total))",
+      "\tlocal position=\\$((100 * current / total))",
+      "\tlocal barPosition=\\$((position / 5))",
       "",
-      "\techo -ne \"\\r|\\${bar:0:\\$position}\\${space:\\$position:20}| \\${wheel[wheelIndex]} \\$((\\$position*5))% [ \\${msg} ] \"",
+      "\techo -ne \"\\r|\\${bar:0:\\$barPosition}\\${space:\\$barPosition:20}| \\${wheel[wheelIndex]} \\${position}% [ \\${msg} ] \"",
       "}\n"
     ],
     "description": "progress bar function"
@@ -795,19 +805,6 @@
     ],
     "description": "call bannerSimple function"
   },
-  "fn-fx.fx-choice": {
-    "prefix": [
-      "fx options",
-      "fn input choice"
-    ],
-    "body": [
-      "# Usage: options=(\"one\" \"two\" \"three\"); chooseOption \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
-      "${1:options}=(${2:\"one\" \"two\" \"three\"})",
-      "chooseOption \"${3:Choose:}\" ${4|0,1,2,3,4,5,6,7,8,9|} \"\\${${1}[@]}\"; choice=\\$?",
-      "echo \"\\${${1}[\\$choice]}\" selected\n"
-    ],
-    "description": "call options function"
-  },
   "fn-fx.fx-import": {
     "prefix": "fx import",
     "body": [
@@ -815,6 +812,19 @@
       "import \"${1:libname}\"\n"
     ],
     "description": "import functions from other shellscript files located in a directory (default: lib) relative to current file"
+  },
+  "fn-fx.fx-input-choice": {
+    "prefix": [
+      "fx options",
+      "fx input choice"
+    ],
+    "body": [
+      "# Usage: options=(\"one\" \"two\" \"three\"); inputChoice \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
+      "${1:options}=(${2:\"one\" \"two\" \"three\"})",
+      "inputChoice \"${3:Choose:}\" ${4|0,1,2,3,4,5,6,7,8,9|} \"\\${${1}[@]}\"; choice=\\$?",
+      "echo \"\\${${1}[\\$choice]}\" selected\n"
+    ],
+    "description": "call options function"
   },
   "fn-fx.fx-math-average": {
     "prefix": "fx math average",
@@ -1140,6 +1150,15 @@
     ],
     "description": "send data with http POST/PUT, using curl"
   },
+  "input.password": {
+    "prefix": "input password",
+    "body": [
+      "echo \"${1:Please enter your password: }\"",
+      "read -s ${2:password}",
+      "${3:echo \"\\${password\\}\"}\n"
+    ],
+    "description": "get text as input from user without showing characters"
+  },
   "input.text": {
     "prefix": [
       "input text",
@@ -1149,7 +1168,7 @@
       "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
       "${3:echo \"\\${answer\\}\"}\n"
     ],
-    "description": "ask question with default answer"
+    "description": "get text as input from user"
   },
   "integer.if-equal": {
     "prefix": "if int =",
@@ -1448,7 +1467,7 @@
       "math √",
       "math sqrt"
     ],
-    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(\\${${3:num}\\})\" | bc)\n",
+    "body": "${1:result}=\\$(echo \"scale=${2|0,1,2,3,4,5,6,7,8,9|};sqrt(${3|num,${num}|})\" | bc)\n",
     "description": "square root of var up to scale decimal places"
   },
   "math.subtract": {
@@ -1493,6 +1512,22 @@
       "set -- \"\\${POSITIONAL[@]}\" # restore positional params\n"
     ],
     "description": "parse command line arguments (flags/switches)"
+  },
+  "misc.echo-text": {
+    "prefix": [
+      "echo text",
+      "print text"
+    ],
+    "body": "echo '${1:text here}'\n",
+    "description": "print text, variable or both"
+  },
+  "misc.echo-variable": {
+    "prefix": [
+      "echo variable",
+      "print variable"
+    ],
+    "body": "echo \"\\${${1:variable}\\}\"\n",
+    "description": "print text, variable or both"
   },
   "misc.region": {
     "prefix": [
@@ -1914,6 +1949,14 @@
     ],
     "description": "current UTC time"
   },
+  "variable.variable-assign": {
+    "prefix": [
+      "variable assign",
+      "variable set"
+    ],
+    "body": "${1:variable}=${2|'value',\"${anotherVariable}\"|}\n",
+    "description": "assign a value or another variable to a new variable"
+  },
   "variable.variable-default-value": {
     "prefix": [
       "variable default value",
@@ -1921,5 +1964,14 @@
     ],
     "body": ": \"\\${${1:variable}:=${2:defaultValue}}\"\n",
     "description": "assign default value to variable if variable is empty otherwise assign null"
+  },
+  "variable.variable-read": {
+    "prefix": [
+      "var",
+      "variable read",
+      "variable expand"
+    ],
+    "body": "\"\\${${1:variable}\\}\"\n",
+    "description": "read the value of a variable"
   }
 }
