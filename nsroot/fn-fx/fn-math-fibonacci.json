@@ -1,0 +1,15 @@
+{
+  "prefix": "fn math fibonacci",
+  "body": [
+    "# Usage: fibonacci n",
+    "fibonacci ()",
+    "{",
+    "\tif ((\\$1 < 2)); then ",
+    "\t\techo \\$1",
+    "\telse",
+    "\t\techo \\$((\\$(fibonacci \\$((\\$1 - 1))) + \\$(fibonacci \\$((\\$1 - 2)))))",
+    "\tfi",
+    "}\n"
+  ],
+  "description": "calculate Nth fibonacci number"
+}

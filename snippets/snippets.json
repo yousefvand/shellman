@@ -34,6 +34,15 @@
     "body": "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
     "description": "concatenate two arrays"
   },
+  "array.contains": {
+    "prefix": "array contains",
+    "body": [
+      "if [[ \"\\${${1:myArray}[@]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
+      "\techo 'array contains element'",
+      "fi\n"
+    ],
+    "description": "check if the array contains an element"
+  },
   "array.declare": {
     "prefix": "array declare",
     "body": [
@@ -444,6 +453,11 @@
     ],
     "description": "if path exists (file, directory, link...)"
   },
+  "filesystem.remove-files-newer-than": {
+    "prefix": "remove new files",
+    "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime -${2:days} | xargs rm -f\n",
+    "description": "find and remove files newer than x days"
+  },
   "filesystem.remove-files-older-than": {
     "prefix": "remove old files",
     "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime +${2:days} | xargs rm -f\n",
@@ -589,7 +603,7 @@
       "# Usage: options=(\"one\" \"two\" \"three\"); inputChoice \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
       "function inputChoice() {",
       "\techo \"\\${1\\}\"; shift",
-      "\techo \\$(tput dim)-\"Change selection: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
+      "\techo \\$(tput dim)-\"Change option: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
       "\tlocal selected=\"\\${1\\}\"; shift\n",
       "\tESC=\\$(echo -e \"\\033\")",
       "\tcursor_blink_on()  { tput cnorm; }",
@@ -628,7 +642,124 @@
       "\treturn \"\\${selected\\}\"",
       "}\n"
     ],
-    "description": "provide a list of options to user and return the index of selected option"
+    "description": "provides a list of choices to user and returns the index of selected choice"
+  },
+  "fn-fx.fn-input-multi-choice": {
+    "prefix": [
+      "fn checkbox",
+      "fn input multichoice"
+    ],
+    "body": [
+      "# Usage: multiChoice \"header message\" resultArray \"comma separated options\" \"comma separated default values\"",
+      "# Credit: https://serverfault.com/a/949806",
+      "# TODO: 1) Refactoring to return result array 2) Get input options as array",
+      "function multiChoice {",
+      "\techo \"\\${1\\}\"; shift",
+      "\techo \\$(tput dim)-\"Change Option: [up/down], Change Selection: [space], Done: [ENTER]\" \\$(tput sgr0)",
+      "\t# little helpers for terminal print control and key input",
+      "\tESC=\\$( printf \"\\033\")",
+      "\tcursor_blink_on()   { printf \"\\$ESC[?25h\"; }",
+      "\tcursor_blink_off()  { printf \"\\$ESC[?25l\"; }",
+      "\tcursor_to()         { printf \"\\$ESC[\\$1;\\${2:-1}H\"; }",
+      "\tprint_inactive()    { printf \"\\$2   \\$1 \"; }",
+      "\tprint_active()      { printf \"\\$2  \\$ESC[7m \\$1 \\$ESC[27m\"; }",
+      "\tget_cursor_row()    { IFS=';' read -sdR -p \\$'\\E[6n' ROW COL; echo \\${ROW#*[}; }",
+      "\tkey_input()         {",
+      "\t\tlocal key",
+      "\t\tIFS= read -rsn1 key 2>/dev/null >&2",
+      "\t\tif [[ \\$key = \"\"      ]]; then echo enter; fi;",
+      "\t\tif [[ \\$key = \\$'\\x20' ]]; then echo space; fi;",
+      "\t\tif [[ \\$key = \\$'\\x1b' ]]; then",
+      "\t\t\tread -rsn2 key",
+      "\t\t\tif [[ \\$key = [A ]]; then echo up;    fi;",
+      "\t\t\tif [[ \\$key = [B ]]; then echo down;  fi;",
+      "\t\tfi",
+      "\t}",
+      "\ttoggle_option()    {",
+      "\t\tlocal arr_name=\\$1",
+      "\t\teval \"local arr=(\\\"\\\\${\\${arr_name}[@]}\\\")\"",
+      "\t\tlocal option=\\$2",
+      "\t\tif [[ \\${arr[option]} == 1 ]]; then",
+      "\t\t\tarr[option]=0",
+      "\t\telse",
+      "\t\t\tarr[option]=1",
+      "\t\tfi",
+      "\t\teval \\$arr_name='(\"\\${arr[@]}\")'",
+      "\t}",
+      "",
+      "\tlocal retval=\\$1",
+      "\tlocal options",
+      "\tlocal defaults",
+      "",
+      "\tIFS=';' read -r -a options <<< \"\\$2\"",
+      "\tif [[ -z \\$3 ]]; then",
+      "\t\tdefaults=()",
+      "\telse",
+      "\t\tIFS=';' read -r -a defaults <<< \"\\$3\"",
+      "\tfi",
+      "",
+      "\tlocal selected=()",
+      "",
+      "\tfor ((i=0; i<\\${#options[@]}; i++)); do",
+      "\t\tselected+=(\"\\${defaults[i]}\")",
+      "\t\tprintf \"\\n\"",
+      "\tdone",
+      "",
+      "\t# determine current screen position for overwriting the options",
+      "\tlocal lastrow=\\$(get_cursor_row)",
+      "\tlocal startrow=\\$((\\$lastrow - \\${#options[@]}))",
+      "",
+      "\t# ensure cursor and input echoing back on upon a ctrl+c during read -s",
+      "\ttrap \"cursor_blink_on; stty echo; printf '\\n'; exit\" 2",
+      "\tcursor_blink_off",
+      "",
+      "\tlocal active=0",
+      "\twhile true; do",
+      "\t\t# print options by overwriting the last lines",
+      "\t\tlocal idx=0",
+      "\t\tfor option in \"\\${options[@]}\"; do",
+      "\t\t\tlocal prefix=\"[ ]\"",
+      "\t\t\tif [[ \\${selected[idx]} == 1 ]]; then",
+      "\t\t\t\tprefix=\"[x]\"",
+      "\t\t\tfi",
+      "",
+      "\t\t\tcursor_to \\$((\\$startrow + \\$idx))",
+      "\t\t\tif [ \\$idx -eq \\$active ]; then",
+      "\t\t\t\tprint_active \"\\$option\" \"\\$prefix\"",
+      "\t\t\telse",
+      "\t\t\t\tprint_inactive \"\\$option\" \"\\$prefix\"",
+      "\t\t\tfi",
+      "\t\t\t((idx++))",
+      "\t\tdone",
+      "",
+      "\t\t# user key control",
+      "\t\tcase \\$(key_input) in",
+      "\t\t\tspace)  toggle_option selected \\$active;;",
+      "\t\t\tenter)  break;;",
+      "\t\t\tup)     ((active--));",
+      "\t\t\t\tif [ \\$active -lt 0 ]; then active=\\$((\\${#options[@]} - 1)); fi;;",
+      "\t\t\tdown)   ((active++));",
+      "\t\t\t\tif [ \\$active -ge \\${#options[@]} ]; then active=0; fi;;",
+      "\t\tesac",
+      "\tdone",
+      "",
+      "\t# cursor position back to normal",
+      "\tcursor_to \\$lastrow",
+      "\tprintf \"\\n\"",
+      "\tcursor_blink_on",
+      "",
+      "\tindices=()",
+      "\tfor((i=0;i<\\${#selected[@]};i++)); do",
+      "\t\tif ((\\${selected[i]} == 1)); then",
+      "\t\t\tindices+=(\\${i})",
+      "\t\tfi",
+      "\tdone",
+      "",
+      "\t# eval \\$retval='(\"\\${selected[@]}\")'",
+      "\teval \\$retval='(\"\\${indices[@]}\")'",
+      "}\n"
+    ],
+    "description": "provides a list of choices to user and returns the index of selected choices"
   },
   "fn-fx.fn-math-average": {
     "prefix": "fn math average",
@@ -643,6 +774,55 @@
       "}\n"
     ],
     "description": "calculate average of given integers"
+  },
+  "fn-fx.fn-math-factorial": {
+    "prefix": "fn math factorial",
+    "body": [
+      "# Usage: factorial n",
+      "factorial ()",
+      "{",
+      "\tif (( \\$1 < 2 )); then",
+      "\t\techo 1",
+      "\telse",
+      "\t\techo \\$(( \\$1 * \\$(factorial \\$(( \\$1 - 1 ))) ))",
+      "\tfi",
+      "}\n"
+    ],
+    "description": "calculate n!"
+  },
+  "fn-fx.fn-math-fibonacci-series": {
+    "prefix": "fn math fibonacci series",
+    "body": [
+      "# Usage: fibonacciSeries n",
+      "fibonacciSeries ()",
+      "{",
+      "\tfib=()",
+      "\tfib+=(0)",
+      "\tfib+=(1)",
+      "",
+      "\tfor((i=2;i<\\${1};i++)); do",
+      "\t\tfib[i]=\\$((fib[i-1] + fib[i-2]))",
+      "\tdone",
+      "",
+      "\techo \"\\${fib[@]}\"",
+      "}\n"
+    ],
+    "description": "array of fibonacci series"
+  },
+  "fn-fx.fn-math-fibonacci": {
+    "prefix": "fn math fibonacci",
+    "body": [
+      "# Usage: fibonacci n",
+      "fibonacci ()",
+      "{",
+      "\tif ((\\$1 < 2)); then ",
+      "\t\techo \\$1",
+      "\telse",
+      "\t\techo \\$((\\$(fibonacci \\$((\\$1 - 1))) + \\$(fibonacci \\$((\\$1 - 2)))))",
+      "\tfi",
+      "}\n"
+    ],
+    "description": "calculate Nth fibonacci number"
   },
   "fn-fx.fn-math-product": {
     "prefix": "fn math product",
@@ -706,6 +886,28 @@
       "}\n"
     ],
     "description": "scan localhost's port range (tcp/udp)"
+  },
+  "fn-fx.fn-time-format-seconds": {
+    "prefix": "fn time format seconds",
+    "body": [
+      "# Usage: formatSeconds 70 -> 1m 10s",
+      "# Credit: https://unix.stackexchange.com/a/27014",
+      "function formatSeconds {",
+      "\tlocal T=\\$1",
+      "\tlocal D=\\$((T/60/60/24))",
+      "\tlocal H=\\$((T/60/60%24))",
+      "\tlocal M=\\$((T/60%60))",
+      "\tlocal S=\\$((T%60))",
+      "\tlocal result=\"\"",
+      "",
+      "\t(( \\$D > 0 )) && result=\"\\${D}d \"",
+      "\t(( \\$H > 0 )) && result=\"\\${result}\\${H}h \"",
+      "\t(( \\$M > 0 )) && result=\"\\${result}\\${M}m \"",
+      "\t(( \\$S > 0 )) && result=\"\\${result}\\${S}s \"",
+      "\techo -e \"\\${result}\" | sed -e 's/[[:space:]]*\\$//'",
+      "}\n"
+    ],
+    "description": "format seconds into days/hours/minutes/seconds"
   },
   "fn-fx.fn-urldecode": {
     "prefix": "fn urldecode",
@@ -824,7 +1026,27 @@
       "inputChoice \"${3:Choose:}\" ${4|0,1,2,3,4,5,6,7,8,9|} \"\\${${1}[@]}\"; choice=\\$?",
       "echo \"\\${${1}[\\$choice]}\" selected\n"
     ],
-    "description": "call options function"
+    "description": "call input choice function"
+  },
+  "fn-fx.fx-input-multi-choice": {
+    "prefix": [
+      "fx checkbox",
+      "fx input multichoice"
+    ],
+    "body": [
+      "# Usage: multiChoice \"header message\" resultArray \"comma separated options\" \"comma separated default values\"",
+      "multiChoice \"${1:Select options:}\" ${2:result} \"One 1;Two 2;Three 3\" \"1;0;1\"",
+      "echo \"${${2}[@]}\"\n"
+    ],
+    "description": "call input multichoice function"
+  },
+  "fn-fx.fx-math fibonacci": {
+    "prefix": "fx math fibonacci",
+    "body": [
+      "# Usage: fibonacci n",
+      "result=\\$(fibonacci ${1:n})\n"
+    ],
+    "description": "calculate Nth fibonacci number"
   },
   "fn-fx.fx-math-average": {
     "prefix": "fx math average",
@@ -833,6 +1055,23 @@
       "result=\\$(average \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
     ],
     "description": "call math average function"
+  },
+  "fn-fx.fx-math-factorial": {
+    "prefix": "fx math factorial",
+    "body": [
+      "# Usage: factorial n",
+      "result=\\$(factorial ${1:n})\n"
+    ],
+    "description": "calculate n!"
+  },
+  "fn-fx.fx-math-fibonacci-series": {
+    "prefix": "fx math fibonacci series",
+    "body": [
+      "# Usage: fibonacciSeries n",
+      "${1:result}=(\\$(fibonacciSeries ${2:n}))",
+      "echo \"\\${${1}[@]}\"\n"
+    ],
+    "description": "array of fibonacci series"
   },
   "fn-fx.fx-math-product": {
     "prefix": "fx math product",
@@ -872,6 +1111,15 @@
       "${5:echo \"\\${openPorts[@]\\}\"}\n"
     ],
     "description": "call scan function to scan localhost over a port range"
+  },
+  "fn-fx.fx-time-format-seconds": {
+    "prefix": "fx time format seconds",
+    "body": [
+      "# Usage: formatSeconds 70 -> 1m 10s",
+      "${1:result}=($(formatSeconds ${2:seconds}))",
+      "echo ${${1}[@]}\n"
+    ],
+    "description": "call formatSeconds function"
   },
   "fn-fx.fx-urldecode": {
     "prefix": "fx urldecode",
@@ -1475,6 +1723,30 @@
     "body": "${1:result}=\\$((${2:int1} - ${3:int2}))\n",
     "description": "subtract int2 from int1"
   },
+  "misc.am-I-not-root": {
+    "prefix": [
+      "am I not root",
+      "am I not sudo"
+    ],
+    "body": [
+      "if (( \\$(id -u) != 0 )); then",
+      "\t${1:echo \"I'm not root\"}",
+      "fi\n"
+    ],
+    "description": "check if script is not running as root (sudo)"
+  },
+  "misc.am-I-root": {
+    "prefix": [
+      "am I root",
+      "am I sudo"
+    ],
+    "body": [
+      "if (( $(id -u) == 0 )); then",
+      "\t${1:echo \"I'm root\"}",
+      "fi\n"
+    ],
+    "description": "check if script is running as root (sudo)"
+  },
   "misc.animation-frame": {
     "prefix": "animation frame",
     "body": [
@@ -1513,6 +1785,11 @@
     ],
     "description": "parse command line arguments (flags/switches)"
   },
+  "misc.echo-array": {
+    "prefix": "echo array",
+    "body": "echo \\${${1:myArray}[@]}\n",
+    "description": "print array elements"
+  },
   "misc.echo-text": {
     "prefix": [
       "echo text",
@@ -1526,7 +1803,7 @@
       "echo variable",
       "print variable"
     ],
-    "body": "echo \"\\${${1:variable}\\}\"\n",
+    "body": "echo \"\\${${1|result,variable,X|}\\}\"\n",
     "description": "print text, variable or both"
   },
   "misc.region": {
@@ -1971,7 +2248,7 @@
       "variable read",
       "variable expand"
     ],
-    "body": "\"\\${${1:variable}\\}\"\n",
+    "body": "\"\\${${1|result,variable|}\\}\"\n",
     "description": "read the value of a variable"
   }
 }

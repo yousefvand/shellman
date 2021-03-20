@@ -1,5 +1,22 @@
 # Change Log
 
+## 5.2.0
+
+- `echo array` snippet added.
+- `fn/fx math factorial` snippet added.
+- `fn/fx math fibonacci` snippet added.
+- `fn/fx math fibonacci series` snippet added.
+- `am I root` & `am I not root` snippets added.
+- `fn/fx input multichoice`: select more than one option.
+- `array contains`: check if the array contains an element".
+- `fn/fx time format seconds` snippet to format seconds into days/hours/minutes/seconds.
+
+Now there is a `input` namespace for getting user input:
+
+- `input text`: formerly `ask question`.
+- `input password`: don't show input on screen.
+- `fn/fx input choice`: formerly `fn/fx options`.
+
 ## 5.1.0
 
 - Smooth percentage for `fn progress`.
@@ -7,12 +24,6 @@
 - assign variable value via `variable assign` | `variable set` snippet.
 - `iterate files` snippet for iterating specific file extensions inside a path.
 - read/expand variable value via `var` | `variable read` | `variable expand` snippet.
-
-Now there is a `input` namespace for getting user input:
-
-- `input text`: formerly `ask question`.
-- `input password`: don't show input on screen.
-- `fn/fx input choice`: formerly `fn/fx options`.
 
 ## 5.0.0
 

@@ -4,6 +4,6 @@
     "variable read",
     "variable expand"
   ],
-  "body": "\"\\${${1:variable}\\}\"\n",
+  "body": "\"\\${${1|result,variable|}\\}\"\n",
   "description": "read the value of a variable"
 }

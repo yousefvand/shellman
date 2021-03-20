@@ -1,0 +1,15 @@
+{
+  "prefix": "fn math factorial",
+  "body": [
+    "# Usage: factorial n",
+    "factorial ()",
+    "{",
+    "\tif (( \\$1 < 2 )); then",
+    "\t\techo 1",
+    "\telse",
+    "\t\techo \\$(( \\$1 * \\$(factorial \\$(( \\$1 - 1 ))) ))",
+    "\tfi",
+    "}\n"
+  ],
+  "description": "calculate n!"
+}

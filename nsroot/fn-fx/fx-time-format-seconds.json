@@ -1,0 +1,9 @@
+{
+  "prefix": "fx time format seconds",
+  "body": [
+    "# Usage: formatSeconds 70 -> 1m 10s",
+    "${1:result}=($(formatSeconds ${2:seconds}))",
+    "echo ${${1}[@]}\n"
+  ],
+  "description": "call formatSeconds function"
+}

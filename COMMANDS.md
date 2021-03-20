@@ -18,6 +18,8 @@
 
   - [array concat](#array-concat)
 
+  - [array contains](#array-contains)
+
   - [array declare](#array-declare)
 
   - [array delete at](#array-delete-at)
@@ -130,6 +132,8 @@
 
   - [if path exists](#if-path-exists)
 
+  - [remove new files](#remove-new-files)
+
   - [remove old files](#remove-old-files)
 
 - fn-fx
@@ -146,7 +150,15 @@
 
   - [fn options](#fn-options)
 
+  - [fn checkbox](#fn-checkbox)
+
   - [fn math average](#fn-math-average)
+
+  - [fn math factorial](#fn-math-factorial)
+
+  - [fn math fibonacci series](#fn-math-fibonacci-series)
+
+  - [fn math fibonacci](#fn-math-fibonacci)
 
   - [fn math product](#fn-math-product)
 
@@ -155,6 +167,8 @@
   - [fn progress](#fn-progress)
 
   - [fn scan local](#fn-scan-local)
+
+  - [fn time format seconds](#fn-time-format-seconds)
 
   - [fn urldecode](#fn-urldecode)
 
@@ -174,7 +188,15 @@
 
   - [fx options](#fx-options)
 
+  - [fx checkbox](#fx-checkbox)
+
+  - [fx math fibonacci](#fx-math-fibonacci)
+
   - [fx math average](#fx-math-average)
+
+  - [fx math factorial](#fx-math-factorial)
+
+  - [fx math fibonacci series](#fx-math-fibonacci-series)
 
   - [fx math product](#fx-math-product)
 
@@ -183,6 +205,8 @@
   - [fx progress](#fx-progress)
 
   - [fx scan local](#fx-scan-local)
+
+  - [fx time format seconds](#fx-time-format-seconds)
 
   - [fx urldecode](#fx-urldecode)
 
@@ -380,9 +404,15 @@
 
 - misc
 
+  - [am I not root](#am-I-not-root)
+
+  - [am I root](#am-I-root)
+
   - [animation frame](#animation-frame)
 
   - [argument parsing](#argument-parsing)
+
+  - [echo array](#echo-array)
 
   - [echo text](#echo-text)
 
@@ -576,6 +606,16 @@ concatenate two arrays [&uarr;](#Commands)
 
 ```bash
 newArray=("${array1[@]}" "${array2[@]}")
+```
+
+## `array contains`
+
+check if the array contains an element [&uarr;](#Commands)
+
+```bash
+if [[ "${myArray[@]}" =~ ${2|'element',"${value}"|} ]]; then
+  echo 'array contains element'
+fi
 ```
 
 ## `array declare`
@@ -1050,6 +1090,14 @@ if [ -e "${1|/path/to/something,${pathToSomething}|}" ]; then
 fi
 ```
 
+## `remove new files`
+
+find and remove files newer than x days [&uarr;](#Commands)
+
+```bash
+find "${1|/path/to/directory,${pathToDirectory}|}" -mtime -days | xargs rm -f
+```
+
 ## `remove old files`
 
 find and remove files older than x days [&uarr;](#Commands)
@@ -1196,13 +1244,13 @@ function import() {
 
 ## `fn options,fn input choice`
 
-provide a list of options to user and return the index of selected option [&uarr;](#Commands)
+provides a list of choices to user and returns the index of selected choice [&uarr;](#Commands)
 
 ```bash
 # Usage: options=("one" "two" "three"); inputChoice "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
 function inputChoice() {
   echo "${1\}"; shift
-  echo $(tput dim)-"Change selection: [up/down], Select: [ENTER]" $(tput sgr0)
+  echo $(tput dim)-"Change option: [up/down], Select: [ENTER]" $(tput sgr0)
   local selected="${1\}"; shift
   ESC=$(echo -e "\033")
   cursor_blink_on()  { tput cnorm; }
@@ -1242,6 +1290,121 @@ function inputChoice() {
 }
 ```
 
+## `fn checkbox,fn input multichoice`
+
+provides a list of choices to user and returns the index of selected choices [&uarr;](#Commands)
+
+```bash
+# Usage: multiChoice "header message" resultArray "comma separated options" "comma separated default values"
+# Credit: https://serverfault.com/a/949806
+# TODO: 1) Refactoring to return result array 2) Get input options as array
+function multiChoice {
+  echo "${1\}"; shift
+  echo $(tput dim)-"Change Option: [up/down], Change Selection: [space], Done: [ENTER]" $(tput sgr0)
+  # little helpers for terminal print control and key input
+  ESC=$( printf "\033")
+  cursor_blink_on()   { printf "$ESC[?25h"; }
+  cursor_blink_off()  { printf "$ESC[?25l"; }
+  cursor_to()         { printf "$ESC[$1;-1H"; }
+  print_inactive()    { printf "$2   $1 "; }
+  print_active()      { printf "$2  $ESC[7m $1 $ESC[27m"; }
+  get_cursor_row()    { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
+  key_input()         {
+    local key
+    IFS= read -rsn1 key 2>/dev/null >&2
+    if [[ $key = ""      ]]; then echo enter; fi;
+    if [[ $key = $'\x20' ]]; then echo space; fi;
+    if [[ $key = $'\x1b' ]]; then
+      read -rsn2 key
+      if [[ $key = [A ]]; then echo up;    fi;
+      if [[ $key = [B ]]; then echo down;  fi;
+    fi
+  }
+  toggle_option()    {
+    local arr_name=$1
+    eval "local arr=(\"${${arr_name}[@]}\")"
+    local option=$2
+    if [[ ${arr[option]} == 1 ]]; then
+      arr[option]=0
+    else
+      arr[option]=1
+    fi
+    eval $arr_name='("${arr[@]}")'
+  }
+
+  local retval=$1
+  local options
+  local defaults
+
+  IFS=';' read -r -a options <<< "$2"
+  if [[ -z $3 ]]; then
+    defaults=()
+  else
+    IFS=';' read -r -a defaults <<< "$3"
+  fi
+
+  local selected=()
+
+  for ((i=0; i<${#options[@]}; i++)); do
+    selected+=("${defaults[i]}")
+    printf "\n"
+  done
+
+  # determine current screen position for overwriting the options
+  local lastrow=$(get_cursor_row)
+  local startrow=$(($lastrow - ${#options[@]}))
+
+  # ensure cursor and input echoing back on upon a ctrl+c during read -s
+  trap "cursor_blink_on; stty echo; printf '\n'; exit" 2
+  cursor_blink_off
+
+  local active=0
+  while true; do
+    # print options by overwriting the last lines
+    local idx=0
+    for option in "${options[@]}"; do
+      local prefix="[ ]"
+      if [[ ${selected[idx]} == 1 ]]; then
+        prefix="[x]"
+      fi
+
+      cursor_to $(($startrow + $idx))
+      if [ $idx -eq $active ]; then
+        print_active "$option" "$prefix"
+      else
+        print_inactive "$option" "$prefix"
+      fi
+      ((idx++))
+    done
+
+    # user key control
+    case $(key_input) in
+      space)  toggle_option selected $active;;
+      enter)  break;;
+      up)     ((active--));
+        if [ $active -lt 0 ]; then active=$((${#options[@]} - 1)); fi;;
+      down)   ((active++));
+        if [ $active -ge ${#options[@]} ]; then active=0; fi;;
+    esac
+  done
+
+  # cursor position back to normal
+  cursor_to $lastrow
+  printf "\n"
+  cursor_blink_on
+
+  indices=()
+  for((i=0;i<${#selected[@]};i++)); do
+    if ((${selected[i]} == 1)); then
+      indices+=(${i})
+    fi
+  done
+
+  # eval $retval='("${selected[@]}")'
+  eval $retval='("${indices[@]}")'
+}
+```
+
 ## `fn math average`
 
 calculate average of given integers [&uarr;](#Commands)
@@ -1254,6 +1417,58 @@ function average () {
     ((sum += int))
   done
   echo $((sum / $#))
+}
+```
+
+## `fn math factorial`
+
+calculate n! [&uarr;](#Commands)
+
+```bash
+# Usage: factorial n
+factorial ()
+{
+  if (( $1 < 2 )); then
+    echo 1
+  else
+    echo $(( $1 * $(factorial $(( $1 - 1 ))) ))
+  fi
+}
+```
+
+## `fn math fibonacci series`
+
+array of fibonacci series [&uarr;](#Commands)
+
+```bash
+# Usage: fibonacciSeries n
+fibonacciSeries ()
+{
+  fib=()
+  fib+=(0)
+  fib+=(1)
+
+  for((i=2;i<${1};i++)); do
+    fib[i]=$((fib[i-1] + fib[i-2]))
+  done
+
+  echo "${fib[@]}"
+}
+```
+
+## `fn math fibonacci`
+
+calculate Nth fibonacci number [&uarr;](#Commands)
+
+```bash
+# Usage: fibonacci n
+fibonacci ()
+{
+  if (($1 < 2)); then 
+    echo $1
+  else
+    echo $(($(fibonacci $(($1 - 1))) + $(fibonacci $(($1 - 2)))))
+  fi
 }
 ```
 
@@ -1321,6 +1536,29 @@ function scan () {
     (echo >/dev/${1\}/${2\}/${port\}) >/dev/null 2>&1 && openPortsArray+=("${port}")
   done
   echo "${openPortsArray[@]}"
+}
+```
+
+## `fn time format seconds`
+
+format seconds into days/hours/minutes/seconds [&uarr;](#Commands)
+
+```bash
+# Usage: formatSeconds 70 -> 1m 10s
+# Credit: https://unix.stackexchange.com/a/27014
+function formatSeconds {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60$))
+  local M=$((T/60`))
+  local S=$((T`))
+  local result=""
+
+  (( $D > 0 )) && result="${D}d "
+  (( $H > 0 )) && result="${result}${H}h "
+  (( $M > 0 )) && result="${result}${M}m "
+  (( $S > 0 )) && result="${result}${S}s "
+  echo -e "${result}" | sed -e 's/[[:space:]]*$//'
 }
 ```
 
@@ -1437,13 +1675,32 @@ import "libname"
 
 ## `fx options,fx input choice`
 
-call options function [&uarr;](#Commands)
+call input choice function [&uarr;](#Commands)
 
 ```bash
 # Usage: options=("one" "two" "three"); inputChoice "Choose:" 1 "${options[@]}"; choice=$?; echo "${options[$choice]}"
 options=(${2:"one" "two" "three"})
 inputChoice "Choose:" ${4|0,1,2,3,4,5,6,7,8,9|} "${${1}[@]}"; choice=$?
 echo "${${1}[$choice]}" selected
+```
+
+## `fx checkbox,fx input multichoice`
+
+call input multichoice function [&uarr;](#Commands)
+
+```bash
+# Usage: multiChoice "header message" resultArray "comma separated options" "comma separated default values"
+multiChoice "Select options:" ${2:result} "One 1;Two 2;Three 3" "1;0;1"
+echo "${${2}[@]}"
+```
+
+## `fx math fibonacci`
+
+calculate Nth fibonacci number [&uarr;](#Commands)
+
+```bash
+# Usage: fibonacci n
+result=$(fibonacci n)
 ```
 
 ## `fx math average`
@@ -1453,6 +1710,25 @@ call math average function [&uarr;](#Commands)
 ```bash
 # Usage: average int1 int2 ...
 result=$(average ${int1\} ${int2\} ${int3\})
+```
+
+## `fx math factorial`
+
+calculate n! [&uarr;](#Commands)
+
+```bash
+# Usage: factorial n
+result=$(factorial n)
+```
+
+## `fx math fibonacci series`
+
+array of fibonacci series [&uarr;](#Commands)
+
+```bash
+# Usage: fibonacciSeries n
+result=($(fibonacciSeries n))
+echo "${${1}[@]}"
 ```
 
 ## `fx math product`
@@ -1496,6 +1772,16 @@ call scan function to scan localhost over a port range [&uarr;](#Commands)
 # Usage: scan proto host fromPort toPort
 openPorts=( $(scan ${1|tcp,udp|} "${2|localhost,127.0.0.1,::1|}" fromPort ${4:toPort}) )
 echo "${openPorts[@]\"}
+```
+
+## `fx time format seconds`
+
+call formatSeconds function [&uarr;](#Commands)
+
+```bash
+# Usage: formatSeconds 70 -> 1m 10s
+result=($(formatSeconds seconds))
+echo ${${1}[@]}
 ```
 
 ## `fx urldecode`
@@ -2275,6 +2561,26 @@ subtract int2 from int1 [&uarr;](#Commands)
 result=$((int1 - int2))
 ```
 
+## `am I not root,am I not sudo`
+
+check if script is not running as root (sudo) [&uarr;](#Commands)
+
+```bash
+if (( $(id -u) != 0 )); then
+  echo "I'm not root"
+fi
+```
+
+## `am I root,am I sudo`
+
+check if script is running as root (sudo) [&uarr;](#Commands)
+
+```bash
+if (( $(id -u) == 0 )); then
+  echo "I'm root"
+fi
+```
+
 ## `animation frame`
 
 define animation frame [&uarr;](#Commands)
@@ -2312,6 +2618,14 @@ done
 set -- "${POSITIONAL[@]}" # restore positional params
 ```
 
+## `echo array`
+
+print array elements [&uarr;](#Commands)
+
+```bash
+echo ${myArray[@]}
+```
+
 ## `echo text,print text`
 
 print text, variable or both [&uarr;](#Commands)
@@ -2325,7 +2639,7 @@ echo 'text here'
 print text, variable or both [&uarr;](#Commands)
 
 ```bash
-echo "${variable\}"
+echo "${${1|result,variable,X|}\}"
 ```
 
 ## `region,section`
@@ -2855,5 +3169,5 @@ assign default value to variable if variable is empty otherwise assign null [&ua
 read the value of a variable [&uarr;](#Commands)
 
 ```bash
-"${variable\}"
+"${${1|result,variable|}\}"
 ```

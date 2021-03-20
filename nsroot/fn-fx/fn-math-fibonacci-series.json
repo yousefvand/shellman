@@ -1,0 +1,19 @@
+{
+  "prefix": "fn math fibonacci series",
+  "body": [
+    "# Usage: fibonacciSeries n",
+    "fibonacciSeries ()",
+    "{",
+    "\tfib=()",
+    "\tfib+=(0)",
+    "\tfib+=(1)",
+    "",
+    "\tfor((i=2;i<\\${1};i++)); do",
+    "\t\tfib[i]=\\$((fib[i-1] + fib[i-2]))",
+    "\tdone",
+    "",
+    "\techo \"\\${fib[@]}\"",
+    "}\n"
+  ],
+  "description": "array of fibonacci series"
+}

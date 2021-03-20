@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "EUID",
     "Gitter",
     "KHTML",
     "Mascheroni",
@@ -48,6 +49,7 @@
     "proto",
     "quickstart",
     "renice",
+    "retval",
     "semvers",
     "setaf",
     "shasum",
@@ -55,6 +57,7 @@
     "sitm",
     "somefile",
     "startrow",
+    "stty",
     "systemctl",
     "tprintf",
     "tput",

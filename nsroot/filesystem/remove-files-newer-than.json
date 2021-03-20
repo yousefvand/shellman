@@ -1,0 +1,5 @@
+{
+  "prefix": "remove new files",
+  "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime -${2:days} | xargs rm -f\n",
+  "description": "find and remove files newer than x days"
+}

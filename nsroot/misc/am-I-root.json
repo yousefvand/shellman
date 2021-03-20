@@ -1,0 +1,13 @@
+{
+  "prefix": [
+    "am I root",
+    "am I sudo"
+  ],
+  "body": [
+    "if (( $(id -u) == 0 )); then",
+    "\t${1:echo \"I'm root\"}",
+    "fi\n"
+  ],
+  "description": "check if script is running as root (sudo)"
+}
+

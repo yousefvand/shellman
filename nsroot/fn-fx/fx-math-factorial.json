@@ -1,0 +1,8 @@
+{
+  "prefix": "fx math factorial",
+  "body": [
+    "# Usage: factorial n",
+    "result=\\$(factorial ${1:n})\n"
+  ],
+  "description": "calculate n!"
+}

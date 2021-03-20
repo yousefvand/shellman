@@ -1,0 +1,22 @@
+{
+  "prefix": "fn time format seconds",
+  "body": [
+    "# Usage: formatSeconds 70 -> 1m 10s",
+    "# Credit: https://unix.stackexchange.com/a/27014",
+    "function formatSeconds {",
+    "\tlocal T=\\$1",
+    "\tlocal D=\\$((T/60/60/24))",
+    "\tlocal H=\\$((T/60/60%24))",
+    "\tlocal M=\\$((T/60%60))",
+    "\tlocal S=\\$((T%60))",
+    "\tlocal result=\"\"",
+    "",
+    "\t(( \\$D > 0 )) && result=\"\\${D}d \"",
+    "\t(( \\$H > 0 )) && result=\"\\${result}\\${H}h \"",
+    "\t(( \\$M > 0 )) && result=\"\\${result}\\${M}m \"",
+    "\t(( \\$S > 0 )) && result=\"\\${result}\\${S}s \"",
+    "\techo -e \"\\${result}\" | sed -e 's/[[:space:]]*\\$//'",
+    "}\n"
+  ],
+  "description": "format seconds into days/hours/minutes/seconds"
+}

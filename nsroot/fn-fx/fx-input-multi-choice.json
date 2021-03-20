@@ -1,0 +1,12 @@
+{
+  "prefix": [
+    "fx checkbox",
+    "fx input multichoice"
+  ],
+  "body": [
+    "# Usage: multiChoice \"header message\" resultArray \"comma separated options\" \"comma separated default values\"",
+    "multiChoice \"${1:Select options:}\" ${2:result} \"One 1;Two 2;Three 3\" \"1;0;1\"",
+    "echo \"${${2}[@]}\"\n"
+  ],
+  "description": "call input multichoice function"
+}

@@ -7,7 +7,7 @@
     "# Usage: options=(\"one\" \"two\" \"three\"); inputChoice \"Choose:\" 1 \"\\${options[@]}\"; choice=\\$?; echo \"\\${options[\\$choice]}\"",
     "function inputChoice() {",
     "\techo \"\\${1\\}\"; shift",
-    "\techo \\$(tput dim)-\"Change selection: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
+    "\techo \\$(tput dim)-\"Change option: [up/down], Select: [ENTER]\" \\$(tput sgr0)",
     "\tlocal selected=\"\\${1\\}\"; shift\n",
     "\tESC=\\$(echo -e \"\\033\")",
     "\tcursor_blink_on()  { tput cnorm; }",
@@ -46,5 +46,5 @@
     "\treturn \"\\${selected\\}\"",
     "}\n"
   ],
-  "description": "provide a list of options to user and return the index of selected option"
+  "description": "provides a list of choices to user and returns the index of selected choice"
 }

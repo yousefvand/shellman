@@ -1,0 +1,5 @@
+{
+  "prefix": "echo array",
+  "body": "echo \\${${1:myArray}[@]}\n",
+  "description": "print array elements"
+}

@@ -1,0 +1,8 @@
+{
+  "prefix": "fx math fibonacci",
+  "body": [
+    "# Usage: fibonacci n",
+    "result=\\$(fibonacci ${1:n})\n"
+  ],
+  "description": "calculate Nth fibonacci number"
+}

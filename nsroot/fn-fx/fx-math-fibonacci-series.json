@@ -1,0 +1,9 @@
+{
+  "prefix": "fx math fibonacci series",
+  "body": [
+    "# Usage: fibonacciSeries n",
+    "${1:result}=(\\$(fibonacciSeries ${2:n}))",
+    "echo \"\\${${1}[@]}\"\n"
+  ],
+  "description": "array of fibonacci series"
+}

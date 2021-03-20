@@ -1,0 +1,13 @@
+{
+  "prefix": [
+    "am I not root",
+    "am I not sudo"
+  ],
+  "body": [
+    "if (( \\$(id -u) != 0 )); then",
+    "\t${1:echo \"I'm not root\"}",
+    "fi\n"
+  ],
+  "description": "check if script is not running as root (sudo)"
+}
+
