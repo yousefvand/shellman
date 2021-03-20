@@ -156,6 +156,7 @@ bannerColor "Publish vscode extension to market" "magenta" ":"
 multiChoice "Which markets to publish:" markets "vscode;open-vsx" "1;1"
 
 if [[ "${markets[@]}" =~ '0' ]]; then
+  echo
   echo "Enter vscode token:"
   read -s vscodeToken
   echo $(tput setaf 6)"Publishing to vscode..."$(tput sgr0)
@@ -164,6 +165,7 @@ if [[ "${markets[@]}" =~ '0' ]]; then
 fi
 
 if [[ "${markets[@]}" =~ '1' ]]; then
+  echo
   echo "Enter open-vsx token:"
   read -s openVsxToken
   echo $(tput setaf 6)"Publishing to open-vsx..."$(tput sgr0)
