@@ -1,5 +1,5 @@
 {
-  "prefix": "remove new files",
-  "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime -${2:days} | xargs rm -f\n",
-  "description": "find and remove files newer than x days"
+  "prefix": "remove old/new files/directories",
+  "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} | xargs rm -f\n",
+  "description": "find and remove files(f)/directories(d) older(+)/newer(-) than x days"
 }

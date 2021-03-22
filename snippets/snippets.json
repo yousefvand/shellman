@@ -1,23 +1,51 @@
 {
   "archive.compress-tar-gz": {
-    "prefix": "archive compress tar.gz",
+    "prefix": [
+      "archive compress tar.gz",
+      "archive tar.gz"
+    ],
     "body": "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
     "description": "compress file/folder to a .tar.gz file"
   },
   "archive.compress-tar-xz": {
-    "prefix": "archive compress tar.xz",
+    "prefix": [
+      "archive compress tar.xz",
+      "archive tar.xz"
+    ],
     "body": "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
     "description": "compress file/folder to a .tar.xz file"
   },
+  "archive.compress-zip": {
+    "prefix": [
+      "archive compress .zip",
+      "archive zip"
+    ],
+    "body": "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
+    "description": "compress file/folder to a .zip file"
+  },
   "archive.decompress-tar-gz": {
-    "prefix": "archive decompress tar.gz",
+    "prefix": [
+      "archive decompress tar.gz",
+      "decompress tar.gz"
+    ],
     "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xzvf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n",
     "description": "decompress a .tar.gz file to specified path"
   },
   "archive.decompress-tar-xz": {
-    "prefix": "archive decompress tar.xz",
+    "prefix": [
+      "archive decompress tar.xz",
+      "decompress tar.xz"
+    ],
     "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
     "description": "decompress a .tar.xz file to specified path"
+  },
+  "archive.decompress-unzip": {
+    "prefix": [
+      "archive decompress .zip",
+      "archive unzip"
+    ],
+    "body": "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
+    "description": "decompress a .zip file to specified path"
   },
   "array.all-elements": {
     "prefix": "array all",
@@ -66,8 +94,8 @@
   },
   "array.filter": {
     "prefix": "array filter",
-    "body": "${1:filtered}=(\\$(for i in ${${2:myArray}[@]} ; do echo \\$i; done | grep ${3:pattern}))\n",
-    "description": "filter elements of an array based on given pattern"
+    "body": "${1:filtered}=(\\$(for i in ${${2:myArray}[@]} ; do echo \\${i\\}; done | grep ${3|',\"|}${4:pattern}${3}))\n",
+    "description": "filter elements of an array based on given grep pattern"
   },
   "array.iterate": {
     "prefix": [
@@ -265,6 +293,18 @@
     ],
     "description": "register a function (handler) to run on script exit"
   },
+  "filesystem.directories-iterate": {
+    "prefix": "iterate directories",
+    "body": [
+      "# Make sure path ends with /",
+      "for directory in ${1|'/path/to/directory/',\"${pathToDirectory}\"|}*; do",
+      "\tif [[ -d \"\\${directory}\" && ! -L \"\\${directory}\" ]]; then",
+      "\t\t${2:echo \"\\${directory\\}\"}",
+      "\tfi",
+      "done\n"
+    ],
+    "description": "write to a file"
+  },
   "filesystem.directory-create-nested": {
     "prefix": "directory create nested",
     "body": "mkdir -p ${1|\"parent dir/child dir\",\"${pathToCreate}\"|}\n",
@@ -340,6 +380,7 @@
   "filesystem.files-iterate": {
     "prefix": "iterate files",
     "body": [
+      "# Make sure path ends with /",
       "for file in ${1|'/path/to/files/',\"${pathToFiles}\"|}*.{jpg,png\\}; do",
       "\t${2:echo \"\\${file\\}\"}",
       "done\n"
@@ -454,14 +495,86 @@
     "description": "if path exists (file, directory, link...)"
   },
   "filesystem.remove-files-newer-than": {
-    "prefix": "remove new files",
-    "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime -${2:days} | xargs rm -f\n",
-    "description": "find and remove files newer than x days"
+    "prefix": "remove old/new files/directories",
+    "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} | xargs rm -f\n",
+    "description": "find and remove files(f)/directories(d) older(+)/newer(-) than x days"
   },
   "filesystem.remove-files-older-than": {
     "prefix": "remove old files",
     "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime +${2:days} | xargs rm -f\n",
     "description": "find and remove files older than x days"
+  },
+  "float.if-equal": {
+    "prefix": [
+      "if float =",
+      "if double ="
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} == \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"equal\"}",
+      "fi\n"
+    ],
+    "description": "if numbers are equal"
+  },
+  "float.if-greater-or-equal": {
+    "prefix": [
+      "if float >=",
+      "if double >="
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} >= \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"greater or equal\"}",
+      "fi\n"
+    ],
+    "description": "if num1 is greater to num2"
+  },
+  "float.if-greater": {
+    "prefix": [
+      "if float >",
+      "if double >"
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} > \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"greater\"}",
+      "fi\n"
+    ],
+    "description": "if num2 is greater than num2"
+  },
+  "float.if-lesser-or-equal": {
+    "prefix": [
+      "if float <=",
+      "if double <="
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} <= \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"lesser or equal\"}",
+      "fi\n"
+    ],
+    "description": "if num1 is lesser or equal to num2"
+  },
+  "float.if-lesser": {
+    "prefix": [
+      "if float <",
+      "if double <"
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} < \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"lesser\"}",
+      "fi\n"
+    ],
+    "description": "if num1 is lesser than num2"
+  },
+  "float.if-not-equal": {
+    "prefix": [
+      "if float !=",
+      "if double !="
+    ],
+    "body": [
+      "if (( $(echo \"\\${${1:num1}} != \\${${2:num2}}\" | bc -l) )); then",
+      "\t${3:echo \"not equal\"}",
+      "fi\n"
+    ],
+    "description": "if numbers are not equal"
   },
   "fn-fx.fn-animate": {
     "prefix": "fn animation animate",
@@ -1434,7 +1547,7 @@
       "\t${3:echo \"greater or equal\"}",
       "fi\n"
     ],
-    "description": "if integer greater than or equal value"
+    "description": "if int1 is greater or equal to int2"
   },
   "integer.if-greater": {
     "prefix": "if int >",
@@ -1443,7 +1556,7 @@
       "\t${3:echo \"greater\"}",
       "fi\n"
     ],
-    "description": "if integer greater than value"
+    "description": "if int1 is greater than int2"
   },
   "integer.if-lesser-or-equal": {
     "prefix": "if int <=",
@@ -1452,7 +1565,7 @@
       "\t${3:echo \"lesser or equal\"}",
       "fi\n"
     ],
-    "description": "if integer lesser than or equal value"
+    "description": "if int1 is lesser or equal to int2"
   },
   "integer.if-lesser": {
     "prefix": "if int <",
@@ -1461,7 +1574,7 @@
       "\t${3:echo \"lesser\"}",
       "fi\n"
     ],
-    "description": "if integer lesser than value"
+    "description": "if int1 is lesser than int2"
   },
   "integer.if-not-equal": {
     "prefix": "if int !=",
@@ -2193,6 +2306,15 @@
     ],
     "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|}\n",
     "description": "manage service operations"
+  },
+  "system.uptime-seconds": {
+    "prefix": "system uptime seconds",
+    "body": [
+      "# Use 'fn time format seconds' snippet for formatting",
+      "${1:systemUptime}=\\$(awk '{print \\$1}' /proc/uptime)",
+      "${3:echo \"\\${${1}\\}\"}\n"
+    ],
+    "description": "system uptime in seconds."
   },
   "system.uptime": {
     "prefix": "system uptime",

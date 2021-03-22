@@ -5,5 +5,5 @@
     "\t${3:echo \"lesser\"}",
     "fi\n"
   ],
-  "description": "if integer lesser than value"
+  "description": "if int1 is lesser than int2"
 }

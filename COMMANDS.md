@@ -6,9 +6,13 @@
 
   - [archive compress tar.xz](#archive-compress-tar.xz)
 
+  - [archive compress .zip](#archive-compress-.zip)
+
   - [archive decompress tar.gz](#archive-decompress-tar.gz)
 
   - [archive decompress tar.xz](#archive-decompress-tar.xz)
+
+  - [archive decompress .zip](#archive-decompress-.zip)
 
 - array
 
@@ -88,6 +92,8 @@
 
 - filesystem
 
+  - [iterate directories](#iterate-directories)
+
   - [directory create nested](#directory-create-nested)
 
   - [directory create](#directory-create)
@@ -132,9 +138,23 @@
 
   - [if path exists](#if-path-exists)
 
-  - [remove new files](#remove-new-files)
+  - [remove old/new files/directories](#remove-old/new-files/directories)
 
   - [remove old files](#remove-old-files)
+
+- float
+
+  - [if float =](#if-float-=)
+
+  - [if float >=](#if-float->=)
+
+  - [if float >](#if-float->)
+
+  - [if float <=](#if-float-<=)
+
+  - [if float <](#if-float-<)
+
+  - [if float !=](#if-float-!=)
 
 - fn-fx
 
@@ -534,6 +554,8 @@
 
   - [service manage](#service-manage)
 
+  - [system uptime seconds](#system-uptime-seconds)
+
   - [system uptime](#system-uptime)
 
 - time
@@ -552,7 +574,7 @@
 
   - [var](#var)
 
-## `archive compress tar.gz`
+## `archive compress tar.gz,archive tar.gz`
 
 compress file/folder to a .tar.gz file [&uarr;](#Commands)
 
@@ -560,7 +582,7 @@ compress file/folder to a .tar.gz file [&uarr;](#Commands)
 tar -czvf ${1|/path/to/archive, "${pathToArchive}"|}.tar.gz ${2|/path/to/directory-or-file, "${pathToDirectoryOrFile}"|}
 ```
 
-## `archive compress tar.xz`
+## `archive compress tar.xz,archive tar.xz`
 
 compress file/folder to a .tar.xz file [&uarr;](#Commands)
 
@@ -568,7 +590,15 @@ compress file/folder to a .tar.xz file [&uarr;](#Commands)
 tar -cJf ${1|/path/to/archive, "${pathToArchive}"|}.tar.xz ${2|/path/to/directory-or-file, "${pathToDirectoryOrFile}"|}
 ```
 
-## `archive decompress tar.gz`
+## `archive compress .zip,archive zip`
+
+compress file/folder to a .zip file [&uarr;](#Commands)
+
+```bash
+zip -rq ${1|/path/to/archive, "${pathToArchive}"|}.zip ${2|/path/to/directory-or-file,"${pathToDirectoryOrFile}"|}
+```
+
+## `archive decompress tar.gz,decompress tar.gz`
 
 decompress a .tar.gz file to specified path [&uarr;](#Commands)
 
@@ -576,12 +606,20 @@ decompress a .tar.gz file to specified path [&uarr;](#Commands)
 tar -C ${1|/extract/to/path, "${extractToPath}"|} -xzvf ${2|/path/to/archive, "${pathToArchive}"|}.tar.gz
 ```
 
-## `archive decompress tar.xz`
+## `archive decompress tar.xz,decompress tar.xz`
 
 decompress a .tar.xz file to specified path [&uarr;](#Commands)
 
 ```bash
 tar -C ${1|/extract/to/path, "${extractToPath}"|} -xf ${2|/path/to/archive, "${pathToArchive}"|}.tar.xz
+```
+
+## `archive decompress .zip,archive unzip`
+
+decompress a .zip file to specified path [&uarr;](#Commands)
+
+```bash
+unzip -q ${1|/path/to/archive, "${pathToArchive}"|}.zip -d ${2|/extract/to/path,"${extractToPath}"|}
 ```
 
 ## `array all`
@@ -648,10 +686,10 @@ unset myArray
 
 ## `array filter`
 
-filter elements of an array based on given pattern [&uarr;](#Commands)
+filter elements of an array based on given grep pattern [&uarr;](#Commands)
 
 ```bash
-filtered=($(for i in ${myArray[@]} ; do echo $i; done | grep pattern))
+filtered=($(for i in ${myArray[@]} ; do echo ${i\}; done | grep ${3|',"|}pattern${3}))
 ```
 
 ## `array iterate,array forEach`
@@ -881,6 +919,19 @@ function on_exit() {
 trap on_exit EXIT
 ```
 
+## `iterate directories`
+
+write to a file [&uarr;](#Commands)
+
+```bash
+# Make sure path ends with /
+for directory in ${1|'/path/to/directory/',"${pathToDirectory}"|}*; do
+  if [[ -d "${directory}" && ! -L "${directory}" ]]; then
+    echo "${directory\"}
+  fi
+done
+```
+
 ## `directory create nested`
 
 create nested directories [&uarr;](#Commands)
@@ -967,6 +1018,7 @@ done
 write to a file [&uarr;](#Commands)
 
 ```bash
+# Make sure path ends with /
 for file in ${1|'/path/to/files/',"${pathToFiles}"|}*.{jpg,png\}; do
   echo "${file\"}
 done
@@ -1090,12 +1142,12 @@ if [ -e "${1|/path/to/something,${pathToSomething}|}" ]; then
 fi
 ```
 
-## `remove new files`
+## `remove old/new files/directories`
 
-find and remove files newer than x days [&uarr;](#Commands)
+find and remove files(f)/directories(d) older(+)/newer(-) than x days [&uarr;](#Commands)
 
 ```bash
-find "${1|/path/to/directory,${pathToDirectory}|}" -mtime -days | xargs rm -f
+find "${1|/path/to/directory/,${pathToDirectory}|}"* -type ${2|f,d|} -mtime ${3|-,+|}days | xargs rm -f
 ```
 
 ## `remove old files`
@@ -1104,6 +1156,66 @@ find and remove files older than x days [&uarr;](#Commands)
 
 ```bash
 find "${1|/path/to/directory,${pathToDirectory}|}" -mtime +days | xargs rm -f
+```
+
+## `if float =,if double =`
+
+if numbers are equal [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} == ${num2}" | bc -l) )); then
+  echo "equal"
+fi
+```
+
+## `if float >=,if double >=`
+
+if num1 is greater to num2 [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} >= ${num2}" | bc -l) )); then
+  echo "greater or equal"
+fi
+```
+
+## `if float >,if double >`
+
+if num2 is greater than num2 [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} > ${num2}" | bc -l) )); then
+  echo "greater"
+fi
+```
+
+## `if float <=,if double <=`
+
+if num1 is lesser or equal to num2 [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} <= ${num2}" | bc -l) )); then
+  echo "lesser or equal"
+fi
+```
+
+## `if float <,if double <`
+
+if num1 is lesser than num2 [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} < ${num2}" | bc -l) )); then
+  echo "lesser"
+fi
+```
+
+## `if float !=,if double !=`
+
+if numbers are not equal [&uarr;](#Commands)
+
+```bash
+if (( $(echo "${num1} != ${num2}" | bc -l) )); then
+  echo "not equal"
+fi
 ```
 
 ## `fn animation animate`
@@ -2174,7 +2286,7 @@ fi
 
 ## `if int >=`
 
-if integer greater than or equal value [&uarr;](#Commands)
+if int1 is greater or equal to int2 [&uarr;](#Commands)
 
 ```bash
 if (( int1 >= ${2:int2} )); then
@@ -2184,7 +2296,7 @@ fi
 
 ## `if int >`
 
-if integer greater than value [&uarr;](#Commands)
+if int1 is greater than int2 [&uarr;](#Commands)
 
 ```bash
 if (( int1 > ${2:int2} )); then
@@ -2194,7 +2306,7 @@ fi
 
 ## `if int <=`
 
-if integer lesser than or equal value [&uarr;](#Commands)
+if int1 is lesser or equal to int2 [&uarr;](#Commands)
 
 ```bash
 if (( int1 <= ${2:int2} )); then
@@ -2204,7 +2316,7 @@ fi
 
 ## `if int <`
 
-if integer lesser than value [&uarr;](#Commands)
+if int1 is lesser than int2 [&uarr;](#Commands)
 
 ```bash
 if (( int1 < ${2:int2} )); then
@@ -3110,6 +3222,16 @@ manage service operations [&uarr;](#Commands)
 
 ```bash
 sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',"${serviceName}"|}
+```
+
+## `system uptime seconds`
+
+system uptime in seconds. [&uarr;](#Commands)
+
+```bash
+# Use 'fn time format seconds' snippet for formatting
+systemUptime=$(awk '{print $1}' /proc/uptime)
+echo "${${1\}"}
 ```
 
 ## `system uptime`

@@ -1,0 +1,9 @@
+{
+  "prefix": "system uptime seconds",
+  "body": [
+    "# Use 'fn time format seconds' snippet for formatting",
+    "${1:systemUptime}=\\$(awk '{print \\$1}' /proc/uptime)",
+    "${3:echo \"\\${${1}\\}\"}\n"
+  ],
+  "description": "system uptime in seconds."
+}

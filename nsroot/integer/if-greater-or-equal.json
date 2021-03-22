@@ -5,5 +5,5 @@
     "\t${3:echo \"greater or equal\"}",
     "fi\n"
   ],
-  "description": "if integer greater than or equal value"
+  "description": "if int1 is greater or equal to int2"
 }

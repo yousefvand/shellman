@@ -38,19 +38,11 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ## Latest release Notes
 
-## 5.2.0
+## 5.3.0
 
-- `echo array` snippet added.
-- `fn/fx math factorial` snippet added.
-- `fn/fx math fibonacci` snippet added.
-- `fn/fx math fibonacci series` snippet added.
-- `am I root` & `am I not root` snippets added.
-- `fn/fx input multichoice`: select more than one option.
-- `array contains`: check if the array contains an element".
-- `fn/fx time format seconds` snippet to format seconds into days/hours/minutes/seconds.
-
-Now there is a `input` namespace for getting user input:
-
-- `input text`: formerly `ask question`.
-- `input password`: don't show input on screen.
-- `fn/fx input choice`: formerly `fn/fx options`.
+- `iterate directories` snippet added.
+- `archive compress .zip` snippet added.
+- `archive decompress .zip` snippet added.
+- `system uptime seconds` snippet added. Seconds can be formatted by `fn time format seconds` snippet.
+- `remove old/new files/directories` snippet for removing files (-type f) or directories (-type d) if they are older (-mtime n) than n days or newer (+mtime n) than n days.
+- Comparison of floating point numbers: `float|double >`, `float|double >=`, `float|double <`, `float|double <=`, `float|double ==`, `float|double !=` added.

@@ -1,5 +1,8 @@
 {
-		"prefix": "archive compress tar.gz",
+		"prefix": [
+			"archive compress tar.gz",
+			"archive tar.gz"
+		],
 		"body": "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
 		"description": "compress file/folder to a .tar.gz file"
 }

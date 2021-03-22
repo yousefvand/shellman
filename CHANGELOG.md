@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.3.0
+
+- `iterate directories` snippet added.
+- `archive compress .zip` snippet added.
+- `archive decompress .zip` snippet added.
+- `system uptime seconds` snippet added. Seconds can be formatted by `fn time format seconds` snippet.
+- `remove old/new files/directories` snippet for removing files (-type f) or directories (-type d) if they are older (-mtime n) than n days or newer (+mtime n) than n days.
+- Comparison of floating point numbers: `float|double >`, `float|double >=`, `float|double <`, `float|double <=`, `float|double ==`, `float|double !=` added.
+
 ## 5.2.0
 
 - `echo array` snippet added.

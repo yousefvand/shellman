@@ -1,0 +1,12 @@
+{
+  "prefix": [
+    "if float >",
+    "if double >"
+  ],
+  "body": [
+    "if (( $(echo \"\\${${1:num1}} > \\${${2:num2}}\" | bc -l) )); then",
+    "\t${3:echo \"greater\"}",
+    "fi\n"
+  ],
+  "description": "if num2 is greater than num2"
+}

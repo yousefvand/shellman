@@ -1,0 +1,12 @@
+{
+  "prefix": [
+    "if float !=",
+    "if double !="
+  ],
+  "body": [
+    "if (( $(echo \"\\${${1:num1}} != \\${${2:num2}}\" | bc -l) )); then",
+    "\t${3:echo \"not equal\"}",
+    "fi\n"
+  ],
+  "description": "if numbers are not equal"
+}
