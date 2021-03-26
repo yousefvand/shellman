@@ -42,11 +42,15 @@
 
   - [array replace](#array-replace)
 
+  - [array reverse](#array-reverse)
+
   - [array set element](#array-set-element)
 
 - command
 
   - [command failure check](#command-failure-check)
+
+  - [hide command error](#hide-command-error)
 
   - [if command exists](#if-command-exists)
 
@@ -438,6 +442,8 @@
 
   - [echo variable](#echo-variable)
 
+  - [exit code](#exit-code)
+
   - [region](#region)
 
   - [shebang](#shebang)
@@ -734,6 +740,14 @@ find and replace elements in array using regex [&uarr;](#Commands)
 newArray=${myArray[@]//find/replace}
 ```
 
+## `array reverse`
+
+reverse order of array elements [&uarr;](#Commands)
+
+```bash
+reversedArray=( $(echo "${array[@]}" | rev) )
+```
+
 ## `array set element`
 
 set array element at specified index [&uarr;](#Commands)
@@ -750,6 +764,14 @@ check if last command failed [&uarr;](#Commands)
 if [[ $? != 0 ]]; then
   echo "Last command failed"
 fi
+```
+
+## `hide command error,don't show command error`
+
+If a command fails don't show error (suppress stderr) [&uarr;](#Commands)
+
+```bash
+command 2> /dev/null
 ```
 
 ## `if command exists,if cmd exists`
@@ -1220,12 +1242,17 @@ fi
 
 ## `fn animation animate`
 
-animate frames of animation with interval seconds between frames [&uarr;](#Commands)
+animate frames of animation with interval seconds between frames circular and pendular [&uarr;](#Commands)
 
 ```bash
 # Usage: animate framesArray interval
 function animate () {
   local frames=("$@")
+
+  ((lastIndex=${#frames[@]} - 1))
+  local mode=${frames[lastIndex]}
+  unset frames[lastIndex]
+
   ((lastIndex=${#frames[@]} - 1))
   local interval=${frames[lastIndex]}
   unset frames[lastIndex]
@@ -1235,11 +1262,41 @@ function animate () {
   tput civis # hide cursor
   tput sc # save cursor position
 
+  tput civis # hide cursor
+  tput sc # save cursor position
+
+  index=0
+  max="${#frames[@]}"
+  indices=()
+  direction="forward"
+  forwardIndices=( $(seq 0 1 "${max}") )
+  backwardIndices=( $(seq "${max}" -1 0) )
+
   while true; do
-    for frame in "${frames[@]}"; do
+    if [ "${mode}" = "circular" ]; then
+      direction="forward"
+    elif [ "${mode}" = "pendular" ]; then
+      if (( index >= max )); then
+        direction="backward"
+      elif (( index <= 0 )); then
+        direction="forward"
+      fi
+    else
+      echo "Wrong mode! Valid modes: circular, pendular"
+      exit 255
+    fi
+
+    if [ "${direction}" = "forward" ]; then
+      indices=( "${forwardIndices[@]}" )
+    else
+      indices=( "${backwardIndices[@]}" )
+    fi
+    
+
+    for index in "${indices[@]}"; do
       tput rc # restore cursor position
-      echo "${frame\}"
-      sleep "${interval\}"
+      echo "${frames[$index]}"
+      sleep "${interval}"
     done
   done
 }
@@ -1746,7 +1803,7 @@ call animate function to start animation [&uarr;](#Commands)
 
 ```bash
 # Usage: animate framesArray interval
-animate "${frames[@]}" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|}
+animate "${frames[@]}" ${2|0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1|} ${3|circular,pendular|}
 ```
 
 ## `fx animation pacman`
@@ -2752,6 +2809,14 @@ print text, variable or both [&uarr;](#Commands)
 
 ```bash
 echo "${${1|result,variable,X|}\}"
+```
+
+## `exit code`
+
+provide an exit code on error [&uarr;](#Commands)
+
+```bash
+exit ${1|0,1,2,3,4,5,6,7,8,9,255|}
 ```
 
 ## `region,section`

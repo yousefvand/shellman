@@ -1,0 +1,5 @@
+{
+  "prefix": "array reverse",
+  "body": "${1:reversedArray}=( \\$(echo \"\\${${2:array}[@]}\" | rev) )\n",
+  "description": "reverse order of array elements"
+}

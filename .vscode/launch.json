@@ -8,20 +8,33 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Build",
+            "name": "Build Node",
             "program": "${workspaceFolder}/build.js",
             "skipFiles": [
                 "<node_internals>/**"
             ]
         },
         {
-            "name": "Extension",
+            "name": "Extension Test",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash Debug",
+            "program": "${file}"
+        },
+        {
+            "name": "Build Go",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}"
         }
     ]
 }

@@ -32,17 +32,18 @@ to activate desired `snippet` you need to type `string` and select desired `snip
 
 Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use functions to put into your code if you type `fn`, and selected function usage is available after typing `fx`. For example the function to create a banner with desired text can be accessed via `fn banner simple` and to call this function the `snippet` is `fx banner simple`. Pass required parameters and a banner with your text would be printed.
 
-## List of [commands](COMMANDS.md)
+### List of [commands](COMMANDS.md)
 
-## [Full release Notes](CHANGELOG.md)
+### [Full release Notes](CHANGELOG.md)
 
-## Latest release Notes
+### [Contribution](nsroot/README.md)
 
-## 5.3.0
+### Latest release Notes
 
-- `iterate directories` snippet added.
-- `archive compress .zip` snippet added.
-- `archive decompress .zip` snippet added.
-- `system uptime seconds` snippet added. Seconds can be formatted by `fn time format seconds` snippet.
-- `remove old/new files/directories` snippet for removing files (-type f) or directories (-type d) if they are older (-mtime n) than n days or newer (+mtime n) than n days.
-- Comparison of floating point numbers: `float|double >`, `float|double >=`, `float|double <`, `float|double <=`, `float|double ==`, `float|double !=` added.
+## 5.4.0
+
+- `exit code` for gracefully inform what error happened.
+- `array reverse` snippet to reverse array elements order added.
+- `hide command error` snippet to suppress command error (stderr),
+- `fn animation animate` now supports two mode: circular, pendular.
+- Binary build tool for major operating systems is available.

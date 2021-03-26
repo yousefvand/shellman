@@ -1,5 +1,13 @@
 # Change Log
 
+## 5.4.0
+
+- `exit code` for gracefully inform what error happened.
+- `array reverse` snippet to reverse array elements order added.
+- `hide command error` snippet to suppress command error (stderr),
+- `fn animation animate` now supports two mode: circular, pendular.
+- Binary build tool for major operating systems is available.
+
 ## 5.3.0
 
 - `iterate directories` snippet added.

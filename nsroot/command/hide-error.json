@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "hide command error",
+    "don't show command error"
+  ],
+  "body": "${1:command} 2> /dev/null\n",
+  "description": "If a command fails don't show error (suppress stderr)"
+}
