@@ -2824,7 +2824,7 @@ exit ${1|0,1,2,3,4,5,6,7,8,9,255|}
 comment out a special region (i.e. variable declarations) [&uarr;](#Commands)
 
 ```bash
-# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>
+# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,frames,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>
 $0
 # <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<
 ```

@@ -121,42 +121,42 @@ windows_i386='GOOS=windows GOARCH=386 go build -o bin/build-windows-i386.exe bui
 # macOS
 mac_amd64='GOOS=darwin GOARCH=amd64 go build -o bin/build-darwin-amd64 build.go'
 mac_arm64='GOOS=darwin GOARCH=arm64 go build -o bin/build-darwin-arm64 build.go'
-#-# GOOS=darwin GOARCH=386   go build -o bin/build-darwin-386   build.go
-#-# GOOS=darwin GOARCH=arm   go build -o bin/build-darwin-arm   build.go
+#-# GOOS=darwin GOARCH=386 go build -o bin/build-darwin-386 build.go
+#-# GOOS=darwin GOARCH=arm go build -o bin/build-darwin-arm build.go
 
 # Linux
 linux_amd64='GOOS=linux GOARCH=amd64 go build -o bin/build-linux-amd64 build.go'
 linux_i386='GOOS=linux GOARCH=386 go build -o bin/build-linux-386 build.go'
-# GOOS=linux GOARCH=arm      go build -o bin/build-linux-arm      build.go
-# GOOS=linux GOARCH=arm64    go build -o bin/build-linux-arm64    build.go
-# GOOS=linux GOARCH=ppc64    go build -o bin/build-linux-ppc64    build.go
-# GOOS=linux GOARCH=ppc64le  go build -o bin/build-linux-ppc64le  build.go
-# GOOS=linux GOARCH=mips     go build -o bin/build-linux-mips     build.go
-# GOOS=linux GOARCH=mipsle   go build -o bin/build-linux-mipsle   build.go
-# GOOS=linux GOARCH=mips64   go build -o bin/build-linux-mips64   build.go
-# GOOS=linux GOARCH=mips64le go build -o bin/build-linux-mips64le build.go
+linux_arm='GOOS=linux GOARCH=arm go build -o bin/build-linux-arm build.go'
+linux_arm64='GOOS=linux GOARCH=arm64 go build -o bin/build-linux-arm64 build.go'
+linux_ppc64='GOOS=linux GOARCH=ppc64 go build -o bin/build-linux-ppc64 build.go'
+linux_ppc64le='GOOS=linux GOARCH=ppc64le go build -o bin/build-linux-ppc64le build.go'
+linux_mips='GOOS=linux GOARCH=mips go build -o bin/build-linux-mips build.go'
+linux_mipsle='GOOS=linux GOARCH=mipsle go build -o bin/build-linux-mipsle build.go'
+linux_mips64='GOOS=linux GOARCH=mips64 go build -o bin/build-linux-mips64 build.go'
+linux_mips64le='GOOS=linux GOARCH=mips64le go build -o bin/build-linux-mips64le build.go'
 
 # Dragonfly
-# GOOS=dragonfly GOARCH=amd64 go build -o bin/build-dragonfly-amd64 build.go
+dragonfly_amd64='GOOS=dragonfly GOARCH=amd64 go build -o bin/build-dragonfly-amd64 build.go'
 
 # FreeBSD
-# GOOS=freebsd GOARCH=arm64 go build -o bin/build-freebsd-amd64 build.go
-# GOOS=freebsd GOARCH=386 go build -o bin/build-freebsd-386     build.go
-# GOOS=freebsd GOARCH=arm64 go build -o bin/build-freebsd-arm   build.go
+freebsd_amd64='GOOS=freebsd GOARCH=arm64 go build -o bin/build-freebsd-amd64 build.go'
+freebsd_i386='GOOS=freebsd GOARCH=386 go build -o bin/build-freebsd-386 build.go'
+freebsd_arm='GOOS=freebsd GOARCH=arm64 go build -o bin/build-freebsd-arm build.go'
 
 # NetBSD
-# GOOS=netbsd GOARCH=amd64 go build -o bin/build-netbsd-amd64 build.go
-# GOOS=netbsd GOARCH=386   go build -o bin/build-netbsd-386   build.go
-# GOOS=netbsd GOARCH=arm   go build -o bin/build-netbsd-arm   build.go
+netbsd_amd64='GOOS=netbsd GOARCH=amd64 go build -o bin/build-netbsd-amd64 build.go'
+netbsd_i386='GOOS=netbsd GOARCH=386 go build -o bin/build-netbsd-386 build.go'
+netbsd_arm='GOOS=netbsd GOARCH=arm go build -o bin/build-netbsd-arm build.go'
 
 # OpenBSD
-# GOOS=openbsd GOARCH=amd64 go build -o bin/build-openbsd-amd64 build.go
-# GOOS=openbsd GOARCH=386   go build -o bin/build-openbsd-386   build.go
-# GOOS=openbsd GOARCH=arm   go build -o bin/build-openbsd-arm   build.go
+openbsd_amd64='GOOS=openbsd GOARCH=amd64 go build -o bin/build-openbsd-amd64 build.go'
+openbsd_i386='GOOS=openbsd GOARCH=386 go build -o bin/build-openbsd-386 build.go'
+openbsd_arm='GOOS=openbsd GOARCH=arm go build -o bin/build-openbsd-arm build.go'
 
 # Plan9
-# GOOS=plan9 GOARCH=amd64 go build -o bin/build-plan9-amd64 build.go
-# GOOS=plan9 GOARCH=386   go build -o bin/build-plan9-386   build.go
+plan9_amd64='GOOS=plan9 GOARCH=amd64 go build -o bin/build-plan9-amd64 build.go'
+plan9_i386='GOOS=plan9 GOARCH=386 go build -o bin/build-plan9-386 build.go'
 
 # Solaris
 # GOOS=solaris GOARCH=amd64 go build -o bin/build-openbsd-amd64 build.go

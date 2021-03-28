@@ -1978,7 +1978,7 @@
       "section"
     ],
     "body": [
-      "# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>",
+      "# >>>>>>>>>>>>>>>>>>>>>>>> ${1|functions,event handlers,variables,frames,argument parsing,main code|} >>>>>>>>>>>>>>>>>>>>>>>>",
       "$0",
       "# <<<<<<<<<<<<<<<<<<<<<<<< ${1} <<<<<<<<<<<<<<<<<<<<<<<<"
     ],
