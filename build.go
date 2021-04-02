@@ -9,6 +9,8 @@
 	Version: 1.0.0
 */
 
+// TODO: Generate COMMANDS.md
+
 package main
 
 import (

@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Build Node",
-            "program": "${workspaceFolder}/build.js",
+            "program": "${file}",
             "skipFiles": [
                 "<node_internals>/**"
             ]
@@ -34,7 +34,7 @@
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${file}"
+            "program": "${workspaceFolder}/build.go"
         }
     ]
 }

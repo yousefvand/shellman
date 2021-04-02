@@ -1,5 +1,11 @@
 # Change Log
 
+## 5.5.0
+
+- `process Name by ID`: Get process name by it's ID(s).
+- Fixed #28 (COMMANDS.md links not working).
+- Added animation examples for pendular mode.
+
 ## 5.4.0
 
 - `exit code` for gracefully inform what error happened.

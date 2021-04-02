@@ -56,40 +56,63 @@ const app = pipe(
   write
 );
 
-// TODO: Refactor
-function docGen() {
-  const rgx = /\$\{\d+:(.*?)\}/g;
-  const snippets = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "./snippets/snippets.json"), "utf-8")
+// Entry Point
+app("./nsroot"); // Generate snippet file
+
+// Generate Documentation file
+// TODO:  Numerous minor parsing bugs to fix!
+const snippets = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "./snippets/snippets.json"), "utf-8")
+);
+
+const nameSpaces = [
+  ...new Set(Object.keys(snippets).map(snippet => snippet.split(".")[0])),
+].sort();
+
+structure = new Map();
+
+for (const ns of nameSpaces) {
+  members = Object.keys(snippets).filter(
+    snippet => snippet.split(".")[0] === ns
   );
+  structure.set(ns, members.sort());
+}
 
-  let out = "# Commands\n\n";
-  let ns = "";
+const toc = ["# Commands"];
+const content = [];
 
-  for (const snippetName in snippets) {
-    // Table of Contents
-    const snippet = snippets[snippetName];
-    if (snippetName.split(".")[0] !== ns) {
-      ns = snippetName.split(".")[0];
-      out += `- ${ns}\n\n`;
-    }
-    const snippetPrefix = Array.isArray(snippet.prefix)
-      ? snippet.prefix[0]
-      : snippet.prefix;
-    out += `  - [${snippetPrefix}](#${snippetPrefix.split(" ").join("-")})\n\n`;
-  }
+for (const [ns, members] of structure.entries()) {
+  toc.push(`### ${ns}`);
+  for (const member of members) {
+    let entry = Object.entries(snippets).filter(entry => entry[0] === member);
+    const snippet = entry[0];
+    const snippetName = snippet[0];
+    const prefix = snippet[1].prefix;
+    const body = snippet[1].body;
+    const description = snippet[1].description;
 
-  for (const snippetName in snippets) {
-    const snippet = snippets[snippetName];
-    out += `## \`${snippet.prefix}\`\n\n`;
-    out += `${snippet.description} [&uarr;](#Commands)\n\n`;
-    out += "```bash\n";
-    let body = "";
+    // fs.writeFileSync(
+    //   path.join(__dirname, "ZZZ.json"),
+    //   JSON.stringify(entry[0], null, 2)
+    // );
+
+    const title = Array.isArray(prefix) ? prefix.join(" , ") : prefix;
+    const link = title.split(" ").join("-");
+    toc.push(`  - [${title}](#${link})`);
+    content.push(`## ${title}`);
+    content.push(`${description} [&uarr;](#Commands)`);
+
+    const rgx = /\$\{\d+:(.*?)\}/g;
+    let out = "```bash\n";
+    let code = "";
     let y;
-    if (snippet.body.constructor === Array) {
-      let tmp = snippet.body.map(line => line.split("\n").join(""));
+
+    if (Array.isArray(body)) {
+      let tmp = body.map(line => line.split("\n").join(""));
       tmp = tmp.map(line => line.split("\t").join("  "));
       tmp = tmp.map(line => unescape(line).split("\\$").join("$"));
+      tmp = tmp.map(line => line.split(/\\\$/g).join("$"));
+      tmp = tmp.map(line => line.split(/\\\}/g).join("}"));
       tmp = tmp.map(line => {
         let y;
         while ((y = rgx.exec(line)) !== null) {
@@ -97,26 +120,24 @@ function docGen() {
         }
         return line;
       });
-      body = tmp.join("\n");
+      code = tmp.join("\n");
     } else {
       // single line body
-      body = unescape(snippet.body);
-      body = body.split("\n").join("");
-      while ((y = rgx.exec(snippet.body)) !== null) {
-        body = body.split(y[0]).join(y[1]);
+      code = unescape(body).split("\\$").join("$");
+      code = code.split(/\\\$/g).join("$");
+      code = code.split("\n").join("");
+      while ((y = rgx.exec(code)) !== null) {
+        code = code.split(y[0]).join(y[1]);
       }
+      code = code.split(/\\\}/g).join("}");
     }
-    out += body;
+    out += code.trim();
     out += "\n```\n\n";
+    content.push(out);
   }
-
-  out = out.slice(0, -1); // Remove extra line break
-  out = out.replace(/\\\$/gm, "$"); // Replacing \$ with $s
-
-  fs.writeFileSync(path.join(__dirname, "COMMANDS.md"), out);
 }
 
-// Entry Point
-app("./nsroot"); // Generate snippet file
-
-docGen(); // Generate Documentation file
+fs.writeFileSync(
+  path.join(__dirname, "COMMANDS.md"),
+  toc.concat(content).join("\n\n")
+);

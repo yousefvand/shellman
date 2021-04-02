@@ -1,0 +1,5 @@
+{
+  "prefix": "process Name by ID",
+  "body": "${1:processName}=\\$(ps -p \\${${2:pid}\\} -o comm=)\n",
+  "description": "find process name by it's ID(s)"
+}

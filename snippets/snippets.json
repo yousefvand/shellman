@@ -2123,6 +2123,11 @@
     "body": "ps -A\n",
     "description": "list processes"
   },
+  "process.process-name": {
+    "prefix": "process Name by ID",
+    "body": "${1:processName}=\\$(ps -p \\${${2:pid}\\} -o comm=)\n",
+    "description": "find process name by it's ID(s)"
+  },
   "string.concat": {
     "prefix": [
       "string concat",
