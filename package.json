@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^5.3.10",
+    "cspell": "^5.3.12",
     "path": "^0.12.7"
   },
   "scripts": {

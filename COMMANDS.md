@@ -859,7 +859,7 @@ for p in $(pidof "processName"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,
 run command (command substitution) [&uarr;](#Commands)
 
 ```bash
-result=$(${2:command})
+result="$(${2:command})"
 ```
 
 

@@ -200,7 +200,7 @@
       "command substitution",
       "cmd substitution"
     ],
-    "body": "${1:result}=$(${2:command})\n",
+    "body": "${1:result}=\"$(${2:command})\"\n",
     "description": "run command (command substitution)"
   },
   "command.success-check": {
