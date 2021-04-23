@@ -2142,7 +2142,7 @@
       "if string contains"
     ],
     "body": [
-      "if [[ \"\\${${1:string}\\}\" = *\\${${2:substring}\\}* ]]; then",
+      "if [[ \"\\${${1:string}\\}\" == *\"\\${${2:substring}\\}\"* ]]; then",
       "\t${3:echo \"\\${${1:string}\\} contains: \\${${2:substring}\\}\"}",
       "fi\n"
     ],
@@ -2159,7 +2159,7 @@
   "string.if-empty": {
     "prefix": "if string empty",
     "body": [
-      "if [ -z \"\\${${1:string}\\}\" ]; then",
+      "if [[ -z \"\\${${1:string}\\}\" ]]; then",
       "\t${2:echo \"empty string\"}",
       "fi\n"
     ],
@@ -2167,11 +2167,11 @@
   },
   "string.if-equal": {
     "prefix": [
-      "if string =",
+      "if string ==",
       "string equal"
     ],
     "body": [
-      "if [ \"\\${${1:string1}\\}\" = \"\\${${2:string2}\\}\" ]; then",
+      "if [[ \"\\${${1:string1}\\}\" == \"\\${${2:string2}\\}\" ]]; then",
       "\t${3:echo \"The two strings are the same\"}",
       "fi\n"
     ],
@@ -2180,7 +2180,7 @@
   "string.if-not-empty": {
     "prefix": "if string not empty",
     "body": [
-      "if [ -n \"\\${${1:string}\\}\" ]; then",
+      "if [[ -n \"\\${${1:string}\\}\" ]]; then",
       "\t${2:echo \"string is not empty\"}",
       "fi\n"
     ],
@@ -2192,7 +2192,7 @@
       "string not equal"
     ],
     "body": [
-      "if [ \"\\${${1:string1}\\}\" != \"\\${${2:string2}\\}\" ]; then",
+      "if [[ \"\\${${1:string1}\\}\" != \"\\${${2:string2}\\}\" ]]; then",
       "\t${3:echo \"The two strings are different\"}",
       "fi\n"
     ],

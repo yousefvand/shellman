@@ -508,7 +508,7 @@
 
   - [if string empty](#if-string-empty)
 
-  - [if string = , string equal](#if-string-=-,-string-equal)
+  - [if string == , string equal](#if-string-==-,-string-equal)
 
   - [if string not empty](#if-string-not-empty)
 
@@ -3508,7 +3508,7 @@ string="${${2:string1}}${string2}"
 check whether string contains substring [&uarr;](#Commands)
 
 ```bash
-if [[ "${string}" = *${substring}* ]]; then
+if [[ "${string}" == *"${substring}"* ]]; then
   echo "${${1:string} contains: ${substring}"}
 fi
 ```
@@ -3531,19 +3531,19 @@ echo "index of \"${${2:substring}\" in \"${string}\" is ${index}"}
 if string is empty [&uarr;](#Commands)
 
 ```bash
-if [ -z "${string}" ]; then
+if [[ -z "${string}" ]]; then
   echo "empty string"
 fi
 ```
 
 
 
-## if string = , string equal
+## if string == , string equal
 
 if strings are equal [&uarr;](#Commands)
 
 ```bash
-if [ "${string1}" = "${string2}" ]; then
+if [[ "${string1}" == "${string2}" ]]; then
   echo "The two strings are the same"
 fi
 ```
@@ -3555,7 +3555,7 @@ fi
 if string is not empty [&uarr;](#Commands)
 
 ```bash
-if [ -n "${string}" ]; then
+if [[ -n "${string}" ]]; then
   echo "string is not empty"
 fi
 ```
@@ -3567,7 +3567,7 @@ fi
 if strings are not equal [&uarr;](#Commands)
 
 ```bash
-if [ "${string1}" != "${string2}" ]; then
+if [[ "${string1}" != "${string2}" ]]; then
   echo "The two strings are different"
 fi
 ```
