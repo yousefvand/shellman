@@ -4,7 +4,7 @@
     "string not equal"
   ],
   "body": [
-    "if [ \"\\${${1:string1}\\}\" != \"\\${${2:string2}\\}\" ]; then",
+    "if [[ \"\\${${1:string1}\\}\" != \"\\${${2:string2}\\}\" ]]; then",
     "\t${3:echo \"The two strings are different\"}",
     "fi\n"
   ],

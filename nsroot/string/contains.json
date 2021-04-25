@@ -4,7 +4,7 @@
     "if string contains"
   ],
   "body": [
-    "if [[ \"\\${${1:string}\\}\" = *\\${${2:substring}\\}* ]]; then",
+    "if [[ \"\\${${1:string}\\}\" == *\"\\${${2:substring}\\}\"* ]]; then",
     "\t${3:echo \"\\${${1:string}\\} contains: \\${${2:substring}\\}\"}",
     "fi\n"
   ],
