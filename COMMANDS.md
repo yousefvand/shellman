@@ -805,7 +805,7 @@ myArray[${2:index}]="value"
 check if last command failed [&uarr;](#Commands)
 
 ```bash
-if [[ $? != 0 ]]; then
+if (( $? != 0 )); then
   echo "Last command failed"
 fi
 ```
@@ -869,7 +869,7 @@ result="$(${2:command})"
 check if last command succeed [&uarr;](#Commands)
 
 ```bash
-if [[ $? == 0 ]]; then
+if (( $? == 0 )); then
   echo "Last command succeed"
 fi
 ```

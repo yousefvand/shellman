@@ -151,7 +151,7 @@
       "cmd failure check"
     ],
     "body": [
-      "if [[ \\$? != 0 ]]; then",
+      "if (( \\$? != 0 )); then",
       "\t${1:echo \"Last command failed\"}",
       "fi\n"
     ],
@@ -209,7 +209,7 @@
       "cmd success check"
     ],
     "body": [
-      "if [[ \\$? == 0 ]]; then",
+      "if (( \\$? == 0 )); then",
       "\t${1:echo \"Last command succeed\"}",
       "fi\n"
     ],
