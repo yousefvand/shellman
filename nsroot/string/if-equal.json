@@ -1,6 +1,6 @@
 {
   "prefix": [
-    "if string ==",
+    "if string =",
     "string equal"
   ],
   "body": [
