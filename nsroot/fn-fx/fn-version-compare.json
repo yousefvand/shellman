@@ -7,7 +7,6 @@
     "# Usage: versionCompare \"1.2.3\" \"1.1.7\"",
     "function versionCompare () {",
     "\tfunction subVersion () {",
-    "\t\tlocal len=${#1}",
     "\t\ttemp=${1%%\".\"*} && indexOf=\\$(echo ${1%%\".\"*} | echo ${#temp})",
     "\t\techo -e \"\\${1:0:indexOf}\"",
     "\t}",

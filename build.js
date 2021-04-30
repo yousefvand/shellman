@@ -102,38 +102,38 @@ for (const [ns, members] of structure.entries()) {
     content.push(`## ${title}`);
     content.push(`${description} [&uarr;](#Commands)`);
 
-    const rgx = /\$\{\d+:(.*?)\}/g;
-    let out = "```bash\n";
-    let code = "";
-    let y;
+    // const rgx = /\$\{\d+:(.*?)\}/g;
+    // let out = "```bash\n";
+    // let code = "";
+    // let y;
 
-    if (Array.isArray(body)) {
-      let tmp = body.map(line => line.split("\n").join(""));
-      tmp = tmp.map(line => line.split("\t").join("  "));
-      tmp = tmp.map(line => unescape(line).split("\\$").join("$"));
-      tmp = tmp.map(line => line.split(/\\\$/g).join("$"));
-      tmp = tmp.map(line => line.split(/\\\}/g).join("}"));
-      tmp = tmp.map(line => {
-        let y;
-        while ((y = rgx.exec(line)) !== null) {
-          line = line.split(y[0]).join(y[1]);
-        }
-        return line;
-      });
-      code = tmp.join("\n");
-    } else {
-      // single line body
-      code = unescape(body).split("\\$").join("$");
-      code = code.split(/\\\$/g).join("$");
-      code = code.split("\n").join("");
-      while ((y = rgx.exec(code)) !== null) {
-        code = code.split(y[0]).join(y[1]);
-      }
-      code = code.split(/\\\}/g).join("}");
-    }
-    out += code.trim();
-    out += "\n```\n\n";
-    content.push(out);
+    // if (Array.isArray(body)) {
+    //   let tmp = body.map(line => line.split("\n").join(""));
+    //   tmp = tmp.map(line => line.split("\t").join("  "));
+    //   tmp = tmp.map(line => unescape(line).split("\\$").join("$"));
+    //   tmp = tmp.map(line => line.split(/\\\$/g).join("$"));
+    //   tmp = tmp.map(line => line.split(/\\\}/g).join("}"));
+    //   tmp = tmp.map(line => {
+    //     let y;
+    //     while ((y = rgx.exec(line)) !== null) {
+    //       line = line.split(y[0]).join(y[1]);
+    //     }
+    //     return line;
+    //   });
+    //   code = tmp.join("\n");
+    // } else {
+    //   // single line body
+    //   code = unescape(body).split("\\$").join("$");
+    //   code = code.split(/\\\$/g).join("$");
+    //   code = code.split("\n").join("");
+    //   while ((y = rgx.exec(code)) !== null) {
+    //     code = code.split(y[0]).join(y[1]);
+    //   }
+    //   code = code.split(/\\\}/g).join("}");
+    // }
+    // out += code.trim();
+    // out += "\n```\n\n";
+    // content.push(out);
   }
 }
 

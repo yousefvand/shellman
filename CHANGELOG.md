@@ -5,6 +5,9 @@
 - `process Name by ID`: Get process name by it's ID(s).
 - Fixed #28 (COMMANDS.md links not working).
 - Added animation examples for pendular mode.
+- Fixed #29 (thanks to @rwin-novo).
+- Fixed #30 and #32 (thanks to @jsbrain).
+- Code section removed from `COMMANDS.md`.
 
 ## 5.4.0
 

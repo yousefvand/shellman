@@ -40,10 +40,11 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ### Latest release Notes
 
-## 5.4.0
+## 5.5.0
 
-- `exit code` for gracefully inform what error happened.
-- `array reverse` snippet to reverse array elements order added.
-- `hide command error` snippet to suppress command error (stderr),
-- `fn animation animate` now supports two mode: circular, pendular.
-- Binary build tool for major operating systems is available.
+- `process Name by ID`: Get process name by it's ID(s).
+- Fixed #28 (COMMANDS.md links not working).
+- Added animation examples for pendular mode.
+- Fixed #29 (thanks to @rwin-novo).
+- Fixed #30 and #32 (thanks to @jsbrain).
+- Code section removed from `COMMANDS.md`.
