@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.?.?
+
+- `build.go` now generates `COMMANDS.md` as well.
+
 ## 5.5.0
 
 - `process Name by ID`: Get process name by it's ID(s).
