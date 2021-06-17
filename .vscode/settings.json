@@ -61,6 +61,7 @@
     "startrow",
     "stty",
     "systemctl",
+    "tnum",
     "tprintf",
     "tput",
     "ttput",

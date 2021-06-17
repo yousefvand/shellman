@@ -3,6 +3,7 @@
 ## 5.?.?
 
 - `build.go` now generates `COMMANDS.md` as well.
+- Fixed #34 (Argument parsing for switches may result in infinite loop)
 
 ## 5.5.0
 

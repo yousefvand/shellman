@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^5.3.12",
+    "cspell": "^5.6.4",
     "path": "^0.12.7"
   },
   "scripts": {
@@ -38,7 +38,7 @@
     "spellcheck": "npx cspell ./**/*"
   },
   "dependencies": {
-    "ovsx": "0.1.0",
-    "vsce": "^1.88.0"
+    "ovsx": "0.2.0",
+    "vsce": "^1.93.0"
   }
 }
