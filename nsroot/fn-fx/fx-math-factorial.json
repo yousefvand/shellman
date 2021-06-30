@@ -2,7 +2,8 @@
   "prefix": "fx math factorial",
   "body": [
     "# Usage: factorial n",
-    "result=\\$(factorial ${1:n})\n"
+    "readarray -t result < <(factorial ${1:n})",
+    "echo \"\\${result[@]\\}\"\n"
   ],
   "description": "calculate n!"
 }

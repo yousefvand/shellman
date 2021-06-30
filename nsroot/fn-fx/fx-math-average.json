@@ -2,7 +2,7 @@
   "prefix": "fx math average",
   "body": [
     "# Usage: average int1 int2 ...",
-    "result=\\$(average \\${${1:int1}\\} \\${${2:int2}\\} \\${${3:int3}\\})\n"
+    "result=\\$(average \"\\${${1:int1}\\}\" \"\\${${2:int2}\\}\" \"\\${${3:int3}\\}\")\n"
   ],
   "description": "call math average function"
 }

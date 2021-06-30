@@ -1,5 +1,5 @@
 {
   "prefix": "color black",
-  "body": "echo \\$(tput setaf 0)\"${1:black text}\"\\$(tput sgr0)\n",
+  "body": "echo \"\\$(tput setaf 0)\"${1:black text}\"\\$(tput sgr0)\"\n",
   "description": "write in black"
 }

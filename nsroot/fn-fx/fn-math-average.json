@@ -4,7 +4,7 @@
     "# Usage: average int1 int2 ...",
     "function average () {",
     "\tlocal sum=0",
-    "\tfor int in \\$@; do",
+    "\tfor int in \"\\$@\"; do",
     "\t\t((sum += int))",
     "\tdone",
     "\techo \\$((sum / \\$#))",

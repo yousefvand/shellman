@@ -1,9 +1,10 @@
 # Change Log
 
-## 5.?.?
+## 5.5.1
 
 - `build.go` now generates `COMMANDS.md` as well.
-- Fixed #34 (Argument parsing for switches may result in infinite loop)
+- Fixed #34 (Argument parsing for switches may result in infinite loop).
+- Numerous bug fixed in `fn`s.
 
 ## 5.5.0
 

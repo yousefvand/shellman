@@ -40,11 +40,8 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ### Latest release Notes
 
-## 5.5.0
+## 5.5.1
 
-- `process Name by ID`: Get process name by it's ID(s).
-- Fixed #28 (COMMANDS.md links not working).
-- Added animation examples for pendular mode.
-- Fixed #29 (thanks to @rwin-novo).
-- Fixed #30 and #32 (thanks to @jsbrain).
-- Code section removed from `COMMANDS.md`.
+- `build.go` now generates `COMMANDS.md` as well.
+- Fixed #34 (Argument parsing for switches may result in infinite loop).
+- Numerous bug fixed in `fn`s.
