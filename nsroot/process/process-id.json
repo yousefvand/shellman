@@ -1,7 +1,7 @@
 {
   "prefix": "process ID(s)",
   "body": [
-    "${1:processIDsArray}=(\\$(pgrep ${2:processName}))",
+    "readarray -t ${1:processIDsArray} < <(pgrep ${2|processName, \"${processName}\"|})",
     "${3:echo \"\\${${1}[@]\\}\"}\n"
   ],
   "description": "find process ID(s) aka PIDs"

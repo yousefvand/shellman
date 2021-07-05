@@ -3,6 +3,6 @@
     "file find",
     "directory find"
   ],
-  "body": "${1:resultArray}=(\\$(find \"${2|/path/to/search,${pathToSearch}|}\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type ${4|f,d|} -name \"${5:criteria}\"))\n",
+  "body": "readarray -t resultArray < <(find \"/path/to/search\" -maxdepth 1 -type f -name \"criteria\")\n",
   "description": "find files (-type f) or directories (-type d) by name or pattern (*.jpg)"
 }

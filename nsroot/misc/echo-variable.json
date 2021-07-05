@@ -3,6 +3,6 @@
     "echo variable",
     "print variable"
   ],
-  "body": "echo \"\\${${1|result,variable,X|}\\}\"\n",
+  "body": "echo \"\\${${1|result,variable|}\\}\"\n",
   "description": "print text, variable or both"
 }

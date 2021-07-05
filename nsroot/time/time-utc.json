@@ -2,7 +2,7 @@
   "prefix": "time now UTC",
   "body": [
     "${1:timeNowUTC}=\\$(date -u +%R)",
-    "${2:echo \\${${1}\\}}\n"
+    "${2:echo \"\\${${1}\\}}\"\n"
   ],
   "description": "current UTC time"
 }

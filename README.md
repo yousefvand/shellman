@@ -40,8 +40,7 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ### Latest release Notes
 
-## 5.5.1
+## 5.6.0
 
-- `build.go` now generates `COMMANDS.md` as well.
-- Fixed #34 (Argument parsing for switches may result in infinite loop).
-- Numerous bug fixed in `fn`s.
+- `shellcheck` compatible (99.99%).
+- Added `array print` snippet.

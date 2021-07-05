@@ -4,7 +4,7 @@
     "# Usage: progressBar \"message\" currentStep totalSteps",
     "function progressBar() {",
     "\tlocal   bar='████████████████████'",
-    "\tlocal space='                    '",
+    "\tlocal space='....................'",
     "\tlocal wheel=('\\' '|' '/' '-')",
     "",
     "\tlocal msg=\"\\${1\\}\"",
@@ -14,7 +14,7 @@
     "\tlocal position=\\$((100 * current / total))",
     "\tlocal barPosition=\\$((position / 5))",
     "",
-    "\techo -ne \"\\r|\\${bar:0:\\$barPosition}\\${space:\\$barPosition:20}| \\${wheel[wheelIndex]} \\${position}% [ \\${msg} ] \"",
+    "\techo -ne \"\\r|\\${bar:0:\\$barPosition}\\$(tput dim)\\${space:\\$barPosition:20}\\$(tput sgr0)| \\${wheel[wheelIndex]} \\${position}% [ \\${msg} ] \"",
     "}\n"
   ],
   "description": "progress bar function"

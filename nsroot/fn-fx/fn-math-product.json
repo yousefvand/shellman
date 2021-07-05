@@ -4,10 +4,10 @@
     "# Usage: product int1 int2 ...",
     "function product () {",
     "\tlocal result=1",
-    "\tfor int in $@; do",
+    "\tfor int in \"$@\"; do",
     "\t\t((result *= int))",
     "\tdone",
-    "\techo \\${result\\}",
+    "\techo \"\\${result\\}\"",
     "}\n"
   ],
   "description": "calculate product of given integers"

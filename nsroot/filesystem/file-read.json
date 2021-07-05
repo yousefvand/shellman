@@ -1,9 +1,9 @@
 {
   "prefix": "file read",
   "body": [
-    "cat \"${1|/path/to/file,${filePath}|}\" | while read ${2:line}; do",
-    "\t${3:echo \"\\${${2:line}\\}\"}",
-    "done\n"
+    "while IFS= read -r line; do",
+    "\techo \"\\$line\"",
+    "done < ${1|/path/ro/file,\"${inputFile}\"|}\n"
   ],
   "description": "read a file"
 }

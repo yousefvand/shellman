@@ -4,10 +4,10 @@
     "# Usage: sum int1 int2 ...",
     "function sum () {",
     "\tlocal result=0",
-    "\tfor int in \\$@; do",
+    "\tfor int in \"\\$@\"; do",
     "\t\t((result += int))",
     "\tdone",
-    "\techo \\${result\\}",
+    "\techo \"\\${result\\}\"",
     "}\n"
   ],
   "description": "calculate sum of given integers"

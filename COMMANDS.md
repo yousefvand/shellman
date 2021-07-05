@@ -36,6 +36,8 @@
 
   - [array length](#array-length)
 
+  - [array print , echo array](#array-print-,-echo-array)
+
   - [array push , array add](#array-push-,-array-add)
 
   - [array slice , array range](#array-slice-,-array-range)
@@ -143,8 +145,6 @@
   - [if path exists](#if-path-exists)
 
   - [remove old/new files/directories](#remove-old/new-files/directories)
-
-  - [remove old files](#remove-old-files)
 
 ### float
 
@@ -258,7 +258,7 @@
 
   - [function , func](#function-,-func)
 
-  - [function return value , func return value](#function-return-value-,-func-return-value)
+  - [function return value , func return value , func ret val](#function-return-value-,-func-return-value-,-func-ret-val)
 
 ### git
 
@@ -435,8 +435,6 @@
   - [animation frame](#animation-frame)
 
   - [argument parsing , parse args](#argument-parsing-,-parse-args)
-
-  - [echo array](#echo-array)
 
   - [echo text , print text](#echo-text-,-print-text)
 
@@ -646,6 +644,10 @@ iterate array elements [&uarr;](#Commands)
 
 length of an array [&uarr;](#Commands)
 
+## array print , echo array
+
+iterate array elements [&uarr;](#Commands)
+
 ## array push , array add
 
 push new item to the end of array [&uarr;](#Commands)
@@ -841,10 +843,6 @@ if path exists (file, directory, link...) [&uarr;](#Commands)
 ## remove old/new files/directories
 
 find and remove files(f)/directories(d) older(+)/newer(-) than x days [&uarr;](#Commands)
-
-## remove old files
-
-find and remove files older than x days [&uarr;](#Commands)
 
 ## if float = , if double =
 
@@ -1054,7 +1052,7 @@ number of function arguments [&uarr;](#Commands)
 
 function [&uarr;](#Commands)
 
-## function return value , func return value
+## function return value , func return value , func ret val
 
 last function/command return code [&uarr;](#Commands)
 
@@ -1377,10 +1375,6 @@ define animation frame [&uarr;](#Commands)
 ## argument parsing , parse args
 
 parse command line arguments (flags/switches) [&uarr;](#Commands)
-
-## echo array
-
-print array elements [&uarr;](#Commands)
 
 ## echo text , print text
 

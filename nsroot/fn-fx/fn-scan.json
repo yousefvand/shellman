@@ -5,7 +5,7 @@
     "function scan () {",
     "\tlocal openPortsArray=()",
     "\tfor ((port=\\${3\\}; port<=\\${4\\}; port++)); do",
-    "\t\t(echo >/dev/\\${1\\}/\\${2\\}/\\${port\\}) >/dev/null 2>&1 && openPortsArray+=(\"\\${port}\")",
+    "\t\t(echo >/dev/\"\\${1\\}\"/\"\\${2\\}\"/\"\\${port\\}\") >/dev/null 2>&1 && openPortsArray+=(\"\\${port}\")",
     "\tdone",
     "\techo \"\\${openPortsArray[@]}\"",
     "}\n"

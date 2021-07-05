@@ -65,7 +65,7 @@
   "array.contains": {
     "prefix": "array contains",
     "body": [
-      "if [[ \"\\${${1:myArray}[@]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
+      "if [[ \"\\${${1:myArray}[*]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
       "\techo 'array contains element'",
       "fi\n"
     ],
@@ -84,7 +84,7 @@
   },
   "array.delete-at": {
     "prefix": "array delete at",
-    "body": "unset ${1:myArray}[${2:index}]\n",
+    "body": "unset \"${1:myArray}[${2:index}]\"\n",
     "description": "delete element at index from array"
   },
   "array.delete": {
@@ -94,7 +94,7 @@
   },
   "array.filter": {
     "prefix": "array filter",
-    "body": "${1:filtered}=(\\$(for i in ${${2:myArray}[@]} ; do echo \\${i\\}; done | grep ${3|',\"|}${4:pattern}${3}))\n",
+    "body": "readarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\" ; do echo \"\\${i\\}\"; done | grep ${3|',\"|}${4:pattern}${3})\n",
     "description": "filter elements of an array based on given grep pattern"
   },
   "array.iterate": {
@@ -114,6 +114,14 @@
     "body": "${1:length}=${#${2:myArray}[@]}\n",
     "description": "length of an array"
   },
+  "array.print": {
+    "prefix": [
+      "array print",
+      "echo array"
+    ],
+    "body": "echo \"\\${${1:myArray}[@]}\"\n",
+    "description": "iterate array elements"
+  },
   "array.push": {
     "prefix": [
       "array push",
@@ -127,17 +135,25 @@
       "array slice",
       "array range"
     ],
-    "body": "${1:newArray}=\"${${2:myArray}[@]:${3:fromIndex}:${4:n}}\"\n",
+    "body": "${1:newArray}=\"${${2:myArray}[*]:${3:fromIndex}:${4:n}}\"\n",
     "description": "n elements of an array from specified index (zero based)"
   },
   "array.replace": {
     "prefix": "array replace",
-    "body": "${1:newArray}=${${2:myArray}[@]//${3:find}/${4:replace}}\n",
+    "body": "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n",
     "description": "find and replace elements in array using regex"
   },
   "array.reverse": {
     "prefix": "array reverse",
-    "body": "${1:reversedArray}=( \\$(echo \"\\${${2:array}[@]}\" | rev) )\n",
+    "body": [
+      "for((i=\\${#${1:myArray}[@]}-1;i>=0;i--)); do",
+      "\t${2:reversed}+=(\"\\${${1:myArray}[i]}\")",
+      "done",
+      "",
+      "unset \"${1:myArray}\" # optional",
+      "echo \"\\${${2:reversed}[@]}\"",
+      ""
+    ],
     "description": "reverse order of array elements"
   },
   "array.set-element-at": {
@@ -151,8 +167,10 @@
       "cmd failure check"
     ],
     "body": [
-      "if (( \\$? != 0 )); then",
-      "\t${1:echo \"Last command failed\"}",
+      "if ! ${1:command} >/dev/null 2>&1; then",
+      "\techo \"failed\"",
+      "else",
+      "\techo \"succeed\"",
       "fi\n"
     ],
     "description": "check if last command failed"
@@ -171,7 +189,7 @@
       "if cmd exists"
     ],
     "body": [
-      "if [ \\$(command -v ${1:command}) ]; then",
+      "if [ \"\\$(command -v ${1:command})\" ]; then",
       "\t${2:echo \"command \\\"${1:command}\\\" exists on system\"}",
       "fi\n"
     ],
@@ -209,8 +227,10 @@
       "cmd success check"
     ],
     "body": [
-      "if (( \\$? == 0 )); then",
-      "\t${1:echo \"Last command succeed\"}",
+      "if ${1:command} >/dev/null 2>&1; then",
+      "\techo \"succeed\"",
+      "else",
+      "\techo \"failed\"",
       "fi\n"
     ],
     "description": "check if last command succeed"
@@ -347,9 +367,9 @@
   "filesystem.file-read": {
     "prefix": "file read",
     "body": [
-      "cat \"${1|/path/to/file,${filePath}|}\" | while read ${2:line}; do",
-      "\t${3:echo \"\\${${2:line}\\}\"}",
-      "done\n"
+      "while IFS= read -r line; do",
+      "\techo \"\\$line\"",
+      "done < ${1|/path/ro/file,\"${inputFile}\"|}\n"
     ],
     "description": "read a file"
   },
@@ -384,8 +404,9 @@
     "prefix": "file write",
     "body": [
       "echo \"${1:sample header}\" > \"${2|/path/to/file,${pathToFile}|}\"",
-      "for ${3:line} in \\${${4:lines}[@]}; do",
-      "\techo \"\\${${3:line}\\}\" >> \"${2}\"",
+      "echo # Empty line",
+      "for ${3:line} in \"\\${${4:lines}[@]}\"; do",
+      "\techo \"\\${${3:line}\\}\" >> \"${2}\" # >> means append",
       "done\n"
     ],
     "description": "write to a file"
@@ -393,8 +414,8 @@
   "filesystem.files-iterate": {
     "prefix": "iterate files",
     "body": [
-      "# Make sure path ends with /",
-      "for file in ${1|'/path/to/files/',\"${pathToFiles}\"|}*.{jpg,png\\}; do",
+      "# Searching in the current directory",
+      "for file in ${1|*,*.{jpg\\,png}|}; do",
       "\t${2:echo \"\\${file\\}\"}",
       "done\n"
     ],
@@ -405,7 +426,7 @@
       "file find",
       "directory find"
     ],
-    "body": "${1:resultArray}=(\\$(find \"${2|/path/to/search,${pathToSearch}|}\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type ${4|f,d|} -name \"${5:criteria}\"))\n",
+    "body": "readarray -t resultArray < <(find \"/path/to/search\" -maxdepth 1 -type f -name \"criteria\")\n",
     "description": "find files (-type f) or directories (-type d) by name or pattern (*.jpg)"
   },
   "filesystem.if-directory-exists": {
@@ -507,15 +528,10 @@
     ],
     "description": "if path exists (file, directory, link...)"
   },
-  "filesystem.remove-files-newer-than": {
+  "filesystem.remove-files-older-newer-than": {
     "prefix": "remove old/new files/directories",
-    "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} | xargs rm -f\n",
+    "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} -delete\n",
     "description": "find and remove files(f)/directories(d) older(+)/newer(-) than x days"
-  },
-  "filesystem.remove-files-older-than": {
-    "prefix": "remove old files",
-    "body": "find \"${1|/path/to/directory,${pathToDirectory}|}\" -mtime +${2:days} | xargs rm -f\n",
-    "description": "find and remove files older than x days"
   },
   "float.if-equal": {
     "prefix": [
@@ -994,10 +1010,10 @@
       "# Usage: product int1 int2 ...",
       "function product () {",
       "\tlocal result=1",
-      "\tfor int in $@; do",
+      "\tfor int in \"$@\"; do",
       "\t\t((result *= int))",
       "\tdone",
-      "\techo \\${result\\}",
+      "\techo \"\\${result\\}\"",
       "}\n"
     ],
     "description": "calculate product of given integers"
@@ -1008,10 +1024,10 @@
       "# Usage: sum int1 int2 ...",
       "function sum () {",
       "\tlocal result=0",
-      "\tfor int in \\$@; do",
+      "\tfor int in \"\\$@\"; do",
       "\t\t((result += int))",
       "\tdone",
-      "\techo \\${result\\}",
+      "\techo \"\\${result\\}\"",
       "}\n"
     ],
     "description": "calculate sum of given integers"
@@ -1022,7 +1038,7 @@
       "# Usage: progressBar \"message\" currentStep totalSteps",
       "function progressBar() {",
       "\tlocal   bar='████████████████████'",
-      "\tlocal space='                    '",
+      "\tlocal space='....................'",
       "\tlocal wheel=('\\' '|' '/' '-')",
       "",
       "\tlocal msg=\"\\${1\\}\"",
@@ -1032,7 +1048,7 @@
       "\tlocal position=\\$((100 * current / total))",
       "\tlocal barPosition=\\$((position / 5))",
       "",
-      "\techo -ne \"\\r|\\${bar:0:\\$barPosition}\\${space:\\$barPosition:20}| \\${wheel[wheelIndex]} \\${position}% [ \\${msg} ] \"",
+      "\techo -ne \"\\r|\\${bar:0:\\$barPosition}\\$(tput dim)\\${space:\\$barPosition:20}\\$(tput sgr0)| \\${wheel[wheelIndex]} \\${position}% [ \\${msg} ] \"",
       "}\n"
     ],
     "description": "progress bar function"
@@ -1044,7 +1060,7 @@
       "function scan () {",
       "\tlocal openPortsArray=()",
       "\tfor ((port=\\${3\\}; port<=\\${4\\}; port++)); do",
-      "\t\t(echo >/dev/\\${1\\}/\\${2\\}/\\${port\\}) >/dev/null 2>&1 && openPortsArray+=(\"\\${port}\")",
+      "\t\t(echo >/dev/\"\\${1\\}\"/\"\\${2\\}\"/\"\\${port\\}\") >/dev/null 2>&1 && openPortsArray+=(\"\\${port}\")",
       "\tdone",
       "\techo \"\\${openPortsArray[@]}\"",
       "}\n"
@@ -1064,10 +1080,10 @@
       "\tlocal S=\\$((T%60))",
       "\tlocal result=\"\"",
       "",
-      "\t(( \\$D > 0 )) && result=\"\\${D}d \"",
-      "\t(( \\$H > 0 )) && result=\"\\${result}\\${H}h \"",
-      "\t(( \\$M > 0 )) && result=\"\\${result}\\${M}m \"",
-      "\t(( \\$S > 0 )) && result=\"\\${result}\\${S}s \"",
+      "\t(( D > 0 )) && result=\"\\${D}d \"",
+      "\t(( H > 0 )) && result=\"\\${result}\\${H}h \"",
+      "\t(( M > 0 )) && result=\"\\${result}\\${M}m \"",
+      "\t(( S > 0 )) && result=\"\\${result}\\${S}s \"",
       "\techo -e \"\\${result}\" | sed -e 's/[[:space:]]*\\$//'",
       "}\n"
     ],
@@ -1095,7 +1111,7 @@
       "\tfor (( i = 0; i < length; i++ )); do",
       "\t\tlocal c=\"\\${1:i:1}\"",
       "\t\tcase \"\\${c\\}\" in",
-      "\t\t\t[a-zA-Z0-9.~_-]) printf \"\\${c\\}\" ;;",
+      "\t\t\t[a-zA-Z0-9.~_-]) printf \"%s\" \"\\${c\\}\" ;;",
       "\t\t\t*) printf '%%%02X' \"'\\${c\\}\" ;;",
       "\t\tesac",
       "\tdone",
@@ -1112,8 +1128,7 @@
       "# Usage: versionCompare \"1.2.3\" \"1.1.7\"",
       "function versionCompare () {",
       "\tfunction subVersion () {",
-      "\t\ttemp=${1%%\".\"*} && indexOf=\\$(echo ${1%%\".\"*} | echo ${#temp})",
-      "\t\techo -e \"\\${1:0:indexOf}\"",
+      "\t\techo -e \"\\${1%%\".\"*}\"",
       "\t}",
       "\tfunction cutDot () {",
       "\t\tlocal offset=${#1}",
@@ -1123,16 +1138,20 @@
       "\tif [ -z \"\\${1\\}\" ] || [ -z \"\\${2\\}\" ]; then",
       "\t\techo \"=\" && exit 0",
       "\tfi",
-      "\tlocal v1=\\$(echo -e \"\\${1}\" | tr -d '[[:space:]]')",
-      "\tlocal v2=\\$(echo -e \"\\${2}\" | tr -d '[[:space:]]')",
-      "\tlocal v1Sub=\\$(subVersion \\$v1)",
-      "\tlocal v2Sub=\\$(subVersion \\$v2)",
+      "\tlocal v1",
+      "\tv1=\\$(echo -e \"\\${1}\" | tr -d '[:space:]')",
+      "\tlocal v2",
+      "\tv2=\\$(echo -e \"\\${2}\" | tr -d '[:space:]')",
+      "\tlocal v1Sub",
+      "\tv1Sub=\\$(subVersion \"\\$v1\")",
+      "\tlocal v2Sub",
+      "\tv2Sub=\\$(subVersion \"\\$v2\")",
       "\tif (( v1Sub > v2Sub )); then",
       "\t\techo \">\"",
       "\telif (( v1Sub < v2Sub )); then",
       "\t\techo \"<\"",
       "\telse",
-      "\t\tversionCompare \\$(cutDot \\$v1Sub \\$v1) \\$(cutDot \\$v2Sub \\$v2)",
+      "\t\tversionCompare \"\\$(cutDot \"\\$v1Sub\" \"\\$v1\")\" \"\\$(cutDot \"\\$v2Sub\" \"\\$v2\")\"",
       "\tfi",
       "}\n"
     ],
@@ -1261,7 +1280,7 @@
       "",
       "for ((${3:currentStep}=${4:1}; ${3} <= ${1}; ${3}++)); do",
       "\tsleep 0.1 # simulating one step of job",
-      "\tprogressBar \"Installing foo...\" \\${${3}\\} \\${${1}\\}",
+      "\tprogressBar \"Installing foo...\" \"\\${${3}\\}\" \"\\${${1}\\}\"",
       "done\n",
       "echo\n"
     ],
@@ -1271,7 +1290,7 @@
     "prefix": "fx scan local",
     "body": [
       "# Usage: scan proto host fromPort toPort",
-      "openPorts=( \\$(scan ${1|tcp,udp|} \"${2|localhost,127.0.0.1,::1|}\" ${3:fromPort} ${4:toPort}) )",
+      "readarray -t openPorts < <(scan ${1|tcp,udp|} \"${2|localhost,127.0.0.1,::1|}\" ${3:fromPort} ${4:toPort})",
       "${5:echo \"\\${openPorts[@]\\}\"}\n"
     ],
     "description": "call scan function to scan localhost over a port range"
@@ -1280,8 +1299,8 @@
     "prefix": "fx time format seconds",
     "body": [
       "# Usage: formatSeconds 70 -> 1m 10s",
-      "${1:result}=($(formatSeconds ${2:seconds}))",
-      "echo ${${1}[@]}\n"
+      "readarray -t ${1:result} < <(formatSeconds ${2:seconds})",
+      "echo \"${${1}[@]}\"\n"
     ],
     "description": "call formatSeconds function"
   },
@@ -1368,7 +1387,8 @@
   "function.return-value": {
     "prefix": [
       "function return value",
-      "func return value"
+      "func return value",
+      "func ret val"
     ],
     "body": "echo \"$?\"",
     "description": "last function/command return code"
@@ -1500,7 +1520,7 @@
     "prefix": "http cookie",
     "body": [
       "curl --request ${1|GET,POST,DELETE,PUT|} -sL \\",
-      "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${2|Shellman,Your custom user agent|}' \\",
       "\t--cookie ${3|'key=value',\"${key}=${value}\"|} \\",
       "\t--url ${4|'http://example.com',\"${url}\"|}\n"
     ],
@@ -1510,7 +1530,7 @@
     "prefix": "http download",
     "body": [
       "curl --request ${1|GET,POST|} -sL \\",
-      "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${2|Shellman,Your custom user agent|}' \\",
       "\t--output ${3|'/path/to/file',\"${pathToFile}\"|} \\",
       "\t--url ${4|'http://example.com/file.zip',\"${downloadUrl}\"|}\n"
     ],
@@ -1523,7 +1543,7 @@
     ],
     "body": [
       "curl --request ${1|GET,DELETE|} -sL \\",
-      "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${2|Shellman,Your custom user agent|}' \\",
       "\t--url ${3|'http://example.com',\"${url}\"|}\n"
     ],
     "description": "send http GET/DELETE request using curl"
@@ -1532,7 +1552,7 @@
     "prefix": "http header",
     "body": [
       "curl --request ${1|GET,POST,DELETE,PUT|} -sL \\",
-      "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${2|Shellman,Your custom user agent|}' \\",
       "\t--header ${3|'key: value',\"${key}\": \"${value}\"|} \\",
       "\t--url ${4|'http://example.com',\"${url}\"|}\n"
     ],
@@ -1542,7 +1562,7 @@
     "prefix": "http POST file",
     "body": [
       "curl --request POST -sL \\",
-      "\t--user-agent '${1|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${1|Shellman,Your custom user agent|}' \\",
       "\t--url ${2|'http://example.com',\"${url}\"|} \\",
       "\t--form ${3|'key=value',\"${key}\"=\"${value}\"|} \\",
       "\t--form ${4|'file=@/path/to/file',file=@\"${pathToFile}\"|}\n"
@@ -1556,7 +1576,7 @@
     ],
     "body": [
       "curl --request ${1|POST,PUT|} -sL \\",
-      "\t--user-agent '${2|Shellman,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/58.0.3029.110 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\\, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393|}' \\",
+      "\t--user-agent '${2|Shellman,Your custom user agent|}' \\",
       "\t--url ${3|'http://example.com',\"${url}\"|} \\",
       "\t--data ${4|'key=value',\"${key}\"=\"${value}\"|} \n"
     ],
@@ -1566,7 +1586,7 @@
     "prefix": "input password",
     "body": [
       "echo \"${1:Please enter your password: }\"",
-      "read -s ${2:password}",
+      "read -rs ${2:password}",
       "${3:echo \"\\${password\\}\"}\n"
     ],
     "description": "get text as input from user without showing characters"
@@ -1577,7 +1597,7 @@
       "ask question"
     ],
     "body": [
-      "read -ep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
+      "read -rep \"${1:Question here? }\" -i \"${2:Default answer}\" answer",
       "${3:echo \"\\${answer\\}\"}\n"
     ],
     "description": "get text as input from user"
@@ -1954,11 +1974,6 @@
     ],
     "description": "parse command line arguments (flags/switches)"
   },
-  "misc.echo-array": {
-    "prefix": "echo array",
-    "body": "echo \\${${1:myArray}[@]}\n",
-    "description": "print array elements"
-  },
   "misc.echo-text": {
     "prefix": [
       "echo text",
@@ -1972,7 +1987,7 @@
       "echo variable",
       "print variable"
     ],
-    "body": "echo \"\\${${1|result,variable,X|}\\}\"\n",
+    "body": "echo \"\\${${1|result,variable|}\\}\"\n",
     "description": "print text, variable or both"
   },
   "misc.exit": {
@@ -2111,19 +2126,19 @@
   "process.process-id": {
     "prefix": "process ID(s)",
     "body": [
-      "${1:processIDsArray}=(\\$(pgrep ${2:processName}))",
+      "readarray -t ${1:processIDsArray} < <(pgrep ${2|processName, \"${processName}\"|})",
       "${3:echo \"\\${${1}[@]\\}\"}\n"
     ],
     "description": "find process ID(s) aka PIDs"
   },
   "process.process-instances": {
     "prefix": "process instances",
-    "body": "${1:processInstances}=\\$(ps -A | grep \"\\${${2:processName}\\}\")\n",
+    "body": "${1:processInstances}=\\$(pgrep -l \"\\${${2:processName}\\}\")\n",
     "description": "list processes"
   },
   "process.process-kill": {
     "prefix": "process kill",
-    "body": "sudo kill -9 \\$(pgrep ${1:processName})\n",
+    "body": "sudo kill -9 \"\\$(pgrep ${1:processName})\"\n",
     "description": "kill process by name"
   },
   "process.process-list": {
@@ -2254,7 +2269,7 @@
   },
   "string.trim-all": {
     "prefix": "string trim all",
-    "body": "${1:trimmed}=\\$(echo -e \"\\${${2:string}}\" | tr -d '[[:space:]]')\n",
+    "body": "${1:trimmed}=\\$(echo -e \"\\${${2:string}}\" | tr -d '[:space:]')\n",
     "description": "remove all white space(s)"
   },
   "string.trim-left": {
@@ -2315,7 +2330,7 @@
   "system.memory-info": {
     "prefix": "system memory info",
     "body": [
-      "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)",
+      "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(grep '${1}' < /proc/meminfo | awk '{print \\$2}' | head -n 1)",
       "${2:echo \"\\${sysMemory${1}\\}\"}\n"
     ],
     "description": "system memory information in kilobytes (KB)"
@@ -2370,7 +2385,7 @@
       "service manage",
       "systemd manage"
     ],
-    "body": "sudo systemctl ${1|enable,disable,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|}\n",
+    "body": "sudo systemctl ${1|enable,enable --now,disable,disable --now,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|} # use '--user' for user services\n",
     "description": "manage service operations"
   },
   "system.uptime-seconds": {
@@ -2410,7 +2425,7 @@
     "prefix": "time now UTC",
     "body": [
       "${1:timeNowUTC}=\\$(date -u +%R)",
-      "${2:echo \\${${1}\\}}\n"
+      "${2:echo \"\\${${1}\\}}\"\n"
     ],
     "description": "current UTC time"
   },

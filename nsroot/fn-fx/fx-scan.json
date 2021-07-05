@@ -2,7 +2,7 @@
   "prefix": "fx scan local",
   "body": [
     "# Usage: scan proto host fromPort toPort",
-    "openPorts=( \\$(scan ${1|tcp,udp|} \"${2|localhost,127.0.0.1,::1|}\" ${3:fromPort} ${4:toPort}) )",
+    "readarray -t openPorts < <(scan ${1|tcp,udp|} \"${2|localhost,127.0.0.1,::1|}\" ${3:fromPort} ${4:toPort})",
     "${5:echo \"\\${openPorts[@]\\}\"}\n"
   ],
   "description": "call scan function to scan localhost over a port range"

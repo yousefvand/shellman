@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.6.0
+
+- `shellcheck` compatible (99.99%).
+- Added `array print` snippet.
+
 ## 5.5.1
 
 - `build.go` now generates `COMMANDS.md` as well.

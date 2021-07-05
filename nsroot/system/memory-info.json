@@ -1,7 +1,7 @@
 {
   "prefix": "system memory info",
   "body": [
-    "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(cat /proc/meminfo | grep '${1}' | awk '{print \\$2}' | head -n 1)",
+    "sysMemory${1|MemTotal,MemFree,MemAvailable,Cached,Buffers,Active,Inactive,SwapTotal,SwapFree,SwapCached|}=\\$(grep '${1}' < /proc/meminfo | awk '{print \\$2}' | head -n 1)",
     "${2:echo \"\\${sysMemory${1}\\}\"}\n"
   ],
   "description": "system memory information in kilobytes (KB)"

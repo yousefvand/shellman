@@ -4,8 +4,10 @@
     "cmd success check"
   ],
   "body": [
-    "if (( \\$? == 0 )); then",
-    "\t${1:echo \"Last command succeed\"}",
+    "if ${1:command} >/dev/null 2>&1; then",
+    "\techo \"succeed\"",
+    "else",
+    "\techo \"failed\"",
     "fi\n"
   ],
   "description": "check if last command succeed"

@@ -1,7 +1,8 @@
 {
   "prefix": [
     "function return value",
-    "func return value"
+    "func return value",
+    "func ret val"
   ],
   "body": "echo \"$?\"",
   "description": "last function/command return code"

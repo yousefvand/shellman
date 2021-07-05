@@ -1,8 +1,8 @@
 {
   "prefix": "iterate files",
   "body": [
-    "# Make sure path ends with /",
-    "for file in ${1|'/path/to/files/',\"${pathToFiles}\"|}*.{jpg,png\\}; do",
+    "# Searching in the current directory",
+    "for file in ${1|*,*.{jpg\\,png}|}; do",
     "\t${2:echo \"\\${file\\}\"}",
     "done\n"
   ],

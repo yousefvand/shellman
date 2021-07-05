@@ -1,7 +1,7 @@
 {
   "prefix": "array contains",
   "body": [
-    "if [[ \"\\${${1:myArray}[@]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
+    "if [[ \"\\${${1:myArray}[*]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
     "\techo 'array contains element'",
     "fi\n"
   ],

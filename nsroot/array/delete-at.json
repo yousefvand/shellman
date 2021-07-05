@@ -1,5 +1,5 @@
 {
   "prefix": "array delete at",
-  "body": "unset ${1:myArray}[${2:index}]\n",
+  "body": "unset \"${1:myArray}[${2:index}]\"\n",
   "description": "delete element at index from array"
 }

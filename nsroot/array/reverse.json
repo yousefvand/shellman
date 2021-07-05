@@ -1,5 +1,13 @@
 {
   "prefix": "array reverse",
-  "body": "${1:reversedArray}=( \\$(echo \"\\${${2:array}[@]}\" | rev) )\n",
+  "body": [
+    "for((i=\\${#${1:myArray}[@]}-1;i>=0;i--)); do",
+    "\t${2:reversed}+=(\"\\${${1:myArray}[i]}\")",
+    "done",
+    "",
+    "unset \"${1:myArray}\" # optional",
+    "echo \"\\${${2:reversed}[@]}\"",
+    ""
+  ],
   "description": "reverse order of array elements"
 }

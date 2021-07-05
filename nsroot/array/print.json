@@ -1,0 +1,8 @@
+{
+  "prefix": [
+    "array print",
+    "echo array"
+  ],
+  "body": "echo \"\\${${1:myArray}[@]}\"\n",
+  "description": "iterate array elements"
+}

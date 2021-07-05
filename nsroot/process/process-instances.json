@@ -1,5 +1,5 @@
 {
   "prefix": "process instances",
-  "body": "${1:processInstances}=\\$(ps -A | grep \"\\${${2:processName}\\}\")\n",
+  "body": "${1:processInstances}=\\$(pgrep -l \"\\${${2:processName}\\}\")\n",
   "description": "list processes"
 }
