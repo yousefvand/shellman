@@ -280,6 +280,10 @@
 
   - [git clone branch](#git-clone-branch)
 
+  - [git clone branch https](#git-clone-branch-https)
+
+  - [git clone https](#git-clone-https)
+
   - [git commit](#git-commit)
 
   - [git commit list notPushed](#git-commit-list-notPushed)
@@ -1086,11 +1090,19 @@ revert tracked changes [&uarr;](#Commands)
 
 ## git clone
 
-clone remote repository to local machine. [&uarr;](#Commands)
+clone remote repository to local machine over SSH. [&uarr;](#Commands)
 
 ## git clone branch
 
-clone a remote branch to local machine. [&uarr;](#Commands)
+clone a remote branch to local machine over SSH. [&uarr;](#Commands)
+
+## git clone branch https
+
+clone a remote branch to local machine over HTTPS. [&uarr;](#Commands)
+
+## git clone https
+
+clone remote repository to local machine over HTTPS. [&uarr;](#Commands)
 
 ## git commit
 

@@ -1,0 +1,5 @@
+{
+  "prefix": "git clone branch https",
+  "body": "git clone -b ${1:branchName} git@${2:github.com}:${3:user}/${4:repository}.git\n",
+  "description": "clone a remote branch to local machine over HTTPS."
+}
