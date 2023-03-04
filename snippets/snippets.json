@@ -1493,15 +1493,15 @@
     "body": "git remote\n",
     "description": "list all remotes"
   },
+  "git.remote-url-add": {
+    "prefix": "git remote urlAdd",
+    "body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
+    "description": "add remote url"
+  },
   "git.remote-url-change": {
     "prefix": "git remote urlChange",
     "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
     "description": "change remote url"
-  },
-  "git.remote-urlAdd": {
-    "prefix": "git remote urlAdd",
-    "body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "add remote url"
   },
   "git.tag-commit": {
     "prefix": [

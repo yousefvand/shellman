@@ -302,9 +302,9 @@
 
   - [git remote list](#git-remote-list)
 
-  - [git remote urlChange](#git-remote-urlChange)
-
   - [git remote urlAdd](#git-remote-urlAdd)
+
+  - [git remote urlChange](#git-remote-urlChange)
 
   - [git tag commit , git commit tag](#git-tag-commit-,-git-commit-tag)
 
@@ -1140,13 +1140,13 @@ create a patch from changes [&uarr;](#Commands)
 
 list all remotes [&uarr;](#Commands)
 
-## git remote urlChange
-
-change remote url [&uarr;](#Commands)
-
 ## git remote urlAdd
 
 add remote url [&uarr;](#Commands)
+
+## git remote urlChange
+
+change remote url [&uarr;](#Commands)
 
 ## git tag commit , git commit tag
 
