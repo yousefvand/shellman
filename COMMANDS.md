@@ -302,9 +302,13 @@
 
   - [git remote list](#git-remote-list)
 
-  - [git remote urlAdd](#git-remote-urlAdd)
+  - [git remote urlAdd , git remote url add , git remote urlAdd ssh , git remote url add ssh](#git-remote-urlAdd-,-git-remote-url-add-,-git-remote-urlAdd-ssh-,-git-remote-url-add-ssh)
 
-  - [git remote urlChange](#git-remote-urlChange)
+  - [git remote urlAdd https , git remote url add https](#git-remote-urlAdd-https-,-git-remote-url-add-https)
+
+  - [git remote urlChange , git remote url change , git remote urlChange ssh , git remote url change ssh](#git-remote-urlChange-,-git-remote-url-change-,-git-remote-urlChange-ssh-,-git-remote-url-change-ssh)
+
+  - [git remote urlChange https , git remote url change https](#git-remote-urlChange-https-,-git-remote-url-change-https)
 
   - [git tag commit , git commit tag](#git-tag-commit-,-git-commit-tag)
 
@@ -1140,13 +1144,21 @@ create a patch from changes [&uarr;](#Commands)
 
 list all remotes [&uarr;](#Commands)
 
-## git remote urlAdd
+## git remote urlAdd , git remote url add , git remote urlAdd ssh , git remote url add ssh
 
-add remote url [&uarr;](#Commands)
+add remote url using SSH [&uarr;](#Commands)
 
-## git remote urlChange
+## git remote urlAdd https , git remote url add https
 
-change remote url [&uarr;](#Commands)
+add remote url using HTTPS [&uarr;](#Commands)
+
+## git remote urlChange , git remote url change , git remote urlChange ssh , git remote url change ssh
+
+change remote url using SSH [&uarr;](#Commands)
+
+## git remote urlChange https , git remote url change https
+
+change remote url using HTTPS [&uarr;](#Commands)
 
 ## git tag commit , git commit tag
 

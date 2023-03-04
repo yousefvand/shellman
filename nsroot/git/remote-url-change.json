@@ -1,5 +1,10 @@
 {
-  "prefix": "git remote urlChange",
-  "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-  "description": "change remote url"
+  "prefix":  [
+    "git remote urlChange",
+    "git remote url change",
+    "git remote urlChange ssh",
+    "git remote url change ssh"
+  ],
+  "body": "git remote set-url origin git@${1:github.com}:${2:user}/${3:repository}.git\n",
+  "description": "change remote url using SSH"
 }
