@@ -1,0 +1,10 @@
+{
+  "prefix": [
+    "git remote urlAdd",
+    "git remote url add",
+    "git remote urlAdd ssh",
+    "git remote url add ssh"
+  ],
+  "body": "git remote add origin git@${1:github.com}:${2:user}/${3:repository}.git\n",
+  "description": "add remote url using SSH"
+}

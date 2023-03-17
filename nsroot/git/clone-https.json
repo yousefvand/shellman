@@ -1,0 +1,5 @@
+{
+  "prefix": "git clone https",
+  "body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
+  "description": "clone remote repository to local machine over HTTPS."
+}

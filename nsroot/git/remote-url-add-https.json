@@ -1,0 +1,5 @@
+{
+  "prefix": ["git remote urlAdd https", "git remote url add https"],
+  "body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
+  "description": "add remote url using HTTPS"
+}

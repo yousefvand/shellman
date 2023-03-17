@@ -33,7 +33,7 @@ Bump version in `package.json` file according to [SemVer](https://semver.org).
 
 ## Testing changes
 
-First disable `Shellman` extension. Your compiled version if snippets is in file `snippets/snippets`. Copy all of contents of this file. In vscode from main mneu go to:
+First disable `Shellman` extension. Your compiled version if snippets is in file `snippets/snippets`. Copy all of contents of this file. In vscode from main menu go to:
 
 ```
 File -> Preferences -> User Snippets
@@ -41,4 +41,4 @@ File -> Preferences -> User Snippets
 
 Select `shellscript.json` from drop down menu. Delete all file contents and paste `snippets/snippets` content there and save the file.
 
-Now you can use `test,sh` at project root to test your changes.
+Now you can use `test.sh` at project root to test your changes.

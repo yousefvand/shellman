@@ -280,6 +280,10 @@
 
   - [git clone branch](#git-clone-branch)
 
+  - [git clone branch https](#git-clone-branch-https)
+
+  - [git clone https](#git-clone-https)
+
   - [git commit](#git-commit)
 
   - [git commit list notPushed](#git-commit-list-notPushed)
@@ -298,9 +302,13 @@
 
   - [git remote list](#git-remote-list)
 
-  - [git remote urlChange](#git-remote-urlChange)
+  - [git remote urlAdd , git remote url add , git remote urlAdd ssh , git remote url add ssh](#git-remote-urlAdd-,-git-remote-url-add-,-git-remote-urlAdd-ssh-,-git-remote-url-add-ssh)
 
-  - [git remote urlAdd](#git-remote-urlAdd)
+  - [git remote urlAdd https , git remote url add https](#git-remote-urlAdd-https-,-git-remote-url-add-https)
+
+  - [git remote urlChange , git remote url change , git remote urlChange ssh , git remote url change ssh](#git-remote-urlChange-,-git-remote-url-change-,-git-remote-urlChange-ssh-,-git-remote-url-change-ssh)
+
+  - [git remote urlChange https , git remote url change https](#git-remote-urlChange-https-,-git-remote-url-change-https)
 
   - [git tag commit , git commit tag](#git-tag-commit-,-git-commit-tag)
 
@@ -1086,11 +1094,19 @@ revert tracked changes [&uarr;](#Commands)
 
 ## git clone
 
-clone remote repository to local machine. [&uarr;](#Commands)
+clone remote repository to local machine over SSH. [&uarr;](#Commands)
 
 ## git clone branch
 
-clone a remote branch to local machine. [&uarr;](#Commands)
+clone a remote branch to local machine over SSH. [&uarr;](#Commands)
+
+## git clone branch https
+
+clone a remote branch to local machine over HTTPS. [&uarr;](#Commands)
+
+## git clone https
+
+clone remote repository to local machine over HTTPS. [&uarr;](#Commands)
 
 ## git commit
 
@@ -1128,13 +1144,21 @@ create a patch from changes [&uarr;](#Commands)
 
 list all remotes [&uarr;](#Commands)
 
-## git remote urlChange
+## git remote urlAdd , git remote url add , git remote urlAdd ssh , git remote url add ssh
 
-change remote url [&uarr;](#Commands)
+add remote url using SSH [&uarr;](#Commands)
 
-## git remote urlAdd
+## git remote urlAdd https , git remote url add https
 
-add remote url [&uarr;](#Commands)
+add remote url using HTTPS [&uarr;](#Commands)
+
+## git remote urlChange , git remote url change , git remote urlChange ssh , git remote url change ssh
+
+change remote url using SSH [&uarr;](#Commands)
+
+## git remote urlChange https , git remote url change https
+
+change remote url using HTTPS [&uarr;](#Commands)
 
 ## git tag commit , git commit tag
 

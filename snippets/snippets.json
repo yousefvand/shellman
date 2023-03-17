@@ -1428,15 +1428,25 @@
     "body": "git checkout .\n",
     "description": "revert tracked changes"
   },
+  "git.clone-branch-https": {
+    "prefix": "git clone branch https",
+    "body": "git clone -b ${1:branchName} git@${2:github.com}:${3:user}/${4:repository}.git\n",
+    "description": "clone a remote branch to local machine over HTTPS."
+  },
   "git.clone-branch": {
     "prefix": "git clone branch",
-    "body": "git clone -b ${1:branchName} https://${2:github.com}/${3:user}/${4:repository}.git\n",
-    "description": "clone a remote branch to local machine."
+    "body": "git clone -b ${1:branchName} git@${2:github.com}:${3:user}/${4:repository}.git\n",
+    "description": "clone a remote branch to local machine over SSH."
+  },
+  "git.clone-https": {
+    "prefix": "git clone https",
+    "body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
+    "description": "clone remote repository to local machine over HTTPS."
   },
   "git.clone": {
     "prefix": "git clone",
-    "body": "git clone https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "clone remote repository to local machine."
+    "body": "git clone git@${1:github.com}:${2:user}/${3:repository}.git\n",
+    "description": "clone remote repository to local machine over SSH."
   },
   "git.commit-list-notpushed": {
     "prefix": "git commit list notPushed",
@@ -1483,15 +1493,41 @@
     "body": "git remote\n",
     "description": "list all remotes"
   },
-  "git.remote-url-change": {
-    "prefix": "git remote urlChange",
-    "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "change remote url"
-  },
-  "git.remote-urlAdd": {
-    "prefix": "git remote urlAdd",
+  "git.remote-url-add-https": {
+    "prefix": [
+      "git remote urlAdd https",
+      "git remote url add https"
+    ],
     "body": "git remote add origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
-    "description": "add remote url"
+    "description": "add remote url using HTTPS"
+  },
+  "git.remote-url-add": {
+    "prefix": [
+      "git remote urlAdd",
+      "git remote url add",
+      "git remote urlAdd ssh",
+      "git remote url add ssh"
+    ],
+    "body": "git remote add origin git@${1:github.com}:${2:user}/${3:repository}.git\n",
+    "description": "add remote url using SSH"
+  },
+  "git.remote-url-change-https": {
+    "prefix": [
+      "git remote urlChange https",
+      "git remote url change https"
+    ],
+    "body": "git remote set-url origin https://${1:github.com}/${2:user}/${3:repository}.git\n",
+    "description": "change remote url using HTTPS"
+  },
+  "git.remote-url-change": {
+    "prefix": [
+      "git remote urlChange",
+      "git remote url change",
+      "git remote urlChange ssh",
+      "git remote url change ssh"
+    ],
+    "body": "git remote set-url origin git@${1:github.com}:${2:user}/${3:repository}.git\n",
+    "description": "change remote url using SSH"
   },
   "git.tag-commit": {
     "prefix": [
