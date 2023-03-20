@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.6.1
+
+- Fixed #47 (thanks to Haltarys)
+
 ## 5.6.0
 
 - `shellcheck` compatible (99.99%).
