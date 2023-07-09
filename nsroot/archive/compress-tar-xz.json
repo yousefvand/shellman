@@ -3,6 +3,6 @@
 		"archive compress tar.xz",
 		"archive tar.xz"
 	],
-	"body": "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
-	"description": "compress file/folder to a .tar.xz file"
+    "body": "tar ${1|-cJf,--create --xz --file|} ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${3|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
+	"description": "compress file/folder to the specified .tar.xz file"
 }

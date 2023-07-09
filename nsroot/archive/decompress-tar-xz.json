@@ -3,6 +3,6 @@
     "archive decompress tar.xz",
     "decompress tar.xz"
   ],
-  "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
-  "description": "decompress a .tar.xz file to specified path"
+  "body": "tar ${1|-C,--directory|} ${2|/extract/to/path, \"${extractToPath}\"|} ${3|-xf,--extract --file|} ${4|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
+  "description": "decompress a .tar.xz file to the specified path"
 }
