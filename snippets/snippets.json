@@ -5,7 +5,7 @@
       "archive tar.gz"
     ],
     "body": "tar ${1|-czvf,--create --zip --verbose --file|} ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${3|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
-    "description": "compress file/folder to the specified .tar.gz file"
+    "description": "compress file/folder to a .tar.gz file"
   },
   "archive.compress-tar-xz": {
     "prefix": [
@@ -13,7 +13,7 @@
       "archive tar.xz"
     ],
     "body": "tar ${1|-cJf,--create --xz --file|} ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${3|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
-    "description": "compress file/folder to to the specified .tar.xz file"
+    "description": "compress file/folder to a .tar.xz file"
   },
   "archive.compress-zip": {
     "prefix": [
@@ -21,7 +21,7 @@
       "archive zip"
     ],
     "body": "zip ${1|-rq,--recurse-paths --quiet|} ${2|/path/to/archive, \"${pathToArchive}\"|}.zip ${3|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
-    "description": "compress file/folder to to the specified .zip file"
+    "description": "compress file/folder to a .zip file"
   },
   "archive.decompress-tar-gz": {
     "prefix": [
@@ -29,7 +29,7 @@
       "decompress tar.gz"
     ],
     "body": "tar ${1|-C,--directory|} ${2|/extract/to/path, \"${extractToPath}\"|} ${3|-xzvf,--extract --gzip --verbose --file|} ${4|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n",
-    "description": "decompress the specified .tar.gz file to specified path"
+    "description": "decompress a .tar.gz file to specified path"
   },
   "archive.decompress-tar-xz": {
     "prefix": [
@@ -37,7 +37,7 @@
       "decompress tar.xz"
     ],
     "body": "tar ${1|-C,--directory|} ${2|/extract/to/path, \"${extractToPath}\"|} ${3|-xf,--extract --file|} ${4|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
-    "description": "decompress the specified .tar.xz file to specified path"
+    "description": "decompress a .tar.xz file to specified path"
   },
   "archive.decompress-unzip": {
     "prefix": [
@@ -45,7 +45,7 @@
       "archive unzip"
     ],
     "body": "unzip -q ${2|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
-    "description": "decompress the specified .zip file to specified path"
+    "description": "decompress a .zip file to specified path"
   },
   "array.all-elements": {
     "prefix": "array all",
