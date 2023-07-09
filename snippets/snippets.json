@@ -4,7 +4,7 @@
       "archive compress tar.gz",
       "archive tar.gz"
     ],
-    "body": "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
+    "body": "tar ${1|-czvf,--create --zip --verbose --file|} ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${3|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
     "description": "compress file/folder to a .tar.gz file"
   },
   "archive.compress-tar-xz": {
@@ -12,7 +12,7 @@
       "archive compress tar.xz",
       "archive tar.xz"
     ],
-    "body": "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
+    "body": "tar ${1|-cJf,--create --xz --file|} ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${3|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
     "description": "compress file/folder to a .tar.xz file"
   },
   "archive.compress-zip": {
@@ -20,7 +20,7 @@
       "archive compress .zip",
       "archive zip"
     ],
-    "body": "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
+    "body": "zip ${1|-rq,--recurse-paths --quiet|} ${2|/path/to/archive, \"${pathToArchive}\"|}.zip ${3|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
     "description": "compress file/folder to a .zip file"
   },
   "archive.decompress-tar-gz": {
@@ -28,7 +28,7 @@
       "archive decompress tar.gz",
       "decompress tar.gz"
     ],
-    "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xzvf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n",
+    "body": "tar ${1|-C,--directory|} ${2|/extract/to/path, \"${extractToPath}\"|} ${3|-xzvf,--extract --gzip --verbose --file|} ${4|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n",
     "description": "decompress a .tar.gz file to specified path"
   },
   "archive.decompress-tar-xz": {
@@ -36,7 +36,7 @@
       "archive decompress tar.xz",
       "decompress tar.xz"
     ],
-    "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
+    "body": "tar ${1|-C,--directory|} ${2|/extract/to/path, \"${extractToPath}\"|} ${3|-xf,--extract --file|} ${4|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
     "description": "decompress a .tar.xz file to specified path"
   },
   "archive.decompress-unzip": {
@@ -44,7 +44,7 @@
       "archive decompress .zip",
       "archive unzip"
     ],
-    "body": "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
+    "body": "unzip -q ${2|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
     "description": "decompress a .zip file to specified path"
   },
   "array.all-elements": {
