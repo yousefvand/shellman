@@ -1,5 +1,5 @@
 {
   "prefix": "array all",
-  "body": "${0:echo }\"${${1:myArray}[@]}\"",
-  "description": "access all array elements"
+  "body": "${1:echo }\"${${2:array}[@]}\"\n",
+  "description": "get all array elements"
 }

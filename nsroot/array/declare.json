@@ -1,11 +1,5 @@
 {
   "prefix": "array declare",
-  "body": [
-    "${1:myArray}=(",
-    "\t'${2:constant}'",
-    "\t\"${3:${variable\\}}\"",
-    "\t'${4:another constant}'",
-    ")\n"
-  ],
+  "body": "${1:array}=(\"${2:element}\"$0)\n",
   "description": "declare an array"
 }

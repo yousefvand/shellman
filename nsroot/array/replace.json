@@ -1,5 +1,5 @@
 {
   "prefix": "array replace",
-  "body": "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n",
-  "description": "find and replace elements in array using regex"
+  "body": "${1:newArray}=${${2:array}[*]//${3:pattern}/${4:replacement}}\n",
+  "description": "find and replace elements in array using specific regex"
 }

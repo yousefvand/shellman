@@ -4,9 +4,9 @@
     "array forEach"
   ],
   "body": [
-    "for item in \"${${1:myArray}[@]}\"; do",
-    "\t${2:echo \"\\${item\\}\"}",
+    "for item in \"${${1:array}[@]}\"; do\n",
+    "\t${2:echo \"\\${item\\}\"}\n",
     "done\n"
   ],
-  "description": "iterate array elements"
+  "description": "iterate all array elements"
 }

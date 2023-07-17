@@ -1,9 +1,9 @@
 {
   "prefix": "array contains",
   "body": [
-    "if [[ \"\\${${1:myArray}[*]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
-    "\techo 'array contains element'",
+    "if [[ \"\\${${1:array}[*]}\" =~ ${2:element} ]]; then",
+    "\t${3:echo \"array contains element\"}",
     "fi\n"
   ],
-  "description": "check if the array contains an element"
+  "description": "check if an array contains a specific element"
 }

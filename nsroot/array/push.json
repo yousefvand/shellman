@@ -3,6 +3,6 @@
     "array push",
     "array add"
   ],
-  "body": "${1:myArray}+=('${2:newItem}')\n",
-  "description": "push new item to the end of array"
+  "body": "${1:array}+=(\"${2:element}\")\n",
+  "description": "push a specific element to the end of array"
 }

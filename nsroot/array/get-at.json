@@ -1,0 +1,5 @@
+{
+  "prefix": "array get at",
+  "body": "${1:echo }\"${${2:array}[${3:index}]}\"\n",
+  "description": "get element at a specific zero based index from an array"
+}

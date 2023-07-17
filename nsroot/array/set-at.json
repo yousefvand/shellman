@@ -1,0 +1,5 @@
+{
+  "prefix": "array set at",
+  "body": "${1:array}[${2:index}]=\"${3:value}\"\n",
+  "description": "set an array element at a specific index"
+}

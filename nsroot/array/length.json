@@ -1,5 +1,5 @@
 {
   "prefix": "array length",
-  "body": "${1:length}=${#${2:myArray}[@]}\n",
-  "description": "length of an array"
+  "body": "${0:echo }${#${1:array}[@]}\n",
+  "description": "get an array length"
 }

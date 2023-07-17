@@ -1,5 +1,5 @@
 {
   "prefix": "array concat",
   "body": "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
-  "description": "concatenate two arrays"
+  "description": "concatenate two specific arrays"
 }

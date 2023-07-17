@@ -1,5 +1,0 @@
-{
-  "prefix": "array at index",
-  "body": "${0:echo }\"${${1:myArray}[${2:index}]}\"",
-  "description": "retrieve element from array at specified index (zero based)"
-}

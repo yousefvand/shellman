@@ -3,6 +3,6 @@
     "array print",
     "echo array"
   ],
-  "body": "echo \"\\${${1:myArray}[@]}\"\n",
+  "body": "echo \"\\${${1:array}[@]}\"\n",
   "description": "iterate array elements"
 }
