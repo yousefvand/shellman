@@ -3,6 +3,6 @@
     "archive compress .zip",
     "archive zip"
   ],
-  "body": "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
+  "body": "zip ${1|--recurse-paths --quiet,-rq|} \"${2:/path/to/archive}.zip\" \"${3:/path/to/directory-or-file}\"\n",
   "description": "compress file/folder to a .zip file"
 }

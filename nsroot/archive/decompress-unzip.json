@@ -3,6 +3,6 @@
     "archive decompress .zip",
     "archive unzip"
   ],
-  "body": "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
+  "body": "unzip -q \"${1:/path/to/archive}.zip\" -d \"${2:/extract/to/path}\"\n",
   "description": "decompress a .zip file to specified path"
 }
