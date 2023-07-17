@@ -4,5 +4,5 @@
     "decompress tar.gz"
   ],
   "body": "tar ${1|--directory,-C|} \"${2:/extract/to/path}\" ${3|--extract --gzip --verbose --file,-xzvf|} \"${4:/path/to/archive}.tar.gz\"\n",
-  "description": "decompress a .tar.gz file to specified path"
+  "description": "decompress a .tar.gz file to a specific path"
 }

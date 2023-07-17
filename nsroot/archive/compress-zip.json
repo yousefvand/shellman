@@ -4,5 +4,5 @@
     "archive zip"
   ],
   "body": "zip ${1|--recurse-paths --quiet,-rq|} \"${2:/path/to/archive}.zip\" \"${3:/path/to/directory-or-file}\"\n",
-  "description": "compress file/folder to a .zip file"
+  "description": "compress file/folder to a specific .zip file"
 }

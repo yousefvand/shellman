@@ -4,5 +4,5 @@
 		"archive tar.xz"
 	],
 	"body": "tar ${1|--create --xz --file,-cJf|} \"${2:/path/to/archive}.tar.xz\" \"${3:/path/to/directory-or-file}\"\n",
-	"description": "compress file/folder to a .tar.xz file"
+	"description": "compress file/folder to a specific .tar.xz file"
 }
