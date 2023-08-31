@@ -1,0 +1,5 @@
+{
+  "prefix": "os is",
+  "body": "OS=$(awk -F'=' '/^ID=/ { gsub(\"\\\"\",\"\",\\$2); print tolower(\\$2) }' /etc/*-release 2> /dev/null)\n",
+  "description": "The OS running on this machine"
+}

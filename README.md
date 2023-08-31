@@ -40,7 +40,7 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ### Latest release Notes
 
-## 5.6.1
+## 5.7.0
 
-- `shellcheck` compatible (99.99%).
-- Added `array print` snippet.
+- `shellcheck` compatible (99.99%)
+- Fixes issue #48

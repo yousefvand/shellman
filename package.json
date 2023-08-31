@@ -2,7 +2,7 @@
   "name": "shellman",
   "displayName": "shellman",
   "description": "Shell script snippet",
-  "version": "5.6.1",
+  "version": "5.7.0",
   "publisher": "Remisa",
   "icon": "images/icon.png",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -38,7 +38,7 @@
     "spellcheck": "npx cspell ./**/*"
   },
   "dependencies": {
-    "ovsx": "0.8.0",
+    "ovsx": "0.8.3",
     "vsce": "^2.15.0"
   }
 }

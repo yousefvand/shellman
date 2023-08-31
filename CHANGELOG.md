@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.7.0
+
+Fixes issue #48
+
 ## 5.6.1
 
 - Fixed #47 (thanks to Haltarys)

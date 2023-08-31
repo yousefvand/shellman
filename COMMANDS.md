@@ -450,6 +450,8 @@
 
   - [exit code](#exit-code)
 
+  - [os is](#os-is)
+
   - [region , section](#region-,-section)
 
   - [shebang , bash , first line](#shebang-,-bash-,-first-line)
@@ -1411,6 +1413,10 @@ print text, variable or both [&uarr;](#Commands)
 ## exit code
 
 provide an exit code on error [&uarr;](#Commands)
+
+## os is
+
+The OS running on this machine [&uarr;](#Commands)
 
 ## region , section
 
