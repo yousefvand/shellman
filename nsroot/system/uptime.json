@@ -1,8 +1,8 @@
 {
   "prefix": "system uptime",
   "body": [
-    "${1:systemUptime}=\\$(uptime ${2|-p,-s|})",
+    "${1:Uptime}=\\$(uptime -p)",
     "${3:echo \"\\${${1}\\}\"}\n"
-  ],
-  "description": "system uptime. -p: --pretty, -s: since"
+          ],
+          "description": "system uptime. -p: --pretty, -s: since"
 }

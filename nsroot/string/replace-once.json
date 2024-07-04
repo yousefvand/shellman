@@ -1,0 +1,5 @@
+{
+  "prefix": "string replace once",
+  "body": "${1:result}=\"${${2:string}/\\$${3:old}/\\$${4:new}}\"\n",
+  "description": "find first occurrence of a substring and replace it"
+}

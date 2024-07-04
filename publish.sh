@@ -26,7 +26,8 @@ function bannerColor() {
   esac
 
   local msg="${3} ${1} ${3}"
-  local edge=$(echo "${msg}" | sed "s/./${3}/g")
+  local edge
+  edge=$(echo "${msg}" | sed "s/./${3}/g")
   tput setaf ${color}
   tput bold
   echo "${edge}"
@@ -38,7 +39,6 @@ function bannerColor() {
 
 
 # Usage: multiChoice "header message" resultArray "comma separated options" "comma separated default values"
-# Credit: https://serverfault.com/a/949806
 # TODO: 1) Refactoring to return result array 2) Get input options as array
 function multiChoice {
   echo "${1}"; shift

@@ -2,7 +2,7 @@
   "prefix": "iterate directories",
   "body": [
     "# Make sure path ends with /",
-    "for directory in ${1|'/path/to/directory/',\"${pathToDirectory}\"|}*; do",
+    "for directory in ${1| /'path/to/directory'/,\"${pathToDirectory}\"|}*; do",
     "\tif [[ -d \"\\${directory}\" && ! -L \"\\${directory}\" ]]; then",
     "\t\t${2:echo \"\\${directory\\}\"}",
       "\tfi",

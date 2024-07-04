@@ -1,5 +1,15 @@
 # Change Log
 
+## 6.0.0
+
+- some improvements.
+- fixed #52
+- fixed #53
+
+## 5.8.0
+
+- some improvements to become more standard.
+
 ## 5.7.0
 
 Fixes issue #48

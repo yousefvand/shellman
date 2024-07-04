@@ -2,7 +2,7 @@
   "name": "shellman",
   "displayName": "shellman",
   "description": "Shell script snippet",
-  "version": "5.7.0",
+  "version": "6.0.0",
   "publisher": "Remisa",
   "icon": "images/icon.png",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -29,16 +29,11 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^6.30.2",
+    "cspell": "^8.9.1",
     "path": "^0.12.7"
   },
-  "scripts": {
-    "build": "node build.js",
-    "build-rem": "node build.js && yes | cp ~/Code/shellman/snippets/snippets.json ~/.config/Code/User/snippets/shellscript.json",
-    "spellcheck": "npx cspell ./**/*"
-  },
   "dependencies": {
-    "ovsx": "0.8.3",
+    "ovsx": "0.9.1",
     "vsce": "^2.15.0"
   }
 }

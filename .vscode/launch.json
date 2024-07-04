@@ -33,7 +33,6 @@
             "name": "Build Go",
             "type": "go",
             "request": "launch",
-            "mode": "debug",
             "program": "${workspaceFolder}/build.go"
         }
     ]

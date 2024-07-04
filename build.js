@@ -1,4 +1,5 @@
-// NOTE: This script doesn't work on Windows
+// NOTE: This script doesn't work on Windows.
+// This script doesn't work for unknown reason. Use Go tool.
 
 const fs = require("fs");
 const path = require("path");

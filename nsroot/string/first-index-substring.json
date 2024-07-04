@@ -1,8 +1,17 @@
 {
   "prefix": "string indexOf",
   "body": [
-    "temp=\\${${1:string}%%\\${${2:substring}}*} && index=\\${#temp\\}",
-    "${3:echo \"index of \\\"\\${${2:substring}\\}\\\" in \\\"\\${${1:string}\\}\\\" is \\${index\\}\"\n}"
+    "string=\"${1:hello world}\"",
+    "substring=\"${2:world}\"",
+
+    "prefix=${string%%\"\\$substring\"*}",
+    "index=${#prefix}",
+
+    "if [[ index -eq ${#string} ]]; then",
+    "\techo -1",
+    "else",
+    "\techo \"\\$index\"",
+    "fi"
   ],
   "description": "first index of substring in a string"
 }

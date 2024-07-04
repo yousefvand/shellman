@@ -1,0 +1,5 @@
+{
+  "prefix": "string replace all",
+  "body": "${1:result}=\"${${2:string}//\\$${3:old}/\\$${4:new}}\"\n",
+  "description": "find all occurrences of a substring and replace them"
+}

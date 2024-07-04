@@ -1,7 +1,7 @@
 {
   "prefix": [
-    "file find",
-    "directory find"
+    "find file",
+    "find directory"
   ],
   "body": "readarray -t resultArray < <(find \"/path/to/search\" -maxdepth 1 -type f -name \"criteria\")\n",
   "description": "find files (-type f) or directories (-type d) by name or pattern (*.jpg)"

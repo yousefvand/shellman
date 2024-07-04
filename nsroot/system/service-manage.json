@@ -1,8 +1,8 @@
 {
   "prefix": [
-    "service manage",
-    "systemd manage"
+    "system service manage",
+    "system systemd manage"
   ],
-  "body": "sudo systemctl ${1|enable,enable --now,disable,disable --now,start,stop,reload,restart,status|} ${2|'serviceName',\"${serviceName}\"|} # use '--user' for user services\n",
+  "body": "sudo systemctl ${1|enable,enable --now,disable,disable --now,start,stop,reload,restart,status,daemon-reload|} ${2|'serviceName',\"${serviceName}\"|} # use '--user' for user services\n",
   "description": "manage service operations"
-}
+}      

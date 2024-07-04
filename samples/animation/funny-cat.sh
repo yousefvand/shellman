@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IFS='' read -r -d '' frames[1] <<"EOF"
+IFS='' read -r -d '' "frames[1]" <<"EOF"
  .       .
  |\_---_/|
 /   o_O   \
@@ -9,7 +9,7 @@ IFS='' read -r -d '' frames[1] <<"EOF"
  `-_____-'
 EOF
 
-IFS='' read -r -d '' frames[2] <<"EOF"
+IFS='' read -r -d '' "frames[2]" <<"EOF"
  .       .
  |\_---_/|
 /   O_o   \
@@ -23,7 +23,7 @@ function animate () {
   local frames=("$@")
   ((last_index=${#frames[@]} - 1))
   local interval=${frames[last_index]}
-  unset frames[last_index]
+  unset "frames[last_index]"
 
   # Comment out next two lines if you are using CTRL+C event handler.
   trap 'tput cnorm; echo' EXIT

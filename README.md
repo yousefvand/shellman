@@ -8,7 +8,7 @@
 
 ## Shell scripting snippet
 
-Learn easy Shell Scripting with `Shellman`, examples included. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub, mobi). Reading the `Basics` part of the book is strongly recommended if you are new to `Shell Scripting`.
+Learn easy Shell Scripting with `Shellman`, examples included. [Download](https://github.com/yousefvand/shellman-ebook) free ebook (pdf, epub). Reading the `Basics` part of the book is strongly recommended if you are new to `Shell Scripting`. Finally first edition of the ebook published.
 
 Read [Shellman story on medium](https://medium.com/@remisa.yousefvand/shellman-reborn-f2cc948ce3fc) (3 min read).
 
@@ -40,7 +40,7 @@ Sometimes doing a job takes more than a `snippet`. `Shellman` has ready to use f
 
 ### Latest release Notes
 
-## 5.7.0
+## 6.0.0
 
 - `shellcheck` compatible (99.99%)
-- Fixes issue #48
+- Fixes issue #52, #53

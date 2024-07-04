@@ -5,5 +5,5 @@
       "\t${2:echo \"File \\\"${1}\\\" exists\"}",
     "fi\n"
   ],
-  "description": "check if file exists"
+  "description": "check if the file exists"
 }

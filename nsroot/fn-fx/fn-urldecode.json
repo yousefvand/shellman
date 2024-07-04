@@ -1,11 +1,8 @@
 {
-  "prefix": "fn urldecode",
+  "prefix": ["fn urldecode"],
   "body": [
-    "# Usage: urldecode url",
-    "# Credit: https://unix.stackexchange.com/a/187256",
-    "function urldecode () {",
-    "\tlocal urlEncoded=\"\\${1//+/ }\"",
-    "\tprintf '%b' \"\\${urlEncoded//%/\\\\\\\\x}\"",
+    "function urldecode() {",
+    ": \"${*\/\/+\/ }\"; echo -e \"${_\/\/%\/\\\\x}\";",
     "}\n"
   ],
   "description": "decodes encoded URL"

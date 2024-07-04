@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "alnum",
     "bashdb",
     "civis",
     "cnorm",
@@ -76,6 +77,7 @@
     "urandom",
     "urldecode",
     "urlencode",
+    "useremail",
     "wangyuew",
     "whatismyipaddress",
     "xargs",

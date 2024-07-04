@@ -3,7 +3,7 @@
   "body": [
     "# Your frames need to have the exact same width and height.",
     "# If they are different in size, fill unused space with `space`s (no `TAB`s).",
-    "IFS='' read -r -d '' ${1:frames}[${2|1,2,3,4,5,6,7,8,9|}] <<\"EOF\"",
+    "IFS='' read -r -d '' \"${1:frames}[${2|1,2,3,4,5,6,7,8,9|}]\" <<\"EOF\"",
     "${3:# Frame here}",
     "EOF\n"
   ],

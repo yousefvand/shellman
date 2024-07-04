@@ -1,0 +1,10 @@
+
+{
+  "prefix": ["git begin", "git start"],
+  "body": ["git config ${1|--local,--global,--system|} user.name \"${2:username}\"",
+          "git config ${3|--local,--global,--system|} user.email ${4:useremail}\n"],
+  "description": "Initialize git configurations"
+}
+
+
+  

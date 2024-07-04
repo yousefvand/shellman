@@ -2,21 +2,21 @@
 
 # >>>>>>>>>>>>>>>>>>>>>>>> frames >>>>>>>>>>>>>>>>>>>>>>>>
 
-IFS='' read -r -d '' frames[1] <<"EOF"
+IFS='' read -r -d '' "frames[1]" <<"EOF"
     /    
    /     
   /      
  o        
 EOF
 
-IFS='' read -r -d '' frames[2] <<"EOF"
+IFS='' read -r -d '' "frames[2]" <<"EOF"
      |   
      |   
      |   
      o    
 EOF
 
-IFS='' read -r -d '' frames[3] <<"EOF"
+IFS='' read -r -d '' "frames[3]" <<"EOF"
       \  
        \ 
         \
@@ -33,11 +33,11 @@ function animate () {
 
   ((lastIndex=${#frames[@]} - 1))
   local mode=${frames[lastIndex]}
-  unset frames[lastIndex]
+  unset "frames[lastIndex]"
 
   ((lastIndex=${#frames[@]} - 1))
   local interval=${frames[lastIndex]}
-  unset frames[lastIndex]
+  unset "frames[lastIndex]"
 
   # Comment out next two lines if you are using CTRL+C event handler.
   trap 'tput cnorm; echo' EXIT

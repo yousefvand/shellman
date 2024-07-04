@@ -2,49 +2,49 @@
 
 # >>>>>>>>>>>>>>>>>>>>>>>> frames >>>>>>>>>>>>>>>>>>>>>>>>
 
-IFS='' read -r -d '' frames[1] <<"EOF"
+IFS='' read -r -d '' "frames[1]" <<"EOF"
 ==~=========
 | Shellman |
 ==~=========
 EOF
 
-IFS='' read -r -d '' frames[2] <<"EOF"
+IFS='' read -r -d '' "frames[2]" <<"EOF"
 ===~========
 | sHellman |
 ===~========
 EOF
 
-IFS='' read -r -d '' frames[3] <<"EOF"
+IFS='' read -r -d '' "frames[3]" <<"EOF"
 ====~=======
 | ShEllman |
 ====~=======
 EOF
 
-IFS='' read -r -d '' frames[4] <<"EOF"
+IFS='' read -r -d '' "frames[4]" <<"EOF"
 =====~======
 | SheLlman |
 =====~======
 EOF
 
-IFS='' read -r -d '' frames[5] <<"EOF"
+IFS='' read -r -d '' "frames[5]" <<"EOF"
 ======~=====
 | ShelLman |
 ======~=====
 EOF
 
-IFS='' read -r -d '' frames[6] <<"EOF"
+IFS='' read -r -d '' "frames[6]" <<"EOF"
 =======~====
 | ShellMan |
 =======~====
 EOF
 
-IFS='' read -r -d '' frames[7] <<"EOF"
+IFS='' read -r -d '' "frames[7]" <<"EOF"
 ========~===
 | ShellmAn |
 ========~===
 EOF
 
-IFS='' read -r -d '' frames[8] <<"EOF"
+IFS='' read -r -d '' "frames[8]" <<"EOF"
 =========~==
 | ShellmaN |
 =========~==
@@ -60,11 +60,11 @@ function animate () {
 
   ((lastIndex=${#frames[@]} - 1))
   local mode=${frames[lastIndex]}
-  unset frames[lastIndex]
+  unset "frames[lastIndex]"
 
   ((lastIndex=${#frames[@]} - 1))
   local interval=${frames[lastIndex]}
-  unset frames[lastIndex]
+  unset "frames[lastIndex]"
 
   # Comment out next two lines if you are using CTRL+C event handler.
   trap 'tput cnorm; echo' EXIT
