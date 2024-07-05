@@ -29,11 +29,11 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^8.9.1",
+    "cspell": "^8.10.0",
     "path": "^0.12.7"
   },
   "dependencies": {
-    "ovsx": "^0.9.1",
-    "vsce": "^2.15.0"
+    "@vscode/vsce": "^2.29.0",
+    "ovsx": "^0.9.1"
   }
 }
