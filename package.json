@@ -29,7 +29,6 @@
     ]
   },
   "devDependencies": {
-    "cspell": "^8.10.2",
     "path": "^0.12.7"
   },
   "dependencies": {
