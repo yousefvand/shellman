@@ -4,7 +4,7 @@
       "archive compress tar.gz",
       "archive tar.gz"
     ],
-    "body": "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
+    "body": "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n",
     "description": "compress file/folder to a .tar.gz file"
   },
   "archive.compress-tar-xz": {
@@ -12,7 +12,7 @@
       "archive compress tar.xz",
       "archive tar.xz"
     ],
-    "body": "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n",
+    "body": "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && xz -f \"${archive_path}.tar\"\n",
     "description": "compress file/folder to a .tar.xz file"
   },
   "archive.compress-zip": {
@@ -20,7 +20,7 @@
       "archive compress .zip",
       "archive zip"
     ],
-    "body": "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n",
+    "body": "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\nzip -rq \"${archive_path}.zip\" \"${source_path}\"\n",
     "description": "compress file/folder to a .zip file"
   },
   "archive.decompress-tar-gz": {
@@ -28,7 +28,7 @@
       "archive decompress tar.gz",
       "decompress tar.gz"
     ],
-    "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xzvf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n",
+    "body": "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  gzip -dc \"${archive_path}.tar.gz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n",
     "description": "decompress a .tar.gz file to specified path"
   },
   "archive.decompress-tar-xz": {
@@ -36,7 +36,7 @@
       "archive decompress tar.xz",
       "decompress tar.xz"
     ],
-    "body": "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n",
+    "body": "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  xz -dc \"${archive_path}.tar.xz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n",
     "description": "decompress a .tar.xz file to specified path"
   },
   "archive.decompress-unzip": {
@@ -44,7 +44,7 @@
       "archive decompress .zip",
       "archive unzip"
     ],
-    "body": "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}",
+    "body": "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nextract_path=\"${2|/extract/to/path,\"${extractToPath}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\nunzip -q \"${archive_path}.zip\" -d \"${extract_path}\"",
     "description": "decompress a .zip file to specified path"
   },
   "array.all-elements": {

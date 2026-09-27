@@ -1,12 +1,14 @@
 /*
-  Tool for compiling small snippets in `nsroot` directory into a single snippet file
-	at `snippets/snippets` and generating `COMMANDS.md`.
+Tool for compiling the JSON files below nsroot into snippets/snippets.json and
+generating COMMANDS.md.
 
-	To compile  to binary (you need golang installed):
-  $ go build build.go
+To compile (Go is required):
 
-  To run without build (you need golang installed):
-  $ go run build.go
+	go build build.go
+
+To run without building:
+
+	go run build.go
 */
 
 package main
@@ -14,26 +16,39 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
-const Version = "1.1.0" // 2021-05-02
-const root = "nsroot"
-const tabSpace = "  "
+const (
+	Version            = "1.1.0"
+	rootDirectory      = "nsroot"
+	snippetOutputPath  = "snippets/snippets.json"
+	documentOutputPath = "COMMANDS.md"
+	tabSpace           = "  "
+	snippetOutputMode  = 0o755
+	documentOutputMode = 0o666
+)
 
 type Snippet struct {
-	Prefix      interface{} `json:"prefix"`
-	Body        interface{} `json:"body"`
-	Description string      `json:"description"`
+	Prefix      any    `json:"prefix"`
+	Body        any    `json:"body"`
+	Description string `json:"description"`
+}
+
+type namedSnippet struct {
+	name      string
+	namespace string
+	snippet   Snippet
 }
 
 func main() {
-
-	if len(os.Args) > 1 { // No argument accepted
+	if len(os.Args) > 1 {
 		fmt.Printf(`Shellman build tool v%v
 
 This tool doesn't accept any argument. Run it from project root directory.
@@ -42,163 +57,212 @@ It concatenates 'nsroot' snippets to 'snippets/snippets.json' and generates 'COM
 		os.Exit(1)
 	}
 
-	cwd, errGetCurrentDirectory := os.Getwd()
-	if errGetCurrentDirectory != nil {
-		fmt.Printf("Cannot get current directory due to error: %v\n", errGetCurrentDirectory)
-		panic(errGetCurrentDirectory)
+	if err := build("."); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
-	snippetFilePath := filepath.Join(cwd, "snippets", "snippets.json")
-	snippetFilePath = filepath.FromSlash(snippetFilePath) // OS agnostic path
-	docFilePath := filepath.Join(cwd, "COMMANDS.md")
-	docFilePath = filepath.FromSlash(docFilePath) // OS agnostic path
+}
 
-	docTitleBuilder := strings.Builder{}
-	docBodyBuilder := strings.Builder{}
-
-	docTitleBuilder.WriteString("# Commands\n\n")
-
-	changeToRootErr := os.Chdir(root)
-	if changeToRootErr != nil {
-		fmt.Println("Run this program from Shellman root directory")
-		panic(changeToRootErr)
+func build(projectRoot string) error {
+	snippetJSON, documentation, err := generate(projectRoot)
+	if err != nil {
+		return err
 	}
 
-	folders := getFolders(".")
-	snippets := map[string]Snippet{}
+	if err := os.WriteFile(filepath.Join(projectRoot, snippetOutputPath), snippetJSON, snippetOutputMode); err != nil {
+		return fmt.Errorf("write snippet file: %w", err)
+	}
+	if err := os.WriteFile(filepath.Join(projectRoot, documentOutputPath), documentation, documentOutputMode); err != nil {
+		return fmt.Errorf("write documentation file: %w", err)
+	}
+	return nil
+}
 
-	for _, folder := range folders {
-		docTitleBuilder.WriteString("### " + folder + "\n\n")
-		files := getFiles(folder)
+func generate(projectRoot string) ([]byte, []byte, error) {
+	snippets, err := readSnippets(filepath.Join(projectRoot, rootDirectory))
+	if err != nil {
+		return nil, nil, err
+	}
 
-		errChangeToChildDir := os.Chdir(folder)
-		if errChangeToChildDir != nil {
-			fmt.Printf("Cannot change path to child directory: %s due to error: %v\n",
-				folder, errChangeToChildDir)
-			panic(errChangeToChildDir)
+	snippetJSON, err := renderSnippetJSON(snippets)
+	if err != nil {
+		return nil, nil, err
+	}
+	return snippetJSON, renderDocumentation(snippets), nil
+}
+
+func readSnippets(root string) ([]namedSnippet, error) {
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		return nil, fmt.Errorf("read namespace root %q: %w", root, err)
+	}
+
+	var snippets []namedSnippet
+	for _, entry := range entries {
+		info, err := entry.Info()
+		if err != nil {
+			return nil, fmt.Errorf("inspect namespace entry %q: %w", entry.Name(), err)
+		}
+		if !info.IsDir() {
+			continue
+		}
+
+		namespace := entry.Name()
+		namespacePath := filepath.Join(root, namespace)
+		files, err := os.ReadDir(namespacePath)
+		if err != nil {
+			return nil, fmt.Errorf("read namespace %q: %w", namespace, err)
 		}
 
 		for _, file := range files {
-
-			snippetName := folder + "." + strings.TrimSuffix(file, ".json")
-			jsonFileBytes, err := ioutil.ReadFile(file)
+			fileInfo, err := file.Info()
 			if err != nil {
-				fmt.Printf("Cannot read file: %s due to error: %v\n", file, err)
-				panic(err)
+				return nil, fmt.Errorf("inspect %q: %w", filepath.Join(namespacePath, file.Name()), err)
+			}
+			if fileInfo.IsDir() {
+				return nil, fmt.Errorf("namespace directories should not contain nested directories: %q contains %q", namespace, file.Name())
 			}
 
-			var snippet Snippet
-			json.Unmarshal(jsonFileBytes, &snippet)
-			namedSnippet := map[string]Snippet{
-				snippetName: snippet,
+			path := filepath.Join(namespacePath, file.Name())
+			snippet, err := readSnippet(path)
+			if err != nil {
+				return nil, err
 			}
-
-			for k, v := range namedSnippet {
-				snippets[k] = v
-
-				prefixes := []string{}
-				docTitleBuilder.WriteString("  - [")
-				docBodyBuilder.WriteString("## ")
-
-				switch v.Prefix.(type) {
-				case []interface{}: // snippet with multiple prefixes
-					for _, prefix := range v.Prefix.([]interface{}) {
-						p := prefix.(string)
-						prefixes = append(prefixes, p)
-					}
-					link := strings.Join(prefixes[:], " , ")
-					docTitleBuilder.WriteString(link)
-					docTitleBuilder.WriteString("](#")
-
-					docBodyBuilder.WriteString(link + "\n\n")
-					docBodyBuilder.WriteString(v.Description + "[&uarr;](#" + folder + ")\n\n")
-
-					link = strings.ReplaceAll(link, " ", "-")
-					docTitleBuilder.WriteString(link)
-				case interface{}: // snippet with single prefix
-					p := v.Prefix.(string)
-					docTitleBuilder.WriteString(p)
-					docTitleBuilder.WriteString("](#")
-
-					docBodyBuilder.WriteString(p + "\n\n")
-					docBodyBuilder.WriteString(v.Description + "[&uarr;](#" + folder + ")\n\n")
-
-					link := strings.ReplaceAll(p, " ", "-")
-					docTitleBuilder.WriteString(link)
-				default:
-					panic("Unknown prefix type")
-				}
-
-				docTitleBuilder.WriteString(")\n\n")
-			}
-		}
-		errChangeToParentDir := os.Chdir("..")
-		if errChangeToParentDir != nil {
-			fmt.Printf("Cannot change path to parent directory: %s due to error: %v\n",
-				folder, errChangeToParentDir)
-			panic(errChangeToParentDir)
+			snippets = append(snippets, namedSnippet{
+				name:      namespace + "." + strings.TrimSuffix(file.Name(), ".json"),
+				namespace: namespace,
+				snippet:   snippet,
+			})
 		}
 	}
-
-	// write snippet file
-	var buf bytes.Buffer
-	jsonEncoder := json.NewEncoder(&buf)
-	jsonEncoder.SetEscapeHTML(false)
-	jsonEncoder.SetIndent("", tabSpace)
-	jsonEncoder.Encode(snippets)
-	snippetFileErr := ioutil.WriteFile(snippetFilePath, buf.Bytes(), 0755)
-	if snippetFileErr != nil {
-		fmt.Printf("Cannot write snippet file: %v due to error: %v\n",
-			snippetFilePath, snippetFileErr)
-		panic(snippetFileErr)
-	}
-
-	// Write documentation file
-	docFile, docFileErr := os.Create(docFilePath)
-	if docFileErr != nil {
-		fmt.Printf("Cannot create documentation file: %v due to error: %v\n",
-			docFilePath, docFileErr)
-		panic(docFileErr)
-	}
-	defer docFile.Close()
-	documentation := docTitleBuilder.String() + docBodyBuilder.String()
-	_, docFileWriteErr := docFile.WriteString(documentation)
-	if docFileWriteErr != nil {
-		fmt.Printf("Cannot write documentation file: %v due to error: %v\n",
-			docFilePath, docFileWriteErr)
-		panic(docFileWriteErr)
-	}
-
+	return snippets, nil
 }
 
-func getFolders(root string) []string {
-	var folders []string
-	files, err := ioutil.ReadDir(root)
+func readSnippet(path string) (Snippet, error) {
+	data, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Printf("Cannot read "+root+" directories: %v due to error: %v\n", root, err)
-		panic(err)
+		return Snippet{}, fmt.Errorf("read snippet %q: %w", path, err)
 	}
-	for _, fileInfo := range files {
-		if fileInfo.IsDir() {
-			folders = append(folders, fileInfo.Name())
-		}
+
+	var snippet Snippet
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&snippet); err != nil {
+		return Snippet{}, fmt.Errorf("decode snippet %q: %w", path, err)
 	}
-	return folders
+	if err := ensureJSONEnd(decoder); err != nil {
+		return Snippet{}, fmt.Errorf("decode snippet %q: %w", path, err)
+	}
+	if err := validateSnippet(snippet); err != nil {
+		return Snippet{}, fmt.Errorf("validate snippet %q: %w", path, err)
+	}
+	return snippet, nil
 }
 
-func getFiles(dir string) []string {
-	files, err := ioutil.ReadDir(dir)
-	if err != nil {
-		fmt.Printf("Cannot read directory: %v due to error: %v\n", dir, err)
-		panic(err)
+func ensureJSONEnd(decoder *json.Decoder) error {
+	var extra any
+	err := decoder.Decode(&extra)
+	if errors.Is(err, io.EOF) {
+		return nil
+	}
+	if err == nil {
+		return errors.New("multiple JSON values")
+	}
+	return err
+}
+
+func validateSnippet(snippet Snippet) error {
+	switch prefix := snippet.Prefix.(type) {
+	case string:
+		if prefix == "" {
+			return errors.New("prefix must not be empty")
+		}
+	case []any:
+		if len(prefix) == 0 {
+			return errors.New("prefix list must not be empty")
+		}
+		for _, value := range prefix {
+			if text, ok := value.(string); !ok || text == "" {
+				return errors.New("prefix list must contain non-empty strings")
+			}
+		}
+	default:
+		return errors.New("prefix must be a string or a list of strings")
 	}
 
-	var result []string
-	for _, fileInfo := range files {
-		if fileInfo.IsDir() {
-			fmt.Printf("Namespace directories should not contain nested directories: '%v' contains '%v'\n", dir, fileInfo.Name())
-			panic("Found nested directories inside namespace directory")
+	switch body := snippet.Body.(type) {
+	case string:
+	case []any:
+		for _, value := range body {
+			if _, ok := value.(string); !ok {
+				return errors.New("body list must contain strings")
+			}
 		}
-		result = append(result, fileInfo.Name())
+	default:
+		return errors.New("body must be a string or a list of strings")
 	}
-	return result
+	return nil
+}
+
+func renderSnippetJSON(ordered []namedSnippet) ([]byte, error) {
+	snippets := make(map[string]Snippet, len(ordered))
+	for _, item := range ordered {
+		if _, exists := snippets[item.name]; exists {
+			return nil, fmt.Errorf("duplicate snippet name %q", item.name)
+		}
+		snippets[item.name] = item.snippet
+	}
+
+	var output bytes.Buffer
+	encoder := json.NewEncoder(&output)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", tabSpace)
+	if err := encoder.Encode(snippets); err != nil {
+		return nil, fmt.Errorf("encode snippets: %w", err)
+	}
+	return output.Bytes(), nil
+}
+
+func renderDocumentation(snippets []namedSnippet) []byte {
+	var titles strings.Builder
+	var body strings.Builder
+	titles.WriteString("# Commands\n\n")
+
+	currentNamespace := ""
+	for _, item := range snippets {
+		if item.namespace != currentNamespace {
+			currentNamespace = item.namespace
+			titles.WriteString("### " + currentNamespace + "\n\n")
+		}
+
+		prefixes := snippetPrefixes(item.snippet.Prefix)
+		title := strings.Join(prefixes, " , ")
+		titles.WriteString("  - [" + title + "](#" + strings.ReplaceAll(title, " ", "-") + ")\n\n")
+		body.WriteString("## " + title + "\n\n")
+		body.WriteString(item.snippet.Description + "[&uarr;](#" + item.namespace + ")\n\n")
+	}
+	return []byte(titles.String() + body.String())
+}
+
+func snippetPrefixes(prefix any) []string {
+	if text, ok := prefix.(string); ok {
+		return []string{text}
+	}
+	values := prefix.([]any)
+	prefixes := make([]string, len(values))
+	for index, value := range values {
+		prefixes[index] = value.(string)
+	}
+	return prefixes
+}
+
+// sortedSnippetNames exposes the generator's stable JSON order to tests without
+// coupling generation itself to map iteration order.
+func sortedSnippetNames(snippets []namedSnippet) []string {
+	names := make([]string, len(snippets))
+	for index, item := range snippets {
+		names[index] = item.name
+	}
+	sort.Strings(names)
+	return names
 }

@@ -1,0 +1,11 @@
+go run .
+ npx --no-install vsce package --out /tmp/shellman-test.vsix    
+unzip -l /tmp/shellman-test.vsix | grep 'extension/snippets/snippets.json'
+
+
+
+code --list-extensions | grep -i shellman
+code --uninstall-extension yousefvand.shellman
+code --install-extension /tmp/shellman-test.vsix --force
+# close code
+code /data/Code/shellman
