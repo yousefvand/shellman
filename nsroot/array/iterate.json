@@ -4,6 +4,7 @@
     "array forEach"
   ],
   "body": [
+    "# Bash-only: indexed arrays are not specified by POSIX sh.",
     "for item in \"${${1:myArray}[@]}\"; do",
     "\t${2:echo \"\\${item\\}\"}",
     "done\n"

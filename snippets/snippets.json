@@ -49,31 +49,38 @@
   },
   "array.all-elements": {
     "prefix": "array all",
-    "body": "${0:echo }\"${${1:myArray}[@]}\"",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[@]}\"",
     "description": "access all array elements"
   },
   "array.at-index": {
     "prefix": "array at index",
-    "body": "${0:echo }\"${${1:myArray}[${2:index}]}\"",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[${2:index}]}\"",
     "description": "retrieve element from array at specified index (zero based)"
   },
   "array.concat": {
     "prefix": "array concat",
-    "body": "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n",
     "description": "concatenate two arrays"
   },
   "array.contains": {
     "prefix": "array contains",
     "body": [
-      "if [[ \"\\${${1:myArray}[*]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
-      "\techo 'array contains element'",
-      "fi\n"
+      "# Bash-only: indexed arrays are not specified by POSIX sh.",
+      "(",
+      "\tfor element in \"${${1:myArray}[@]}\"; do",
+      "\t\tif [ \"\\${element\\}\" = ${2|'element',\"${value}\"|} ]; then",
+      "\t\t\techo 'array contains element'",
+      "\t\t\texit",
+      "\t\tfi",
+      "\tdone",
+      ")\n"
     ],
     "description": "check if the array contains an element"
   },
   "array.declare": {
     "prefix": "array declare",
     "body": [
+      "# Bash-only: indexed arrays are not specified by POSIX sh.",
       "${1:myArray}=(",
       "\t'${2:constant}'",
       "\t\"${3:${variable\\}}\"",
@@ -84,17 +91,17 @@
   },
   "array.delete": {
     "prefix": "array delete",
-    "body": "unset ${1:myArray}\n",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}\"\n",
     "description": "delete entire array"
   },
   "array.delete-at": {
     "prefix": "array delete at",
-    "body": "unset \"${1:myArray}[${2:index}]\"\n",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}[${2:index}]\"\n",
     "description": "delete element at index from array"
   },
   "array.filter": {
     "prefix": "array filter",
-    "body": "readarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\" ; do echo \"\\${i\\}\"; done | grep ${3|',\"|}${4:pattern}${3})\n",
+    "body": "# Bash-only: indexed arrays, readarray, and process substitution are not specified by POSIX sh.\nreadarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\"; do printf '%s\\n' \"\\${i\\}\"; done | grep -e ${3|',\"|}${4:pattern}${3} || [ $? -eq 1 ]) && wait \"$!\"\n",
     "description": "filter elements of an array based on given grep pattern"
   },
   "array.iterate": {
@@ -103,6 +110,7 @@
       "array forEach"
     ],
     "body": [
+      "# Bash-only: indexed arrays are not specified by POSIX sh.",
       "for item in \"${${1:myArray}[@]}\"; do",
       "\t${2:echo \"\\${item\\}\"}",
       "done\n"
@@ -111,7 +119,7 @@
   },
   "array.length": {
     "prefix": "array length",
-    "body": "${1:length}=${#${2:myArray}[@]}\n",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:length}=${#${2:myArray}[@]}\n",
     "description": "length of an array"
   },
   "array.print": {
@@ -119,7 +127,7 @@
       "array print",
       "echo array"
     ],
-    "body": "echo \"\\${${1:myArray}[@]}\"\n",
+    "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n(IFS=' '; printf '%s\\n' \"\\${${1:myArray}[*]}\")\n",
     "description": "iterate array elements"
   },
   "array.push": {
@@ -127,7 +135,7 @@
       "array push",
       "array add"
     ],
-    "body": "${1:myArray}+=('${2:newItem}')\n",
+    "body": "# Bash-only: indexed arrays and compound assignment are not specified by POSIX sh.\n${1:myArray}+=('${2:newItem}')\n",
     "description": "push new item to the end of array"
   },
   "array.range": {
@@ -135,23 +143,30 @@
       "array slice",
       "array range"
     ],
-    "body": "${1:newArray}=\"${${2:myArray}[*]:${3:fromIndex}:${4:n}}\"\n",
+    "body": "# Bash-only: indexed arrays and array slicing are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]:${3:fromIndex}:${4:n}}\")\n",
     "description": "n elements of an array from specified index (zero based)"
   },
   "array.replace": {
     "prefix": "array replace",
-    "body": "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n",
+    "body": "# Bash-only: indexed arrays and pattern substitution are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]//${3:find}/${4:replace}}\")\n",
     "description": "find and replace elements in array using regex"
   },
   "array.reverse": {
     "prefix": "array reverse",
     "body": [
-      "for((i=\\${#${1:myArray}[@]}-1;i>=0;i--)); do",
-      "\t${2:reversed}+=(\"\\${${1:myArray}[i]}\")",
-      "done",
+      "# Bash-only: indexed arrays and C-style for loops are not specified by POSIX sh.",
+      "# shellcheck disable=SC2050 # compare expanded snippet variable names",
+      "${2:reversed}=(\"\\${${1:myArray}[@]}\") &&",
+      "_shellman_reverse_status=0 &&",
+      "for ((i=0, j=\\${#${2:reversed}[@]}-1; i<j; i++, j--)); do",
+      "\t_shellman_reverse_item=\\${${2:reversed}[i]} &&",
+      "\t\t${2:reversed}[i]=\\${${2:reversed}[j]} &&",
+      "\t\t${2:reversed}[j]=\\${_shellman_reverse_item} || { _shellman_reverse_status=$?; break; }",
+      "done &&",
+      "((! _shellman_reverse_status)) &&",
       "",
-      "unset \"${1:myArray}\" # optional",
-      "echo \"\\${${2:reversed}[@]}\"",
+      "{ [ '${1:myArray}' = '${2:reversed}' ] || unset \"${1:myArray}\"; } && # optional",
+      "(IFS=' '; printf '%s\\n' \"\\${${2:reversed}[*]}\")",
       ""
     ],
     "description": "reverse order of array elements"

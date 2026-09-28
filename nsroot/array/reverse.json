@@ -1,12 +1,19 @@
 {
   "prefix": "array reverse",
   "body": [
-    "for((i=\\${#${1:myArray}[@]}-1;i>=0;i--)); do",
-    "\t${2:reversed}+=(\"\\${${1:myArray}[i]}\")",
-    "done",
+    "# Bash-only: indexed arrays and C-style for loops are not specified by POSIX sh.",
+    "# shellcheck disable=SC2050 # compare expanded snippet variable names",
+    "${2:reversed}=(\"\\${${1:myArray}[@]}\") &&",
+    "_shellman_reverse_status=0 &&",
+    "for ((i=0, j=\\${#${2:reversed}[@]}-1; i<j; i++, j--)); do",
+    "\t_shellman_reverse_item=\\${${2:reversed}[i]} &&",
+    "\t\t${2:reversed}[i]=\\${${2:reversed}[j]} &&",
+    "\t\t${2:reversed}[j]=\\${_shellman_reverse_item} || { _shellman_reverse_status=$?; break; }",
+    "done &&",
+    "((! _shellman_reverse_status)) &&",
     "",
-    "unset \"${1:myArray}\" # optional",
-    "echo \"\\${${2:reversed}[@]}\"",
+    "{ [ '${1:myArray}' = '${2:reversed}' ] || unset \"${1:myArray}\"; } && # optional",
+    "(IFS=' '; printf '%s\\n' \"\\${${2:reversed}[*]}\")",
     ""
   ],
   "description": "reverse order of array elements"

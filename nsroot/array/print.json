@@ -3,6 +3,6 @@
     "array print",
     "echo array"
   ],
-  "body": "echo \"\\${${1:myArray}[@]}\"\n",
+  "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n(IFS=' '; printf '%s\\n' \"\\${${1:myArray}[*]}\")\n",
   "description": "iterate array elements"
 }

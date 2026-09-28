@@ -1,5 +1,5 @@
 {
   "prefix": "array replace",
-  "body": "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n",
+  "body": "# Bash-only: indexed arrays and pattern substitution are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]//${3:find}/${4:replace}}\")\n",
   "description": "find and replace elements in array using regex"
 }

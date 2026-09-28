@@ -1,6 +1,7 @@
 {
   "prefix": "array declare",
   "body": [
+    "# Bash-only: indexed arrays are not specified by POSIX sh.",
     "${1:myArray}=(",
     "\t'${2:constant}'",
     "\t\"${3:${variable\\}}\"",

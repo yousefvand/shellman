@@ -1,9 +1,15 @@
 {
   "prefix": "array contains",
   "body": [
-    "if [[ \"\\${${1:myArray}[*]}\" =~ ${2|'element',\"${value}\"|} ]]; then",
-    "\techo 'array contains element'",
-    "fi\n"
+    "# Bash-only: indexed arrays are not specified by POSIX sh.",
+    "(",
+    "\tfor element in \"${${1:myArray}[@]}\"; do",
+    "\t\tif [ \"\\${element\\}\" = ${2|'element',\"${value}\"|} ]; then",
+    "\t\t\techo 'array contains element'",
+    "\t\t\texit",
+    "\t\tfi",
+    "\tdone",
+    ")\n"
   ],
   "description": "check if the array contains an element"
 }

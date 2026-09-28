@@ -1,5 +1,5 @@
 {
   "prefix": "array all",
-  "body": "${0:echo }\"${${1:myArray}[@]}\"",
+  "body": "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[@]}\"",
   "description": "access all array elements"
 }

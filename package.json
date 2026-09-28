@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@vscode/vsce": "^2.29.0",
-    "ovsx": "^0.9.1"
+    "@vscode/vsce": "^4.0.0",
+    "ovsx": "^1.2.0"
   }
 }
