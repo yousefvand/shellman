@@ -1,5 +1,5 @@
 {
   "prefix": "array set element",
-  "body": "${1:myArray}[${2:index}]=\"${3:value}\"\n",
+  "body": "# Bash-only: indexed arrays and arithmetic array indices are not specified by POSIX sh.\n${1:myArray}[${2:index}]=\"${3:value}\"\n",
   "description": "set array element at specified index"
 }

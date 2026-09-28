@@ -59,6 +59,8 @@ const (
 	approvedV7Iteration20Commands = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
 	currentV7Iteration21SHA256    = "46ea401b4f979ec857b2a079308c426f2f95fa0cc54c3f6201ec162ca398d111"
 	currentV7Iteration21Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration22SHA256    = "303cc7ea8f7d18cc31408f7bdf3424b31711fdbc5f68c890590941bb62c0f189"
+	currentV7Iteration22Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
 	approvedMigrationName         = "archive.compress-tar-gz"
 	iteration2MigrationName       = "archive.compress-tar-xz"
 	iteration3MigrationName       = "archive.compress-zip"
@@ -80,6 +82,7 @@ const (
 	iteration19MigrationName      = "array.range"
 	iteration20MigrationName      = "array.replace"
 	iteration21MigrationName      = "array.reverse"
+	iteration22MigrationName      = "array.set-element-at"
 	v6CompressTarGzBody           = "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
 	currentCompressTarGzBody      = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n"
 	v6CompressTarXzBody           = "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
@@ -114,6 +117,8 @@ const (
 	currentArrayRangeBody         = "# Bash-only: indexed arrays and array slicing are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]:${3:fromIndex}:${4:n}}\")\n"
 	v6ArrayReplaceBody            = "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n"
 	currentArrayReplaceBody       = "# Bash-only: indexed arrays and pattern substitution are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]//${3:find}/${4:replace}}\")\n"
+	v6ArraySetElementAtBody       = "${1:myArray}[${2:index}]=\"${3:value}\"\n"
+	currentArraySetElementAtBody  = "# Bash-only: indexed arrays and arithmetic array indices are not specified by POSIX sh.\n${1:myArray}[${2:index}]=\"${3:value}\"\n"
 )
 
 var v6ArrayReverseBody = []any{
@@ -276,12 +281,18 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got := ordered[20].name; got != iteration21MigrationName {
 		t.Fatalf("twenty-first snippet in actual nsroot traversal = %q, want %q", got, iteration21MigrationName)
 	}
-	currentIteration21, err := renderSnippetJSON(ordered)
+	if got := ordered[21].name; got != iteration22MigrationName {
+		t.Fatalf("twenty-second snippet in actual nsroot traversal = %q, want %q", got, iteration22MigrationName)
+	}
+	if got, want := ordered[22].name, "command.failure-check"; got != want {
+		t.Fatalf("entry after array namespace = %q, want %q", got, want)
+	}
+	currentIteration22, err := renderSnippetJSON(ordered)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertSHA256(t, "current v7 iteration-21 snippets (twenty-one changed, 257 unchanged)", currentIteration21, currentV7Iteration21SHA256)
-	assertSHA256(t, "current v7 iteration-21 commands", renderDocumentation(ordered), currentV7Iteration21Commands)
+	assertSHA256(t, "current v7 iteration-22 snippets (twenty-two changed, 256 unchanged)", currentIteration22, currentV7Iteration22SHA256)
+	assertSHA256(t, "current v7 iteration-22 commands", renderDocumentation(ordered), currentV7Iteration22Commands)
 
 	foundFirst := false
 	foundSecond := false
@@ -304,6 +315,7 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	foundNineteenth := false
 	foundTwentieth := false
 	foundTwentyFirst := false
+	foundTwentySecond := false
 	for index := range ordered {
 		switch ordered[index].name {
 		case approvedMigrationName:
@@ -547,7 +559,18 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 			if got := ordered[index].snippet.Body; !reflect.DeepEqual(got, currentArrayReverseBody) {
 				t.Fatalf("iteration-21 snippet body = %#v, want %#v", got, currentArrayReverseBody)
 			}
-			ordered[index].snippet.Body = v6ArrayReverseBody
+		case iteration22MigrationName:
+			foundTwentySecond = true
+			if got, want := ordered[index].snippet.Prefix, "array set element"; got != want {
+				t.Fatalf("iteration-22 snippet prefix = %#v, want %#v", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "set array element at specified index"; got != want {
+				t.Fatalf("iteration-22 snippet description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentArraySetElementAtBody {
+				t.Fatalf("iteration-22 snippet body = %#v, want %#v", got, currentArraySetElementAtBody)
+			}
+			ordered[index].snippet.Body = v6ArraySetElementAtBody
 		}
 	}
 	if !foundFirst {
@@ -612,6 +635,22 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	}
 	if !foundTwentyFirst {
 		t.Fatalf("iteration-21 snippet %q is missing", iteration21MigrationName)
+	}
+	if !foundTwentySecond {
+		t.Fatalf("iteration-22 snippet %q is missing", iteration22MigrationName)
+	}
+
+	reconstructedIteration21, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-21 snippets", reconstructedIteration21, currentV7Iteration21SHA256)
+	assertSHA256(t, "approved v7 iteration-21 commands", renderDocumentation(ordered), currentV7Iteration21Commands)
+
+	for index := range ordered {
+		if ordered[index].name == iteration21MigrationName {
+			ordered[index].snippet.Body = v6ArrayReverseBody
+		}
 	}
 
 	reconstructedIteration20, err := renderSnippetJSON(ordered)
@@ -2685,6 +2724,120 @@ func runnableGeneratedArrayReverse(t *testing.T, destination, source string) str
 	result = strings.ReplaceAll(result, `${1:myArray}`, source)
 	result = strings.ReplaceAll(result, `${2:reversed}`, destination)
 	return strings.ReplaceAll(result, `\${`, `${`)
+}
+
+func TestArraySetElementAtPlaceholderContractAndBashDocumentation(t *testing.T) {
+	body := currentArraySetElementAtBody
+	for _, placeholder := range []string{`${1:myArray}`, `${2:index}`, `${3:value}`} {
+		if strings.Count(body, placeholder) != 1 {
+			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
+		}
+	}
+	if !strings.HasPrefix(body, "# Bash-only: indexed arrays and arithmetic array indices are not specified by POSIX sh.\n") {
+		t.Fatal("Bash-only comment must precisely identify indexed-array and arithmetic-index dependencies")
+	}
+	if !strings.HasSuffix(body, `${1:myArray}[${2:index}]="${3:value}"`+"\n") {
+		t.Fatal("historical quoted assignment and exact placeholders changed")
+	}
+}
+
+func TestArraySetElementAtBehavior(t *testing.T) {
+	requireCommand(t, "bash")
+
+	runCase := func(t *testing.T, setup, index, value, assertion string) (string, int) {
+		t.Helper()
+		body := runnableGeneratedArraySetElementAt(t, "array", index, value)
+		path := filepath.Join(t.TempDir(), "array-set-element-at.sh")
+		mustWriteFile(t, path, []byte("#!/usr/bin/env bash\n"+setup+"\n"+body+"snippet_status=$?\n"+assertion+"\n"))
+		run(t, ".", "bash", "-n", path)
+		output, err := runCommand(".", nil, "bash", path)
+		return string(output), exitCode(err)
+	}
+
+	tests := []struct {
+		name      string
+		setup     string
+		index     string
+		value     string
+		assertion string
+	}{
+		{"dense existing index is updated", `array=(zero one two)`, "1", "changed", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 3 && ${array[0]} == zero && ${array[1]} == changed && ${array[2]} == two ]]`},
+		{"sparse existing index is updated", `array=(); array[2]=two; array[8]=eight`, "8", "changed", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 2 && ${array[2]} == two && ${array[8]} == changed && ! -v 'array[0]' ]]`},
+		{"beyond highest index creates sparse element", `array=(zero one)`, "20", "far", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 3 && ${array[20]} == far && ! -v 'array[2]' ]]`},
+		{"index zero on empty array", `array=()`, "0", "first", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 1 && ${array[0]} == first ]]`},
+		{"previously unset interior index", `array=(); array[0]=zero; array[3]=three`, "2", "two", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 3 && ${array[2]} == two && ! -v 'array[1]' ]]`},
+		{"empty replacement", `array=(old)`, "0", "", `[[ $snippet_status -eq 0 && -v 'array[0]' && -z ${array[0]} ]]`},
+		{"special characters preserve one value", `array=(old)`, "0", `space * -n \"quote\" a\\b
+\$HOME`, `[[ $snippet_status -eq 0 && ${#array[@]} -eq 1 && ${array[0]} == $'space * -n "quote" a\\b\n$HOME' ]]`},
+		{"arithmetic expression index", `array=(zero one two three)`, "1+2", "changed", `[[ $snippet_status -eq 0 && ${array[3]} == changed && ${#array[@]} -eq 4 ]]`},
+		{"negative index updates last element", `array=(zero one two)`, "-1", "last", `[[ $snippet_status -eq 0 && ${#array[@]} -eq 3 && ${array[2]} == last ]]`},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			output, status := runCase(t, test.setup, test.index, test.value, test.assertion)
+			if status != 0 {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("negative index on empty array fails", func(t *testing.T) {
+		output, status := runCase(t, `array=()`, "-1", "value", `exit "$snippet_status"`)
+		if status == 0 || !strings.Contains(output, "bad array subscript") {
+			t.Fatalf("failure was masked: status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("readonly array assignment failure propagates", func(t *testing.T) {
+		output, status := runCase(t, `array=(old); readonly -a array`, "0", "new", `exit "$snippet_status"`)
+		if status == 0 || !strings.Contains(output, "readonly variable") {
+			t.Fatalf("failure was masked: status=%d output=%q", status, output)
+		}
+	})
+}
+
+func TestArrayNamespaceIterationInventory(t *testing.T) {
+	ordered, err := readSnippets(rootDirectory)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{
+		"array.all-elements", "array.at-index", "array.concat", "array.contains",
+		"array.declare", "array.delete-at", "array.delete", "array.filter",
+		"array.iterate", "array.length", "array.print", "array.push",
+		"array.range", "array.replace", "array.reverse", "array.set-element-at",
+	}
+	got := make([]string, 0, len(want))
+	for _, item := range ordered {
+		if item.namespace == "array" {
+			got = append(got, item.name)
+		}
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("array traversal = %#v, want %#v", got, want)
+	}
+	if got := ordered[22].name; got != "command.failure-check" {
+		t.Fatalf("next traversal entry = %q, want command.failure-check", got)
+	}
+}
+
+func runnableGeneratedArraySetElementAt(t *testing.T, array, index, value string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration22MigrationName].Body.(string)
+	if !ok || body != currentArraySetElementAtBody {
+		t.Fatal("generated iteration-22 body differs from candidate")
+	}
+	body = strings.ReplaceAll(body, `${1:myArray}`, array)
+	body = strings.ReplaceAll(body, `${2:index}`, index)
+	return strings.ReplaceAll(body, `${3:value}`, value)
 }
 
 func runWithEnvironment(t *testing.T, dir string, environment []string, name string, args ...string) string {
