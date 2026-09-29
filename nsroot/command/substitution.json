@@ -2,6 +2,6 @@
   "prefix": [
     "command substitution"
   ],
-  "body": "${1:result}=\"$(${2:command})\"\n",
+  "body": "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n",
   "description": "run command (command substitution)"
 }

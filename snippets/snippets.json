@@ -182,11 +182,14 @@
       "cmd failure check"
     ],
     "body": [
-      "if ! ${1:command} >/dev/null 2>&1; then",
-      "\techo \"failed\"",
+      "if ${1:command} >/dev/null 2>&1; then",
+      "\t_shellman_command_status=0 &&",
+      "\tprintf '%s\\n' 'succeed'",
       "else",
-      "\techo \"succeed\"",
-      "fi\n"
+      "\t_shellman_command_status=$? &&",
+      "\tprintf '%s\\n' 'failed'",
+      "fi &&",
+      "(exit \"\\${_shellman_command_status}\")\n"
     ],
     "description": "check if last command failed"
   },
@@ -195,7 +198,7 @@
       "hide command error",
       "don't show command error"
     ],
-    "body": "${1:command} 2> /dev/null\n",
+    "body": "{\n\t${1:command}\n} 2>/dev/null\n",
     "description": "If a command fails don't show error (suppress stderr)"
   },
   "command.if-exists": {
@@ -204,7 +207,7 @@
       "if cmd exists"
     ],
     "body": [
-      "if [ \"\\$(command -v ${1:command})\" ]; then",
+      "if command -v -- \"${1:command}\" >/dev/null 2>&1; then",
       "\t${2:echo \"command \\\"${1:command}\\\" exists on system\"}",
       "fi\n"
     ],
@@ -215,7 +218,7 @@
       "command nice",
       "cmd nice"
     ],
-    "body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${2:command}\n",
+    "body": "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -- ${2:command}\n",
     "description": "run command with desired privilege. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.renice": {
@@ -223,7 +226,7 @@
       "command renice",
       "cmd renice"
     ],
-    "body": "for p in \\$(pidof \"${1:processName}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n",
+    "body": "(\n\t_shellman_renice_pids=\\$(pidof -- \"${1:processName}\") || exit\n\t_shellman_renice_status=0\n\tunset IFS\n\t# shellcheck disable=SC2086 # pidof output must split into individual PIDs\n\tfor _shellman_renice_pid in \\${_shellman_renice_pids}; do\n\t\tsudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\${_shellman_renice_pid}\" || _shellman_renice_status=\\$?\n\tdone\n\texit \"\\${_shellman_renice_status}\"\n)\n",
     "description": "change running process priority. n: -20 (highest priority) to 19 (lowest priority)"
   },
   "command.run": {
@@ -233,14 +236,14 @@
       "command substitution",
       "cmd substitution"
     ],
-    "body": "${1:result}=\"$(${2:command})\"\n",
+    "body": "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n",
     "description": "run command (command substitution)"
   },
   "command.substitution": {
     "prefix": [
       "command substitution"
     ],
-    "body": "${1:result}=\"$(${2:command})\"\n",
+    "body": "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n",
     "description": "run command (command substitution)"
   },
   "command.success-check": {
@@ -249,10 +252,16 @@
       "cmd success check"
     ],
     "body": [
-      "if ${1:command} >/dev/null 2>&1; then",
+      "if {",
+      "\t${1:command}",
+      "} >/dev/null 2>&1; then",
       "\techo \"succeed\"",
       "else",
-      "\techo \"failed\"",
+      "\t(",
+      "\t\tset -- \"\\$?\"",
+      "\t\techo \"failed\" || exit",
+      "\t\texit \"\\$1\"",
+      "\t)",
       "fi\n"
     ],
     "description": "check if last command succeed"

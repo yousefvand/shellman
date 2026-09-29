@@ -4,11 +4,14 @@
     "cmd failure check"
   ],
   "body": [
-    "if ! ${1:command} >/dev/null 2>&1; then",
-    "\techo \"failed\"",
+    "if ${1:command} >/dev/null 2>&1; then",
+    "\t_shellman_command_status=0 &&",
+    "\tprintf '%s\\n' 'succeed'",
     "else",
-    "\techo \"succeed\"",
-    "fi\n"
+    "\t_shellman_command_status=$? &&",
+    "\tprintf '%s\\n' 'failed'",
+    "fi &&",
+    "(exit \"\\${_shellman_command_status}\")\n"
   ],
   "description": "check if last command failed"
 }
