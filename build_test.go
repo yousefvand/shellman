@@ -2,7 +2,11 @@ package main
 
 import (
 	"bytes"
+	"crypto/md5"
+	"crypto/sha1"
 	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -16,144 +20,164 @@ import (
 )
 
 const (
-	historicalV6SnippetSHA256      = "5840e7cc9ff1e1ba17413f2c54f242224aac413a94afb89a77cc6cf89c668d4b"
-	historicalV6CommandsSHA256     = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration1SHA256     = "42f7919542f6ffb7d48fb8e44fd3a4091eb4a63f3d9774b594d526f56b6408b1"
-	approvedV7Iteration1Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration2SHA256     = "7ddfd8260bdc5bddd951abe4712582b6e164d6ecdab693fcee7275ae526827b8"
-	approvedV7Iteration2Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration3SHA256     = "04a2f6f0d046a828ac0d48d94e08469184232879e75859140ab28fbb28130902"
-	approvedV7Iteration3Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration4SHA256     = "5929c529f11a3e9c01c7d80289025873ce9b8613e7db3d20606d0d8f70c15e32"
-	approvedV7Iteration4Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration5SHA256     = "3310be931efc6aba4a25804391a5011c956f698ce0818d2a36d115bcb1f930c7"
-	approvedV7Iteration5Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration6SHA256     = "fdbb2248248bd8dadf5108b82a8521b34bb7ae7c0fcffc0a81e2ec18a5f7fbf9"
-	approvedV7Iteration6Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration7SHA256     = "d64627c3e4250f0e26bcf15a97b20c4a75a98dec3eb54ecb87b6d461de5bc1f5"
-	approvedV7Iteration7Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration8SHA256     = "ce523b8dfe3e1d4c8c9f99ad93ea7d9d788bae0248bfff4aeb12706fbeb61c33"
-	approvedV7Iteration8Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration9SHA256     = "7d09714ae18decf9ca6bbfb362049a78db77484e94133a73926c6e4e4e524dc6"
-	approvedV7Iteration9Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration10SHA256    = "4b6863dc69dd9718876c511939ad53fb733e5ba099290c925e957199919203a4"
-	approvedV7Iteration10Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration11SHA256    = "3dc4d44814da2e055820228717292ba482c0d65b0e612edefceb780e918daedf"
-	approvedV7Iteration11Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration12SHA256    = "a0dbbe3cbca7fdc70560af96cb418a9d31ba335b6d5bf84537917d8affeaa9f7"
-	approvedV7Iteration12Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration13SHA256    = "96d55eb656e9e48df559c38754be78396a0580e75653be4088300e36b5a85159"
-	approvedV7Iteration13Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration14SHA256    = "0a3893084a3eb00d4ba389be1a156504191120ecea0cd28096a78e9af4e40145"
-	approvedV7Iteration14Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration15SHA256    = "6b984c4bdd26d09e5b983b0d268cc8c11f32223683c9cfcbde5b414dbccf8893"
-	approvedV7Iteration15Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration16SHA256    = "bcf18df13a9d6feec94697eaab51d65741cad95ce6227381a5bd8fbbdfc3ffa1"
-	approvedV7Iteration16Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration17SHA256    = "3ed152152d9c755d2c18f0df4e1928d838812a6a04a33aa1ba5d9c37d8c3e095"
-	approvedV7Iteration17Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration18SHA256    = "602bf3edd6dfef153dfcaf0166ca3f0e56927b951102ea59f9a67088ff77eb11"
-	approvedV7Iteration18Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration19SHA256    = "e60bbdf48c50df882774e7b08402c9aa11346880ab65561b0d23271e4943e305"
-	approvedV7Iteration19Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedV7Iteration20SHA256    = "eb329317f710bc17689d92ef768348401c6bfa135dd2966c18dd00780c855c9c"
-	approvedV7Iteration20Commands  = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration21SHA256     = "46ea401b4f979ec857b2a079308c426f2f95fa0cc54c3f6201ec162ca398d111"
-	currentV7Iteration21Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration22SHA256     = "303cc7ea8f7d18cc31408f7bdf3424b31711fdbc5f68c890590941bb62c0f189"
-	currentV7Iteration22Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration23SHA256     = "0ca1bd5d0dbaf01a2ef5371a88f8f59c01593296192a0f21ba0a4321e30236a2"
-	currentV7Iteration23Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration24SHA256     = "85f91833817a9fb9fa422d6f395743f1397b9e8b3ab7fcf6283d1efcc4f817d4"
-	currentV7Iteration24Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration25SHA256     = "d6ae6e6fd6bafcd949c643e0fa6edb740e8e7ca8a3451ac7f044bc71cc7a1674"
-	currentV7Iteration25Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration26SHA256     = "c3168fabd9761906a6004c3a689827968caabb46607cb9815ac4190f52d718e2"
-	currentV7Iteration26Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration27SHA256     = "5b5b8bc76050ef0e6725403cd3a7a3c8a2f3de03ea2f8f31b2641b5a59bbf0b0"
-	currentV7Iteration27Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration28SHA256     = "743f9201b2058249222ec19a3136476b31c48e408c7a4d75bf85db220de58646"
-	currentV7Iteration28Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration29SHA256     = "eaec72fbaa1334f789b5cc7451361b83bc920984fce6093ec88e38c85e384c7a"
-	currentV7Iteration29Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	currentV7Iteration30SHA256     = "2c52360c9d0a68e0a028f02660b15242206f5cd2645484dcc00fad1334f1e03f"
-	currentV7Iteration30Commands   = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
-	approvedMigrationName          = "archive.compress-tar-gz"
-	iteration2MigrationName        = "archive.compress-tar-xz"
-	iteration3MigrationName        = "archive.compress-zip"
-	iteration4MigrationName        = "archive.decompress-tar-gz"
-	iteration5MigrationName        = "archive.decompress-tar-xz"
-	iteration6MigrationName        = "archive.decompress-unzip"
-	iteration7MigrationName        = "array.all-elements"
-	iteration8MigrationName        = "array.at-index"
-	iteration9MigrationName        = "array.concat"
-	iteration10MigrationName       = "array.contains"
-	iteration11MigrationName       = "array.declare"
-	iteration12MigrationName       = "array.delete-at"
-	iteration13MigrationName       = "array.delete"
-	iteration14MigrationName       = "array.filter"
-	iteration15MigrationName       = "array.iterate"
-	iteration16MigrationName       = "array.length"
-	iteration17MigrationName       = "array.print"
-	iteration18MigrationName       = "array.push"
-	iteration19MigrationName       = "array.range"
-	iteration20MigrationName       = "array.replace"
-	iteration21MigrationName       = "array.reverse"
-	iteration22MigrationName       = "array.set-element-at"
-	iteration23MigrationName       = "command.failure-check"
-	iteration24MigrationName       = "command.hide-error"
-	iteration25MigrationName       = "command.if-exists"
-	iteration26MigrationName       = "command.nice"
-	iteration27MigrationName       = "command.renice"
-	iteration28MigrationName       = "command.run"
-	iteration29MigrationName       = "command.substitution"
-	iteration30MigrationName       = "command.success-check"
-	v6CompressTarGzBody            = "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
-	currentCompressTarGzBody       = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n"
-	v6CompressTarXzBody            = "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
-	currentCompressTarXzBody       = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && xz -f \"${archive_path}.tar\"\n"
-	v6CompressZipBody              = "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n"
-	currentCompressZipBody         = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\nzip -rq \"${archive_path}.zip\" \"${source_path}\"\n"
-	v6DecompressTarGzBody          = "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xzvf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n"
-	currentDecompressTarGzBody     = "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  gzip -dc \"${archive_path}.tar.gz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n"
-	v6DecompressTarXzBody          = "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n"
-	currentDecompressTarXzBody     = "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  xz -dc \"${archive_path}.tar.xz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n"
-	v6DecompressUnzipBody          = "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}"
-	currentDecompressUnzipBody     = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nextract_path=\"${2|/extract/to/path,\"${extractToPath}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\nunzip -q \"${archive_path}.zip\" -d \"${extract_path}\""
-	v6ArrayAllElementsBody         = "${0:echo }\"${${1:myArray}[@]}\""
-	currentArrayAllElementsBody    = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[@]}\""
-	v6ArrayAtIndexBody             = "${0:echo }\"${${1:myArray}[${2:index}]}\""
-	currentArrayAtIndexBody        = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[${2:index}]}\""
-	v6ArrayConcatBody              = "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n"
-	currentArrayConcatBody         = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n"
-	v6ArrayDeleteAtBody            = "unset \"${1:myArray}[${2:index}]\"\n"
-	currentArrayDeleteAtBody       = "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}[${2:index}]\"\n"
-	v6ArrayDeleteBody              = "unset ${1:myArray}\n"
-	currentArrayDeleteBody         = "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}\"\n"
-	v6ArrayFilterBody              = "readarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\" ; do echo \"\\${i\\}\"; done | grep ${3|',\"|}${4:pattern}${3})\n"
-	currentArrayFilterBody         = "# Bash-only: indexed arrays, readarray, and process substitution are not specified by POSIX sh.\nreadarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\"; do printf '%s\\n' \"\\${i\\}\"; done | grep -e ${3|',\"|}${4:pattern}${3} || [ $? -eq 1 ]) && wait \"$!\"\n"
-	v6ArrayLengthBody              = "${1:length}=${#${2:myArray}[@]}\n"
-	currentArrayLengthBody         = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:length}=${#${2:myArray}[@]}\n"
-	v6ArrayPrintBody               = "echo \"\\${${1:myArray}[@]}\"\n"
-	currentArrayPrintBody          = "# Bash-only: indexed arrays are not specified by POSIX sh.\n(IFS=' '; printf '%s\\n' \"\\${${1:myArray}[*]}\")\n"
-	v6ArrayPushBody                = "${1:myArray}+=('${2:newItem}')\n"
-	currentArrayPushBody           = "# Bash-only: indexed arrays and compound assignment are not specified by POSIX sh.\n${1:myArray}+=('${2:newItem}')\n"
-	v6ArrayRangeBody               = "${1:newArray}=\"${${2:myArray}[*]:${3:fromIndex}:${4:n}}\"\n"
-	currentArrayRangeBody          = "# Bash-only: indexed arrays and array slicing are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]:${3:fromIndex}:${4:n}}\")\n"
-	v6ArrayReplaceBody             = "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n"
-	currentArrayReplaceBody        = "# Bash-only: indexed arrays and pattern substitution are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]//${3:find}/${4:replace}}\")\n"
-	v6ArraySetElementAtBody        = "${1:myArray}[${2:index}]=\"${3:value}\"\n"
-	currentArraySetElementAtBody   = "# Bash-only: indexed arrays and arithmetic array indices are not specified by POSIX sh.\n${1:myArray}[${2:index}]=\"${3:value}\"\n"
-	v6CommandHideErrorBody         = "${1:command} 2> /dev/null\n"
-	currentCommandHideErrorBody    = "{\n\t${1:command}\n} 2>/dev/null\n"
-	v6CommandNiceBody              = "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${2:command}\n"
-	currentCommandNiceBody         = "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -- ${2:command}\n"
-	v6CommandReniceBody            = "for p in \\$(pidof \"${1:processName}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n"
-	currentCommandReniceBody       = "(\n\t_shellman_renice_pids=\\$(pidof -- \"${1:processName}\") || exit\n\t_shellman_renice_status=0\n\tunset IFS\n\t# shellcheck disable=SC2086 # pidof output must split into individual PIDs\n\tfor _shellman_renice_pid in \\${_shellman_renice_pids}; do\n\t\tsudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\${_shellman_renice_pid}\" || _shellman_renice_status=\\$?\n\tdone\n\texit \"\\${_shellman_renice_status}\"\n)\n"
-	v6CommandRunBody               = "${1:result}=\"$(${2:command})\"\n"
-	currentCommandRunBody          = "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n"
-	v6CommandSubstitutionBody      = "${1:result}=\"$(${2:command})\"\n"
-	currentCommandSubstitutionBody = "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n"
+	historicalV6SnippetSHA256           = "5840e7cc9ff1e1ba17413f2c54f242224aac413a94afb89a77cc6cf89c668d4b"
+	historicalV6CommandsSHA256          = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration1SHA256          = "42f7919542f6ffb7d48fb8e44fd3a4091eb4a63f3d9774b594d526f56b6408b1"
+	approvedV7Iteration1Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration2SHA256          = "7ddfd8260bdc5bddd951abe4712582b6e164d6ecdab693fcee7275ae526827b8"
+	approvedV7Iteration2Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration3SHA256          = "04a2f6f0d046a828ac0d48d94e08469184232879e75859140ab28fbb28130902"
+	approvedV7Iteration3Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration4SHA256          = "5929c529f11a3e9c01c7d80289025873ce9b8613e7db3d20606d0d8f70c15e32"
+	approvedV7Iteration4Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration5SHA256          = "3310be931efc6aba4a25804391a5011c956f698ce0818d2a36d115bcb1f930c7"
+	approvedV7Iteration5Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration6SHA256          = "fdbb2248248bd8dadf5108b82a8521b34bb7ae7c0fcffc0a81e2ec18a5f7fbf9"
+	approvedV7Iteration6Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration7SHA256          = "d64627c3e4250f0e26bcf15a97b20c4a75a98dec3eb54ecb87b6d461de5bc1f5"
+	approvedV7Iteration7Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration8SHA256          = "ce523b8dfe3e1d4c8c9f99ad93ea7d9d788bae0248bfff4aeb12706fbeb61c33"
+	approvedV7Iteration8Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration9SHA256          = "7d09714ae18decf9ca6bbfb362049a78db77484e94133a73926c6e4e4e524dc6"
+	approvedV7Iteration9Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration10SHA256         = "4b6863dc69dd9718876c511939ad53fb733e5ba099290c925e957199919203a4"
+	approvedV7Iteration10Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration11SHA256         = "3dc4d44814da2e055820228717292ba482c0d65b0e612edefceb780e918daedf"
+	approvedV7Iteration11Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration12SHA256         = "a0dbbe3cbca7fdc70560af96cb418a9d31ba335b6d5bf84537917d8affeaa9f7"
+	approvedV7Iteration12Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration13SHA256         = "96d55eb656e9e48df559c38754be78396a0580e75653be4088300e36b5a85159"
+	approvedV7Iteration13Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration14SHA256         = "0a3893084a3eb00d4ba389be1a156504191120ecea0cd28096a78e9af4e40145"
+	approvedV7Iteration14Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration15SHA256         = "6b984c4bdd26d09e5b983b0d268cc8c11f32223683c9cfcbde5b414dbccf8893"
+	approvedV7Iteration15Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration16SHA256         = "bcf18df13a9d6feec94697eaab51d65741cad95ce6227381a5bd8fbbdfc3ffa1"
+	approvedV7Iteration16Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration17SHA256         = "3ed152152d9c755d2c18f0df4e1928d838812a6a04a33aa1ba5d9c37d8c3e095"
+	approvedV7Iteration17Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration18SHA256         = "602bf3edd6dfef153dfcaf0166ca3f0e56927b951102ea59f9a67088ff77eb11"
+	approvedV7Iteration18Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration19SHA256         = "e60bbdf48c50df882774e7b08402c9aa11346880ab65561b0d23271e4943e305"
+	approvedV7Iteration19Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedV7Iteration20SHA256         = "eb329317f710bc17689d92ef768348401c6bfa135dd2966c18dd00780c855c9c"
+	approvedV7Iteration20Commands       = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration21SHA256          = "46ea401b4f979ec857b2a079308c426f2f95fa0cc54c3f6201ec162ca398d111"
+	currentV7Iteration21Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration22SHA256          = "303cc7ea8f7d18cc31408f7bdf3424b31711fdbc5f68c890590941bb62c0f189"
+	currentV7Iteration22Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration23SHA256          = "0ca1bd5d0dbaf01a2ef5371a88f8f59c01593296192a0f21ba0a4321e30236a2"
+	currentV7Iteration23Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration24SHA256          = "85f91833817a9fb9fa422d6f395743f1397b9e8b3ab7fcf6283d1efcc4f817d4"
+	currentV7Iteration24Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration25SHA256          = "d6ae6e6fd6bafcd949c643e0fa6edb740e8e7ca8a3451ac7f044bc71cc7a1674"
+	currentV7Iteration25Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration26SHA256          = "c3168fabd9761906a6004c3a689827968caabb46607cb9815ac4190f52d718e2"
+	currentV7Iteration26Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration27SHA256          = "5b5b8bc76050ef0e6725403cd3a7a3c8a2f3de03ea2f8f31b2641b5a59bbf0b0"
+	currentV7Iteration27Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration28SHA256          = "743f9201b2058249222ec19a3136476b31c48e408c7a4d75bf85db220de58646"
+	currentV7Iteration28Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration29SHA256          = "eaec72fbaa1334f789b5cc7451361b83bc920984fce6093ec88e38c85e384c7a"
+	currentV7Iteration29Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration30SHA256          = "2c52360c9d0a68e0a028f02660b15242206f5cd2645484dcc00fad1334f1e03f"
+	currentV7Iteration30Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration31SHA256          = "11488609a0ade7d3ea45a9c89ebc91c49270ce12b19c154528d700f73ac8d35a"
+	currentV7Iteration31Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration32SHA256          = "a8640a242c972e62d900cee36fbe115a21b591730940af37f6b8a6b5888284ca"
+	currentV7Iteration32Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration33SHA256          = "a7e0b39fa9ce92abdcec472d273db5ef8fd040080b10092727bd208e1f6dcdb8"
+	currentV7Iteration33Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration34SHA256          = "3986dece5e7ddfca8cfffacc0007d977a8a70641aa817820b4537068eb6b8b6f"
+	currentV7Iteration34Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	approvedMigrationName               = "archive.compress-tar-gz"
+	iteration2MigrationName             = "archive.compress-tar-xz"
+	iteration3MigrationName             = "archive.compress-zip"
+	iteration4MigrationName             = "archive.decompress-tar-gz"
+	iteration5MigrationName             = "archive.decompress-tar-xz"
+	iteration6MigrationName             = "archive.decompress-unzip"
+	iteration7MigrationName             = "array.all-elements"
+	iteration8MigrationName             = "array.at-index"
+	iteration9MigrationName             = "array.concat"
+	iteration10MigrationName            = "array.contains"
+	iteration11MigrationName            = "array.declare"
+	iteration12MigrationName            = "array.delete-at"
+	iteration13MigrationName            = "array.delete"
+	iteration14MigrationName            = "array.filter"
+	iteration15MigrationName            = "array.iterate"
+	iteration16MigrationName            = "array.length"
+	iteration17MigrationName            = "array.print"
+	iteration18MigrationName            = "array.push"
+	iteration19MigrationName            = "array.range"
+	iteration20MigrationName            = "array.replace"
+	iteration21MigrationName            = "array.reverse"
+	iteration22MigrationName            = "array.set-element-at"
+	iteration23MigrationName            = "command.failure-check"
+	iteration24MigrationName            = "command.hide-error"
+	iteration25MigrationName            = "command.if-exists"
+	iteration26MigrationName            = "command.nice"
+	iteration27MigrationName            = "command.renice"
+	iteration28MigrationName            = "command.run"
+	iteration29MigrationName            = "command.substitution"
+	iteration30MigrationName            = "command.success-check"
+	iteration31MigrationName            = "cryptography.base64-decode"
+	iteration32MigrationName            = "cryptography.base64-encode"
+	iteration33MigrationName            = "cryptography.hash"
+	iteration34MigrationName            = "date.date-now-short"
+	v6CompressTarGzBody                 = "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
+	currentCompressTarGzBody            = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n"
+	v6CompressTarXzBody                 = "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
+	currentCompressTarXzBody            = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && xz -f \"${archive_path}.tar\"\n"
+	v6CompressZipBody                   = "zip -rq ${1|/path/to/archive, \"${pathToArchive}\"|}.zip ${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\n"
+	currentCompressZipBody              = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file,\"${pathToDirectoryOrFile}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\nzip -rq \"${archive_path}.zip\" \"${source_path}\"\n"
+	v6DecompressTarGzBody               = "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xzvf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.gz\n"
+	currentDecompressTarGzBody          = "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  gzip -dc \"${archive_path}.tar.gz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n"
+	v6DecompressTarXzBody               = "tar -C ${1|/extract/to/path, \"${extractToPath}\"|} -xf ${2|/path/to/archive, \"${pathToArchive}\"|}.tar.xz\n"
+	currentDecompressTarXzBody          = "extract_path=\"${1|/extract/to/path, \"${extractToPath}\"|}\"\narchive_path=\"${2|/path/to/archive, \"${pathToArchive}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\n(\n  temporary_directory=$(mktemp -d \"${TMPDIR:-/tmp}/shellman.XXXXXXXXXX\") || exit\n  status=0\n  trap 'status=$?; trap - 0; rm -rf \"${temporary_directory}\"; exit \"${status}\"' 0\n  trap 'exit 129' HUP\n  trap 'exit 130' INT\n  trap 'exit 143' TERM\n  xz -dc \"${archive_path}.tar.xz\" > \"${temporary_directory}/archive.tar\" &&\n    (cd \"${extract_path}\" && tar -xf \"${temporary_directory}/archive.tar\")\n)\n"
+	v6DecompressUnzipBody               = "unzip -q ${1|/path/to/archive, \"${pathToArchive}\"|}.zip -d ${2|/extract/to/path,\"${extractToPath}\"|}"
+	currentDecompressUnzipBody          = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nextract_path=\"${2|/extract/to/path,\"${extractToPath}\"|}\"\ncase ${archive_path} in\n  -*) archive_path=./${archive_path} ;;\nesac\nunzip -q \"${archive_path}.zip\" -d \"${extract_path}\""
+	v6ArrayAllElementsBody              = "${0:echo }\"${${1:myArray}[@]}\""
+	currentArrayAllElementsBody         = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[@]}\""
+	v6ArrayAtIndexBody                  = "${0:echo }\"${${1:myArray}[${2:index}]}\""
+	currentArrayAtIndexBody             = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${0:echo }\"${${1:myArray}[${2:index}]}\""
+	v6ArrayConcatBody                   = "${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n"
+	currentArrayConcatBody              = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:newArray}=(\"${${2:array1}[@]}\" \"${${3:array2}[@]}\")\n"
+	v6ArrayDeleteAtBody                 = "unset \"${1:myArray}[${2:index}]\"\n"
+	currentArrayDeleteAtBody            = "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}[${2:index}]\"\n"
+	v6ArrayDeleteBody                   = "unset ${1:myArray}\n"
+	currentArrayDeleteBody              = "# Bash-only: indexed arrays are not specified by POSIX sh.\nunset \"${1:myArray}\"\n"
+	v6ArrayFilterBody                   = "readarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\" ; do echo \"\\${i\\}\"; done | grep ${3|',\"|}${4:pattern}${3})\n"
+	currentArrayFilterBody              = "# Bash-only: indexed arrays, readarray, and process substitution are not specified by POSIX sh.\nreadarray -t ${1:filtered} < <(for i in \"${${2:myArray}[@]}\"; do printf '%s\\n' \"\\${i\\}\"; done | grep -e ${3|',\"|}${4:pattern}${3} || [ $? -eq 1 ]) && wait \"$!\"\n"
+	v6ArrayLengthBody                   = "${1:length}=${#${2:myArray}[@]}\n"
+	currentArrayLengthBody              = "# Bash-only: indexed arrays are not specified by POSIX sh.\n${1:length}=${#${2:myArray}[@]}\n"
+	v6ArrayPrintBody                    = "echo \"\\${${1:myArray}[@]}\"\n"
+	currentArrayPrintBody               = "# Bash-only: indexed arrays are not specified by POSIX sh.\n(IFS=' '; printf '%s\\n' \"\\${${1:myArray}[*]}\")\n"
+	v6ArrayPushBody                     = "${1:myArray}+=('${2:newItem}')\n"
+	currentArrayPushBody                = "# Bash-only: indexed arrays and compound assignment are not specified by POSIX sh.\n${1:myArray}+=('${2:newItem}')\n"
+	v6ArrayRangeBody                    = "${1:newArray}=\"${${2:myArray}[*]:${3:fromIndex}:${4:n}}\"\n"
+	currentArrayRangeBody               = "# Bash-only: indexed arrays and array slicing are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]:${3:fromIndex}:${4:n}}\")\n"
+	v6ArrayReplaceBody                  = "${1:newArray}=${${2:myArray}[*]//${3:find}/${4:replace}}\n"
+	currentArrayReplaceBody             = "# Bash-only: indexed arrays and pattern substitution are not specified by POSIX sh.\n${1:newArray}=(\"${${2:myArray}[@]//${3:find}/${4:replace}}\")\n"
+	v6ArraySetElementAtBody             = "${1:myArray}[${2:index}]=\"${3:value}\"\n"
+	currentArraySetElementAtBody        = "# Bash-only: indexed arrays and arithmetic array indices are not specified by POSIX sh.\n${1:myArray}[${2:index}]=\"${3:value}\"\n"
+	v6CommandHideErrorBody              = "${1:command} 2> /dev/null\n"
+	currentCommandHideErrorBody         = "{\n\t${1:command}\n} 2>/dev/null\n"
+	v6CommandNiceBody                   = "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} ${2:command}\n"
+	currentCommandNiceBody              = "sudo nice -n ${1|-20,-15,-10,-5,0,5,10,15,19|} -- ${2:command}\n"
+	v6CommandReniceBody                 = "for p in \\$(pidof \"${1:processName}\"); do sudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\$p\"; done\n"
+	currentCommandReniceBody            = "(\n\t_shellman_renice_pids=\\$(pidof -- \"${1:processName}\") || exit\n\t_shellman_renice_status=0\n\tunset IFS\n\t# shellcheck disable=SC2086 # pidof output must split into individual PIDs\n\tfor _shellman_renice_pid in \\${_shellman_renice_pids}; do\n\t\tsudo renice -n ${2|-20,-15,-10,-5,0,5,10,15,19|} -p \"\\${_shellman_renice_pid}\" || _shellman_renice_status=\\$?\n\tdone\n\texit \"\\${_shellman_renice_status}\"\n)\n"
+	v6CommandRunBody                    = "${1:result}=\"$(${2:command})\"\n"
+	currentCommandRunBody               = "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n"
+	v6CommandSubstitutionBody           = "${1:result}=\"$(${2:command})\"\n"
+	currentCommandSubstitutionBody      = "# POSIX sh: command substitution runs in a subshell and removes trailing newlines.\n${1:result}=\"$(${2:command})\"\n"
+	v6CryptographyBase64DecodeBody      = "${1:base64Decoded}=\\$(echo -n \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n"
+	currentCryptographyBase64DecodeBody = "# Requires a base64 utility with the -d decode option.\n${1:base64Decoded}=\\$(printf '%s' \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n"
+	v6CryptographyBase64EncodeBody      = "${1:base64Encoded}=\\$(echo -n \"${2|stringToEncode,${variableToEncode}|}\" | base64)\n"
+	currentCryptographyBase64EncodeBody = "${1:base64Encoded}=\\$(printf '%s' \"${2|stringToEncode,${variableToEncode}|}\" | base64)\n"
+	v6CryptographyHashBody              = "${1:hash}=\\$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n"
+	currentCryptographyHashBody         = "${1:hash}=\\$(\n  hash_output=$(printf '%s' \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}) || exit\n  printf '%s\\n' \"\\${hash_output%% *}\"\n)\n"
+	v6DateNowShortBody                  = "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n"
+	currentDateNowShortBody             = "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n"
 )
 
 var v6ArrayReverseBody = []any{
@@ -315,6 +339,7 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got, want := len(ordered), 278; got != want {
 		t.Fatalf("snippet count = %d, want %d", got, want)
 	}
+	currentOrdered := append([]namedSnippet(nil), ordered...)
 	if got := ordered[3].name; got != iteration4MigrationName {
 		t.Fatalf("fourth snippet in actual nsroot traversal = %q, want %q", got, iteration4MigrationName)
 	}
@@ -396,12 +421,24 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got := ordered[29].name; got != iteration30MigrationName {
 		t.Fatalf("thirtieth snippet in actual nsroot traversal = %q, want %q", got, iteration30MigrationName)
 	}
-	currentIteration30, err := renderSnippetJSON(ordered)
+	if got := ordered[30].name; got != iteration31MigrationName {
+		t.Fatalf("thirty-first snippet in actual nsroot traversal = %q, want %q", got, iteration31MigrationName)
+	}
+	if got := ordered[31].name; got != iteration32MigrationName {
+		t.Fatalf("thirty-second snippet in actual nsroot traversal = %q, want %q", got, iteration32MigrationName)
+	}
+	if got := ordered[32].name; got != iteration33MigrationName {
+		t.Fatalf("thirty-third snippet in actual nsroot traversal = %q, want %q", got, iteration33MigrationName)
+	}
+	if got := ordered[33].name; got != iteration34MigrationName {
+		t.Fatalf("thirty-fourth snippet in actual nsroot traversal = %q, want %q", got, iteration34MigrationName)
+	}
+	currentIteration34, err := renderSnippetJSON(ordered)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertSHA256(t, "current v7 iteration-30 snippets (thirty changed, 248 unchanged)", currentIteration30, currentV7Iteration30SHA256)
-	assertSHA256(t, "current v7 iteration-30 commands", renderDocumentation(ordered), currentV7Iteration30Commands)
+	assertSHA256(t, "current v7 iteration-34 snippets (thirty-four changed, 244 unchanged)", currentIteration34, currentV7Iteration34SHA256)
+	assertSHA256(t, "current v7 iteration-34 commands", renderDocumentation(ordered), currentV7Iteration34Commands)
 
 	foundFirst := false
 	foundSecond := false
@@ -433,6 +470,10 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	foundTwentyEighth := false
 	foundTwentyNinth := false
 	foundThirtieth := false
+	foundThirtyFirst := false
+	foundThirtySecond := false
+	foundThirtyThird := false
+	foundThirtyFourth := false
 	for index := range ordered {
 		switch ordered[index].name {
 		case approvedMigrationName:
@@ -783,7 +824,51 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 			if got := ordered[index].snippet.Body; !reflect.DeepEqual(got, currentCommandSuccessCheckBody) {
 				t.Fatalf("iteration-30 snippet body = %#v, want %#v", got, currentCommandSuccessCheckBody)
 			}
-			ordered[index].snippet.Body = v6CommandSuccessCheckBody
+		case iteration31MigrationName:
+			foundThirtyFirst = true
+			if got, want := ordered[index].snippet.Prefix, "crypto base64 decode"; got != want {
+				t.Fatalf("iteration-31 snippet prefix = %#v, want %#v", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "decode variable from base64"; got != want {
+				t.Fatalf("iteration-31 snippet description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentCryptographyBase64DecodeBody {
+				t.Fatalf("iteration-31 snippet body = %#v, want %#v", got, currentCryptographyBase64DecodeBody)
+			}
+		case iteration32MigrationName:
+			foundThirtySecond = true
+			if got, want := ordered[index].snippet.Prefix, "crypto base64 encode"; got != want {
+				t.Fatalf("iteration-32 snippet prefix = %#v, want %#v", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "encode variable to base64"; got != want {
+				t.Fatalf("iteration-32 snippet description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentCryptographyBase64EncodeBody {
+				t.Fatalf("iteration-32 snippet body = %#v, want %#v", got, currentCryptographyBase64EncodeBody)
+			}
+		case iteration33MigrationName:
+			foundThirtyThird = true
+			if got, want := ordered[index].snippet.Prefix, "crypto hash"; got != want {
+				t.Fatalf("iteration-33 snippet prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"; got != want {
+				t.Fatalf("iteration-33 snippet description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentCryptographyHashBody {
+				t.Fatalf("iteration-33 snippet body = %#v, want %#v", got, currentCryptographyHashBody)
+			}
+		case iteration34MigrationName:
+			foundThirtyFourth = true
+			if got, want := ordered[index].snippet.Prefix, "date now short"; got != want {
+				t.Fatalf("iteration-34 snippet prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "yyyy/mm/dd"; got != want {
+				t.Fatalf("iteration-34 snippet description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentDateNowShortBody {
+				t.Fatalf("iteration-34 snippet body = %#v, want %#v", got, currentDateNowShortBody)
+			}
+			ordered[index].snippet.Body = v6DateNowShortBody
 		}
 	}
 	if !foundFirst {
@@ -875,6 +960,70 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	}
 	if !foundThirtieth {
 		t.Fatalf("iteration-30 snippet %q is missing", iteration30MigrationName)
+	}
+	if !foundThirtyFirst {
+		t.Fatalf("iteration-31 snippet %q is missing", iteration31MigrationName)
+	}
+	if !foundThirtySecond {
+		t.Fatalf("iteration-32 snippet %q is missing", iteration32MigrationName)
+	}
+	if !foundThirtyThird {
+		t.Fatalf("iteration-33 snippet %q is missing", iteration33MigrationName)
+	}
+	if !foundThirtyFourth {
+		t.Fatalf("iteration-34 snippet %q is missing", iteration34MigrationName)
+	}
+
+	reconstructedIteration33, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-33 snippets", reconstructedIteration33, currentV7Iteration33SHA256)
+	assertSHA256(t, "approved v7 iteration-33 commands", renderDocumentation(ordered), currentV7Iteration33Commands)
+
+	for index := range ordered {
+		if ordered[index].name == iteration33MigrationName {
+			ordered[index].snippet.Body = v6CryptographyHashBody
+		}
+	}
+
+	reconstructedIteration32, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-32 snippets", reconstructedIteration32, currentV7Iteration32SHA256)
+	assertSHA256(t, "approved v7 iteration-32 commands", renderDocumentation(ordered), currentV7Iteration32Commands)
+
+	for index := range ordered {
+		if ordered[index].name == iteration32MigrationName {
+			ordered[index].snippet.Body = v6CryptographyBase64EncodeBody
+		}
+	}
+
+	reconstructedIteration31, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-31 snippets", reconstructedIteration31, currentV7Iteration31SHA256)
+	assertSHA256(t, "approved v7 iteration-31 commands", renderDocumentation(ordered), currentV7Iteration31Commands)
+
+	for index := range ordered {
+		if ordered[index].name == iteration31MigrationName {
+			ordered[index].snippet.Body = v6CryptographyBase64DecodeBody
+		}
+	}
+
+	reconstructedIteration30, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-30 snippets", reconstructedIteration30, currentV7Iteration30SHA256)
+	assertSHA256(t, "approved v7 iteration-30 commands", renderDocumentation(ordered), currentV7Iteration30Commands)
+
+	for index := range ordered {
+		if ordered[index].name == iteration30MigrationName {
+			ordered[index].snippet.Body = v6CommandSuccessCheckBody
+		}
 	}
 
 	reconstructedIteration29, err := renderSnippetJSON(ordered)
@@ -1259,6 +1408,16 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	}
 	assertSHA256(t, "reconstructed historical v6 snippets", reconstructedV6, historicalV6SnippetSHA256)
 	assertSHA256(t, "historical v6 commands", renderDocumentation(ordered), historicalV6CommandsSHA256)
+
+	changed := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(currentOrdered[index].snippet, ordered[index].snippet) {
+			changed++
+		}
+	}
+	if changed != 34 {
+		t.Fatalf("snippets differing from historical v6 = %d, want 34 (244 unchanged)", changed)
+	}
 }
 
 func TestCompressTarGzPlaceholderContractAndPortableTarOptions(t *testing.T) {
@@ -4043,6 +4202,442 @@ func runnableGeneratedCommandSuccessCheck(t *testing.T, command string) string {
 	result := strings.Join(anyStrings(t, body), "\n")
 	result = strings.ReplaceAll(result, `\$`, `$`)
 	return strings.ReplaceAll(result, `${1:command}`, command)
+}
+
+func TestCryptographyBase64DecodePlaceholderContractAndPOSIXSyntax(t *testing.T) {
+	body := currentCryptographyBase64DecodeBody
+	for _, placeholder := range []string{`${1:base64Decoded}`, `${2|stringToDecode,${variableToDecode}|}`} {
+		if strings.Count(body, placeholder) != 1 {
+			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
+		}
+	}
+	if !strings.Contains(body, `printf '%s' "${2|stringToDecode,${variableToDecode}|}" | base64 -d`) {
+		t.Fatal("encoded data must be printed exactly and piped to the decoder")
+	}
+	if strings.Contains(body, "[[") || strings.Contains(body, "function ") || strings.Contains(body, "local ") {
+		t.Fatal("base64 decoder snippet must remain POSIX sh syntax")
+	}
+}
+
+func TestCryptographyBase64DecodeBehavior(t *testing.T) {
+	requireCommand(t, "sh")
+	requireCommand(t, "base64")
+
+	runCase := func(t *testing.T, setup, destination, encoded, trailer string, environment []string) (string, int) {
+		t.Helper()
+		body := runnableGeneratedCryptographyBase64Decode(t, destination, encoded)
+		path := filepath.Join(t.TempDir(), "base64-decode.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+body+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", environment, "sh", path)
+		return string(output), exitCode(err)
+	}
+
+	tests := []struct {
+		name string
+		data []byte
+	}{
+		{"ordinary text", []byte("Shellman base64\n")},
+		{"whitespace glob hyphen quote backslash and expansion-looking text", []byte("space * -n 'quote' backslash\\ $HOME\ninternal newline\n")},
+		{"leading newline", []byte("\nleading\n")},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			encoded := base64.StdEncoding.EncodeToString(tc.data)
+			trailer := `[ "$snippet_status" -eq 0 ] && [ "$decoded" = "$expected" ]`
+			environment := append(os.Environ(), "expected="+strings.TrimRight(string(tc.data), "\n"))
+			output, status := runCase(t, ``, "decoded", `"${variableToDecode}"`, trailer, append(environment, "variableToDecode="+encoded))
+			if status != 0 || output != "" {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("literal nested choice selection", func(t *testing.T) {
+		encoded := base64.StdEncoding.EncodeToString([]byte("literal choice"))
+		output, status := runCase(t, "", "decoded", `"`+encoded+`"`, `[ "$snippet_status" -eq 0 ] && [ "$decoded" = 'literal choice' ]`, nil)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("invalid input propagates decoder status and diagnostic", func(t *testing.T) {
+		output, status := runCase(t, "", "decoded", `"%%%"`, `exit "$snippet_status"`, nil)
+		if status != 1 || !strings.Contains(output, "invalid") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("arbitrary decoder failure propagates", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		mustExecutable(t, filepath.Join(fakeBin, "base64"), "#!/bin/sh\ncat >/dev/null\nprintf partial\nprintf 'decoder error\\n' >&2\nexit 42\n")
+		environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+		output, status := runCase(t, "", "decoded", `"QQ=="`, `[ "$decoded" = partial ] && exit "$snippet_status"`, environment)
+		if status != 42 || !strings.Contains(output, "decoder error") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("decoder command not found propagates", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		output, status := runCase(t, "", "decoded", `"QQ=="`, `exit "$snippet_status"`, []string{"PATH=" + fakeBin})
+		if status != 127 || !strings.Contains(output, "base64") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("empty value decodes to empty output", func(t *testing.T) {
+		output, status := runCase(t, "", "decoded", `""`, `[ "$snippet_status" -eq 0 ] && [ -z "$decoded" ]`, nil)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func runnableGeneratedCryptographyBase64Decode(t *testing.T, destination, encodedExpression string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration31MigrationName].Body.(string)
+	if !ok || body != currentCryptographyBase64DecodeBody {
+		t.Fatal("generated iteration-31 body differs from candidate")
+	}
+	body = strings.ReplaceAll(body, `\$`, `$`)
+	body = strings.ReplaceAll(body, `${1:base64Decoded}`, destination)
+	return strings.ReplaceAll(body, `${2|stringToDecode,${variableToDecode}|}`, encodedExpression)
+}
+
+func TestCryptographyBase64EncodePlaceholderContractAndPOSIXSyntax(t *testing.T) {
+	body := currentCryptographyBase64EncodeBody
+	for _, placeholder := range []string{`${1:base64Encoded}`, `${2|stringToEncode,${variableToEncode}|}`} {
+		if strings.Count(body, placeholder) != 1 {
+			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
+		}
+	}
+	if !strings.Contains(body, `printf '%s' "${2|stringToEncode,${variableToEncode}|}" | base64`) {
+		t.Fatal("input data must be printed exactly and piped to the encoder")
+	}
+	if strings.Contains(body, "[[") || strings.Contains(body, "function ") || strings.Contains(body, "local ") {
+		t.Fatal("base64 encoder snippet must remain POSIX sh syntax")
+	}
+}
+
+func TestCryptographyBase64EncodeBehavior(t *testing.T) {
+	requireCommand(t, "sh")
+	requireCommand(t, "base64")
+
+	runCase := func(t *testing.T, setup, destination, inputExpression, trailer string, environment []string) (string, int) {
+		t.Helper()
+		body := runnableGeneratedCryptographyBase64Encode(t, destination, inputExpression)
+		path := filepath.Join(t.TempDir(), "base64-encode.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+body+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", environment, "sh", path)
+		return string(output), exitCode(err)
+	}
+
+	tests := []struct {
+		name string
+		data string
+	}{
+		{"ordinary text", "Shellman base64"},
+		{"empty input", ""},
+		{"whitespace glob hyphen quote backslash and expansion-looking text", " space * -n 'quote' backslash\\ $HOME "},
+		{"leading internal and trailing newlines", "\nleading\ninternal\n"},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			want := base64.StdEncoding.EncodeToString([]byte(tc.data))
+			trailer := `[ "$snippet_status" -eq 0 ] && [ "$encoded" = "$expected" ]`
+			environment := append(os.Environ(), "variableToEncode="+tc.data, "expected="+want, "IFS=*,")
+			output, status := runCase(t, "", "encoded", `${variableToEncode}`, trailer, environment)
+			if status != 0 || output != "" {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("literal choice selection", func(t *testing.T) {
+		want := base64.StdEncoding.EncodeToString([]byte("stringToEncode"))
+		output, status := runCase(t, "", "encoded", `stringToEncode`, `[ "$snippet_status" -eq 0 ] && [ "$encoded" = "$expected" ]`, []string{"expected=" + want})
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	for _, failureStatus := range []int{1, 42} {
+		t.Run(fmt.Sprintf("encoder failure %d preserves partial output status and stderr", failureStatus), func(t *testing.T) {
+			fakeBin := t.TempDir()
+			mustExecutable(t, filepath.Join(fakeBin, "base64"), fmt.Sprintf("#!/bin/sh\ncat >/dev/null\nprintf 'partial\\n\\n'\nprintf 'encoder error\\n' >&2\nexit %d\n", failureStatus))
+			environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+			output, status := runCase(t, "", "encoded", `data`, `[ "$encoded" = partial ] && exit "$snippet_status"`, environment)
+			if status != failureStatus || !strings.Contains(output, "encoder error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("encoder command not found propagates", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		output, status := runCase(t, "", "encoded", `data`, `exit "$snippet_status"`, []string{"PATH=" + fakeBin})
+		if status != 127 || !strings.Contains(output, "base64") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("destination assignment failure is nonzero", func(t *testing.T) {
+		output, status := runCase(t, "readonly encoded", "encoded", `data`, `exit "$snippet_status"`, nil)
+		if status == 0 || !strings.Contains(output, "encoded") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func runnableGeneratedCryptographyBase64Encode(t *testing.T, destination, inputExpression string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration32MigrationName].Body.(string)
+	if !ok || body != currentCryptographyBase64EncodeBody {
+		t.Fatal("generated iteration-32 body differs from candidate")
+	}
+	body = strings.ReplaceAll(body, `\$`, `$`)
+	body = strings.ReplaceAll(body, `${1:base64Encoded}`, destination)
+	return strings.ReplaceAll(body, `${2|stringToEncode,${variableToEncode}|}`, inputExpression)
+}
+
+func TestCryptographyHashPlaceholderContractAndPOSIXSyntax(t *testing.T) {
+	body := currentCryptographyHashBody
+	for _, placeholder := range []string{`${1:hash}`, `${2:variableToHash}`, `${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}`} {
+		if strings.Count(body, placeholder) != 1 {
+			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
+		}
+	}
+	if !strings.Contains(body, `printf '%s' "\$${2:variableToHash}" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}`) {
+		t.Fatal("variable contents must be produced exactly and sent to the selected hash utility")
+	}
+	if strings.Contains(body, "[[") || strings.Contains(body, "function ") || strings.Contains(body, "local ") {
+		t.Fatal("hash snippet must remain POSIX sh syntax")
+	}
+}
+
+func TestCryptographyHashBehavior(t *testing.T) {
+	requireCommand(t, "sh")
+
+	runCase := func(t *testing.T, setup, destination, variable, utility, trailer string, environment []string) (string, int) {
+		t.Helper()
+		body := runnableGeneratedCryptographyHash(t, destination, variable, utility)
+		path := filepath.Join(t.TempDir(), "hash.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+body+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", environment, "sh", path)
+		return string(output), exitCode(err)
+	}
+
+	utilities := []struct {
+		name string
+		hash func([]byte) []byte
+	}{
+		{"md5sum", func(data []byte) []byte { sum := md5.Sum(data); return sum[:] }},
+		{"shasum", func(data []byte) []byte { sum := sha1.Sum(data); return sum[:] }},
+		{"sha1sum", func(data []byte) []byte { sum := sha1.Sum(data); return sum[:] }},
+		{"sha224sum", func(data []byte) []byte { sum := sha256.Sum224(data); return sum[:] }},
+		{"sha256sum", func(data []byte) []byte { sum := sha256.Sum256(data); return sum[:] }},
+		{"sha384sum", func(data []byte) []byte { sum := sha512.Sum384(data); return sum[:] }},
+		{"sha512sum", func(data []byte) []byte { sum := sha512.Sum512(data); return sum[:] }},
+	}
+	inputs := []struct {
+		name string
+		data string
+	}{
+		{"ordinary text", "Shellman hash"},
+		{"empty input", ""},
+		{"whitespace glob hyphen quote backslash and expansion-looking text", " -n * 'quoted' \\ $HOME "},
+		{"leading internal and trailing newlines", "\nleading\ninternal\n"},
+	}
+	for _, utility := range utilities {
+		if _, err := exec.LookPath(utility.name); err != nil {
+			t.Logf("SKIP utility %s: not installed", utility.name)
+			continue
+		}
+		for _, input := range inputs {
+			t.Run(utility.name+"/"+input.name, func(t *testing.T) {
+				want := hex.EncodeToString(utility.hash([]byte(input.data)))
+				trailer := `[ "$snippet_status" -eq 0 ] && [ "$hash_result" = "$expected" ]`
+				environment := append(os.Environ(), "variableToHash="+input.data, "expected="+want, "IFS=*,")
+				output, status := runCase(t, "", "hash_result", "variableToHash", utility.name, trailer, environment)
+				if status != 0 || output != "" {
+					t.Fatalf("status=%d output=%q", status, output)
+				}
+			})
+		}
+	}
+
+	t.Run("command choice is substituted literally", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		mustExecutable(t, filepath.Join(fakeBin, "hash_choice"), "#!/bin/sh\ncat >/dev/null\nprintf 'choice-digest  -\\n'\n")
+		environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+		output, status := runCase(t, "", "hash_result", "variableToHash", "hash_choice", `[ "$snippet_status" -eq 0 ] && [ "$hash_result" = choice-digest ]`, environment)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	for _, failureStatus := range []int{1, 42} {
+		t.Run(fmt.Sprintf("utility failure %d propagates and discards partial result", failureStatus), func(t *testing.T) {
+			fakeBin := t.TempDir()
+			mustExecutable(t, filepath.Join(fakeBin, "hash_failure"), fmt.Sprintf("#!/bin/sh\ncat >/dev/null\nprintf 'partial-digest  -\\n'\nprintf 'hash error\\n' >&2\nexit %d\n", failureStatus))
+			environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+			output, status := runCase(t, "", "hash_result", "variableToHash", "hash_failure", `[ -z "$hash_result" ] && exit "$snippet_status"`, environment)
+			if status != failureStatus || !strings.Contains(output, "hash error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("utility command not found propagates 127", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		output, status := runCase(t, "", "hash_result", "variableToHash", "hash_missing", `exit "$snippet_status"`, []string{"PATH=" + fakeBin})
+		if status != 127 || !strings.Contains(output, "hash_missing") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("destination assignment failure is nonzero", func(t *testing.T) {
+		output, status := runCase(t, "readonly hash_result", "hash_result", "variableToHash", "sha256sum", `exit "$snippet_status"`, nil)
+		if status == 0 || !strings.Contains(output, "hash_result") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func runnableGeneratedCryptographyHash(t *testing.T, destination, variable, utility string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration33MigrationName].Body.(string)
+	if !ok || body != currentCryptographyHashBody {
+		t.Fatal("generated iteration-33 body differs from candidate")
+	}
+	body = strings.ReplaceAll(body, `\$`, `$`)
+	body = strings.ReplaceAll(body, `${1:hash}`, destination)
+	body = strings.ReplaceAll(body, `${2:variableToHash}`, variable)
+	return strings.ReplaceAll(body, `${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}`, utility)
+}
+
+func TestDateNowShortPlaceholderContractAndPOSIXSyntax(t *testing.T) {
+	body := currentDateNowShortBody
+	for _, placeholder := range []string{`${1:dateShort}`, `${0:# format: yyyy/mm/dd}`} {
+		if strings.Count(body, placeholder) != 1 {
+			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
+		}
+	}
+	if !strings.Contains(body, `date '+%Y/%m/%d'`) {
+		t.Fatal("date must use the documented year/month/day format")
+	}
+	if strings.Contains(body, "date -I") {
+		t.Fatal("GNU-specific date -I must not remain")
+	}
+}
+
+func TestDateNowShortBehaviorAndStatus(t *testing.T) {
+	requireCommand(t, "sh")
+	requireCommand(t, "date")
+
+	runCase := func(t *testing.T, setup, destination, trailer string, environment []string) (string, int) {
+		t.Helper()
+		body := runnableGeneratedDateNowShort(t, destination, "# format: yyyy/mm/dd")
+		path := filepath.Join(t.TempDir(), "date-now-short.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+body+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", environment, "sh", path)
+		return string(output), exitCode(err)
+	}
+
+	t.Run("installed date emits documented slash format", func(t *testing.T) {
+		output, status := runCase(t, "", "date_result", `
+case $date_result in
+  [0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]) [ "$snippet_status" -eq 0 ] ;;
+  *) exit 1 ;;
+esac`, append(os.Environ(), "TZ=UTC0", "LC_ALL=C"))
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("format operand and final-tabstop comment expand exactly", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		mustExecutable(t, filepath.Join(fakeBin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '+%Y/%m/%d' ] || exit 42\nprintf '2034/05/06\\n'\n")
+		environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+		output, status := runCase(t, "", "date_result", `[ "$snippet_status" -eq 0 ] && [ "$date_result" = 2034/05/06 ]`, environment)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	for _, failureStatus := range []int{1, 42} {
+		t.Run(fmt.Sprintf("date failure %d propagates status and exposes partial assignment", failureStatus), func(t *testing.T) {
+			fakeBin := t.TempDir()
+			mustExecutable(t, filepath.Join(fakeBin, "date"), fmt.Sprintf("#!/bin/sh\nprintf 'partial-date\\n'\nprintf 'date error\\n' >&2\nexit %d\n", failureStatus))
+			environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
+			output, status := runCase(t, "", "date_result", `[ "$date_result" = partial-date ] && exit "$snippet_status"`, environment)
+			if status != failureStatus || !strings.Contains(output, "date error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("date command not found propagates 127", func(t *testing.T) {
+		fakeBin := t.TempDir()
+		output, status := runCase(t, "", "date_result", `exit "$snippet_status"`, []string{"PATH=" + fakeBin})
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("destination assignment failure is nonzero", func(t *testing.T) {
+		output, status := runCase(t, "readonly date_result", "date_result", `exit "$snippet_status"`, nil)
+		if status == 0 || !strings.Contains(output, "date_result") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func runnableGeneratedDateNowShort(t *testing.T, destination, finalComment string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration34MigrationName].Body.(string)
+	if !ok || body != currentDateNowShortBody {
+		t.Fatal("generated iteration-34 body differs from candidate")
+	}
+	body = strings.ReplaceAll(body, `\$`, `$`)
+	body = strings.ReplaceAll(body, `${1:dateShort}`, destination)
+	return strings.ReplaceAll(body, `${0:# format: yyyy/mm/dd}`, finalComment)
 }
 
 func TestArraySetElementAtPlaceholderContractAndBashDocumentation(t *testing.T) {

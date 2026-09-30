@@ -268,22 +268,22 @@
   },
   "cryptography.base64-decode": {
     "prefix": "crypto base64 decode",
-    "body": "${1:base64Decoded}=\\$(echo -n \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n",
+    "body": "# Requires a base64 utility with the -d decode option.\n${1:base64Decoded}=\\$(printf '%s' \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n",
     "description": "decode variable from base64"
   },
   "cryptography.base64-encode": {
     "prefix": "crypto base64 encode",
-    "body": "${1:base64Encoded}=\\$(echo -n \"${2|stringToEncode,${variableToEncode}|}\" | base64)\n",
+    "body": "${1:base64Encoded}=\\$(printf '%s' \"${2|stringToEncode,${variableToEncode}|}\" | base64)\n",
     "description": "encode variable to base64"
   },
   "cryptography.hash": {
     "prefix": "crypto hash",
-    "body": "${1:hash}=\\$(echo -n \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|} | cut -f1 -d ' ')\n",
+    "body": "${1:hash}=\\$(\n  hash_output=$(printf '%s' \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}) || exit\n  printf '%s\\n' \"\\${hash_output%% *}\"\n)\n",
     "description": "compute hash of variable (md5, sha, sha1, sha224, sha256, sha384, sha512)"
   },
   "date.date-now-short": {
     "prefix": "date now short",
-    "body": "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n",
+    "body": "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n",
     "description": "yyyy/mm/dd"
   },
   "date.day-of-month-current": {

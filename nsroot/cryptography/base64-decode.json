@@ -1,5 +1,5 @@
 {
   "prefix": "crypto base64 decode",
-  "body": "${1:base64Decoded}=\\$(echo -n \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n",
+  "body": "# Requires a base64 utility with the -d decode option.\n${1:base64Decoded}=\\$(printf '%s' \"${2|stringToDecode,${variableToDecode}|}\" | base64 -d)\n",
   "description": "decode variable from base64"
 }
