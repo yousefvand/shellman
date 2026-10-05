@@ -1,5 +1,5 @@
 {
   "prefix": "date now UTC",
-  "body": "${1:dateUTC}=\\$(date -u)\n",
+  "body": "# -u selects UTC; date's default display format follows LC_TIME.\n${1:dateUTC}=\\$(date -u)\n",
   "description": "coordinated Universal Time"
 }

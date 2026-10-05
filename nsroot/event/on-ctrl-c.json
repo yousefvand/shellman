@@ -5,7 +5,7 @@
   ],
   "body": [
     "# CTRL+C event handler",
-    "function on_ctrl_c() {",
+    "on_ctrl_c() {",
     "\techo # Set cursor to the next line of '^C'",
     "\ttput cnorm # show cursor. You need this if animation is used.",
     "\t${1:# i.e. clean-up code here}",
@@ -14,7 +14,7 @@
     "",
     "# Put this line at the beginning of your script (after functions used by event handlers).",
     "# Register CTRL+C event handler",
-    "trap on_ctrl_c SIGINT"
+    "trap on_ctrl_c INT"
   ],
   "description": "register a function (handler) to run on script termination (CTRL+C)"
 }

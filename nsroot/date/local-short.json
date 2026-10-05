@@ -1,5 +1,5 @@
 {
   "prefix": "date now short",
-  "body": "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n",
+  "body": "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n",
   "description": "yyyy/mm/dd"
 }

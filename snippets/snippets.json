@@ -288,42 +288,42 @@
   },
   "date.day-of-month-current": {
     "prefix": "date now dayOfMonth",
-    "body": "${1:dayOfMonth}=\\$(date +%d)\n",
+    "body": "# date %d renders the 1..31 day of month as 01..31.\n${1:dayOfMonth}=\\$(date +%d)\n",
     "description": "current day of month (1..31)"
   },
   "date.day-of-week-current": {
     "prefix": "date now dayOfWeek",
-    "body": "${1:dayOfWeek}=\\$(date +%${2|A,a|})\n",
+    "body": "# Weekday names follow the current locale.\n${1:dayOfWeek}=\\$(date +%${2|A,a|})\n",
     "description": "current day of week name (A: full, a: abbreviated)"
   },
   "date.day-of-year-current": {
     "prefix": "date now dayOfYear",
-    "body": "${1:dayOfYear}=\\$(date +%j)\n",
+    "body": "# %j is a one-based, zero-padded calendar-year ordinal (001..366).\n${1:dayOfYear}=\\$(date +%j)\n",
     "description": "current day of year (1..366)"
   },
   "date.local-short": {
     "prefix": "date now short",
-    "body": "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n",
+    "body": "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n",
     "description": "yyyy/mm/dd"
   },
   "date.month-name-current": {
     "prefix": "date now monthName",
-    "body": "${1:monthName}=\\$(date +%${2|B,b|})\n",
+    "body": "# Month names follow the current locale.\n${1:monthName}=\\$(date +%${2|B,b|})\n",
     "description": "current month name (B: full, b: abbreviated)"
   },
   "date.month-number-current": {
     "prefix": "date now monthNumber",
-    "body": "${1:monthNumber}=\\$(date +%m)\n",
+    "body": "# %m renders the one-based month number as 01..12.\n${1:monthNumber}=\\$(date +%m)\n",
     "description": "current month number (1..12)"
   },
   "date.utc-long": {
     "prefix": "date now UTC",
-    "body": "${1:dateUTC}=\\$(date -u)\n",
+    "body": "# -u selects UTC; date's default display format follows LC_TIME.\n${1:dateUTC}=\\$(date -u)\n",
     "description": "coordinated Universal Time"
   },
   "date.year-current": {
     "prefix": "date now year",
-    "body": "${1:year}=\\$(date +%${2|Y,y|})\n",
+    "body": "# %Y and %y use the local calendar year, not the ISO week-based year.\n${1:year}=\\$(date +%${2|Y,y|})\n",
     "description": "current Year (Y: full, y: last two digits)"
   },
   "event.on-ctrl-c": {
@@ -333,7 +333,7 @@
     ],
     "body": [
       "# CTRL+C event handler",
-      "function on_ctrl_c() {",
+      "on_ctrl_c() {",
       "\techo # Set cursor to the next line of '^C'",
       "\ttput cnorm # show cursor. You need this if animation is used.",
       "\t${1:# i.e. clean-up code here}",
@@ -342,7 +342,7 @@
       "",
       "# Put this line at the beginning of your script (after functions used by event handlers).",
       "# Register CTRL+C event handler",
-      "trap on_ctrl_c SIGINT"
+      "trap on_ctrl_c INT"
     ],
     "description": "register a function (handler) to run on script termination (CTRL+C)"
   },

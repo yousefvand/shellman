@@ -1,5 +1,5 @@
 {
   "prefix": "date now dayOfYear",
-  "body": "${1:dayOfYear}=\\$(date +%j)\n",
+  "body": "# %j is a one-based, zero-padded calendar-year ordinal (001..366).\n${1:dayOfYear}=\\$(date +%j)\n",
   "description": "current day of year (1..366)"
 }

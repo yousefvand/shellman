@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -17,6 +18,7 @@ import (
 	"sort"
 	"strings"
 	"testing"
+	"time"
 )
 
 const (
@@ -89,7 +91,15 @@ const (
 	currentV7Iteration33SHA256          = "a7e0b39fa9ce92abdcec472d273db5ef8fd040080b10092727bd208e1f6dcdb8"
 	currentV7Iteration33Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
 	currentV7Iteration34SHA256          = "3986dece5e7ddfca8cfffacc0007d977a8a70641aa817820b4537068eb6b8b6f"
-	currentV7Iteration34Commands        = "d97aac2dfe4e8d21e29c892b2d24ba991f5b568f6f8225c724f357bc3efe0595"
+	currentV7Iteration35SHA256          = "f4a6f9ea4308ff3ee51e8eb360b222352dbae37843281d2c62d05d6e48665225"
+	currentV7Iteration36SHA256          = "cc808323680c56c84ae918b9c40c631fe63a3f2e518b4fdafc21f353e1984d78"
+	currentV7Iteration37SHA256          = "a5f648c681c9a081e5b99ae087dd1969a9e26b17ef8cf55ccc3da8d213b06ae2"
+	currentV7Iteration38SHA256          = "b9bbcc604a86e8d314ed4d7f0ee235491667b6634084d6a768524ece5e1a79fe"
+	currentV7Iteration39SHA256          = "d34ab5cb9e89e065b2af8213be8f83c648966acd9482d1492ae662999890f1c9"
+	currentV7Iteration40SHA256          = "59aba95d557ad0490c8effae48a5531022d443d420c0ed72c30b05afd97d3e8a"
+	currentV7Iteration41SHA256          = "583a23e13513bbf052587c5576103bd3d1bc636b24665501bcf7038f92221f1b"
+	currentV7Iteration42SHA256          = "ff586d0e36a95bc676441b850d1f3edc1fc8d113b68e308b69965c7be08316d4"
+	currentV7Iteration43SHA256          = "8cb8126c68afe47860b489dc24ea623dd9ba440844ff9df4a51b3aa90af22554"
 	approvedMigrationName               = "archive.compress-tar-gz"
 	iteration2MigrationName             = "archive.compress-tar-xz"
 	iteration3MigrationName             = "archive.compress-zip"
@@ -124,6 +134,15 @@ const (
 	iteration32MigrationName            = "cryptography.base64-encode"
 	iteration33MigrationName            = "cryptography.hash"
 	iteration34MigrationName            = "date.date-now-short"
+	iteration35MigrationName            = "date.day-of-month-current"
+	iteration36MigrationName            = "date.day-of-week-current"
+	iteration37MigrationName            = "date.day-of-year-current"
+	iteration38MigrationName            = "date.local-short"
+	iteration39MigrationName            = "date.month-name-current"
+	iteration40MigrationName            = "date.month-number-current"
+	iteration41MigrationName            = "date.utc-long"
+	iteration42MigrationName            = "date.year-current"
+	iteration43MigrationName            = "event.on-ctrl-c"
 	v6CompressTarGzBody                 = "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
 	currentCompressTarGzBody            = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n"
 	v6CompressTarXzBody                 = "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
@@ -178,7 +197,51 @@ const (
 	currentCryptographyHashBody         = "${1:hash}=\\$(\n  hash_output=$(printf '%s' \"\\$${2:variableToHash}\" | ${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}) || exit\n  printf '%s\\n' \"\\${hash_output%% *}\"\n)\n"
 	v6DateNowShortBody                  = "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n"
 	currentDateNowShortBody             = "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n"
+	v6DayOfMonthCurrentBody             = "${1:dayOfMonth}=\\$(date +%d)\n"
+	currentDayOfMonthCurrentBody        = "# date %d renders the 1..31 day of month as 01..31.\n${1:dayOfMonth}=\\$(date +%d)\n"
+	v6DayOfWeekCurrentBody              = "${1:dayOfWeek}=\\$(date +%${2|A,a|})\n"
+	currentDayOfWeekCurrentBody         = "# Weekday names follow the current locale.\n${1:dayOfWeek}=\\$(date +%${2|A,a|})\n"
+	v6DayOfYearCurrentBody              = "${1:dayOfYear}=\\$(date +%j)\n"
+	currentDayOfYearCurrentBody         = "# %j is a one-based, zero-padded calendar-year ordinal (001..366).\n${1:dayOfYear}=\\$(date +%j)\n"
+	v6LocalShortBody                    = "${1:dateShort}=\\$(date -I) ${0:# format: yyyy/mm/dd}\n"
+	currentLocalShortBody               = "${1:dateShort}=\\$(date '+%Y/%m/%d') ${0:# format: yyyy/mm/dd}\n"
+	v6MonthNameCurrentBody              = "${1:monthName}=\\$(date +%${2|B,b|})\n"
+	currentMonthNameCurrentBody         = "# Month names follow the current locale.\n${1:monthName}=\\$(date +%${2|B,b|})\n"
+	v6MonthNumberCurrentBody            = "${1:monthNumber}=\\$(date +%m)\n"
+	currentMonthNumberCurrentBody       = "# %m renders the one-based month number as 01..12.\n${1:monthNumber}=\\$(date +%m)\n"
+	v6UTCLongBody                       = "${1:dateUTC}=\\$(date -u)\n"
+	currentUTCLongBody                  = "# -u selects UTC; date's default display format follows LC_TIME.\n${1:dateUTC}=\\$(date -u)\n"
+	v6YearCurrentBody                   = "${1:year}=\\$(date +%${2|Y,y|})\n"
+	currentYearCurrentBody              = "# %Y and %y use the local calendar year, not the ISO week-based year.\n${1:year}=\\$(date +%${2|Y,y|})\n"
 )
+
+var v6CtrlCBody = []any{
+	"# CTRL+C event handler",
+	"function on_ctrl_c() {",
+	"\techo # Set cursor to the next line of '^C'",
+	"\ttput cnorm # show cursor. You need this if animation is used.",
+	"\t${1:# i.e. clean-up code here}",
+	"\texit 1 # Don't remove. Use a number (1-255) for error code.",
+	"}",
+	"",
+	"# Put this line at the beginning of your script (after functions used by event handlers).",
+	"# Register CTRL+C event handler",
+	"trap on_ctrl_c SIGINT",
+}
+
+var currentCtrlCBody = []any{
+	"# CTRL+C event handler",
+	"on_ctrl_c() {",
+	"\techo # Set cursor to the next line of '^C'",
+	"\ttput cnorm # show cursor. You need this if animation is used.",
+	"\t${1:# i.e. clean-up code here}",
+	"\texit 1 # Don't remove. Use a number (1-255) for error code.",
+	"}",
+	"",
+	"# Put this line at the beginning of your script (after functions used by event handlers).",
+	"# Register CTRL+C event handler",
+	"trap on_ctrl_c INT",
+}
 
 var v6ArrayReverseBody = []any{
 	`for((i=\${#${1:myArray}[@]}-1;i>=0;i--)); do`,
@@ -433,12 +496,39 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got := ordered[33].name; got != iteration34MigrationName {
 		t.Fatalf("thirty-fourth snippet in actual nsroot traversal = %q, want %q", got, iteration34MigrationName)
 	}
-	currentIteration34, err := renderSnippetJSON(ordered)
+	if got := ordered[34].name; got != iteration35MigrationName {
+		t.Fatalf("thirty-fifth snippet in actual nsroot traversal = %q, want %q", got, iteration35MigrationName)
+	}
+	if got := ordered[35].name; got != iteration36MigrationName {
+		t.Fatalf("thirty-sixth snippet in actual nsroot traversal = %q, want %q", got, iteration36MigrationName)
+	}
+	if got := ordered[36].name; got != iteration37MigrationName {
+		t.Fatalf("thirty-seventh snippet in actual nsroot traversal = %q, want %q", got, iteration37MigrationName)
+	}
+	if got := ordered[37].name; got != iteration38MigrationName {
+		t.Fatalf("thirty-eighth snippet in actual nsroot traversal = %q, want %q", got, iteration38MigrationName)
+	}
+	if got := ordered[38].name; got != iteration39MigrationName {
+		t.Fatalf("thirty-ninth snippet in actual nsroot traversal = %q, want %q", got, iteration39MigrationName)
+	}
+	if got := ordered[39].name; got != iteration40MigrationName {
+		t.Fatalf("fortieth snippet in actual nsroot traversal = %q, want %q", got, iteration40MigrationName)
+	}
+	if got := ordered[40].name; got != iteration41MigrationName {
+		t.Fatalf("forty-first snippet in actual nsroot traversal = %q, want %q", got, iteration41MigrationName)
+	}
+	if got := ordered[41].name; got != iteration42MigrationName {
+		t.Fatalf("forty-second snippet in actual nsroot traversal = %q, want %q", got, iteration42MigrationName)
+	}
+	if got := ordered[42].name; got != iteration43MigrationName {
+		t.Fatalf("forty-third snippet in actual nsroot traversal = %q, want %q", got, iteration43MigrationName)
+	}
+	currentIteration43, err := renderSnippetJSON(ordered)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertSHA256(t, "current v7 iteration-34 snippets (thirty-four changed, 244 unchanged)", currentIteration34, currentV7Iteration34SHA256)
-	assertSHA256(t, "current v7 iteration-34 commands", renderDocumentation(ordered), currentV7Iteration34Commands)
+	assertSHA256(t, "current v7 iteration-43 snippets", currentIteration43, currentV7Iteration43SHA256)
+	assertSHA256(t, "current v7 iteration-43 commands", renderDocumentation(ordered), historicalV6CommandsSHA256)
 
 	foundFirst := false
 	foundSecond := false
@@ -474,6 +564,15 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	foundThirtySecond := false
 	foundThirtyThird := false
 	foundThirtyFourth := false
+	foundThirtyFifth := false
+	foundThirtySixth := false
+	foundThirtySeventh := false
+	foundThirtyEighth := false
+	foundThirtyNinth := false
+	foundFortieth := false
+	foundFortyFirst := false
+	foundFortySecond := false
+	foundFortyThird := false
 	for index := range ordered {
 		switch ordered[index].name {
 		case approvedMigrationName:
@@ -866,9 +965,107 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 				t.Fatalf("iteration-34 snippet description = %q, want %q", got, want)
 			}
 			if got := ordered[index].snippet.Body; got != currentDateNowShortBody {
-				t.Fatalf("iteration-34 snippet body = %#v, want %#v", got, currentDateNowShortBody)
+				t.Fatalf("iteration-34 date body = %#v, want %#v", got, currentDateNowShortBody)
 			}
-			ordered[index].snippet.Body = v6DateNowShortBody
+		case iteration35MigrationName:
+			foundThirtyFifth = true
+			if got, want := ordered[index].snippet.Prefix, "date now dayOfMonth"; got != want {
+				t.Fatalf("iteration-35 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current day of month (1..31)"; got != want {
+				t.Fatalf("iteration-35 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentDayOfMonthCurrentBody {
+				t.Fatalf("iteration-35 body = %#v, want %#v", got, currentDayOfMonthCurrentBody)
+			}
+		case iteration36MigrationName:
+			foundThirtySixth = true
+			if got, want := ordered[index].snippet.Prefix, "date now dayOfWeek"; got != want {
+				t.Fatalf("iteration-36 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current day of week name (A: full, a: abbreviated)"; got != want {
+				t.Fatalf("iteration-36 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentDayOfWeekCurrentBody {
+				t.Fatalf("iteration-36 body = %#v, want %#v", got, currentDayOfWeekCurrentBody)
+			}
+		case iteration37MigrationName:
+			foundThirtySeventh = true
+			if got, want := ordered[index].snippet.Prefix, "date now dayOfYear"; got != want {
+				t.Fatalf("iteration-37 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current day of year (1..366)"; got != want {
+				t.Fatalf("iteration-37 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentDayOfYearCurrentBody {
+				t.Fatalf("iteration-37 body = %#v, want %#v", got, currentDayOfYearCurrentBody)
+			}
+		case iteration38MigrationName:
+			foundThirtyEighth = true
+			if got, want := ordered[index].snippet.Prefix, "date now short"; got != want {
+				t.Fatalf("iteration-38 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "yyyy/mm/dd"; got != want {
+				t.Fatalf("iteration-38 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentLocalShortBody {
+				t.Fatalf("iteration-38 body = %#v, want %#v", got, currentLocalShortBody)
+			}
+		case iteration39MigrationName:
+			foundThirtyNinth = true
+			if got, want := ordered[index].snippet.Prefix, "date now monthName"; got != want {
+				t.Fatalf("iteration-39 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current month name (B: full, b: abbreviated)"; got != want {
+				t.Fatalf("iteration-39 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentMonthNameCurrentBody {
+				t.Fatalf("iteration-39 body = %#v, want %#v", got, currentMonthNameCurrentBody)
+			}
+		case iteration40MigrationName:
+			foundFortieth = true
+			if got, want := ordered[index].snippet.Prefix, "date now monthNumber"; got != want {
+				t.Fatalf("iteration-40 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current month number (1..12)"; got != want {
+				t.Fatalf("iteration-40 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentMonthNumberCurrentBody {
+				t.Fatalf("iteration-40 body = %#v, want %#v", got, currentMonthNumberCurrentBody)
+			}
+		case iteration41MigrationName:
+			foundFortyFirst = true
+			if got, want := ordered[index].snippet.Prefix, "date now UTC"; got != want {
+				t.Fatalf("iteration-41 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "coordinated Universal Time"; got != want {
+				t.Fatalf("iteration-41 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentUTCLongBody {
+				t.Fatalf("iteration-41 body = %#v, want %#v", got, currentUTCLongBody)
+			}
+		case iteration42MigrationName:
+			foundFortySecond = true
+			if got, want := ordered[index].snippet.Prefix, "date now year"; got != want {
+				t.Fatalf("iteration-42 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "current Year (Y: full, y: last two digits)"; got != want {
+				t.Fatalf("iteration-42 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; got != currentYearCurrentBody {
+				t.Fatalf("iteration-42 body = %#v, want %#v", got, currentYearCurrentBody)
+			}
+		case iteration43MigrationName:
+			foundFortyThird = true
+			if got, want := ordered[index].snippet.Prefix, []any{"event CTRL+C", "event terminated"}; !reflect.DeepEqual(got, want) {
+				t.Fatalf("iteration-43 prefixes = %#v, want %#v", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "register a function (handler) to run on script termination (CTRL+C)"; got != want {
+				t.Fatalf("iteration-43 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; !reflect.DeepEqual(got, currentCtrlCBody) {
+				t.Fatalf("iteration-43 body = %#v, want %#v", got, currentCtrlCBody)
+			}
 		}
 	}
 	if !foundFirst {
@@ -973,7 +1170,205 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if !foundThirtyFourth {
 		t.Fatalf("iteration-34 snippet %q is missing", iteration34MigrationName)
 	}
-
+	if !foundThirtyFifth {
+		t.Fatalf("iteration-35 snippet %q is missing", iteration35MigrationName)
+	}
+	if !foundThirtySixth {
+		t.Fatalf("iteration-36 snippet %q is missing", iteration36MigrationName)
+	}
+	if !foundThirtySeventh {
+		t.Fatalf("iteration-37 snippet %q is missing", iteration37MigrationName)
+	}
+	if !foundThirtyEighth {
+		t.Fatalf("iteration-38 snippet %q is missing", iteration38MigrationName)
+	}
+	if !foundThirtyNinth {
+		t.Fatalf("iteration-39 snippet %q is missing", iteration39MigrationName)
+	}
+	if !foundFortieth {
+		t.Fatalf("iteration-40 snippet %q is missing", iteration40MigrationName)
+	}
+	if !foundFortyFirst {
+		t.Fatalf("iteration-41 snippet %q is missing", iteration41MigrationName)
+	}
+	if !foundFortySecond {
+		t.Fatalf("iteration-42 snippet %q is missing", iteration42MigrationName)
+	}
+	if !foundFortyThird {
+		t.Fatalf("iteration-43 snippet %q is missing", iteration43MigrationName)
+	}
+	for index := range ordered {
+		if ordered[index].name == iteration43MigrationName {
+			ordered[index].snippet.Body = v6CtrlCBody
+		}
+	}
+	rollback43Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(currentOrdered[index].snippet, ordered[index].snippet) {
+			rollback43Differences++
+			if ordered[index].name != iteration43MigrationName {
+				t.Fatalf("iteration-43 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollback43Differences != 1 {
+		t.Fatalf("iteration-43 rollback changed %d snippets, want 1", rollback43Differences)
+	}
+	reconstructedIteration42, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-42 snippets", reconstructedIteration42, currentV7Iteration42SHA256)
+	preRollback42 := append([]namedSnippet(nil), ordered...)
+	for index := range ordered {
+		if ordered[index].name == iteration42MigrationName {
+			ordered[index].snippet.Body = v6YearCurrentBody
+		}
+	}
+	rollback42Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(preRollback42[index].snippet, ordered[index].snippet) {
+			rollback42Differences++
+			if ordered[index].name != iteration42MigrationName {
+				t.Fatalf("iteration-42 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollback42Differences != 1 {
+		t.Fatalf("iteration-42 rollback changed %d snippets, want 1", rollback42Differences)
+	}
+	reconstructedIteration41, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-41 snippets", reconstructedIteration41, currentV7Iteration41SHA256)
+	preRollback41 := append([]namedSnippet(nil), ordered...)
+	for index := range ordered {
+		if ordered[index].name == iteration41MigrationName {
+			ordered[index].snippet.Body = v6UTCLongBody
+		}
+	}
+	rollback41Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(preRollback41[index].snippet, ordered[index].snippet) {
+			rollback41Differences++
+			if ordered[index].name != iteration41MigrationName {
+				t.Fatalf("iteration-41 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollback41Differences != 1 {
+		t.Fatalf("iteration-41 rollback changed %d snippets, want 1", rollback41Differences)
+	}
+	reconstructedIteration40, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-40 snippets", reconstructedIteration40, currentV7Iteration40SHA256)
+	preRollback40 := append([]namedSnippet(nil), ordered...)
+	for index := range ordered {
+		if ordered[index].name == iteration40MigrationName {
+			ordered[index].snippet.Body = v6MonthNumberCurrentBody
+		}
+	}
+	rollback40Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(preRollback40[index].snippet, ordered[index].snippet) {
+			rollback40Differences++
+			if ordered[index].name != iteration40MigrationName {
+				t.Fatalf("iteration-40 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollback40Differences != 1 {
+		t.Fatalf("iteration-40 rollback changed %d snippets, want 1", rollback40Differences)
+	}
+	reconstructedIteration39, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-39 snippets", reconstructedIteration39, currentV7Iteration39SHA256)
+	preRollback39 := append([]namedSnippet(nil), ordered...)
+	for index := range ordered {
+		if ordered[index].name == iteration39MigrationName {
+			ordered[index].snippet.Body = v6MonthNameCurrentBody
+		}
+	}
+	rollback39Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(preRollback39[index].snippet, ordered[index].snippet) {
+			rollback39Differences++
+			if ordered[index].name != iteration39MigrationName {
+				t.Fatalf("iteration-39 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollback39Differences != 1 {
+		t.Fatalf("iteration-39 rollback changed %d snippets, want 1", rollback39Differences)
+	}
+	reconstructedIteration38, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-38 snippets", reconstructedIteration38, currentV7Iteration38SHA256)
+	preRollback38 := append([]namedSnippet(nil), ordered...)
+	for index := range ordered {
+		if ordered[index].name == iteration38MigrationName {
+			ordered[index].snippet.Body = v6LocalShortBody
+		}
+	}
+	rollbackDifferences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(preRollback38[index].snippet, ordered[index].snippet) {
+			rollbackDifferences++
+			if ordered[index].name != iteration38MigrationName {
+				t.Fatalf("iteration-38 rollback changed unexpected snippet %q", ordered[index].name)
+			}
+		}
+	}
+	if rollbackDifferences != 1 {
+		t.Fatalf("iteration-38 rollback changed %d snippets, want 1", rollbackDifferences)
+	}
+	reconstructedIteration37, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-37 snippets", reconstructedIteration37, currentV7Iteration37SHA256)
+	for index := range ordered {
+		if ordered[index].name == iteration37MigrationName {
+			ordered[index].snippet.Body = v6DayOfYearCurrentBody
+		}
+	}
+	reconstructedIteration36, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-36 snippets", reconstructedIteration36, currentV7Iteration36SHA256)
+	for index := range ordered {
+		if ordered[index].name == iteration36MigrationName {
+			ordered[index].snippet.Body = v6DayOfWeekCurrentBody
+		}
+	}
+	reconstructedIteration35, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-35 snippets", reconstructedIteration35, currentV7Iteration35SHA256)
+	for index := range ordered {
+		if ordered[index].name == iteration35MigrationName {
+			ordered[index].snippet.Body = v6DayOfMonthCurrentBody
+		}
+	}
+	reconstructedIteration34, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-34 snippets", reconstructedIteration34, currentV7Iteration34SHA256)
+	for index := range ordered {
+		if ordered[index].name == iteration34MigrationName {
+			ordered[index].snippet.Body = v6DateNowShortBody
+		}
+	}
 	reconstructedIteration33, err := renderSnippetJSON(ordered)
 	if err != nil {
 		t.Fatal(err)
@@ -1415,8 +1810,8 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 			changed++
 		}
 	}
-	if changed != 34 {
-		t.Fatalf("snippets differing from historical v6 = %d, want 34 (244 unchanged)", changed)
+	if changed != 43 {
+		t.Fatalf("snippets differing from historical v6 = %d, want 43 (235 unchanged)", changed)
 	}
 }
 
@@ -4543,85 +4938,7 @@ func runnableGeneratedCryptographyHash(t *testing.T, destination, variable, util
 	return strings.ReplaceAll(body, `${3|md5sum,shasum,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum|}`, utility)
 }
 
-func TestDateNowShortPlaceholderContractAndPOSIXSyntax(t *testing.T) {
-	body := currentDateNowShortBody
-	for _, placeholder := range []string{`${1:dateShort}`, `${0:# format: yyyy/mm/dd}`} {
-		if strings.Count(body, placeholder) != 1 {
-			t.Fatalf("placeholder %q count = %d, want 1", placeholder, strings.Count(body, placeholder))
-		}
-	}
-	if !strings.Contains(body, `date '+%Y/%m/%d'`) {
-		t.Fatal("date must use the documented year/month/day format")
-	}
-	if strings.Contains(body, "date -I") {
-		t.Fatal("GNU-specific date -I must not remain")
-	}
-}
-
-func TestDateNowShortBehaviorAndStatus(t *testing.T) {
-	requireCommand(t, "sh")
-	requireCommand(t, "date")
-
-	runCase := func(t *testing.T, setup, destination, trailer string, environment []string) (string, int) {
-		t.Helper()
-		body := runnableGeneratedDateNowShort(t, destination, "# format: yyyy/mm/dd")
-		path := filepath.Join(t.TempDir(), "date-now-short.sh")
-		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+body+"snippet_status=$?\n"+trailer+"\n"))
-		run(t, ".", "sh", "-n", path)
-		output, err := runCommand(".", environment, "sh", path)
-		return string(output), exitCode(err)
-	}
-
-	t.Run("installed date emits documented slash format", func(t *testing.T) {
-		output, status := runCase(t, "", "date_result", `
-case $date_result in
-  [0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]) [ "$snippet_status" -eq 0 ] ;;
-  *) exit 1 ;;
-esac`, append(os.Environ(), "TZ=UTC0", "LC_ALL=C"))
-		if status != 0 || output != "" {
-			t.Fatalf("status=%d output=%q", status, output)
-		}
-	})
-
-	t.Run("format operand and final-tabstop comment expand exactly", func(t *testing.T) {
-		fakeBin := t.TempDir()
-		mustExecutable(t, filepath.Join(fakeBin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '+%Y/%m/%d' ] || exit 42\nprintf '2034/05/06\\n'\n")
-		environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
-		output, status := runCase(t, "", "date_result", `[ "$snippet_status" -eq 0 ] && [ "$date_result" = 2034/05/06 ]`, environment)
-		if status != 0 || output != "" {
-			t.Fatalf("status=%d output=%q", status, output)
-		}
-	})
-
-	for _, failureStatus := range []int{1, 42} {
-		t.Run(fmt.Sprintf("date failure %d propagates status and exposes partial assignment", failureStatus), func(t *testing.T) {
-			fakeBin := t.TempDir()
-			mustExecutable(t, filepath.Join(fakeBin, "date"), fmt.Sprintf("#!/bin/sh\nprintf 'partial-date\\n'\nprintf 'date error\\n' >&2\nexit %d\n", failureStatus))
-			environment := append(os.Environ(), "PATH="+fakeBin+":"+os.Getenv("PATH"))
-			output, status := runCase(t, "", "date_result", `[ "$date_result" = partial-date ] && exit "$snippet_status"`, environment)
-			if status != failureStatus || !strings.Contains(output, "date error") {
-				t.Fatalf("status=%d output=%q", status, output)
-			}
-		})
-	}
-
-	t.Run("date command not found propagates 127", func(t *testing.T) {
-		fakeBin := t.TempDir()
-		output, status := runCase(t, "", "date_result", `exit "$snippet_status"`, []string{"PATH=" + fakeBin})
-		if status != 127 || !strings.Contains(output, "date") {
-			t.Fatalf("status=%d output=%q", status, output)
-		}
-	})
-
-	t.Run("destination assignment failure is nonzero", func(t *testing.T) {
-		output, status := runCase(t, "readonly date_result", "date_result", `exit "$snippet_status"`, nil)
-		if status == 0 || !strings.Contains(output, "date_result") {
-			t.Fatalf("status=%d output=%q", status, output)
-		}
-	})
-}
-
-func runnableGeneratedDateNowShort(t *testing.T, destination, finalComment string) string {
+func expandedGeneratedDateNowShort(t *testing.T, destination string) string {
 	t.Helper()
 	generated, _, err := generate(".")
 	if err != nil {
@@ -4633,11 +4950,776 @@ func runnableGeneratedDateNowShort(t *testing.T, destination, finalComment strin
 	}
 	body, ok := snippets[iteration34MigrationName].Body.(string)
 	if !ok || body != currentDateNowShortBody {
-		t.Fatal("generated iteration-34 body differs from candidate")
+		t.Fatalf("generated date body = %#v, want %#v", snippets[iteration34MigrationName].Body, currentDateNowShortBody)
 	}
-	body = strings.ReplaceAll(body, `\$`, `$`)
+	if strings.Count(body, `${1:dateShort}`) != 1 || strings.Count(body, `${0:# format: yyyy/mm/dd}`) != 1 ||
+		strings.Count(body, `\$`) != 1 || !strings.HasSuffix(body, "\n") {
+		t.Fatalf("unexpected date placeholder or escaping structure: %q", body)
+	}
 	body = strings.ReplaceAll(body, `${1:dateShort}`, destination)
-	return strings.ReplaceAll(body, `${0:# format: yyyy/mm/dd}`, finalComment)
+	body = strings.ReplaceAll(body, `${0:# format: yyyy/mm/dd}`, `# format: yyyy/mm/dd`)
+	return strings.ReplaceAll(body, `\$`, `$`)
+}
+
+func expandedGeneratedMonthName(t *testing.T, destination, choice string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration39MigrationName].Body.(string)
+	if !ok || body != currentMonthNameCurrentBody {
+		t.Fatalf("generated month body = %#v", snippets[iteration39MigrationName].Body)
+	}
+	if strings.Count(body, `${1:monthName}`) != 1 || strings.Count(body, `${2|B,b|}`) != 1 ||
+		strings.Count(body, `\$`) != 1 || !strings.HasSuffix(body, "\n") {
+		t.Fatalf("unexpected month placeholder structure: %q", body)
+	}
+	if choice != "B" && choice != "b" {
+		t.Fatalf("invalid month choice %q", choice)
+	}
+	body = strings.ReplaceAll(body, `${1:monthName}`, destination)
+	body = strings.ReplaceAll(body, `${2|B,b|}`, choice)
+	return strings.ReplaceAll(body, `\$`, `$`)
+}
+
+func TestMonthNameCurrentGeneratedExpansionAndBehavior(t *testing.T) {
+	requireCommand(t, "sh")
+	for _, choice := range []string{"B", "b"} {
+		got := expandedGeneratedMonthName(t, "month_result", choice)
+		want := "# Month names follow the current locale.\nmonth_result=$(date +%" + choice + ")\n"
+		if got != want {
+			t.Fatalf("choice %s: expansion = %q, want %q", choice, got, want)
+		}
+		path := filepath.Join(t.TempDir(), "month.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+got+"printf '%s\\n' \"$month_result\" >/dev/null\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", nil, "shellcheck", "-s", "sh", path)
+		if err != nil {
+			t.Fatalf("ShellCheck choice %s: %v: %s", choice, err, output)
+		}
+	}
+
+	// Only the test stand-in uses GNU date -d; the snippet invokes date +%B or date +%b.
+	full := []string{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}
+	abbreviated := []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
+	for month := 1; month <= 12; month++ {
+		for _, choice := range []string{"B", "b"} {
+			instant := fmt.Sprintf("2024-%02d-15 12:00:00 UTC", month)
+			want := full[month-1]
+			if choice == "b" {
+				want = abbreviated[month-1]
+			}
+			t.Run(fmt.Sprintf("month-%02d-%s", month, choice), func(t *testing.T) {
+				root := t.TempDir()
+				bin := filepath.Join(root, "bin")
+				mustMkdirAll(t, bin)
+				mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '+%"+choice+"' ] || exit 42\nexec /bin/date -d \"$SHELLMAN_MONTH_INSTANT\" \"$1\"\n")
+				path := filepath.Join(root, "month.sh")
+				mustWriteFile(t, path, []byte("#!/bin/sh\n"+expandedGeneratedMonthName(t, "month_result", choice)+"[ \"$month_result\" = '"+want+"' ]\n"))
+				output, err := runCommand(".", append(os.Environ(), "PATH="+bin, "LC_ALL=C", "TZ=UTC", "SHELLMAN_MONTH_INSTANT="+instant), "sh", path)
+				if err != nil {
+					t.Fatalf("want %q: %v: %s", want, err, output)
+				}
+			})
+		}
+	}
+}
+
+func TestMonthNameCurrentAssignmentStatusAndText(t *testing.T) {
+	requireCommand(t, "sh")
+	runCase := func(t *testing.T, choice, stub, setup, destination, trailer string, includeDate bool) (string, int) {
+		t.Helper()
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		if includeDate {
+			mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n"+stub)
+		}
+		path := filepath.Join(root, "month.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+expandedGeneratedMonthName(t, destination, choice)+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		return string(output), exitCode(err)
+	}
+	for _, choice := range []string{"B", "b"} {
+		t.Run("arbitrary-text-"+choice, func(t *testing.T) {
+			stub := "[ \"$#\" -eq 1 ] && [ \"$1\" = '+%" + choice + "' ] || exit 42\nprintf '\\nMois. long\\ninterne\\n\\n'\n"
+			output, status := runCase(t, choice, stub, "", "month_result", `[ "$snippet_status" -eq 0 ] && [ "$month_result" = "$(printf '\nMois. long\ninterne')" ]`, true)
+			if status != 0 || output != "" {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+		for _, failure := range []int{1, 42, 127} {
+			t.Run(fmt.Sprintf("failure-%s-%d", choice, failure), func(t *testing.T) {
+				stub := fmt.Sprintf("printf 'partial\\n'; printf 'month error\\n' >&2; exit %d\n", failure)
+				output, status := runCase(t, choice, stub, "", "month_result", `[ "$month_result" = partial ] && exit "$snippet_status"`, true)
+				if status != failure || !strings.Contains(output, "month error") {
+					t.Fatalf("status=%d output=%q", status, output)
+				}
+			})
+		}
+	}
+	t.Run("command-not-found", func(t *testing.T) {
+		output, status := runCase(t, "B", "", "", "month_result", `exit "$snippet_status"`, false)
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, destination := range []string{"month_result", "1bad"} {
+		t.Run("destination-"+destination, func(t *testing.T) {
+			setup := ""
+			if destination == "month_result" {
+				setup = "readonly month_result"
+			}
+			output, status := runCase(t, "B", "printf 'March\\n'\n", setup, destination, `exit "$snippet_status"`, true)
+			if status == 0 || !strings.Contains(output, destination) {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("later-command-masks-status", func(t *testing.T) {
+		output, status := runCase(t, "B", "exit 42\n", "", "month_result", `:; [ "$snippet_status" -eq 42 ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	t.Run("pipeline-masks-left-status", func(t *testing.T) {
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\nexit 42\n")
+		path := filepath.Join(root, "pipeline.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n{\n"+expandedGeneratedMonthName(t, "month_result", "B")+"} | /bin/cat\n"))
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		if status := exitCode(err); status != 0 || string(output) != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func expandedGeneratedMonthNumber(t *testing.T, destination string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration40MigrationName].Body.(string)
+	if !ok || body != currentMonthNumberCurrentBody {
+		t.Fatalf("generated month-number body = %#v", snippets[iteration40MigrationName].Body)
+	}
+	if strings.Count(body, `${1:monthNumber}`) != 1 || strings.Count(body, `\$`) != 1 ||
+		strings.Count(body, `date +%m`) != 1 || !strings.HasSuffix(body, "\n") {
+		t.Fatalf("unexpected month-number placeholder structure: %q", body)
+	}
+	body = strings.ReplaceAll(body, `${1:monthNumber}`, destination)
+	return strings.ReplaceAll(body, `\$`, `$`)
+}
+
+func TestMonthNumberCurrentGeneratedExpansionAndMonths(t *testing.T) {
+	requireCommand(t, "sh")
+	expanded := expandedGeneratedMonthNumber(t, "month_result")
+	if want := "# %m renders the one-based month number as 01..12.\nmonth_result=$(date +%m)\n"; expanded != want {
+		t.Fatalf("expanded body = %q, want %q", expanded, want)
+	}
+	path := filepath.Join(t.TempDir(), "month-number.sh")
+	mustWriteFile(t, path, []byte("#!/bin/sh\n"+expanded+"printf '%s\\n' \"$month_result\" >/dev/null\n"))
+	run(t, ".", "sh", "-n", path)
+	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", path)
+	if err != nil {
+		t.Fatalf("ShellCheck: %v: %s", err, output)
+	}
+
+	// GNU date -d controls test time only; the snippet itself passes just +%m.
+	for month := 1; month <= 12; month++ {
+		t.Run(fmt.Sprintf("month-%02d", month), func(t *testing.T) {
+			root := t.TempDir()
+			bin := filepath.Join(root, "bin")
+			mustMkdirAll(t, bin)
+			mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '+%m' ] || exit 42\nexec /bin/date -d \"$SHELLMAN_MONTH_INSTANT\" \"$1\"\n")
+			path := filepath.Join(root, "month.sh")
+			want := fmt.Sprintf("%02d", month)
+			mustWriteFile(t, path, []byte("#!/bin/sh\n"+expanded+"[ \"$month_result\" = '"+want+"' ]\n"))
+			instant := fmt.Sprintf("2024-%02d-15 12:00:00 UTC", month)
+			output, err := runCommand(".", append(os.Environ(), "PATH="+bin, "LC_ALL=C", "TZ=UTC", "SHELLMAN_MONTH_INSTANT="+instant), "sh", path)
+			if err != nil {
+				t.Fatalf("month %d, want %q: %v: %s", month, want, err, output)
+			}
+		})
+	}
+}
+
+func TestMonthNumberCurrentAssignmentStatusAndText(t *testing.T) {
+	requireCommand(t, "sh")
+	runCase := func(t *testing.T, stub, setup, destination, trailer string, includeDate bool) (string, int) {
+		t.Helper()
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		if includeDate {
+			mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n"+stub)
+		}
+		path := filepath.Join(root, "month.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+expandedGeneratedMonthNumber(t, destination)+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		return string(output), exitCode(err)
+	}
+	t.Run("arbitrary-text-and-newlines", func(t *testing.T) {
+		stub := "[ \"$#\" -eq 1 ] && [ \"$1\" = '+%m' ] || exit 42\nprintf '\\n0 7\\ninner\\n\\n'\n"
+		output, status := runCase(t, stub, "", "month_result", `[ "$snippet_status" -eq 0 ] && [ "$month_result" = "$(printf '\n0 7\ninner')" ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, failure := range []int{1, 42, 127} {
+		t.Run(fmt.Sprintf("failure-%d", failure), func(t *testing.T) {
+			stub := fmt.Sprintf("printf 'partial\\n'; printf 'date error\\n' >&2; exit %d\n", failure)
+			output, status := runCase(t, stub, "", "month_result", `[ "$month_result" = partial ] && exit "$snippet_status"`, true)
+			if status != failure || !strings.Contains(output, "date error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("command-not-found", func(t *testing.T) {
+		output, status := runCase(t, "", "", "month_result", `exit "$snippet_status"`, false)
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, destination := range []string{"month_result", "1bad"} {
+		t.Run("destination-"+destination, func(t *testing.T) {
+			setup := ""
+			if destination == "month_result" {
+				setup = "readonly month_result"
+			}
+			output, status := runCase(t, "printf '04\\n'\n", setup, destination, `exit "$snippet_status"`, true)
+			if status == 0 || !strings.Contains(output, destination) {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("later-command-masks-status", func(t *testing.T) {
+		output, status := runCase(t, "exit 42\n", "", "month_result", `:; [ "$snippet_status" -eq 42 ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	t.Run("pipeline-masks-left-status", func(t *testing.T) {
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\nexit 42\n")
+		path := filepath.Join(root, "pipeline.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n{\n"+expandedGeneratedMonthNumber(t, "month_result")+"} | /bin/cat\n"))
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		if status := exitCode(err); status != 0 || string(output) != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func expandedGeneratedUTCLong(t *testing.T, destination string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration41MigrationName].Body.(string)
+	if !ok || body != currentUTCLongBody {
+		t.Fatalf("generated UTC body = %#v", snippets[iteration41MigrationName].Body)
+	}
+	if strings.Count(body, `${1:dateUTC}`) != 1 || strings.Count(body, `\$`) != 1 ||
+		strings.Count(body, `date -u`) != 1 || !strings.HasSuffix(body, "\n") {
+		t.Fatalf("unexpected UTC placeholder structure: %q", body)
+	}
+	body = strings.ReplaceAll(body, `${1:dateUTC}`, destination)
+	return strings.ReplaceAll(body, `\$`, `$`)
+}
+
+func TestUTCLongGeneratedExpansionAndBoundaries(t *testing.T) {
+	requireCommand(t, "sh")
+	expanded := expandedGeneratedUTCLong(t, "utc_result")
+	if want := "# -u selects UTC; date's default display format follows LC_TIME.\nutc_result=$(date -u)\n"; expanded != want {
+		t.Fatalf("expanded body = %q, want %q", expanded, want)
+	}
+	path := filepath.Join(t.TempDir(), "utc.sh")
+	mustWriteFile(t, path, []byte("#!/bin/sh\n"+expanded+"printf '%s\\n' \"$utc_result\" >/dev/null\n"))
+	run(t, ".", "sh", "-n", path)
+	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", path)
+	if err != nil {
+		t.Fatalf("ShellCheck: %v: %s", err, output)
+	}
+
+	// GNU date -d controls the test instant only; the generated snippet passes exactly -u.
+	cases := []struct{ name, instant, want string }{
+		{"year-end", "2024-12-31 23:59:59 UTC", "Tue Dec 31 23:59:59 UTC 2024"},
+		{"new-year-midnight", "2025-01-01 00:00:00 UTC", "Wed Jan  1 00:00:00 UTC 2025"},
+		{"month-end", "2024-01-31 23:59:59 UTC", "Wed Jan 31 23:59:59 UTC 2024"},
+		{"new-month-midnight", "2024-02-01 00:00:00 UTC", "Thu Feb  1 00:00:00 UTC 2024"},
+		{"leap-day-noon", "2024-02-29 12:00:00 UTC", "Thu Feb 29 12:00:00 UTC 2024"},
+		{"after-leap-day", "2024-03-01 00:00:00 UTC", "Fri Mar  1 00:00:00 UTC 2024"},
+		{"representative-daytime", "2024-06-15 12:34:56 UTC", "Sat Jun 15 12:34:56 UTC 2024"},
+	}
+	for _, test := range cases {
+		for _, timezone := range []string{"UTC", "America/Los_Angeles", "Asia/Kathmandu", "Pacific/Kiritimati"} {
+			t.Run(test.name+"-"+timezone, func(t *testing.T) {
+				root := t.TempDir()
+				bin := filepath.Join(root, "bin")
+				mustMkdirAll(t, bin)
+				mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '-u' ] || exit 42\nexec /bin/date -u -d \"$SHELLMAN_UTC_INSTANT\"\n")
+				path := filepath.Join(root, "utc.sh")
+				mustWriteFile(t, path, []byte("#!/bin/sh\n"+expanded+"[ \"$utc_result\" = '"+test.want+"' ]\n"))
+				output, err := runCommand(".", append(os.Environ(), "PATH="+bin, "LC_ALL=C", "TZ="+timezone, "SHELLMAN_UTC_INSTANT="+test.instant), "sh", path)
+				if err != nil {
+					t.Fatalf("want %q: %v: %s", test.want, err, output)
+				}
+			})
+		}
+	}
+}
+
+func TestUTCLongAssignmentStatusAndText(t *testing.T) {
+	requireCommand(t, "sh")
+	runCase := func(t *testing.T, stub, setup, destination, trailer string, includeDate bool) (string, int) {
+		t.Helper()
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		if includeDate {
+			mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n"+stub)
+		}
+		path := filepath.Join(root, "utc.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+expandedGeneratedUTCLong(t, destination)+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		return string(output), exitCode(err)
+	}
+	t.Run("arbitrary-text-and-newlines", func(t *testing.T) {
+		stub := "[ \"$#\" -eq 1 ] && [ \"$1\" = '-u' ] || exit 42\nprintf '\\nUTC label\\ninner\\n\\n'\n"
+		output, status := runCase(t, stub, "", "utc_result", `[ "$snippet_status" -eq 0 ] && [ "$utc_result" = "$(printf '\nUTC label\ninner')" ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, failure := range []int{1, 42, 127} {
+		t.Run(fmt.Sprintf("failure-%d", failure), func(t *testing.T) {
+			stub := fmt.Sprintf("printf 'partial\\n'; printf 'date error\\n' >&2; exit %d\n", failure)
+			output, status := runCase(t, stub, "", "utc_result", `[ "$utc_result" = partial ] && exit "$snippet_status"`, true)
+			if status != failure || !strings.Contains(output, "date error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("command-not-found", func(t *testing.T) {
+		output, status := runCase(t, "", "", "utc_result", `exit "$snippet_status"`, false)
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, destination := range []string{"utc_result", "1bad"} {
+		t.Run("destination-"+destination, func(t *testing.T) {
+			setup := ""
+			if destination == "utc_result" {
+				setup = "readonly utc_result"
+			}
+			output, status := runCase(t, "printf 'UTC\\n'\n", setup, destination, `exit "$snippet_status"`, true)
+			if status == 0 || !strings.Contains(output, destination) {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("later-command-masks-status", func(t *testing.T) {
+		output, status := runCase(t, "exit 42\n", "", "utc_result", `:; [ "$snippet_status" -eq 42 ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	t.Run("pipeline-masks-left-status", func(t *testing.T) {
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\nexit 42\n")
+		path := filepath.Join(root, "pipeline.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n{\n"+expandedGeneratedUTCLong(t, "utc_result")+"} | /bin/cat\n"))
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		if status := exitCode(err); status != 0 || string(output) != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func expandedGeneratedYearCurrent(t *testing.T, destination, choice string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration42MigrationName].Body.(string)
+	if !ok || body != currentYearCurrentBody {
+		t.Fatalf("generated year body = %#v", snippets[iteration42MigrationName].Body)
+	}
+	if strings.Count(body, `${1:year}`) != 1 || strings.Count(body, `${2|Y,y|}`) != 1 ||
+		strings.Count(body, `\$`) != 1 || !strings.HasSuffix(body, "\n") {
+		t.Fatalf("unexpected year placeholder structure: %q", body)
+	}
+	if choice != "Y" && choice != "y" {
+		t.Fatalf("invalid year choice %q", choice)
+	}
+	body = strings.ReplaceAll(body, `${1:year}`, destination)
+	body = strings.ReplaceAll(body, `${2|Y,y|}`, choice)
+	return strings.ReplaceAll(body, `\$`, `$`)
+}
+
+func TestYearCurrentGeneratedExpansionAndCalendarBoundaries(t *testing.T) {
+	requireCommand(t, "sh")
+	for _, choice := range []string{"Y", "y"} {
+		expanded := expandedGeneratedYearCurrent(t, "year_result", choice)
+		want := "# %Y and %y use the local calendar year, not the ISO week-based year.\nyear_result=$(date +%" + choice + ")\n"
+		if expanded != want {
+			t.Fatalf("choice %s: expansion = %q, want %q", choice, expanded, want)
+		}
+		path := filepath.Join(t.TempDir(), "year.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+expanded+"printf '%s\\n' \"$year_result\" >/dev/null\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", nil, "shellcheck", "-s", "sh", path)
+		if err != nil {
+			t.Fatalf("ShellCheck choice %s: %v: %s", choice, err, output)
+		}
+	}
+
+	// GNU date -d fixes test instants only; the snippet passes exactly +%Y or +%y.
+	cases := []struct{ name, instant, timezone, full, short string }{
+		{"ordinary", "2026-06-15 12:00:00 UTC", "UTC", "2026", "26"},
+		{"leap-day", "2024-02-29 12:00:00 UTC", "UTC", "2024", "24"},
+		{"december-31", "2024-12-31 23:59:59 UTC", "UTC", "2024", "24"},
+		{"january-1", "2025-01-01 00:00:00 UTC", "UTC", "2025", "25"},
+		{"iso-next-year", "2019-12-30 12:00:00 UTC", "UTC", "2019", "19"},
+		{"iso-previous-year", "2021-01-01 12:00:00 UTC", "UTC", "2021", "21"},
+		{"same-instant-west", "2024-12-31 23:30:00 UTC", "America/Los_Angeles", "2024", "24"},
+		{"same-instant-east", "2024-12-31 23:30:00 UTC", "Asia/Kathmandu", "2025", "25"},
+	}
+	for _, test := range cases {
+		for _, choice := range []string{"Y", "y"} {
+			t.Run(test.name+"-"+choice, func(t *testing.T) {
+				root := t.TempDir()
+				bin := filepath.Join(root, "bin")
+				mustMkdirAll(t, bin)
+				mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = '+%"+choice+"' ] || exit 42\nexec /bin/date -d \"$SHELLMAN_YEAR_INSTANT\" \"$1\"\n")
+				path := filepath.Join(root, "year.sh")
+				want := test.full
+				if choice == "y" {
+					want = test.short
+				}
+				mustWriteFile(t, path, []byte("#!/bin/sh\n"+expandedGeneratedYearCurrent(t, "year_result", choice)+"[ \"$year_result\" = '"+want+"' ]\n"))
+				output, err := runCommand(".", append(os.Environ(), "PATH="+bin, "LC_ALL=C", "TZ="+test.timezone, "SHELLMAN_YEAR_INSTANT="+test.instant), "sh", path)
+				if err != nil {
+					t.Fatalf("want %q: %v: %s", want, err, output)
+				}
+			})
+		}
+	}
+}
+
+func TestYearCurrentAssignmentStatusAndText(t *testing.T) {
+	requireCommand(t, "sh")
+	runCase := func(t *testing.T, choice, stub, setup, destination, trailer string, includeDate bool) (string, int) {
+		t.Helper()
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		if includeDate {
+			mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\n"+stub)
+		}
+		path := filepath.Join(root, "year.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+expandedGeneratedYearCurrent(t, destination, choice)+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		return string(output), exitCode(err)
+	}
+	for _, choice := range []string{"Y", "y"} {
+		t.Run("arbitrary-text-"+choice, func(t *testing.T) {
+			stub := "[ \"$#\" -eq 1 ] && [ \"$1\" = '+%" + choice + "' ] || exit 42\nprintf '\\n20 26\\ninside\\n\\n'\n"
+			output, status := runCase(t, choice, stub, "", "year_result", `[ "$snippet_status" -eq 0 ] && [ "$year_result" = "$(printf '\n20 26\ninside')" ]`, true)
+			if status != 0 || output != "" {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+		for _, failure := range []int{1, 42, 127} {
+			t.Run(fmt.Sprintf("failure-%s-%d", choice, failure), func(t *testing.T) {
+				stub := fmt.Sprintf("printf 'partial\\n'; printf 'date error\\n' >&2; exit %d\n", failure)
+				output, status := runCase(t, choice, stub, "", "year_result", `[ "$year_result" = partial ] && exit "$snippet_status"`, true)
+				if status != failure || !strings.Contains(output, "date error") {
+					t.Fatalf("status=%d output=%q", status, output)
+				}
+			})
+		}
+	}
+	t.Run("command-not-found", func(t *testing.T) {
+		output, status := runCase(t, "Y", "", "", "year_result", `exit "$snippet_status"`, false)
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	for _, destination := range []string{"year_result", "1bad"} {
+		t.Run("destination-"+destination, func(t *testing.T) {
+			setup := ""
+			if destination == "year_result" {
+				setup = "readonly year_result"
+			}
+			output, status := runCase(t, "Y", "printf '2026\\n'\n", setup, destination, `exit "$snippet_status"`, true)
+			if status == 0 || !strings.Contains(output, destination) {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+	t.Run("later-command-masks-status", func(t *testing.T) {
+		output, status := runCase(t, "Y", "exit 42\n", "", "year_result", `:; [ "$snippet_status" -eq 42 ]`, true)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+	t.Run("pipeline-masks-left-status", func(t *testing.T) {
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		mustExecutable(t, filepath.Join(bin, "date"), "#!/bin/sh\nexit 42\n")
+		path := filepath.Join(root, "pipeline.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n{\n"+expandedGeneratedYearCurrent(t, "year_result", "Y")+"} | /bin/cat\n"))
+		output, err := runCommand(".", append(os.Environ(), "PATH="+bin), "sh", path)
+		if status := exitCode(err); status != 0 || string(output) != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+}
+
+func expandedGeneratedCtrlC(t *testing.T, action string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration43MigrationName].Body.([]any)
+	if !ok || !reflect.DeepEqual(body, currentCtrlCBody) {
+		t.Fatalf("generated Ctrl-C body = %#v", snippets[iteration43MigrationName].Body)
+	}
+	lines := make([]string, len(body))
+	for i, line := range body {
+		lines[i] = line.(string)
+	}
+	expanded := strings.Join(lines, "\n")
+	if strings.Count(expanded, `${1:# i.e. clean-up code here}`) != 1 ||
+		strings.Count(expanded, "trap on_ctrl_c INT") != 1 {
+		t.Fatalf("unexpected Ctrl-C placeholder or trap: %q", expanded)
+	}
+	return strings.ReplaceAll(expanded, `${1:# i.e. clean-up code here}`, action)
+}
+
+func TestCtrlCGeneratedExpansionAndIsolatedSIGINT(t *testing.T) {
+	requireCommand(t, "sh")
+	defaultBody := expandedGeneratedCtrlC(t, "# i.e. clean-up code here")
+	if !strings.Contains(defaultBody, "on_ctrl_c() {\n\techo # Set cursor") ||
+		!strings.HasSuffix(defaultBody, "trap on_ctrl_c INT") {
+		t.Fatalf("unexpected default expansion: %q", defaultBody)
+	}
+	root := t.TempDir()
+	defaultScript := filepath.Join(root, "default.sh")
+	mustWriteFile(t, defaultScript, []byte("#!/bin/sh\n"+defaultBody+"\n"))
+	run(t, ".", "sh", "-n", defaultScript)
+	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", defaultScript)
+	if err != nil {
+		t.Fatalf("ShellCheck: %v: %s", err, output)
+	}
+
+	runSignal := func(t *testing.T, action, prefix, suffix string, wantStatus int, wantTrace string) {
+		t.Helper()
+		root := t.TempDir()
+		bin := filepath.Join(root, "bin")
+		mustMkdirAll(t, bin)
+		mustExecutable(t, filepath.Join(bin, "tput"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = cnorm ] || exit 42\nprintf 'TPUT\\n' >> \"$TRACE\"\n")
+		trace := filepath.Join(root, "trace")
+		ready := filepath.Join(root, "ready")
+		path := filepath.Join(root, "child.sh")
+		body := expandedGeneratedCtrlC(t, action)
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+prefix+"\n"+body+"\n"+suffix+"\nprintf 'READY\\n' > \"$READY\"\nwhile :; do :; done\n"))
+		run(t, ".", "sh", "-n", path)
+		ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+		defer cancel()
+		command := exec.CommandContext(ctx, "sh", path)
+		command.Env = append(os.Environ(), "PATH="+bin+":"+os.Getenv("PATH"), "TRACE="+trace, "READY="+ready)
+		var combined bytes.Buffer
+		command.Stdout = &combined
+		command.Stderr = &combined
+		if err := command.Start(); err != nil {
+			t.Fatal(err)
+		}
+		defer func() {
+			if command.ProcessState == nil {
+				_ = command.Process.Kill()
+				_ = command.Wait()
+			}
+		}()
+		deadline := time.Now().Add(2 * time.Second)
+		for {
+			if _, err := os.Stat(ready); err == nil {
+				break
+			}
+			if time.Now().After(deadline) {
+				t.Fatalf("child did not install trap: %s", combined.String())
+			}
+			time.Sleep(10 * time.Millisecond)
+		}
+		if _, err := os.Stat(trace); !os.IsNotExist(err) {
+			t.Fatalf("trap action ran before SIGINT: trace stat = %v", err)
+		}
+		// Signal only the disposable child PID, never the parent or terminal group.
+		if err := command.Process.Signal(os.Interrupt); err != nil {
+			t.Fatal(err)
+		}
+		err := command.Wait()
+		if ctx.Err() != nil {
+			t.Fatalf("child timed out: %v", ctx.Err())
+		}
+		if status := exitCode(err); status != wantStatus {
+			t.Fatalf("child status=%d, want %d; output=%q", status, wantStatus, combined.String())
+		}
+		gotTrace, err := os.ReadFile(trace)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(gotTrace) != wantTrace {
+			t.Fatalf("trace=%q, want %q", gotTrace, wantTrace)
+		}
+		if got := combined.String(); got != "\n" {
+			t.Fatalf("handler output=%q, want echo newline", got)
+		}
+	}
+
+	t.Run("source action executes on SIGINT and replaces prior trap", func(t *testing.T) {
+		action := `printf '%s\n' "$(printf 'SUB\n' >> "$TRACE"; printf '%s' "$value")" >> "$TRACE"; printf 'DONE\n' >> "$TRACE"`
+		prefix := "value=early\ntrap 'printf OLD\\n >> \"$TRACE\"' INT"
+		runSignal(t, action, prefix, "value=late", 1, "TPUT\nSUB\nlate\nDONE\n")
+	})
+	t.Run("nonzero action command does not replace explicit exit", func(t *testing.T) {
+		runSignal(t, `false; printf 'AFTER_FALSE\n' >> "$TRACE"`, "", "", 1, "TPUT\nAFTER_FALSE\n")
+	})
+	t.Run("explicit action exit overrides default exit", func(t *testing.T) {
+		runSignal(t, "exit 42", "", "", 42, "TPUT\n")
+	})
+	t.Run("empty action still reaches explicit exit", func(t *testing.T) {
+		runSignal(t, "", "", "", 1, "TPUT\n")
+	})
+}
+
+func TestDateNowShortGeneratedExpansionAndStatus(t *testing.T) {
+	requireCommand(t, "sh")
+	if got, want := expandedGeneratedDateNowShort(t, "date_result"), "date_result=$(date '+%Y/%m/%d') # format: yyyy/mm/dd\n"; got != want {
+		t.Fatalf("expanded generated body = %q, want %q", got, want)
+	}
+
+	runCase := func(t *testing.T, stub, setup, destination, trailer string, noDate bool) (string, int) {
+		t.Helper()
+		root := t.TempDir()
+		fakeBin := filepath.Join(root, "bin")
+		mustMkdirAll(t, fakeBin)
+		if !noDate {
+			mustExecutable(t, filepath.Join(fakeBin, "date"), "#!/bin/sh\n"+stub)
+		}
+		path := filepath.Join(root, "snippet.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+setup+"\n"+expandedGeneratedDateNowShort(t, destination)+"snippet_status=$?\n"+trailer+"\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+fakeBin), "sh", path)
+		return string(output), exitCode(err)
+	}
+
+	t.Run("exact operand and newline stripping", func(t *testing.T) {
+		stub := "[ \"$#\" -eq 1 ] && [ \"$1\" = '+%Y/%m/%d' ] || exit 42\nprintf '2034/05/06\\n\\n'\n"
+		output, status := runCase(t, stub, "", "date_result", `[ "$snippet_status" -eq 0 ] && [ "$date_result" = '2034/05/06' ]`, false)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("leading and internal newlines survive", func(t *testing.T) {
+		stub := "printf '\\n2034/05\\n06\\n'\n"
+		output, status := runCase(t, stub, "", "date_result", `[ "$snippet_status" -eq 0 ] && [ "$date_result" = "$(printf '\n2034/05\n06')" ]`, false)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	for _, failureStatus := range []int{1, 42, 127} {
+		t.Run(fmt.Sprintf("utility failure %d", failureStatus), func(t *testing.T) {
+			stub := fmt.Sprintf("printf 'partial\\n'; printf 'date error\\n' >&2; exit %d\n", failureStatus)
+			output, status := runCase(t, stub, "", "date_result", `[ "$date_result" = partial ] && exit "$snippet_status"`, false)
+			if status != failureStatus || !strings.Contains(output, "date error") {
+				t.Fatalf("status=%d output=%q", status, output)
+			}
+		})
+	}
+
+	t.Run("actual command not found", func(t *testing.T) {
+		output, status := runCase(t, "", "", "date_result", `exit "$snippet_status"`, true)
+		if status != 127 || !strings.Contains(output, "date") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("readonly destination", func(t *testing.T) {
+		output, status := runCase(t, "printf '2034/05/06\\n'\n", "readonly date_result", "date_result", `exit "$snippet_status"`, false)
+		if status == 0 || !strings.Contains(output, "date_result") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("invalid destination", func(t *testing.T) {
+		output, status := runCase(t, "printf '2034/05/06\\n'\n", "", "1bad", `exit "$snippet_status"`, false)
+		if status == 0 || !strings.Contains(output, "1bad") {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("later command masks status", func(t *testing.T) {
+		output, status := runCase(t, "exit 42\n", "", "date_result", `:; [ "$snippet_status" -eq 42 ]`, false)
+		if status != 0 || output != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
+
+	t.Run("pipeline masks left command status", func(t *testing.T) {
+		root := t.TempDir()
+		fakeBin := filepath.Join(root, "bin")
+		mustMkdirAll(t, fakeBin)
+		mustExecutable(t, filepath.Join(fakeBin, "date"), "#!/bin/sh\nexit 42\n")
+		path := filepath.Join(root, "pipeline.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n{\n"+expandedGeneratedDateNowShort(t, "date_result")+"} | /bin/cat\n"))
+		run(t, ".", "sh", "-n", path)
+		output, err := runCommand(".", append(os.Environ(), "PATH="+fakeBin), "sh", path)
+		status := exitCode(err)
+		if status != 0 || string(output) != "" {
+			t.Fatalf("status=%d output=%q", status, output)
+		}
+	})
 }
 
 func TestArraySetElementAtPlaceholderContractAndBashDocumentation(t *testing.T) {

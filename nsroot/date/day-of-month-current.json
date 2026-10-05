@@ -1,5 +1,5 @@
 {
   "prefix": "date now dayOfMonth",
-  "body": "${1:dayOfMonth}=\\$(date +%d)\n",
+  "body": "# date %d renders the 1..31 day of month as 01..31.\n${1:dayOfMonth}=\\$(date +%d)\n",
   "description": "current day of month (1..31)"
 }

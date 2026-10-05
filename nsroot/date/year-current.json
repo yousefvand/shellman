@@ -1,5 +1,5 @@
 {
   "prefix": "date now year",
-  "body": "${1:year}=\\$(date +%${2|Y,y|})\n",
+  "body": "# %Y and %y use the local calendar year, not the ISO week-based year.\n${1:year}=\\$(date +%${2|Y,y|})\n",
   "description": "current Year (Y: full, y: last two digits)"
 }

@@ -1,5 +1,5 @@
 {
   "prefix": "date now dayOfWeek",
-  "body": "${1:dayOfWeek}=\\$(date +%${2|A,a|})\n",
+  "body": "# Weekday names follow the current locale.\n${1:dayOfWeek}=\\$(date +%${2|A,a|})\n",
   "description": "current day of week name (A: full, a: abbreviated)"
 }
