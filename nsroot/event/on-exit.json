@@ -2,7 +2,7 @@
   "prefix": "event EXIT",
   "body": [
     "# Exit event handler",
-    "function on_exit() {",
+    "on_exit() {",
     "\ttput cnorm # Show cursor. You need this if animation is used.",
     "\t${1:# i.e. clean-up code here}",
     "\texit 0 # Exit gracefully.",

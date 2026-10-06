@@ -100,6 +100,7 @@ const (
 	currentV7Iteration41SHA256          = "583a23e13513bbf052587c5576103bd3d1bc636b24665501bcf7038f92221f1b"
 	currentV7Iteration42SHA256          = "ff586d0e36a95bc676441b850d1f3edc1fc8d113b68e308b69965c7be08316d4"
 	currentV7Iteration43SHA256          = "8cb8126c68afe47860b489dc24ea623dd9ba440844ff9df4a51b3aa90af22554"
+	currentV7Iteration44SHA256          = "1be38e1f47b9fc3a978de6af6df463daa949a4656c6e91ddee7bb281575943f9"
 	approvedMigrationName               = "archive.compress-tar-gz"
 	iteration2MigrationName             = "archive.compress-tar-xz"
 	iteration3MigrationName             = "archive.compress-zip"
@@ -143,6 +144,7 @@ const (
 	iteration41MigrationName            = "date.utc-long"
 	iteration42MigrationName            = "date.year-current"
 	iteration43MigrationName            = "event.on-ctrl-c"
+	iteration44MigrationName            = "event.on-exit"
 	v6CompressTarGzBody                 = "tar -czvf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.gz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
 	currentCompressTarGzBody            = "archive_path=\"${1|/path/to/archive, \"${pathToArchive}\"|}\"\nsource_path=\"${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\"\ncase ${source_path} in\n  -*) source_path=./${source_path} ;;\nesac\ntar -cf \"${archive_path}.tar\" \"${source_path}\" && gzip -f \"${archive_path}.tar\"\n"
 	v6CompressTarXzBody                 = "tar -cJf ${1|/path/to/archive, \"${pathToArchive}\"|}.tar.xz ${2|/path/to/directory-or-file, \"${pathToDirectoryOrFile}\"|}\n"
@@ -241,6 +243,32 @@ var currentCtrlCBody = []any{
 	"# Put this line at the beginning of your script (after functions used by event handlers).",
 	"# Register CTRL+C event handler",
 	"trap on_ctrl_c INT",
+}
+
+var v6ExitBody = []any{
+	"# Exit event handler",
+	"function on_exit() {",
+	"\ttput cnorm # Show cursor. You need this if animation is used.",
+	"\t${1:# i.e. clean-up code here}",
+	"\texit 0 # Exit gracefully.",
+	"}",
+	"",
+	"# Put this line at the beginning of your script (after functions used by event handlers).",
+	"# Register exit event handler.",
+	"trap on_exit EXIT",
+}
+
+var currentExitBody = []any{
+	"# Exit event handler",
+	"on_exit() {",
+	"\ttput cnorm # Show cursor. You need this if animation is used.",
+	"\t${1:# i.e. clean-up code here}",
+	"\texit 0 # Exit gracefully.",
+	"}",
+	"",
+	"# Put this line at the beginning of your script (after functions used by event handlers).",
+	"# Register exit event handler.",
+	"trap on_exit EXIT",
 }
 
 var v6ArrayReverseBody = []any{
@@ -523,12 +551,15 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got := ordered[42].name; got != iteration43MigrationName {
 		t.Fatalf("forty-third snippet in actual nsroot traversal = %q, want %q", got, iteration43MigrationName)
 	}
-	currentIteration43, err := renderSnippetJSON(ordered)
+	if got := ordered[43].name; got != iteration44MigrationName {
+		t.Fatalf("forty-fourth snippet in actual nsroot traversal = %q, want %q", got, iteration44MigrationName)
+	}
+	currentIteration44, err := renderSnippetJSON(ordered)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertSHA256(t, "current v7 iteration-43 snippets", currentIteration43, currentV7Iteration43SHA256)
-	assertSHA256(t, "current v7 iteration-43 commands", renderDocumentation(ordered), historicalV6CommandsSHA256)
+	assertSHA256(t, "current v7 iteration-44 snippets", currentIteration44, currentV7Iteration44SHA256)
+	assertSHA256(t, "current v7 iteration-44 commands", renderDocumentation(ordered), historicalV6CommandsSHA256)
 
 	foundFirst := false
 	foundSecond := false
@@ -573,6 +604,7 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	foundFortyFirst := false
 	foundFortySecond := false
 	foundFortyThird := false
+	foundFortyFourth := false
 	for index := range ordered {
 		switch ordered[index].name {
 		case approvedMigrationName:
@@ -1066,6 +1098,17 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 			if got := ordered[index].snippet.Body; !reflect.DeepEqual(got, currentCtrlCBody) {
 				t.Fatalf("iteration-43 body = %#v, want %#v", got, currentCtrlCBody)
 			}
+		case iteration44MigrationName:
+			foundFortyFourth = true
+			if got, want := ordered[index].snippet.Prefix, "event EXIT"; got != want {
+				t.Fatalf("iteration-44 prefix = %#v, want %q", got, want)
+			}
+			if got, want := ordered[index].snippet.Description, "register a function (handler) to run on script exit"; got != want {
+				t.Fatalf("iteration-44 description = %q, want %q", got, want)
+			}
+			if got := ordered[index].snippet.Body; !reflect.DeepEqual(got, currentExitBody) {
+				t.Fatalf("iteration-44 body = %#v, want %#v", got, currentExitBody)
+			}
 		}
 	}
 	if !foundFirst {
@@ -1197,6 +1240,32 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if !foundFortyThird {
 		t.Fatalf("iteration-43 snippet %q is missing", iteration43MigrationName)
 	}
+	if !foundFortyFourth {
+		t.Fatalf("iteration-44 snippet %q is missing", iteration44MigrationName)
+	}
+	for index := range ordered {
+		if ordered[index].name == iteration44MigrationName {
+			ordered[index].snippet.Body = v6ExitBody
+		}
+	}
+	rollback44Differences := 0
+	for index := range ordered {
+		if !reflect.DeepEqual(currentOrdered[index].snippet, ordered[index].snippet) {
+			rollback44Differences++
+			if ordered[index].name != iteration44MigrationName || index != 43 {
+				t.Fatalf("iteration-44 rollback changed unexpected snippet %q at position %d", ordered[index].name, index+1)
+			}
+		}
+	}
+	if rollback44Differences != 1 {
+		t.Fatalf("iteration-44 rollback changed %d snippets, want 1", rollback44Differences)
+	}
+	reconstructedIteration43, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "reconstructed approved v7 iteration-43 snippets", reconstructedIteration43, currentV7Iteration43SHA256)
+	preRollback43 := append([]namedSnippet(nil), ordered...)
 	for index := range ordered {
 		if ordered[index].name == iteration43MigrationName {
 			ordered[index].snippet.Body = v6CtrlCBody
@@ -1204,10 +1273,10 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	}
 	rollback43Differences := 0
 	for index := range ordered {
-		if !reflect.DeepEqual(currentOrdered[index].snippet, ordered[index].snippet) {
+		if !reflect.DeepEqual(preRollback43[index].snippet, ordered[index].snippet) {
 			rollback43Differences++
-			if ordered[index].name != iteration43MigrationName {
-				t.Fatalf("iteration-43 rollback changed unexpected snippet %q", ordered[index].name)
+			if ordered[index].name != iteration43MigrationName || index != 42 {
+				t.Fatalf("iteration-43 rollback changed unexpected snippet %q at position %d", ordered[index].name, index+1)
 			}
 		}
 	}
@@ -1810,8 +1879,8 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 			changed++
 		}
 	}
-	if changed != 43 {
-		t.Fatalf("snippets differing from historical v6 = %d, want 43 (235 unchanged)", changed)
+	if changed != 44 {
+		t.Fatalf("snippets differing from historical v6 = %d, want 44 (234 unchanged)", changed)
 	}
 }
 
@@ -5509,7 +5578,7 @@ func TestYearCurrentAssignmentStatusAndText(t *testing.T) {
 	})
 }
 
-func expandedGeneratedCtrlC(t *testing.T, action string) string {
+func expandedGeneratedCtrlC43(t *testing.T, action string) string {
 	t.Helper()
 	generated, _, err := generate(".")
 	if err != nil {
@@ -5521,62 +5590,259 @@ func expandedGeneratedCtrlC(t *testing.T, action string) string {
 	}
 	body, ok := snippets[iteration43MigrationName].Body.([]any)
 	if !ok || !reflect.DeepEqual(body, currentCtrlCBody) {
-		t.Fatalf("generated Ctrl-C body = %#v", snippets[iteration43MigrationName].Body)
+		t.Fatalf("generated entry-43 body = %#v", snippets[iteration43MigrationName].Body)
 	}
 	lines := make([]string, len(body))
-	for i, line := range body {
-		lines[i] = line.(string)
+	for i, value := range body {
+		line, ok := value.(string)
+		if !ok {
+			t.Fatalf("body line %d is not a string", i)
+		}
+		lines[i] = line
 	}
-	expanded := strings.Join(lines, "\n")
-	if strings.Count(expanded, `${1:# i.e. clean-up code here}`) != 1 ||
-		strings.Count(expanded, "trap on_ctrl_c INT") != 1 {
-		t.Fatalf("unexpected Ctrl-C placeholder or trap: %q", expanded)
+	joined := strings.Join(lines, "\n")
+	placeholder := `${1:# i.e. clean-up code here}`
+	if strings.Count(joined, placeholder) != 1 || strings.Contains(joined, "${0") ||
+		!strings.HasSuffix(joined, "trap on_ctrl_c INT") {
+		t.Fatalf("unexpected generated placeholder or trap: %q", joined)
 	}
-	return strings.ReplaceAll(expanded, `${1:# i.e. clean-up code here}`, action)
+	return strings.Replace(joined, placeholder, action, 1)
 }
 
-func TestCtrlCGeneratedExpansionAndIsolatedSIGINT(t *testing.T) {
-	requireCommand(t, "sh")
-	defaultBody := expandedGeneratedCtrlC(t, "# i.e. clean-up code here")
-	if !strings.Contains(defaultBody, "on_ctrl_c() {\n\techo # Set cursor") ||
-		!strings.HasSuffix(defaultBody, "trap on_ctrl_c INT") {
-		t.Fatalf("unexpected default expansion: %q", defaultBody)
+func TestCtrlC43GeneratedSyntaxAndIsolatedSignal(t *testing.T) {
+	for _, shell := range []string{"sh", "bash", "zsh"} {
+		requireCommand(t, shell)
+		path := filepath.Join(t.TempDir(), "syntax.sh")
+		mustWriteFile(t, path, []byte(expandedGeneratedCtrlC43(t, "# i.e. clean-up code here")+"\n"))
+		run(t, ".", shell, "-n", path)
 	}
-	root := t.TempDir()
-	defaultScript := filepath.Join(root, "default.sh")
-	mustWriteFile(t, defaultScript, []byte("#!/bin/sh\n"+defaultBody+"\n"))
-	run(t, ".", "sh", "-n", defaultScript)
-	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", defaultScript)
+	defaultPath := filepath.Join(t.TempDir(), "default.sh")
+	defaultBody := expandedGeneratedCtrlC43(t, "# i.e. clean-up code here")
+	if !strings.Contains(defaultBody, "on_ctrl_c() {\n") || !strings.Contains(defaultBody, "\n\texit 1 # Don't remove") {
+		t.Fatalf("unexpected exact default expansion: %q", defaultBody)
+	}
+	mustWriteFile(t, defaultPath, []byte("#!/bin/sh\n"+defaultBody+"\n"))
+	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", defaultPath)
 	if err != nil {
-		t.Fatalf("ShellCheck: %v: %s", err, output)
+		t.Fatalf("ShellCheck on generated default: %v: %s", err, output)
 	}
 
-	runSignal := func(t *testing.T, action, prefix, suffix string, wantStatus int, wantTrace string) {
-		t.Helper()
+	type signalCase struct {
+		name, shell, action, setup, after, wantTrace, wantOutput string
+		wantStatus                                               int
+		fakeTput                                                 bool
+	}
+	cases := []signalCase{
+		{name: "default shell source", shell: "sh", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "late expansion and prior trap replacement", shell: "sh", setup: `value=before; trap 'printf "OLD\n" >> "$TRACE"' INT`, after: `value=after`, action: `printf '%s\n' "$(printf 'SUB\n' >> "$TRACE"; printf '%s' "$value")" >> "$TRACE"; printf 'SECOND\n' >> "$TRACE"`, wantTrace: "TPUT\nSUB\nafter\nSECOND\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "quoted spaces", shell: "sh", action: `printf '%s\n' 'two words' >> "$TRACE"`, wantTrace: "TPUT\ntwo words\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "parameter arithmetic and status at action", shell: "sh", setup: `value=before`, after: `value=after`, action: `printf 'STATUS:%s ARITH:%s VAR:%s\n' "$?" "$((2+3))" "${value:-unset}" >> "$TRACE"`, wantTrace: "TPUT\nSTATUS:0 ARITH:5 VAR:after\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "handler failure masked by explicit exit", shell: "sh", action: `false; printf 'AFTER_FAIL\n' >> "$TRACE"`, wantTrace: "TPUT\nAFTER_FAIL\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "explicit exit overrides", shell: "sh", action: `exit 42`, wantTrace: "TPUT\n", wantOutput: "\n", wantStatus: 42, fakeTput: true},
+		{name: "explicit successful exit overrides", shell: "sh", action: `exit 0`, wantTrace: "TPUT\n", wantOutput: "\n", wantStatus: 0, fakeTput: true},
+		{name: "empty source placeholder", shell: "sh", action: ``, wantTrace: "TPUT\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "unavailable action command", shell: "sh", action: `missing_shellman_command; printf 'CONTINUED\n' >> "$TRACE"`, wantTrace: "TPUT\nCONTINUED\n", wantOutput: "", wantStatus: 1, fakeTput: true},
+		{name: "unavailable tput", shell: "sh", action: `printf 'TPUT_STATUS:%s\n' "$?" >> "$TRACE"`, wantTrace: "TPUT_STATUS:127\n", wantOutput: "", wantStatus: 1},
+		{name: "bash runtime", shell: "bash", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+		{name: "zsh runtime", shell: "zsh", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", wantOutput: "\n", wantStatus: 1, fakeTput: true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			bin := filepath.Join(root, "bin")
+			mustMkdirAll(t, bin)
+			if tc.fakeTput {
+				mustExecutable(t, filepath.Join(bin, "tput"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = cnorm ] || exit 42\nprintf 'TPUT\\n' >> \"$TRACE\"\n")
+			}
+			trace, ready := filepath.Join(root, "trace"), filepath.Join(root, "ready")
+			script := filepath.Join(root, "child.sh")
+			body := expandedGeneratedCtrlC43(t, tc.action)
+			mustWriteFile(t, script, []byte("#!/bin/sh\n"+tc.setup+"\n"+body+"\n"+tc.after+"\nprintf 'ready\\n' > \"$READY\"\nwhile :; do :; done\n"))
+			run(t, ".", tc.shell, "-n", script)
+			ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+			defer cancel()
+			cmd := exec.CommandContext(ctx, tc.shell, script)
+			cmd.Env = append(os.Environ(), "PATH="+bin, "TRACE="+trace, "READY="+ready)
+			var combined bytes.Buffer
+			cmd.Stdout, cmd.Stderr = &combined, &combined
+			if err := cmd.Start(); err != nil {
+				t.Fatal(err)
+			}
+			defer func() {
+				if cmd.ProcessState == nil {
+					_ = cmd.Process.Kill()
+					_ = cmd.Wait()
+				}
+			}()
+			deadline := time.Now().Add(2 * time.Second)
+			for {
+				if _, err := os.Stat(ready); err == nil {
+					break
+				}
+				if time.Now().After(deadline) {
+					t.Fatalf("child never became ready: %q", combined.String())
+				}
+				time.Sleep(10 * time.Millisecond)
+			}
+			if _, err := os.Stat(trace); !os.IsNotExist(err) {
+				t.Fatalf("handler ran before SIGINT: trace stat %v", err)
+			}
+			if err := cmd.Process.Signal(os.Interrupt); err != nil {
+				t.Fatal(err)
+			}
+			err := cmd.Wait()
+			if ctx.Err() != nil {
+				t.Fatalf("child timed out: %v", ctx.Err())
+			}
+			if status := exitCode(err); status != tc.wantStatus {
+				t.Fatalf("status %d, want %d; output %q", status, tc.wantStatus, combined.String())
+			}
+			gotTrace, err := os.ReadFile(trace)
+			if err != nil || string(gotTrace) != tc.wantTrace {
+				t.Fatalf("trace %q, err %v, want %q", gotTrace, err, tc.wantTrace)
+			}
+			if tc.wantOutput != "" && combined.String() != tc.wantOutput {
+				t.Fatalf("output %q, want %q", combined.String(), tc.wantOutput)
+			}
+		})
+	}
+	invalid := filepath.Join(t.TempDir(), "invalid.sh")
+	mustWriteFile(t, invalid, []byte(expandedGeneratedCtrlC43(t, `printf 'unterminated`)+"\n"))
+	if _, err := runCommand(".", nil, "sh", "-n", invalid); err == nil {
+		t.Fatal("malformed inserted source unexpectedly passed syntax check")
+	}
+}
+
+func expandedGeneratedExit44(t *testing.T, action string) string {
+	t.Helper()
+	generated, _, err := generate(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var snippets map[string]Snippet
+	if err := json.Unmarshal(generated, &snippets); err != nil {
+		t.Fatal(err)
+	}
+	body, ok := snippets[iteration44MigrationName].Body.([]any)
+	if !ok || !reflect.DeepEqual(body, currentExitBody) {
+		t.Fatalf("generated EXIT body = %#v", snippets[iteration44MigrationName].Body)
+	}
+	lines := make([]string, len(body))
+	for index, element := range body {
+		line, ok := element.(string)
+		if !ok {
+			t.Fatalf("EXIT line %d is not a string", index)
+		}
+		lines[index] = line
+	}
+	joined := strings.Join(lines, "\n")
+	placeholder := `${1:# i.e. clean-up code here}`
+	if strings.Count(joined, placeholder) != 1 ||
+		!strings.Contains(joined, "on_exit() {\n") ||
+		!strings.Contains(joined, "\n\texit 0 # Exit gracefully.") ||
+		!strings.HasSuffix(joined, "trap on_exit EXIT") {
+		t.Fatalf("unexpected generated EXIT syntax: %q", joined)
+	}
+	return strings.Replace(joined, placeholder, action, 1)
+}
+
+func TestExit44GeneratedExpansionAndStatus(t *testing.T) {
+	for _, shell := range []string{"sh", "bash", "zsh"} {
+		requireCommand(t, shell)
+		path := filepath.Join(t.TempDir(), "syntax.sh")
+		mustWriteFile(t, path, []byte(expandedGeneratedExit44(t, "# i.e. clean-up code here")+"\n"))
+		run(t, ".", shell, "-n", path)
+	}
+	defaultPath := filepath.Join(t.TempDir(), "default.sh")
+	mustWriteFile(t, defaultPath, []byte("#!/bin/sh\n"+expandedGeneratedExit44(t, "# i.e. clean-up code here")+"\n"))
+	output, err := runCommand(".", nil, "shellcheck", "-s", "sh", defaultPath)
+	if err != nil {
+		t.Fatalf("ShellCheck on exact generated EXIT expansion: %v: %s", err, output)
+	}
+
+	type exitCase struct {
+		name, shell, before, after, action, wantTrace string
+		wantStatus                                    int
+		fakeTput, captureEntry                        bool
+	}
+	cases := []exitCase{
+		{name: "end of script zero", shell: "sh", after: ":", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:0\nACTION\n", captureEntry: true},
+		{name: "end of script failure", shell: "sh", after: "false", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:1\nACTION\n", captureEntry: true},
+		{name: "explicit exit zero", shell: "sh", after: "exit 0", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:0\nACTION\n", captureEntry: true},
+		{name: "explicit exit one", shell: "sh", after: "exit 1", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:1\nACTION\n", captureEntry: true},
+		{name: "explicit exit forty-two", shell: "sh", after: "exit 42", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:42\nACTION\n", captureEntry: true},
+		{name: "set-e controlled failure", shell: "sh", after: "set -e\nfalse", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "ENTRY:1\nACTION\n", captureEntry: true},
+		{name: "prior exit trap replaced", shell: "sh", before: `trap 'printf "OLD\n" >> "$TRACE"' EXIT`, after: ":", action: `printf 'NEW\n' >> "$TRACE"`, wantTrace: "TPUT\nNEW\n", fakeTput: true},
+		{name: "late value substitution multiple commands", shell: "sh", before: "value=before", after: "value=after\n:", action: `printf '%s\n' "$(printf 'SUB\n' >> "$TRACE"; printf '%s' "$value")" >> "$TRACE"; printf 'SECOND\n' >> "$TRACE"`, wantTrace: "TPUT\nSUB\nafter\nSECOND\n", fakeTput: true},
+		{name: "quotes and arithmetic", shell: "sh", after: ":", action: `printf '%s %s\n' 'two words' "$((2+3))" >> "$TRACE"`, wantTrace: "TPUT\ntwo words 5\n", fakeTput: true},
+		{name: "empty placeholder", shell: "sh", after: "exit 42", action: "", wantTrace: "TPUT\n", fakeTput: true},
+		{name: "failed action followed by success", shell: "sh", after: "exit 42", action: `false; printf 'LATER\n' >> "$TRACE"`, wantTrace: "TPUT\nLATER\n", fakeTput: true},
+		{name: "handler explicit exit zero", shell: "sh", after: "exit 42", action: `exit 0`, wantTrace: "TPUT\n", fakeTput: true},
+		{name: "handler explicit exit forty-two", shell: "sh", after: "exit 1", action: `exit 42`, wantTrace: "TPUT\n", wantStatus: 42, fakeTput: true},
+		{name: "handler returns successfully", shell: "sh", after: "exit 42", action: `return 0`, wantTrace: "ENTRY:42\n", wantStatus: 42, captureEntry: true},
+		{name: "handler returns failure", shell: "sh", after: "exit 42", action: `return 7`, wantTrace: "ENTRY:42\n", wantStatus: 42, captureEntry: true},
+		{name: "subshell does not inherit exit trap", shell: "sh", after: "(exit 42)\nexit 1", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", fakeTput: true},
+		{name: "unavailable action command", shell: "sh", after: ":", action: `missing_shellman_exit_command; printf 'LATER\n' >> "$TRACE"`, wantTrace: "TPUT\nLATER\n", fakeTput: true},
+		{name: "unavailable tput", shell: "sh", after: "exit 42", action: `printf 'TPUT_STATUS:%s\n' "$?" >> "$TRACE"`, wantTrace: "TPUT_STATUS:127\n"},
+		{name: "bash runtime", shell: "bash", after: "exit 42", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", fakeTput: true},
+		{name: "zsh runtime", shell: "zsh", after: "exit 42", action: `printf 'ACTION\n' >> "$TRACE"`, wantTrace: "TPUT\nACTION\n", fakeTput: true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			bin := filepath.Join(root, "bin")
+			mustMkdirAll(t, bin)
+			if tc.fakeTput {
+				mustExecutable(t, filepath.Join(bin, "tput"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = cnorm ] || exit 42\nprintf 'TPUT\\n' >> \"$TRACE\"\n")
+			}
+			before := tc.before
+			if tc.captureEntry {
+				before += "\ntput() { entry_status=$?; printf 'ENTRY:%s\\n' \"$entry_status\" >> \"$TRACE\"; return 0; }"
+			}
+			trace := filepath.Join(root, "trace")
+			path := filepath.Join(root, "child.sh")
+			mustWriteFile(t, path, []byte("#!/bin/sh\n"+before+"\n"+expandedGeneratedExit44(t, tc.action)+"\n"+tc.after+"\n"))
+			run(t, ".", tc.shell, "-n", path)
+			ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+			defer cancel()
+			cmd := exec.CommandContext(ctx, tc.shell, path)
+			cmd.Env = append(os.Environ(), "PATH="+bin, "TRACE="+trace)
+			output, err := cmd.CombinedOutput()
+			if ctx.Err() != nil {
+				t.Fatalf("child timeout: %v", ctx.Err())
+			}
+			if status := exitCode(err); status != tc.wantStatus {
+				t.Fatalf("exit status %d, want %d: %q", status, tc.wantStatus, output)
+			}
+			gotTrace, err := os.ReadFile(trace)
+			if err != nil || string(gotTrace) != tc.wantTrace {
+				t.Fatalf("trace %q, err %v, want %q; output %q", gotTrace, err, tc.wantTrace, output)
+			}
+		})
+	}
+	t.Run("caught SIGINT exits and then runs EXIT trap", func(t *testing.T) {
 		root := t.TempDir()
 		bin := filepath.Join(root, "bin")
 		mustMkdirAll(t, bin)
-		mustExecutable(t, filepath.Join(bin, "tput"), "#!/bin/sh\n[ \"$#\" -eq 1 ] && [ \"$1\" = cnorm ] || exit 42\nprintf 'TPUT\\n' >> \"$TRACE\"\n")
-		trace := filepath.Join(root, "trace")
-		ready := filepath.Join(root, "ready")
+		mustExecutable(t, filepath.Join(bin, "tput"), "#!/bin/sh\nprintf 'TPUT\\n' >> \"$TRACE\"\n")
+		trace, ready := filepath.Join(root, "trace"), filepath.Join(root, "ready")
 		path := filepath.Join(root, "child.sh")
-		body := expandedGeneratedCtrlC(t, action)
-		mustWriteFile(t, path, []byte("#!/bin/sh\n"+prefix+"\n"+body+"\n"+suffix+"\nprintf 'READY\\n' > \"$READY\"\nwhile :; do :; done\n"))
+		body := expandedGeneratedExit44(t, `printf 'EXIT\n' >> "$TRACE"`)
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+body+"\ntrap 'exit 42' INT\nprintf 'ready\\n' > \"$READY\"\nwhile :; do :; done\n"))
 		run(t, ".", "sh", "-n", path)
 		ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
 		defer cancel()
-		command := exec.CommandContext(ctx, "sh", path)
-		command.Env = append(os.Environ(), "PATH="+bin+":"+os.Getenv("PATH"), "TRACE="+trace, "READY="+ready)
+		cmd := exec.CommandContext(ctx, "sh", path)
+		cmd.Env = append(os.Environ(), "PATH="+bin, "TRACE="+trace, "READY="+ready)
 		var combined bytes.Buffer
-		command.Stdout = &combined
-		command.Stderr = &combined
-		if err := command.Start(); err != nil {
+		cmd.Stdout, cmd.Stderr = &combined, &combined
+		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
 		defer func() {
-			if command.ProcessState == nil {
-				_ = command.Process.Kill()
-				_ = command.Wait()
+			if cmd.ProcessState == nil {
+				_ = cmd.Process.Kill()
+				_ = cmd.Wait()
 			}
 		}()
 		deadline := time.Now().Add(2 * time.Second)
@@ -5585,50 +5851,48 @@ func TestCtrlCGeneratedExpansionAndIsolatedSIGINT(t *testing.T) {
 				break
 			}
 			if time.Now().After(deadline) {
-				t.Fatalf("child did not install trap: %s", combined.String())
+				t.Fatalf("child not ready: %q", combined.String())
 			}
 			time.Sleep(10 * time.Millisecond)
 		}
 		if _, err := os.Stat(trace); !os.IsNotExist(err) {
-			t.Fatalf("trap action ran before SIGINT: trace stat = %v", err)
+			t.Fatalf("EXIT trap ran before SIGINT: trace stat %v", err)
 		}
-		// Signal only the disposable child PID, never the parent or terminal group.
-		if err := command.Process.Signal(os.Interrupt); err != nil {
+		if err := cmd.Process.Signal(os.Interrupt); err != nil {
 			t.Fatal(err)
 		}
-		err := command.Wait()
-		if ctx.Err() != nil {
-			t.Fatalf("child timed out: %v", ctx.Err())
+		err := cmd.Wait()
+		if ctx.Err() != nil || exitCode(err) != 0 {
+			t.Fatalf("status %d, timeout %v, output %q", exitCode(err), ctx.Err(), combined.String())
 		}
-		if status := exitCode(err); status != wantStatus {
-			t.Fatalf("child status=%d, want %d; output=%q", status, wantStatus, combined.String())
+		got, err := os.ReadFile(trace)
+		if err != nil || string(got) != "TPUT\nEXIT\n" {
+			t.Fatalf("trace %q, err %v, output %q", got, err, combined.String())
 		}
-		gotTrace, err := os.ReadFile(trace)
-		if err != nil {
-			t.Fatal(err)
+	})
+	t.Run("successful exec replacement does not exit shell", func(t *testing.T) {
+		root := t.TempDir()
+		trace := filepath.Join(root, "trace")
+		path := filepath.Join(root, "child.sh")
+		mustWriteFile(t, path, []byte("#!/bin/sh\n"+expandedGeneratedExit44(t, `printf 'EXIT\n' >> "$TRACE"`)+"\nexec /bin/sh -c 'exit 37'\n"))
+		run(t, ".", "sh", "-n", path)
+		ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+		defer cancel()
+		cmd := exec.CommandContext(ctx, "sh", path)
+		cmd.Env = append(os.Environ(), "TRACE="+trace)
+		output, err := cmd.CombinedOutput()
+		if ctx.Err() != nil || exitCode(err) != 37 {
+			t.Fatalf("status %d, timeout %v, output %q", exitCode(err), ctx.Err(), output)
 		}
-		if string(gotTrace) != wantTrace {
-			t.Fatalf("trace=%q, want %q", gotTrace, wantTrace)
+		if _, err := os.Stat(trace); !os.IsNotExist(err) {
+			t.Fatalf("EXIT handler ran after exec replacement: trace stat %v", err)
 		}
-		if got := combined.String(); got != "\n" {
-			t.Fatalf("handler output=%q, want echo newline", got)
-		}
+	})
+	invalid := filepath.Join(t.TempDir(), "invalid.sh")
+	mustWriteFile(t, invalid, []byte(expandedGeneratedExit44(t, `printf 'unterminated`)+"\n"))
+	if _, err := runCommand(".", nil, "sh", "-n", invalid); err == nil {
+		t.Fatal("malformed inserted shell source unexpectedly passed syntax check")
 	}
-
-	t.Run("source action executes on SIGINT and replaces prior trap", func(t *testing.T) {
-		action := `printf '%s\n' "$(printf 'SUB\n' >> "$TRACE"; printf '%s' "$value")" >> "$TRACE"; printf 'DONE\n' >> "$TRACE"`
-		prefix := "value=early\ntrap 'printf OLD\\n >> \"$TRACE\"' INT"
-		runSignal(t, action, prefix, "value=late", 1, "TPUT\nSUB\nlate\nDONE\n")
-	})
-	t.Run("nonzero action command does not replace explicit exit", func(t *testing.T) {
-		runSignal(t, `false; printf 'AFTER_FALSE\n' >> "$TRACE"`, "", "", 1, "TPUT\nAFTER_FALSE\n")
-	})
-	t.Run("explicit action exit overrides default exit", func(t *testing.T) {
-		runSignal(t, "exit 42", "", "", 42, "TPUT\n")
-	})
-	t.Run("empty action still reaches explicit exit", func(t *testing.T) {
-		runSignal(t, "", "", "", 1, "TPUT\n")
-	})
 }
 
 func TestDateNowShortGeneratedExpansionAndStatus(t *testing.T) {
