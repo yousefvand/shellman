@@ -3,6 +3,6 @@
     "find file",
     "find directory"
   ],
-  "body": "readarray -t resultArray < <(find \"/path/to/search\" -maxdepth 1 -type f -name \"criteria\")\n",
+  "body": "_shellman_find_root=\"/path/to/search\"\n_shellman_find_pattern=\"criteria\"\ncase $_shellman_find_root in\n  -*) _shellman_find_root=./$_shellman_find_root ;;\nesac\ncoproc _shellman_find {\n  find \"$_shellman_find_root\" -maxdepth 1 -type f -name \"$_shellman_find_pattern\" -print0\n}\n# shellcheck disable=SC2154 # Bash sets the named coprocess PID.\n_shellman_find_pid=$_shellman_find_PID\nreadarray -d '' -t resultArray <&\"${_shellman_find[0]}\"\nwait \"$_shellman_find_pid\"\n",
   "description": "find files (-type f) or directories (-type d) by name or pattern (*.jpg)"
 }

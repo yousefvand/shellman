@@ -2,9 +2,15 @@
   "prefix": "iterate files",
   "body": [
     "# Searching in the current directory",
+    "file_iterate_status=0",
     "for file in ${1|*,*.{jpg\\,png}|}; do",
-    "\t${2:echo \"\\${file\\}\"}",
-    "done\n"
+    "\t[ -e \"\\$file\" ] || [ -L \"\\$file\" ] || continue",
+    "\taction_status=0",
+    "\t# shellcheck disable=SC2320",
+    "\t${2:printf '%s\\n' \"\\${file\\}\"} || action_status=\\$?",
+    "\tif [ \"\\$file_iterate_status\" -eq 0 ]; then file_iterate_status=\\$action_status; fi",
+    "done",
+    "(exit \"\\$file_iterate_status\")\n"
   ],
   "description": "write to a file"
 }

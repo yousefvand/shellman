@@ -367,8 +367,8 @@
     "body": [
       "# Make sure path ends with /",
       "for directory in ${1| /'path/to/directory'/,\"${pathToDirectory}\"|}*; do",
-      "\tif [[ -d \"\\${directory}\" && ! -L \"\\${directory}\" ]]; then",
-      "\t\t${2:echo \"\\${directory\\}\"}",
+      "\tif [ -d \"\\${directory}\" ] && [ ! -L \"\\${directory}\" ]; then",
+      "\t\t${2:printf '%s\\n' \"\\${directory\\}\"}",
       "\tfi",
       "done\n"
     ],
@@ -376,12 +376,12 @@
   },
   "filesystem.directory-create": {
     "prefix": "directory create",
-    "body": "mkdir \"${1:directory name}\"\n",
+    "body": "directory_path=\"${1:directory name}\"\ncase $directory_path in\n  -*) directory_path=./$directory_path ;;\nesac\nmkdir \"$directory_path\"\n",
     "description": "create directory"
   },
   "filesystem.directory-create-nested": {
     "prefix": "directory create nested",
-    "body": "mkdir -p ${1|\"parent dir/child dir\",\"${pathToCreate}\"|}\n",
+    "body": "directory_path=${1|\"parent dir/child dir\",\"${pathToCreate}\"|}\ncase $directory_path in\n  -*) directory_path=./$directory_path ;;\nesac\nmkdir -p \"$directory_path\"\n",
     "description": "create nested directories"
   },
   "filesystem.directory-delete-nested": {
@@ -389,7 +389,7 @@
       "directory delete nested",
       "directory remove nested"
     ],
-    "body": "rm -rf ${1|/path/to/directory,${pathToDirectory}|}\n",
+    "body": "directory_path=\"${1|/path/to/directory,${pathToDirectory}|}\"\ncase $directory_path in\n  -*) directory_path=./$directory_path ;;\nesac\nrm -rf \"$directory_path\"\n",
     "description": "delete directory and all contents!"
   },
   "filesystem.file-delete": {
@@ -397,15 +397,21 @@
       "file delete",
       "file remove"
     ],
-    "body": "rm -f ${1|/path/to/file,${pathToFile}|}\n",
+    "body": "file_path=\"${1|/path/to/file,${pathToFile}|}\"\ncase $file_path in\n  -*) file_path=./$file_path ;;\nesac\nrm -f \"$file_path\"\n",
     "description": "delete file(s)"
   },
   "filesystem.file-read": {
     "prefix": "file read",
     "body": [
-      "while IFS= read -r line; do",
-      "\techo \"\\$line\"",
-      "done < ${1|/path/ro/file,\"${inputFile}\"|}\n"
+      "file_path=${1|/path/ro/file,\"${inputFile}\"|}",
+      "if [ -d \"\\$file_path\" ]; then",
+      "\tprintf 'cannot read directory: %s\\n' \"\\$file_path\" >&2",
+      "\tfalse",
+      "else",
+      "\twhile IFS= read -r line || [ -n \"\\$line\" ]; do",
+      "\t\tprintf '%s\\n' \"\\$line\"",
+      "\tdone < \"\\$file_path\"",
+      "fi\n"
     ],
     "description": "read a file"
   },
@@ -415,35 +421,52 @@
       "search in files",
       "find in files"
     ],
-    "body": "${1:result}=\\$(find \"${2|/path/to/search,${pathToSearch}|}\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${4:criteria}\" {} +)\n",
+    "body": "${1:result}=\\$(\n  _shellman_search_path=\"${2|/path/to/search,${pathToSearch}|}\"\n  case \\$_shellman_search_path in\n    -*) _shellman_search_path=./\\$_shellman_search_path ;;\n  esac\n  _shellman_status_file=\\$(mktemp) || exit 2\n  trap 'rm -f \"\\$_shellman_status_file\"' 0\n  find \"\\$_shellman_search_path\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type f -exec sh -c '\n    _shellman_pattern=\\$1\n    _shellman_status_file=\\$2\n    shift 2\n    grep -e \"\\$_shellman_pattern\" \"\\$@\"\n    _shellman_grep_status=\\$?\n    printf \"%s\\n\" \"\\$_shellman_grep_status\" >> \"\\$_shellman_status_file\" || exit 2\n  ' sh \"${4:criteria}\" \"\\$_shellman_status_file\" {} +\n  _shellman_find_status=\\$?\n  [ \"\\$_shellman_find_status\" -eq 0 ] || exit 2\n  _shellman_status_data=\\$(cat \"\\$_shellman_status_file\") || exit 2\n  _shellman_match=1\n  if [ -n \"\\$_shellman_status_data\" ]; then\n    while IFS= read -r _shellman_grep_status; do\n      case \\$_shellman_grep_status in\n        0) _shellman_match=0 ;;\n        1) ;;\n        *) exit 2 ;;\n      esac\n    done <<_SHELLMAN_STATUS\n\\$_shellman_status_data\n_SHELLMAN_STATUS\n  fi\n  exit \"\\$_shellman_match\"\n)\n",
     "description": "find files which contain search criteria in given path and below"
   },
   "filesystem.file-write": {
     "prefix": "file write",
     "body": [
-      "echo \"${1:sample header}\" > \"${2|/path/to/file,${pathToFile}|}\"",
-      "echo # Empty line",
-      "for ${3:line} in \"\\${${4:lines}[@]}\"; do",
-      "\techo \"\\${${3:line}\\}\" >> \"${2}\" # >> means append",
-      "done\n"
+      "(",
+      "  file_path=\"${2|/path/to/file,${pathToFile}|}\"",
+      "  case \\$file_path in",
+      "    '') printf '%s\\n' 'destination is empty' >&2; exit 2 ;;",
+      "    -*) file_path=./\\$file_path ;;",
+      "  esac",
+      "  if [ ! -t 0 ]; then printf '%s\\n' 'interactive terminal input is required' >&2; exit 2; fi",
+      "  printf '%s\\n' 'Enter text; press Ctrl-D at the start of a line to finish.' >&2",
+      "  tee \"\\$file_path\" >/dev/null",
+      ")\n"
     ],
     "description": "write to a file"
   },
   "filesystem.file-write-multiline": {
     "prefix": "file write multiline",
     "body": [
-      "cat >\"${1|/path/to/file,${filePath}|}\" <<EOF",
-      "${2:first line\nsecond line\n...}",
-      "EOF\n"
+      "(",
+      "  file_path=\"${1|/path/to/file,${filePath}|}\"",
+      "  case \\$file_path in",
+      "    '') printf '%s\\n' 'destination is empty' >&2; exit 2 ;;",
+      "    -*) file_path=./\\$file_path ;;",
+      "  esac",
+      "  if [ ! -t 0 ]; then printf '%s\\n' 'interactive terminal input is required' >&2; exit 2; fi",
+      "  printf '%s\\n' 'Enter text; press Ctrl-D at the start of a line to finish.' >&2",
+      "  tee \"\\$file_path\" >/dev/null",
+      ")\n"
     ],
     "description": "write multiple lines into file"
   },
   "filesystem.file-write-multiline-sudo": {
     "prefix": "file write multiline sudo",
     "body": [
-      "cat << EOF | sudo tee \"${1|/path/to/file,${filePath}|}\" >/dev/null",
-      "${2:first line\nsecond line\n...}",
-      "EOF\n"
+      "file_path=\"${1|/path/to/file,${filePath}|}\"",
+      "case \\$file_path in",
+      "  '') printf '%s\\n' 'destination is empty' >&2; exit 2 ;;",
+      "  -*) file_path=./\\$file_path ;;",
+      "esac",
+      "if [ ! -t 0 ]; then printf '%s\\n' 'interactive terminal input is required' >&2; exit 2; fi",
+      "printf '%s\\n' 'Enter text; press Ctrl-D at the start of a line to finish.' >&2",
+      "sudo tee \"\\$file_path\" >/dev/null || exit \\$?\n"
     ],
     "description": "write multiple lines into file when sudo permission is required"
   },
@@ -451,9 +474,15 @@
     "prefix": "iterate files",
     "body": [
       "# Searching in the current directory",
+      "file_iterate_status=0",
       "for file in ${1|*,*.{jpg\\,png}|}; do",
-      "\t${2:echo \"\\${file\\}\"}",
-      "done\n"
+      "\t[ -e \"\\$file\" ] || [ -L \"\\$file\" ] || continue",
+      "\taction_status=0",
+      "\t# shellcheck disable=SC2320",
+      "\t${2:printf '%s\\n' \"\\${file\\}\"} || action_status=\\$?",
+      "\tif [ \"\\$file_iterate_status\" -eq 0 ]; then file_iterate_status=\\$action_status; fi",
+      "done",
+      "(exit \"\\$file_iterate_status\")\n"
     ],
     "description": "write to a file"
   },
@@ -462,7 +491,7 @@
       "find file",
       "find directory"
     ],
-    "body": "readarray -t resultArray < <(find \"/path/to/search\" -maxdepth 1 -type f -name \"criteria\")\n",
+    "body": "_shellman_find_root=\"/path/to/search\"\n_shellman_find_pattern=\"criteria\"\ncase $_shellman_find_root in\n  -*) _shellman_find_root=./$_shellman_find_root ;;\nesac\ncoproc _shellman_find {\n  find \"$_shellman_find_root\" -maxdepth 1 -type f -name \"$_shellman_find_pattern\" -print0\n}\n# shellcheck disable=SC2154 # Bash sets the named coprocess PID.\n_shellman_find_pid=$_shellman_find_PID\nreadarray -d '' -t resultArray <&\"${_shellman_find[0]}\"\nwait \"$_shellman_find_pid\"\n",
     "description": "find files (-type f) or directories (-type d) by name or pattern (*.jpg)"
   },
   "filesystem.if-directory-exists": {
@@ -477,7 +506,10 @@
   "filesystem.if-file-executable": {
     "prefix": "if file executable",
     "body": [
-      "if [ -x \"${1|/path/to/file,${filePath}|}\" ]; then",
+      "if (",
+      "\t_shellman_executable_path=\"${1|/path/to/file,${filePath}|}\"",
+      "\t[ -f \"$_shellman_executable_path\" ] && [ -x \"$_shellman_executable_path\" ]",
+      "); then",
       "\t${2:echo \"file \\\"${1}\\\" is executable\"}",
       "fi\n"
     ],
@@ -549,8 +581,26 @@
   "filesystem.if-files-are-equal": {
     "prefix": "if file =",
     "body": [
-      "if cmp -s \"${1|/path/to/file1,${filePath1}|}\" \"${2|/path/to/file2,${filePath2}|}\"; then",
+      "if (",
+      "  file1=\"${1|/path/to/file1,${filePath1}|}\"",
+      "  file2=\"${2|/path/to/file2,${filePath2}|}\"",
+      "  case $file1 in",
+      "    -*) file1=./$file1 ;;",
+      "  esac",
+      "  case $file2 in",
+      "    -*) file2=./$file2 ;;",
+      "  esac",
+      "  cmp -s \"$file1\" \"$file2\"",
+      "); then",
       "\t${3:echo \"File \\\"${1}\\\" is equal to file \\\"${2}\\\"\"}",
+      "else",
+      "  (",
+      "    cmp_status=$?",
+      "    if [ \"$cmp_status\" -ne 1 ]; then",
+      "      printf '%s\\n' 'cmp: comparison failed' >&2",
+      "      exit \"$cmp_status\"",
+      "    fi",
+      "  )",
       "fi\n"
     ],
     "description": "check if files are equal"
@@ -566,7 +616,7 @@
   },
   "filesystem.remove-files-older-newer-than": {
     "prefix": "remove old/new files/directories",
-    "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} -delete\n",
+    "body": "(\n  search_dir=\"${1|/path/to/directory/,${pathToDirectory}|}\"\n  if [ -z \"$search_dir\" ]; then\n    printf '%s\\n' 'find: empty search directory' >&2\n    exit 2\n  fi\n  case $search_dir in\n    -*) search_dir=./$search_dir ;;\n  esac\n  if [ ! -d \"$search_dir\" ] || [ ! -r \"$search_dir\" ] || [ ! -x \"$search_dir\" ]; then\n    printf '%s\\n' 'find: search directory is unavailable' >&2\n    exit 2\n  fi\n  CDPATH='' cd -P \"$search_dir\" || exit 2\n  status=0\n  for entry in ./*; do\n    if [ ! -e \"$entry\" ] && [ ! -L \"$entry\" ]; then\n      continue\n    fi\n    find \"$entry\" -type ${2|f,d|} -mtime ${3|-,+|}${4:days} -delete || status=$?\n  done\n  exit \"$status\"\n)\n",
     "description": "find and remove files(f)/directories(d) older(+)/newer(-) than x days"
   },
   "float.if-equal": {

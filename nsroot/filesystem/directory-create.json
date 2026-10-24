@@ -1,5 +1,5 @@
 {
   "prefix": "directory create",
-  "body": "mkdir \"${1:directory name}\"\n",
+  "body": "directory_path=\"${1:directory name}\"\ncase $directory_path in\n  -*) directory_path=./$directory_path ;;\nesac\nmkdir \"$directory_path\"\n",
   "description": "create directory"
 }

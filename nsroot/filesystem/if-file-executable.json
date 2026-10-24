@@ -1,7 +1,10 @@
 {
   "prefix": "if file executable",
   "body": [
-    "if [ -x \"${1|/path/to/file,${filePath}|}\" ]; then",
+    "if (",
+    "\t_shellman_executable_path=\"${1|/path/to/file,${filePath}|}\"",
+    "\t[ -f \"$_shellman_executable_path\" ] && [ -x \"$_shellman_executable_path\" ]",
+    "); then",
     "\t${2:echo \"file \\\"${1}\\\" is executable\"}",
     "fi\n"
   ],

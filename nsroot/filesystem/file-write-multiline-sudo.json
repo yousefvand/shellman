@@ -1,9 +1,14 @@
 {
   "prefix": "file write multiline sudo",
   "body": [
-    "cat << EOF | sudo tee \"${1|/path/to/file,${filePath}|}\" >/dev/null",
-    "${2:first line\nsecond line\n...}",
-    "EOF\n"
+    "file_path=\"${1|/path/to/file,${filePath}|}\"",
+    "case \\$file_path in",
+    "  '') printf '%s\\n' 'destination is empty' >&2; exit 2 ;;",
+    "  -*) file_path=./\\$file_path ;;",
+    "esac",
+    "if [ ! -t 0 ]; then printf '%s\\n' 'interactive terminal input is required' >&2; exit 2; fi",
+    "printf '%s\\n' 'Enter text; press Ctrl-D at the start of a line to finish.' >&2",
+    "sudo tee \"\\$file_path\" >/dev/null || exit \\$?\n"
   ],
   "description": "write multiple lines into file when sudo permission is required"
 }

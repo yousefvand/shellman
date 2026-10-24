@@ -3,8 +3,8 @@
   "body": [
     "# Make sure path ends with /",
     "for directory in ${1| /'path/to/directory'/,\"${pathToDirectory}\"|}*; do",
-    "\tif [[ -d \"\\${directory}\" && ! -L \"\\${directory}\" ]]; then",
-    "\t\t${2:echo \"\\${directory\\}\"}",
+    "\tif [ -d \"\\${directory}\" ] && [ ! -L \"\\${directory}\" ]; then",
+    "\t\t${2:printf '%s\\n' \"\\${directory\\}\"}",
       "\tfi",
     "done\n"
   ],

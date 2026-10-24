@@ -3,6 +3,6 @@
     "directory delete nested",
     "directory remove nested"
   ],
-  "body": "rm -rf ${1|/path/to/directory,${pathToDirectory}|}\n",
+  "body": "directory_path=\"${1|/path/to/directory,${pathToDirectory}|}\"\ncase $directory_path in\n  -*) directory_path=./$directory_path ;;\nesac\nrm -rf \"$directory_path\"\n",
   "description": "delete directory and all contents!"
 }

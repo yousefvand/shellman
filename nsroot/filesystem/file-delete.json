@@ -3,6 +3,6 @@
     "file delete",
     "file remove"
   ],
-  "body": "rm -f ${1|/path/to/file,${pathToFile}|}\n",
+  "body": "file_path=\"${1|/path/to/file,${pathToFile}|}\"\ncase $file_path in\n  -*) file_path=./$file_path ;;\nesac\nrm -f \"$file_path\"\n",
   "description": "delete file(s)"
 }

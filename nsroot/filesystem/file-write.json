@@ -1,11 +1,16 @@
 {
   "prefix": "file write",
   "body": [
-    "echo \"${1:sample header}\" > \"${2|/path/to/file,${pathToFile}|}\"",
-    "echo # Empty line",
-    "for ${3:line} in \"\\${${4:lines}[@]}\"; do",
-    "\techo \"\\${${3:line}\\}\" >> \"${2}\" # >> means append",
-    "done\n"
+    "(",
+    "  file_path=\"${2|/path/to/file,${pathToFile}|}\"",
+    "  case \\$file_path in",
+    "    '') printf '%s\\n' 'destination is empty' >&2; exit 2 ;;",
+    "    -*) file_path=./\\$file_path ;;",
+    "  esac",
+    "  if [ ! -t 0 ]; then printf '%s\\n' 'interactive terminal input is required' >&2; exit 2; fi",
+    "  printf '%s\\n' 'Enter text; press Ctrl-D at the start of a line to finish.' >&2",
+    "  tee \"\\$file_path\" >/dev/null",
+    ")\n"
   ],
   "description": "write to a file"
 }

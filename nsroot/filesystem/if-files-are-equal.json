@@ -1,8 +1,26 @@
 {
   "prefix": "if file =",
   "body": [
-    "if cmp -s \"${1|/path/to/file1,${filePath1}|}\" \"${2|/path/to/file2,${filePath2}|}\"; then",
-      "\t${3:echo \"File \\\"${1}\\\" is equal to file \\\"${2}\\\"\"}",
+    "if (",
+    "  file1=\"${1|/path/to/file1,${filePath1}|}\"",
+    "  file2=\"${2|/path/to/file2,${filePath2}|}\"",
+    "  case $file1 in",
+    "    -*) file1=./$file1 ;;",
+    "  esac",
+    "  case $file2 in",
+    "    -*) file2=./$file2 ;;",
+    "  esac",
+    "  cmp -s \"$file1\" \"$file2\"",
+    "); then",
+    "\t${3:echo \"File \\\"${1}\\\" is equal to file \\\"${2}\\\"\"}",
+    "else",
+    "  (",
+    "    cmp_status=$?",
+    "    if [ \"$cmp_status\" -ne 1 ]; then",
+    "      printf '%s\\n' 'cmp: comparison failed' >&2",
+    "      exit \"$cmp_status\"",
+    "    fi",
+    "  )",
     "fi\n"
   ],
   "description": "check if files are equal"

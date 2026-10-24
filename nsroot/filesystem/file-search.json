@@ -4,6 +4,6 @@
     "search in files",
     "find in files"
   ],
-  "body": "${1:result}=\\$(find \"${2|/path/to/search,${pathToSearch}|}\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type f -exec grep \"${4:criteria}\" {} +)\n",
+  "body": "${1:result}=\\$(\n  _shellman_search_path=\"${2|/path/to/search,${pathToSearch}|}\"\n  case \\$_shellman_search_path in\n    -*) _shellman_search_path=./\\$_shellman_search_path ;;\n  esac\n  _shellman_status_file=\\$(mktemp) || exit 2\n  trap 'rm -f \"\\$_shellman_status_file\"' 0\n  find \"\\$_shellman_search_path\" -maxdepth ${3|1,2,3,4,5,6,7,8,9|} -type f -exec sh -c '\n    _shellman_pattern=\\$1\n    _shellman_status_file=\\$2\n    shift 2\n    grep -e \"\\$_shellman_pattern\" \"\\$@\"\n    _shellman_grep_status=\\$?\n    printf \"%s\\n\" \"\\$_shellman_grep_status\" >> \"\\$_shellman_status_file\" || exit 2\n  ' sh \"${4:criteria}\" \"\\$_shellman_status_file\" {} +\n  _shellman_find_status=\\$?\n  [ \"\\$_shellman_find_status\" -eq 0 ] || exit 2\n  _shellman_status_data=\\$(cat \"\\$_shellman_status_file\") || exit 2\n  _shellman_match=1\n  if [ -n \"\\$_shellman_status_data\" ]; then\n    while IFS= read -r _shellman_grep_status; do\n      case \\$_shellman_grep_status in\n        0) _shellman_match=0 ;;\n        1) ;;\n        *) exit 2 ;;\n      esac\n    done <<_SHELLMAN_STATUS\n\\$_shellman_status_data\n_SHELLMAN_STATUS\n  fi\n  exit \"\\$_shellman_match\"\n)\n",
   "description": "find files which contain search criteria in given path and below"
 }

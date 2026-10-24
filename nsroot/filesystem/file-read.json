@@ -1,9 +1,15 @@
 {
   "prefix": "file read",
   "body": [
-    "while IFS= read -r line; do",
-    "\techo \"\\$line\"",
-    "done < ${1|/path/ro/file,\"${inputFile}\"|}\n"
+    "file_path=${1|/path/ro/file,\"${inputFile}\"|}",
+    "if [ -d \"\\$file_path\" ]; then",
+    "\tprintf 'cannot read directory: %s\\n' \"\\$file_path\" >&2",
+    "\tfalse",
+    "else",
+    "\twhile IFS= read -r line || [ -n \"\\$line\" ]; do",
+    "\t\tprintf '%s\\n' \"\\$line\"",
+    "\tdone < \"\\$file_path\"",
+    "fi\n"
   ],
   "description": "read a file"
 }

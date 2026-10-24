@@ -1,5 +1,5 @@
 {
   "prefix": "remove old/new files/directories",
-  "body": "find \"${1|/path/to/directory/,${pathToDirectory}|}\"* -type ${2|f,d|} -mtime ${3|-,+|}${4:days} -delete\n",
+  "body": "(\n  search_dir=\"${1|/path/to/directory/,${pathToDirectory}|}\"\n  if [ -z \"$search_dir\" ]; then\n    printf '%s\\n' 'find: empty search directory' >&2\n    exit 2\n  fi\n  case $search_dir in\n    -*) search_dir=./$search_dir ;;\n  esac\n  if [ ! -d \"$search_dir\" ] || [ ! -r \"$search_dir\" ] || [ ! -x \"$search_dir\" ]; then\n    printf '%s\\n' 'find: search directory is unavailable' >&2\n    exit 2\n  fi\n  CDPATH='' cd -P \"$search_dir\" || exit 2\n  status=0\n  for entry in ./*; do\n    if [ ! -e \"$entry\" ] && [ ! -L \"$entry\" ]; then\n      continue\n    fi\n    find \"$entry\" -type ${2|f,d|} -mtime ${3|-,+|}${4:days} -delete || status=$?\n  done\n  exit \"$status\"\n)\n",
   "description": "find and remove files(f)/directories(d) older(+)/newer(-) than x days"
 }
