@@ -117,6 +117,12 @@ const (
 	currentV7Iteration58SHA256          = "e3b820a02fe36079e8caff51dcca8828513a5408439432c4ef56ead7c73e81b9"
 	currentV7Iteration66SHA256          = "d0b12211fbc9febf6ec9c56728f2f6b55d6c1cb8e64a90812f2694c8071c2a0b"
 	currentV7Iteration68SHA256          = "d7b86fd84d520ae1021e1a024ee90cfe56b1047d11a83f01639613a4bc4b4c72"
+	currentV7Iteration69SHA256          = "b461cd6cd3bd1e828431a357670e49f20facd53a07a81a423a30c9ea8d6ee08f"
+	currentV7Iteration70SHA256          = "a95a7fee2066abbc8b0636bed926c5fc24d33da233911c05f5afe914ccefef2a"
+	currentV7Iteration71SHA256          = "8599409dc2e352ec0452eced7efd5a0256d5808e27128939bb19d7d09cda86e1"
+	currentV7Iteration72SHA256          = "06973c772274dc8f87507f0820e12c91112b6dbb8e7fe5a07f9409944136f4ec"
+	currentV7Iteration73SHA256          = "65c1444a2d226cb5e1464651c0f8238ddad00edfe6a9cb452062a0b95ff4545f"
+	currentV7Iteration74SHA256          = "7589b53e00c42df95a8808e4adc0c1faf995be5610fe3b70ecf7206cbcd06cbc"
 	approvedMigrationName               = "archive.compress-tar-gz"
 	iteration2MigrationName             = "archive.compress-tar-xz"
 	iteration3MigrationName             = "archive.compress-zip"
@@ -641,6 +647,138 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	if got, want := len(ordered), 278; got != want {
 		t.Fatalf("snippet count = %d, want %d", got, want)
 	}
+	if ordered[73].name != "float.if-not-equal" {
+		t.Fatalf("entry 74 = %q", ordered[73].name)
+	}
+	if !reflect.DeepEqual(ordered[73].snippet.Prefix, []any{"if float !=", "if double !="}) || ordered[73].snippet.Description != "if numbers are not equal" {
+		t.Fatalf("entry-74 metadata = %#v", ordered[73].snippet)
+	}
+	current74JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-74 snippets", current74JSON, currentV7Iteration74SHA256)
+	iteration74Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[73].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} != \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"not equal\"}",
+		"fi\n",
+	}
+	rollback74JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-74 rollback to approved iteration 73", rollback74JSON, currentV7Iteration73SHA256)
+	if ordered[72].name != "float.if-lesser" {
+		t.Fatalf("entry 73 = %q", ordered[72].name)
+	}
+	if !reflect.DeepEqual(ordered[72].snippet.Prefix, []any{"if float <", "if double <"}) || ordered[72].snippet.Description != "if num1 is lesser than num2" {
+		t.Fatalf("entry-73 metadata = %#v", ordered[72].snippet)
+	}
+	current73JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-73 snippets", current73JSON, currentV7Iteration73SHA256)
+	iteration73Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[72].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} < \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"lesser\"}",
+		"fi\n",
+	}
+	rollback73JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-73 rollback to approved iteration 72", rollback73JSON, currentV7Iteration72SHA256)
+	if ordered[71].name != "float.if-lesser-or-equal" {
+		t.Fatalf("entry 72 = %q", ordered[71].name)
+	}
+	if !reflect.DeepEqual(ordered[71].snippet.Prefix, []any{"if float <=", "if double <="}) || ordered[71].snippet.Description != "if num1 is lesser or equal to num2" {
+		t.Fatalf("entry-72 metadata = %#v", ordered[71].snippet)
+	}
+	current72JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-72 snippets", current72JSON, currentV7Iteration72SHA256)
+	iteration72Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[71].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} <= \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"lesser or equal\"}",
+		"fi\n",
+	}
+	rollback72JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-72 rollback to approved iteration 71", rollback72JSON, currentV7Iteration71SHA256)
+	if ordered[70].name != "float.if-greater" {
+		t.Fatalf("entry 71 = %q", ordered[70].name)
+	}
+	if !reflect.DeepEqual(ordered[70].snippet.Prefix, []any{"if float >", "if double >"}) || ordered[70].snippet.Description != "if num2 is greater than num2" {
+		t.Fatalf("entry-71 metadata = %#v", ordered[70].snippet)
+	}
+	current71JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-71 snippets", current71JSON, currentV7Iteration71SHA256)
+	iteration71Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[70].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} > \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"greater\"}",
+		"fi\n",
+	}
+	rollback71JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-71 rollback to approved iteration 70", rollback71JSON, currentV7Iteration70SHA256)
+	if ordered[69].name != "float.if-greater-or-equal" {
+		t.Fatalf("entry 70 = %q", ordered[69].name)
+	}
+	if !reflect.DeepEqual(ordered[69].snippet.Prefix, []any{"if float >=", "if double >="}) || ordered[69].snippet.Description != "if num1 is greater to num2" {
+		t.Fatalf("entry-70 metadata = %#v", ordered[69].snippet)
+	}
+	current70JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-70 snippets", current70JSON, currentV7Iteration70SHA256)
+	iteration70Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[69].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} >= \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"greater or equal\"}",
+		"fi\n",
+	}
+	rollback70JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-70 rollback to approved iteration 69", rollback70JSON, currentV7Iteration69SHA256)
+	if ordered[68].name != "float.if-equal" {
+		t.Fatalf("entry 69 = %q", ordered[68].name)
+	}
+	if !reflect.DeepEqual(ordered[68].snippet.Prefix, []any{"if float =", "if double ="}) || ordered[68].snippet.Description != "if numbers are equal" {
+		t.Fatalf("entry-69 metadata = %#v", ordered[68].snippet)
+	}
+	currentJSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "current v7 iteration-69 snippets", currentJSON, currentV7Iteration69SHA256)
+	iteration69Ordered := append([]namedSnippet(nil), ordered...)
+	ordered[68].snippet.Body = []any{
+		`if (( $(echo "\${${1:num1}} == \${${2:num2}}" | bc -l) )); then`,
+		"\t${3:echo \"equal\"}",
+		"fi\n",
+	}
+	rollback69JSON, err := renderSnippetJSON(ordered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertSHA256(t, "entry-69 rollback to approved iteration 68", rollback69JSON, currentV7Iteration68SHA256)
 	iteration68Ordered := append([]namedSnippet(nil), ordered...)
 	iteration68JSON, err := renderSnippetJSON(ordered)
 	if err != nil {
@@ -2520,13 +2658,1284 @@ func TestMigrationChangesOnlyApprovedSnippet(t *testing.T) {
 	assertSHA256(t, "historical v6 commands", renderDocumentation(ordered), historicalV6CommandsSHA256)
 
 	changed := 0
+	changed69 := 0
+	changed74, changed73, changed72, changed71, changed70 := 0, 0, 0, 0, 0
 	for index := range ordered {
+		if !reflect.DeepEqual(iteration74Ordered[index].snippet, ordered[index].snippet) {
+			changed74++
+		}
+		if !reflect.DeepEqual(iteration73Ordered[index].snippet, ordered[index].snippet) {
+			changed73++
+		}
+		if !reflect.DeepEqual(iteration72Ordered[index].snippet, ordered[index].snippet) {
+			changed72++
+		}
+		if !reflect.DeepEqual(iteration71Ordered[index].snippet, ordered[index].snippet) {
+			changed71++
+		}
+		if !reflect.DeepEqual(iteration70Ordered[index].snippet, ordered[index].snippet) {
+			changed70++
+		}
+		if !reflect.DeepEqual(iteration69Ordered[index].snippet, ordered[index].snippet) {
+			changed69++
+		}
 		if !reflect.DeepEqual(iteration68Ordered[index].snippet, ordered[index].snippet) {
 			changed++
 		}
 	}
+	if changed74 != 65 {
+		t.Fatalf("iteration-74 objects differing from historical v6 = %d, want 65 (213 unchanged)", changed74)
+	}
+	if changed73 != 64 {
+		t.Fatalf("iteration-73 objects differing from historical v6 = %d, want 64 (214 unchanged)", changed73)
+	}
+	if changed72 != 63 {
+		t.Fatalf("iteration-72 objects differing from historical v6 = %d, want 63 (215 unchanged)", changed72)
+	}
+	if changed71 != 62 {
+		t.Fatalf("iteration-71 objects differing from historical v6 = %d, want 62 (216 unchanged)", changed71)
+	}
+	if changed70 != 61 {
+		t.Fatalf("iteration-70 objects differing from historical v6 = %d, want 61 (217 unchanged)", changed70)
+	}
+	if changed69 != 60 {
+		t.Fatalf("iteration-69 objects differing from historical v6 = %d, want 60 (218 unchanged)", changed69)
+	}
 	if changed != 59 {
 		t.Fatalf("snippets differing from historical v6 = %d, want 59 (219 unchanged)", changed)
+	}
+}
+
+func TestFloatIfEqual69GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-equal"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "equal"}`) != 1 {
+		t.Fatal("historical placeholder spelling or order changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "equal"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	defaultScript := filepath.Join(t.TempDir(), "float-default.sh")
+	mustWriteFile(t, defaultScript, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "equal"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", defaultScript)
+	}
+	if output, err := runCommand(".", nil, "shellcheck", "-s", "sh", defaultScript); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, output)
+	}
+	tests := []struct {
+		name, left, right     string
+		wantCount, wantStatus int
+	}{
+		{"one and one point zero", "1", "1.0", 1, 0},
+		{"one point zero zero and one", "1.00", "1", 1, 0},
+		{"positive sign", "+1", "1", 1, 0},
+		{"negative zero", "-0", "0", 1, 0},
+		{"signed decimal zero", "0.0", "-0.0", 1, 0},
+		{"leading and trailing zeros", "0001.2300", "1.23", 1, 0},
+		{"positive fraction", ".5", "0.50", 1, 0},
+		{"negative fraction", "-.5", "-0.50", 1, 0},
+		{"trailing decimal point", "1.", "1", 1, 0},
+		{"small exact", "0.000000000000000000000000000001", ".000000000000000000000000000001", 1, 0},
+		{"small unequal", "0.000000000000000000000000000001", "0", 0, 0},
+		{"large exact", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999999.0", 1, 0},
+		{"large unequal", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 0, 0},
+		{"no epsilon", "1.000000000000000000000000000001", "1", 0, 0},
+		{"empty", "", "1", 0, 2}, {"whitespace", " \t", "1", 0, 2},
+		{"leading space", " 1", "1", 0, 2}, {"trailing space", "1 ", "1", 0, 2},
+		{"alphabetic", "abc", "1", 0, 2}, {"malformed", "1.2.3", "1", 0, 2},
+		{"scientific notation", "1e3", "1000", 0, 2},
+		{"nan", "NaN", "NaN", 0, 2}, {"infinity", "Inf", "Inf", 0, 2},
+		{"operator expression", "1+0", "1", 0, 2},
+		{"option style", "--1", "1", 0, 2},
+		{"quote", `1"`, "1", 0, 2}, {"backslash", `1\`, "1", 0, 2},
+		{"dollar", "$1", "1", 0, 2},
+		{"command substitution text", "$(touch injected)", "1", 0, 2},
+		{"newline", "1\n2", "1", 0, 2},
+	}
+	for _, locale := range []string{"C", "en_US.utf8"} {
+		for _, errexit := range []bool{false, true} {
+			for _, tc := range tests {
+				t.Run(locale+"/"+tc.name+fmt.Sprint(errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(`count=$((count + 1))`)
+					if errexit {
+						script = "set -e\n" + script
+					}
+					script += "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					cmd := exec.Command("sh", "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+					var stderr bytes.Buffer
+					cmd.Stderr = &stderr
+					out, err := cmd.Output()
+					wantExit, wantOut := 0, fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.wantCount, tc.wantStatus)
+					if errexit && tc.wantStatus != 0 {
+						wantExit, wantOut = tc.wantStatus, ""
+					}
+					if exitCode(err) != wantExit || string(out) != wantOut || (stderr.Len() > 0) != (tc.wantStatus != 0) {
+						t.Fatalf("exit=%d output=%q stderr=%q; want exit=%d output=%q", exitCode(err), out, stderr.String(), wantExit, wantOut)
+					}
+					if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+						t.Fatalf("injection created a file: %v", err)
+					}
+				})
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			want                 int
+		}{
+			{"action failure", "false", "", 1},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"unexpected bc output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(shell+"/"+tc.name+fmt.Sprint(errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Env = append(os.Environ(), "num1=1", "num2=1", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.want || strings.Contains(string(out), "STATUS:") {
+							t.Fatalf("exit=%d output=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.want)) {
+						t.Fatalf("output=%q error=%v", out, err)
+					}
+				})
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right     string
+				wantCount, wantStatus int
+			}{
+				{"equal", "1.00", "+1", 1, 0},
+				{"unequal", "1.000000000000000000000000000001", "1", 0, 0},
+				{"invalid", "1+0", "1", 0, 2},
+			} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/existing=%t/%s/errexit=%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						prelude := "count=0\n"
+						if preexisting {
+							for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+								prelude += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script := prelude + expand(`count=$((count + 1))`)
+						if errexit {
+							script = "set -e\n" + script
+						}
+						script += "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.wantStatus != 0 {
+							if exitCode(err) != tc.wantStatus || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d output=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.wantCount, tc.wantStatus)) {
+							t.Fatalf("exit=%d output=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + ":"
+							if preexisting {
+								want += "SET:BEFORE_" + name
+							} else {
+								want += ":UNSET"
+							}
+							if !strings.Contains(string(out), want+"\n") {
+								t.Fatalf("%s changed caller state: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+}
+
+func TestFloatGreaterOrEqual70GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-greater-or-equal"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "greater or equal"}`) != 1 {
+		t.Fatal("entry-70 placeholders changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "greater or equal"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	lint := filepath.Join(t.TempDir(), "greater-or-equal.sh")
+	mustWriteFile(t, lint, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "greater or equal"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", lint)
+	}
+	if out, err := runCommand(".", nil, "shellcheck", "-s", "sh", lint); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, out)
+	}
+	tests := []struct {
+		name, left, right string
+		want              int
+	}{
+		{"equal integers", "1", "1", 1}, {"equal decimal left", "1.0", "1", 1}, {"equal decimal right", "1", "1.00", 1},
+		{"greater", "2", "1", 1}, {"less", "1", "2", 0}, {"negative greater", "-1", "-2", 1},
+		{"negative less", "-2", "-1", 0}, {"negative below zero", "-1", "0", 0}, {"zero above negative", "0", "-1", 1},
+		{"negative zero", "-0", "0", 1}, {"zero above negative zero", "0", "-0", 1},
+		{"equal fractions", "0.5", "0.50", 1}, {"fraction above", "0.51", "0.50", 1}, {"fraction below", "0.49", "0.50", 0},
+		{"negative fraction above", "-0.49", "-0.50", 1}, {"negative fraction below", "-0.51", "-0.50", 0},
+		{"leading trailing zeros", "0001.2300", "1.23", 1}, {"positive sign", "+1", "1", 1},
+		{"tiny positive above zero", "0.000000000000000000000000000001", "0", 1},
+		{"zero below tiny positive", "0", "0.000000000000000000000000000001", 0},
+		{"tiny negative below zero", "-0.000000000000000000000000000001", "0", 0},
+		{"adjacent large greater", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 1},
+		{"adjacent large less", "999999999999999999999999999999999999999998", "999999999999999999999999999999999999999999", 0},
+		{"precision boundary", "1.000000000000000000000000000001", "1", 1},
+		{"precision boundary reverse", "1", "1.000000000000000000000000000001", 0},
+	}
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit equal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4096), 1})
+	invalid := []struct{ name, value string }{
+		{"empty", ""}, {"spaces", " \t"}, {"leading space", " 1"}, {"trailing space", "1 "},
+		{"letters", "bad"}, {"multiple dots", "1.2.3"}, {"sign only", "+"}, {"negative sign only", "-"},
+		{"scientific", "1e3"}, {"NaN", "NaN"}, {"infinity", "Infinity"}, {"expression", "1+0"},
+		{"option like", "--1"}, {"metacharacter", "1;2"}, {"quotes", `1"`}, {"backslash", `1\`},
+		{"dollar", "$1"}, {"substitution", "$(touch injected)"}, {"newline", "1\n2"}, {"comma", "1,5"},
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, locale := range []string{"C", "en_US.utf8"} {
+			for _, errexit := range []bool{false, true} {
+				for _, tc := range tests {
+					t.Run(fmt.Sprintf("numeric/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						want := fmt.Sprintf("COUNT:%d STATUS:0\n", tc.want)
+						if err != nil || string(out) != want {
+							t.Fatalf("exit=%d out=%q want=%q", exitCode(err), out, want)
+						}
+					})
+				}
+				for _, tc := range invalid {
+					t.Run(fmt.Sprintf("invalid/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.value, "num2=1", "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						if errexit {
+							if exitCode(err) != 2 || strings.Contains(string(out), "COUNT:") || !strings.Contains(string(out), "invalid decimal operand") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+						} else if err != nil || !strings.Contains(string(out), "COUNT:0 STATUS:2\n") || !strings.Contains(string(out), "invalid decimal operand") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+							t.Fatalf("injection created file: %v", err)
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right string
+				count, status     int
+			}{{"true", "1.00", "+1", 1, 0}, {"false", "1", "2", 0, 0}, {"invalid", "1+0", "1", 0, 2}} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/%t/%s/%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							if preexisting {
+								script += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script += expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.status != 0 {
+							if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.count, tc.status)) {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + "::UNSET\n"
+							if preexisting {
+								want = name + ":SET:BEFORE_" + name + "\n"
+							}
+							if !strings.Contains(string(out), want) {
+								t.Fatalf("%s leaked: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			status               int
+		}{
+			{"action failure", "false", "", 1},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"unexpected output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(fmt.Sprintf("failure/%s/%s/%t", shell, tc.name, errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1=1", "num2=1", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.status)) {
+						t.Fatalf("exit=%d out=%q", exitCode(err), out)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestFloatGreater71GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-greater"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "greater"}`) != 1 {
+		t.Fatal("entry-71 placeholders changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "greater"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	lint := filepath.Join(t.TempDir(), "greater.sh")
+	mustWriteFile(t, lint, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "greater"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", lint)
+	}
+	if out, err := runCommand(".", nil, "shellcheck", "-s", "sh", lint); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, out)
+	}
+	tests := []struct {
+		name, left, right string
+		want              int
+	}{
+		{"equal integers", "1", "1", 0}, {"equal decimal left", "1.0", "1", 0}, {"equal decimal right", "1", "1.00", 0},
+		{"greater", "2", "1", 1}, {"less", "1", "2", 0}, {"negative greater", "-1", "-2", 1},
+		{"negative less", "-2", "-1", 0}, {"negative below zero", "-1", "0", 0}, {"zero above negative", "0", "-1", 1},
+		{"negative zero", "-0", "0", 0}, {"zero above negative zero", "0", "-0", 0},
+		{"equal fractions", "0.5", "0.50", 0}, {"fraction above", "0.51", "0.50", 1}, {"fraction below", "0.49", "0.50", 0},
+		{"negative fraction above", "-0.49", "-0.50", 1}, {"negative fraction below", "-0.51", "-0.50", 0},
+		{"leading trailing zeros", "0001.2300", "1.23", 0}, {"positive sign", "+1", "1", 0},
+		{"tiny positive above zero", "0.000000000000000000000000000001", "0", 1},
+		{"zero below tiny positive", "0", "0.000000000000000000000000000001", 0},
+		{"tiny negative below zero", "-0.000000000000000000000000000001", "0", 0},
+		{"adjacent large greater", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 1},
+		{"adjacent large less", "999999999999999999999999999999999999999998", "999999999999999999999999999999999999999999", 0},
+		{"precision boundary", "1.000000000000000000000000000001", "1", 1},
+		{"precision boundary reverse", "1", "1.000000000000000000000000000001", 0},
+	}
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit equal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4096), 0})
+	invalid := []struct{ name, value string }{
+		{"empty", ""}, {"spaces", " \t"}, {"leading space", " 1"}, {"trailing space", "1 "},
+		{"letters", "bad"}, {"multiple dots", "1.2.3"}, {"sign only", "+"}, {"negative sign only", "-"},
+		{"scientific", "1e3"}, {"NaN", "NaN"}, {"infinity", "Infinity"}, {"expression", "1+0"},
+		{"option like", "--1"}, {"metacharacter", "1;2"}, {"quotes", `1"`}, {"backslash", `1\`},
+		{"dollar", "$1"}, {"substitution", "$(touch injected)"}, {"newline", "1\n2"}, {"comma", "1,5"},
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, locale := range []string{"C", "en_US.utf8"} {
+			for _, errexit := range []bool{false, true} {
+				for _, tc := range tests {
+					t.Run(fmt.Sprintf("numeric/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						want := fmt.Sprintf("COUNT:%d STATUS:0\n", tc.want)
+						if err != nil || string(out) != want {
+							t.Fatalf("exit=%d out=%q want=%q", exitCode(err), out, want)
+						}
+					})
+				}
+				for _, tc := range invalid {
+					t.Run(fmt.Sprintf("invalid/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.value, "num2=1", "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						if errexit {
+							if exitCode(err) != 2 || strings.Contains(string(out), "COUNT:") || !strings.Contains(string(out), "invalid decimal operand") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+						} else if err != nil || !strings.Contains(string(out), "COUNT:0 STATUS:2\n") || !strings.Contains(string(out), "invalid decimal operand") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+							t.Fatalf("injection created file: %v", err)
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right string
+				count, status     int
+			}{{"true", "2", "+1", 1, 0}, {"false", "1", "2", 0, 0}, {"invalid", "1+0", "1", 0, 2}} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/%t/%s/%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							if preexisting {
+								script += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script += expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.status != 0 {
+							if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.count, tc.status)) {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + "::UNSET\n"
+							if preexisting {
+								want = name + ":SET:BEFORE_" + name + "\n"
+							}
+							if !strings.Contains(string(out), want) {
+								t.Fatalf("%s leaked: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			status               int
+		}{
+			{"action failure", "false", "", 1},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"unexpected output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(fmt.Sprintf("failure/%s/%s/%t", shell, tc.name, errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1=2", "num2=1", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.status)) {
+						t.Fatalf("exit=%d out=%q", exitCode(err), out)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestFloatLesserOrEqual72GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-lesser-or-equal"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "lesser or equal"}`) != 1 {
+		t.Fatal("entry-72 placeholders changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "lesser or equal"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	lint := filepath.Join(t.TempDir(), "lesser-or-equal.sh")
+	mustWriteFile(t, lint, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "lesser or equal"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", lint)
+	}
+	if out, err := runCommand(".", nil, "shellcheck", "-s", "sh", lint); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, out)
+	}
+	tests := []struct {
+		name, left, right string
+		want              int
+	}{
+		{"equal integers", "1", "1", 1}, {"equal decimal left", "1.0", "1", 1}, {"equal decimal right", "1", "1.00", 1},
+		{"less", "1", "2", 1}, {"greater", "2", "1", 0}, {"negative less", "-2", "-1", 1},
+		{"negative greater", "-1", "-2", 0}, {"negative below zero", "-1", "0", 1}, {"zero above negative", "0", "-1", 0},
+		{"negative zero", "-0", "0", 1}, {"zero and negative zero", "0", "-0", 1},
+		{"fraction below", "0.49", "0.50", 1}, {"equal fractions", "0.50", "0.50", 1}, {"fraction above", "0.51", "0.50", 0},
+		{"negative fraction below", "-0.51", "-0.50", 1}, {"negative fraction above", "-0.49", "-0.50", 0},
+		{"leading trailing zeros", "0001.2300", "1.23", 1}, {"positive sign", "+1", "1", 1},
+		{"zero below tiny positive", "0", "0.000000000000000000000000000001", 1},
+		{"tiny positive above zero", "0.000000000000000000000000000001", "0", 0},
+		{"tiny negative below zero", "-0.000000000000000000000000000001", "0", 1},
+		{"adjacent large less", "999999999999999999999999999999999999999998", "999999999999999999999999999999999999999999", 1},
+		{"adjacent large greater", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 0},
+		{"precision boundary below", "1", "1.000000000000000000000000000001", 1},
+		{"precision boundary above", "1.000000000000000000000000000001", "1", 0},
+	}
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit equal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4096), 1})
+	invalid := []struct{ name, value string }{
+		{"empty", ""}, {"spaces", " \t"}, {"leading space", " 1"}, {"trailing space", "1 "},
+		{"letters", "bad"}, {"multiple dots", "1.2.3"}, {"sign only", "+"}, {"negative sign only", "-"},
+		{"scientific", "1e3"}, {"NaN", "NaN"}, {"infinity", "Infinity"}, {"expression", "1+0"},
+		{"option like", "--1"}, {"metacharacter", "1;2"}, {"quotes", `1"`}, {"backslash", `1\`},
+		{"dollar", "$1"}, {"substitution", "$(touch injected)"}, {"newline", "1\n2"}, {"comma", "1,5"}, {"very long invalid", strings.Repeat("9", 4096) + "e"},
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, locale := range []string{"C", "en_US.utf8"} {
+			for _, errexit := range []bool{false, true} {
+				for _, tc := range tests {
+					t.Run(fmt.Sprintf("numeric/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						want := fmt.Sprintf("COUNT:%d STATUS:0\n", tc.want)
+						if err != nil || string(out) != want {
+							t.Fatalf("exit=%d out=%q want=%q", exitCode(err), out, want)
+						}
+					})
+				}
+				for _, tc := range invalid {
+					t.Run(fmt.Sprintf("invalid/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.value, "num2=1", "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						if errexit {
+							if exitCode(err) != 2 || strings.Contains(string(out), "COUNT:") || !strings.Contains(string(out), "invalid decimal operand") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+						} else if err != nil || !strings.Contains(string(out), "COUNT:0 STATUS:2\n") || !strings.Contains(string(out), "invalid decimal operand") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+							t.Fatalf("injection created file: %v", err)
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right string
+				count, status     int
+			}{{"true", "1.00", "+1", 1, 0}, {"false", "2", "1", 0, 0}, {"invalid left", "1+0", "1", 0, 2}, {"invalid right", "1", "1+0", 0, 2}} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/%t/%s/%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							if preexisting {
+								script += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script += expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.status != 0 {
+							if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.count, tc.status)) {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + "::UNSET\n"
+							if preexisting {
+								want = name + ":SET:BEFORE_" + name + "\n"
+							}
+							if !strings.Contains(string(out), want) {
+								t.Fatalf("%s leaked: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			status               int
+		}{
+			{"action failure", "false", "", 1},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"unexpected output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(fmt.Sprintf("failure/%s/%s/%t", shell, tc.name, errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1=1", "num2=2", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.status)) {
+						t.Fatalf("exit=%d out=%q", exitCode(err), out)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestFloatLesser73GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-lesser"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "lesser"}`) != 1 {
+		t.Fatal("entry-73 placeholders changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "lesser"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	lint := filepath.Join(t.TempDir(), "lesser.sh")
+	mustWriteFile(t, lint, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "lesser"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", lint)
+	}
+	if out, err := runCommand(".", nil, "shellcheck", "-s", "sh", lint); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, out)
+	}
+	tests := []struct {
+		name, left, right string
+		want              int
+	}{
+		{"equal integers", "1", "1", 0}, {"equal decimal left", "1.0", "1", 0}, {"equal decimal right", "1", "1.00", 0},
+		{"less", "1", "2", 1}, {"greater", "2", "1", 0}, {"negative less", "-2", "-1", 1},
+		{"negative greater", "-1", "-2", 0}, {"negative below zero", "-1", "0", 1}, {"zero above negative", "0", "-1", 0},
+		{"negative zero", "-0", "0", 0}, {"zero and negative zero", "0", "-0", 0},
+		{"fraction below", "0.49", "0.50", 1}, {"equal fractions", "0.50", "0.50", 0}, {"fraction above", "0.51", "0.50", 0},
+		{"negative fraction below", "-0.51", "-0.50", 1}, {"negative fraction above", "-0.49", "-0.50", 0},
+		{"leading trailing zeros", "0001.2300", "1.23", 0}, {"positive sign", "+1", "1", 0},
+		{"zero below tiny positive", "0", "0.000000000000000000000000000001", 1},
+		{"tiny positive above zero", "0.000000000000000000000000000001", "0", 0},
+		{"tiny negative below zero", "-0.000000000000000000000000000001", "0", 1},
+		{"adjacent large less", "999999999999999999999999999999999999999998", "999999999999999999999999999999999999999999", 1},
+		{"adjacent large greater", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 0},
+		{"precision boundary below", "1", "1.000000000000000000000000000001", 1},
+		{"precision boundary above", "1.000000000000000000000000000001", "1", 0},
+	}
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit equal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4096), 0})
+	invalid := []struct{ name, value string }{
+		{"empty", ""}, {"spaces", " \t"}, {"leading space", " 1"}, {"trailing space", "1 "},
+		{"letters", "bad"}, {"multiple dots", "1.2.3"}, {"sign only", "+"}, {"negative sign only", "-"},
+		{"scientific", "1e3"}, {"NaN", "NaN"}, {"infinity", "Infinity"}, {"expression", "1+0"},
+		{"option like", "--1"}, {"metacharacter", "1;2"}, {"quotes", `1"`}, {"backslash", `1\`},
+		{"dollar", "$1"}, {"substitution", "$(touch injected)"}, {"newline", "1\n2"}, {"comma", "1,5"}, {"very long invalid", strings.Repeat("9", 4096) + "e"},
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, locale := range []string{"C", "en_US.utf8"} {
+			for _, errexit := range []bool{false, true} {
+				for _, tc := range tests {
+					t.Run(fmt.Sprintf("numeric/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						want := fmt.Sprintf("COUNT:%d STATUS:0\n", tc.want)
+						if err != nil || string(out) != want {
+							t.Fatalf("exit=%d out=%q want=%q", exitCode(err), out, want)
+						}
+					})
+				}
+				for _, tc := range invalid {
+					t.Run(fmt.Sprintf("invalid/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.value, "num2=1", "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						if errexit {
+							if exitCode(err) != 2 || strings.Contains(string(out), "COUNT:") || !strings.Contains(string(out), "invalid decimal operand") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+						} else if err != nil || !strings.Contains(string(out), "COUNT:0 STATUS:2\n") || !strings.Contains(string(out), "invalid decimal operand") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+							t.Fatalf("injection created file: %v", err)
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right string
+				count, status     int
+			}{{"true", "1", "2", 1, 0}, {"false", "2", "1", 0, 0}, {"invalid left", "1+0", "1", 0, 2}, {"invalid right", "1", "1+0", 0, 2}} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/%t/%s/%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							if preexisting {
+								script += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script += expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.status != 0 {
+							if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.count, tc.status)) {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + "::UNSET\n"
+							if preexisting {
+								want = name + ":SET:BEFORE_" + name + "\n"
+							}
+							if !strings.Contains(string(out), want) {
+								t.Fatalf("%s leaked: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			status               int
+		}{
+			{"action failure", "false", "", 1},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"unexpected output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(fmt.Sprintf("failure/%s/%s/%t", shell, tc.name, errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1=1", "num2=2", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.status)) {
+						t.Fatalf("exit=%d out=%q", exitCode(err), out)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestFloatNotEqual74GeneratedBehavior(t *testing.T) {
+	requireCommand(t, "bc")
+	requireCommand(t, "shellcheck")
+	data, err := os.ReadFile(snippetOutputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var generated map[string]Snippet
+	if err := json.Unmarshal(data, &generated); err != nil {
+		t.Fatal(err)
+	}
+	item := generated["float.if-not-equal"]
+	lines, ok := item.Body.([]any)
+	if !ok {
+		t.Fatalf("body representation = %T", item.Body)
+	}
+	var parts []string
+	for _, line := range lines {
+		parts = append(parts, line.(string))
+	}
+	body := strings.Join(parts, "\n")
+	if strings.Count(body, `${1:num1}`) != 1 || strings.Count(body, `${2:num2}`) != 1 || strings.Count(body, `${3:echo "not equal"}`) != 1 {
+		t.Fatal("entry-74 placeholders changed")
+	}
+	expand := func(action string) string {
+		s := strings.Replace(body, `${1:num1}`, "num1", 1)
+		s = strings.Replace(s, `${2:num2}`, "num2", 1)
+		s = strings.Replace(s, `${3:echo "not equal"}`, action, 1)
+		return strings.ReplaceAll(s, `\$`, `$`)
+	}
+	lint := filepath.Join(t.TempDir(), "not-equal.sh")
+	mustWriteFile(t, lint, []byte("#!/bin/sh\n# shellcheck disable=SC2154\n"+expand(`echo "not equal"`)))
+	for _, shell := range []string{"sh", "bash"} {
+		run(t, ".", shell, "-n", lint)
+	}
+	if out, err := runCommand(".", nil, "shellcheck", "-s", "sh", lint); err != nil {
+		t.Fatalf("ShellCheck: %v %q", err, out)
+	}
+	tests := []struct {
+		name, left, right string
+		want              int
+	}{
+		{"equal integers", "1", "1", 0}, {"equal decimal left", "1.0", "1", 0}, {"equal decimal right", "1", "1.00", 0},
+		{"less", "1", "2", 1}, {"greater", "2", "1", 1},
+		{"equal negative", "-1", "-1", 0}, {"opposite signs", "-1", "1", 1},
+		{"negative pair forward", "-2", "-1", 1}, {"negative pair reverse", "-1", "-2", 1},
+		{"negative zero left", "-0", "0", 0}, {"negative zero right", "0", "-0", 0}, {"decimal zero", "0", "0.0", 0},
+		{"tiny nonzero", "0", "0.00000000000000000001", 1},
+		{"negative equivalent", "-0.5", "-0.50", 0}, {"negative difference", "-0.5", "-0.51", 1},
+		{"fraction equivalent", "0.50", "0.50000000000000000000", 0},
+		{"leading trailing zeros", "0001.2300", "1.23", 0}, {"positive sign", "+1", "1", 0},
+		{"precision difference forward", "1.000000000000000000000000000001", "1", 1},
+		{"precision difference reverse", "1", "1.000000000000000000000000000001", 1},
+		{"adjacent large forward", "999999999999999999999999999999999999999999", "999999999999999999999999999999999999999998", 1},
+		{"adjacent large reverse", "999999999999999999999999999999999999999998", "999999999999999999999999999999999999999999", 1},
+	}
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit equal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4096), 0})
+	tests = append(tests, struct {
+		name, left, right string
+		want              int
+	}{"4096-digit unequal integers", strings.Repeat("9", 4096), strings.Repeat("9", 4095) + "8", 1})
+	invalid := []struct{ name, value string }{
+		{"empty", ""}, {"spaces", " \t"}, {"leading space", " 1"}, {"trailing space", "1 "},
+		{"letters", "bad"}, {"multiple dots", "1.2.3"}, {"sign only", "+"}, {"negative sign only", "-"},
+		{"scientific", "1e3"}, {"NaN", "NaN"}, {"infinity", "Infinity"}, {"expression", "1+0"},
+		{"option like", "--1"}, {"metacharacter", "1;2"}, {"quotes", `1"`}, {"backslash", `1\`},
+		{"dollar", "$1"}, {"substitution", "$(touch injected)"}, {"newline", "1\n2"}, {"comma", "1,5"}, {"very long invalid", strings.Repeat("9", 4096) + "e"},
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, locale := range []string{"C", "en_US.utf8"} {
+			for _, errexit := range []bool{false, true} {
+				for _, tc := range tests {
+					t.Run(fmt.Sprintf("numeric/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						want := fmt.Sprintf("COUNT:%d STATUS:0\n", tc.want)
+						if err != nil || string(out) != want {
+							t.Fatalf("exit=%d out=%q want=%q", exitCode(err), out, want)
+						}
+					})
+				}
+				for _, tc := range invalid {
+					t.Run(fmt.Sprintf("invalid/%s/%s/%t/%s", shell, locale, errexit, tc.name), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n" + expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.value, "num2=1", "LC_ALL="+locale)
+						out, err := cmd.CombinedOutput()
+						if errexit {
+							if exitCode(err) != 2 || strings.Contains(string(out), "COUNT:") || !strings.Contains(string(out), "invalid decimal operand") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+						} else if err != nil || !strings.Contains(string(out), "COUNT:0 STATUS:2\n") || !strings.Contains(string(out), "invalid decimal operand") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						if _, err := os.Stat(filepath.Join(root, "injected")); !os.IsNotExist(err) {
+							t.Fatalf("injection created file: %v", err)
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, preexisting := range []bool{false, true} {
+			for _, tc := range []struct {
+				name, left, right string
+				count, status     int
+			}{{"true", "1", "2", 1, 0}, {"false", "1.00", "+1", 0, 0}, {"invalid left", "1+0", "1", 0, 2}, {"invalid right", "1", "1+0", 0, 2}} {
+				for _, errexit := range []bool{false, true} {
+					t.Run(fmt.Sprintf("scope/%s/%t/%s/%t", shell, preexisting, tc.name, errexit), func(t *testing.T) {
+						root := t.TempDir()
+						script := "count=0\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							if preexisting {
+								script += "_shellman_float_" + name + "=BEFORE_" + name + "\n"
+							}
+						}
+						script += expand(`count=$((count + 1))`) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							script += "printf '" + name + ":%s:%s\\n' \"${_shellman_float_" + name + "+SET}\" \"${_shellman_float_" + name + "-UNSET}\"\n"
+						}
+						if errexit {
+							script = "set -e\n" + script
+						}
+						cmd := exec.Command(shell, "-c", script)
+						cmd.Dir = root
+						cmd.Env = append(os.Environ(), "num1="+tc.left, "num2="+tc.right, "LC_ALL=C")
+						out, err := cmd.CombinedOutput()
+						if errexit && tc.status != 0 {
+							if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+								t.Fatalf("exit=%d out=%q", exitCode(err), out)
+							}
+							return
+						}
+						if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:%d STATUS:%d\n", tc.count, tc.status)) {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+						for _, name := range []string{"left", "right", "valid", "operand", "result"} {
+							want := name + "::UNSET\n"
+							if preexisting {
+								want = name + ":SET:BEFORE_" + name + "\n"
+							}
+							if !strings.Contains(string(out), want) {
+								t.Fatalf("%s leaked: %q", name, out)
+							}
+						}
+					})
+				}
+			}
+		}
+	}
+	for _, shell := range []string{"sh", "bash"} {
+		for _, tc := range []struct {
+			name, action, fakeBC string
+			status               int
+		}{
+			{"action failure", "false", "", 1},
+			{"missing bc", `count=$((count + 1))`, "MISSING", 3},
+			{"bc failure", `count=$((count + 1))`, "#!/bin/sh\nexit 7\n", 3},
+			{"unexpected output", `count=$((count + 1))`, "#!/bin/sh\nprintf 'unexpected\\n'\n", 3},
+		} {
+			for _, errexit := range []bool{false, true} {
+				t.Run(fmt.Sprintf("failure/%s/%s/%t", shell, tc.name, errexit), func(t *testing.T) {
+					root := t.TempDir()
+					script := "count=0\n" + expand(tc.action) + "status=$?\nprintf 'COUNT:%s STATUS:%s\\n' \"$count\" \"$status\"\n"
+					if errexit {
+						script = "set -e\n" + script
+					}
+					if tc.fakeBC != "" && tc.fakeBC != "MISSING" {
+						fake := filepath.Join(root, "bc")
+						mustWriteFile(t, fake, []byte(tc.fakeBC))
+						if err := os.Chmod(fake, 0o755); err != nil {
+							t.Fatal(err)
+						}
+					}
+					cmd := exec.Command(shell, "-c", script)
+					cmd.Dir = root
+					cmd.Env = append(os.Environ(), "num1=1", "num2=2", "LC_ALL=C")
+					if tc.fakeBC != "" {
+						cmd.Env = append(cmd.Env, "PATH="+root)
+					}
+					out, err := cmd.CombinedOutput()
+					if errexit {
+						if exitCode(err) != tc.status || strings.Contains(string(out), "COUNT:") {
+							t.Fatalf("exit=%d out=%q", exitCode(err), out)
+						}
+					} else if err != nil || !strings.Contains(string(out), fmt.Sprintf("COUNT:0 STATUS:%d", tc.status)) {
+						t.Fatalf("exit=%d out=%q", exitCode(err), out)
+					}
+				})
+			}
+		}
 	}
 }
 
@@ -10990,7 +12399,7 @@ func TestIfFilesAreEqual66GeneratedBehavior(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertSHA256(t, "iteration-68 artifact while checking entry 66", data, currentV7Iteration68SHA256)
+	assertSHA256(t, "iteration-74 artifact while checking entry 66", data, currentV7Iteration74SHA256)
 	var snippets map[string]Snippet
 	if err := json.Unmarshal(data, &snippets); err != nil {
 		t.Fatal(err)
